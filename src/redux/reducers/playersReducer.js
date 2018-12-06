@@ -1,0 +1,18 @@
+/* eslint-disable */
+
+import produce from 'immer';
+
+export default (state = Array(10).fill({ role: '', isAlive: true, fouls: { amount: 0, muted: false } }), action) =>
+  produce(state, draft => {
+    switch (action.type) {
+      case 'ADD_ROLE':
+        draft[action.payload.playerNumber].role = action.payload.role;
+      case 'KILL_PLAYER':
+        draft[action.playerNumber].isAlive = false;
+      case 'ADD_FOUL':
+        const playerFouls = draft[action.payload.playerNumber].fouls;
+        playerFouls.amount === 2 && (playerFouls.muted = true);
+        playerFouls.amount === 3 && (draft[action.payload.playerNumber].isAlive = false);
+        playerFouls.amount++;
+    }
+  });
