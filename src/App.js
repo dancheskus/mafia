@@ -11,8 +11,11 @@ class App extends Component {
         {this.props.players[0].fouls.amount}
         {this.props.players[0].fouls.muted.toString()}
         {this.props.players[0].isAlive.toString()}
-        <button className="btn btn-primary" onClick={() => this.props.addFoul({ playerNumber: 0 })}>
+        <button className="btn btn-primary" onClick={() => this.props.addFoul(0)}>
           test
+        </button>
+        <button className="btn btn-primary" onClick={() => this.props.removeFoul(0)}>
+          test2
         </button>
       </div>
     );
@@ -28,7 +31,8 @@ const mapDispatchToProps = dispatch => ({
   changeGameState: payload => dispatch(changeGameState(payload)),
   addRole: payload => dispatch(addRole(payload)),
   killPlayer: playerNumber => dispatch(killPlayer(playerNumber)),
-  addFoul: payload => dispatch(addFoul(payload)),
+  addFoul: playerNumber => dispatch(addFoul(playerNumber)),
+  removeFoul: playerNumber => dispatch(removeFoul(playerNumber)),
 });
 
 export default connect(

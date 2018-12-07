@@ -9,10 +9,17 @@ export default (state = Array(10).fill({ role: '', isAlive: true, fouls: { amoun
         draft[action.payload.playerNumber].role = action.payload.role;
       case 'KILL_PLAYER':
         draft[action.playerNumber].isAlive = false;
-      case 'ADD_FOUL':
-        const playerFouls = draft[action.payload.playerNumber].fouls;
+      case 'ADD_FOUL': {
+        const playerFouls = draft[action.playerNumber].fouls;
         playerFouls.amount === 2 && (playerFouls.muted = true);
-        playerFouls.amount === 3 && (draft[action.payload.playerNumber].isAlive = false);
-        playerFouls.amount++;
+        playerFouls.amount === 3 && (draft[action.playerNumber].isAlive = false);
+        playerFouls.amount < 4 && playerFouls.amount++;
+        return;
+      }
+      case 'REMOVE_FOUL': {
+        const playerFouls = draft[action.playerNumber].fouls;
+        playerFouls.amount < 4 && playerFouls.amount-- && (playerFouls.muted = false);
+        return;
+      }
     }
   });
