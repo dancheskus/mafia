@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { addRole, killPlayer, addFoul, removeFoul } from './redux/actions/playersActions';
-import { changeGameState } from './redux/actions/gameActions';
+import { addRole, killPlayer, addFoul, removeFoul } from '../redux/actions/playersActions';
+import { changeGameState } from '../redux/actions/gameActions';
 
 class App extends Component {
   render() {
