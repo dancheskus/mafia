@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
+import SeatAllocator from './SeatAllocator';
+
 /* DAY COLORS */
-const dayColor = '#e9e1d4';
-const votingListItemsDayColor = '#cbc2b7';
+// const dayColor = '#e9e1d4';
+// const votingListItemsDayColor = '#cbc2b7';
 /* NIGHT COLORS */
 /* NUMBER DEALING COLORS */
-const numberDealingColor = '#71B2FE';
-const votingListItemsNumberDealingColor = '#98C8FF';
-const votingListItemsNumberDealingColorSelected = '#3E97FE';
+const seatAllocatorColor = '#71B2FE';
+const votingListItemsSeatAllocatorColor = '#98C8FF';
+const votingListItemsSeatAllocatorColorSelected = '#3E97FE';
 /* ROLE DEALING COLORS */
 /* VOTING COLORS */
 
@@ -19,11 +21,11 @@ const AppWrapper = styled.div`
 `;
 
 const Navigation = styled.div`
-  background: #666a73;
+  background: #46494e;
 
-  .container * {
-    padding: 10px 0;
-    color: ${numberDealingColor};
+  .container > * {
+    padding: 10px;
+    color: ${seatAllocatorColor};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -38,6 +40,7 @@ const NavStateName = styled.h2`
   margin: 0;
   font-weight: 300;
   font-size: 2rem;
+  flex-grow: 1;
 
   @media (max-width: 520px) {
     font-size: 1.5rem;
@@ -49,29 +52,25 @@ const NavTimer = styled.div`
   flex-grow: 1;
 `;
 
-const NavBurger = styled.div`
-  width: 30px;
-`;
-
 const VotingList = styled.div`
-  background: ${numberDealingColor};
-
-  .container {
-    padding: 10px;
-  }
+  background: ${seatAllocatorColor};
+  padding: 10px;
+  border-radius: 15px;
+  margin-bottom: 15px;
 `;
 
 const VotingListItem = styled.div`
   height: 30px;
   width: 30px;
   background: ${props =>
-    props.selected ? votingListItemsNumberDealingColorSelected : votingListItemsNumberDealingColor};
+    props.selected ? votingListItemsSeatAllocatorColorSelected : votingListItemsSeatAllocatorColor};
   border-radius: 50%;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
   font-weight: 500;
+  box-shadow: 0px 9px 35px -8px rgba(0, 0, 0, 0.49);
 `;
 
 const MainApp = styled.div`
@@ -82,12 +81,8 @@ const MainApp = styled.div`
   }
 `;
 
-const PopUp = styled.div`
-  background: ${votingListItemsNumberDealingColorSelected};
-  border-radius: 10px;
-`;
-
 const Navi = styled.div`
+  position: relative;
   .navi {
     &_check {
       display: none;
@@ -98,9 +93,10 @@ const Navi = styled.div`
       height: 2rem;
       width: 2rem;
       border-radius: 50%;
-      position: fixed;
+
+      /* position: fixed;
       top: 2.5rem;
-      right: 2.5rem;
+      right: 2.5rem; */
       background-image: radial-gradient(green, blue);
       transition: transform 0.3s;
     }
@@ -109,9 +105,13 @@ const Navi = styled.div`
       height: 2.5rem;
       width: 2.5rem;
       border-radius: 50%;
-      position: fixed;
+      margin: 0;
+      /* position: absolute;
+      top: 0;
+      left: 0; */
+      /* position: fixed;
       top: 2.3rem;
-      right: 2.3rem;
+      right: 2.3rem; */
       z-index: 3;
       box-shadow: 0 0.5rem 1.5rem rgba(black, 0.1);
       text-align: center;
@@ -164,7 +164,7 @@ const Navi = styled.div`
         text-decoration: none;
         text-transform: uppercase;
         background-image: linear-gradient(120deg, transparent 0%, transparent 50%, white 0%);
-        background-size: 230%;
+        background-size: 240%;
         transition: all 0.4s;
       }
 
@@ -224,6 +224,17 @@ const Navi = styled.div`
   }
 `;
 
+const PopUp = styled.div`
+  background: ${votingListItemsSeatAllocatorColorSelected};
+  border-radius: 10px;
+  box-shadow: 0px 9px 24px -2px rgba(0, 0, 0, 0.52);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  user-select: none;
+`;
+
 class App extends Component {
   state = {
     collapsed: true,
@@ -234,59 +245,57 @@ class App extends Component {
   render() {
     return (
       <AppWrapper className="d-flex flex-column">
-        <Navi>
-          <input type="checkbox" className="navi_check" id="navi-toggle" />
-          <label htmlFor="navi-toggle" className="navi_button">
-            <span className="navi_icon">&nbsp;</span>
-          </label>
-          <div className="navi-background" />
-          <div className="navi_nav">
-            <ul className="navi_list">
-              <li className="navi_item">
-                <a href="#" className="navi_link">
-                  Настройки
-                </a>
-              </li>
-              <li className="navi_item">
-                <a href="#" className="navi_link">
-                  Плеер
-                </a>
-              </li>
-              <li className="navi_item">
-                <a href="#" className="navi_link">
-                  Выход
-                </a>
-              </li>
-            </ul>
-          </div>
-        </Navi>
-
         <Navigation>
-          <Container className="d-flex justify-content-between">
+          <Container className="d-flex justify-content-between p-0">
             <NavStateName>РАЗДАЧА НОМЕРОВ</NavStateName>
             <NavTimer>1:00</NavTimer>
-            <NavBurger>BU</NavBurger>
+            <Navi className="navi">
+              <input type="checkbox" className="navi_check" id="navi-toggle" />
+              <label htmlFor="navi-toggle" className="navi_button">
+                <span className="navi_icon">&nbsp;</span>
+              </label>
+              {/* <div className="navi-background" /> */}
+              <div className="navi_nav">
+                <ul className="navi_list">
+                  <li className="navi_item">
+                    <a href="/" className="navi_link">
+                      Настройки
+                    </a>
+                  </li>
+                  <li className="navi_item">
+                    <a href="/" className="navi_link">
+                      Плеер
+                    </a>
+                  </li>
+                  <li className="navi_item">
+                    <a href="/" className="navi_link">
+                      Выход
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </Navi>
           </Container>
         </Navigation>
 
-        <VotingList>
-          <Container className="d-flex justify-content-around">
-            <VotingListItem selected>1</VotingListItem>
-            <VotingListItem>2</VotingListItem>
-            <VotingListItem>3</VotingListItem>
-            <VotingListItem>4</VotingListItem>
-            <VotingListItem>5</VotingListItem>
-            <VotingListItem selected>6</VotingListItem>
-            <VotingListItem>7</VotingListItem>
-            <VotingListItem>8</VotingListItem>
-            <VotingListItem>9</VotingListItem>
-            <VotingListItem>10</VotingListItem>
-          </Container>
-        </VotingList>
-
         <MainApp className="d-flex">
-          <Container className="d-flex">
-            <PopUp className="flex-grow-1" />
+          <Container className="d-flex flex-column">
+            <VotingList className="d-flex justify-content-around">
+              <VotingListItem selected>1</VotingListItem>
+              <VotingListItem>2</VotingListItem>
+              <VotingListItem>3</VotingListItem>
+              <VotingListItem>4</VotingListItem>
+              <VotingListItem>5</VotingListItem>
+              <VotingListItem selected>6</VotingListItem>
+              <VotingListItem>7</VotingListItem>
+              <VotingListItem>8</VotingListItem>
+              <VotingListItem>9</VotingListItem>
+              <VotingListItem>10</VotingListItem>
+            </VotingList>
+
+            <PopUp className="flex-grow-1">
+              <SeatAllocator />
+            </PopUp>
           </Container>
         </MainApp>
       </AppWrapper>

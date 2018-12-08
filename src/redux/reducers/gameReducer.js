@@ -6,7 +6,7 @@ export default (
   state = {
     thisRoundFirstPlayer: 0,
     activePlayer: 0,
-    gameState: { phase: 'numberDealing', dayNumber: 0 },
+    gameState: { phase: 'seatAllocator', dayNumber: 0 },
     votingList: [],
   },
   action
