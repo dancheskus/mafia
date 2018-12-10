@@ -17,25 +17,15 @@ const PopUpButton = styled.button`
 `;
 
 const BigCircle = styled.div`
-  
   width: 220px;
   height: 220px;
   border-radius: 50%;
-  
-  /* font-size: ${props => (props.number ? '9rem' : '2.3rem')}; */
   font-weight: 600;
   text-transform: uppercase;
   ${props =>
     props.number
-      ? `
-  font-size: 9rem;
-  color: #3E97FE;
-  background: white;
-  `
-      : `font-size: 2.3rem;
-      color: white;
-      background: #70b2ff;
-      `}
+      ? ` font-size: 9rem; color: #3E97FE; background: white; `
+      : `font-size: 2.3rem; color: white; background: #70b2ff; `}
 `;
 
 class SeatAllocator extends Component {
@@ -48,6 +38,9 @@ class SeatAllocator extends Component {
     const randomNumber = this.seats.pop();
     this.setState({ randomNumber });
     this.props.addToSelectedNumbers(randomNumber);
+    // setTimeout(() => {
+    //   this.setState({ randomNumber: null });
+    // }, 2000);
   };
 
   randomClicked = () => {
