@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
+import _ from 'lodash';
 
 import SeatAllocator from './SeatAllocator';
 
@@ -18,6 +19,7 @@ const votingListItemsSeatAllocatorColorSelected = '#3E97FE';
 
 const AppWrapper = styled.div`
   height: 100vh;
+  overflow: hidden;
 `;
 
 const Navigation = styled.div`
@@ -32,6 +34,7 @@ const Navigation = styled.div`
 
     &:not(:last-child) {
       border-right: 2px solid #8f8f8f;
+      flex-grow: 1;
     }
   }
 `;
@@ -40,7 +43,6 @@ const NavStateName = styled.h2`
   margin: 0;
   font-weight: 300;
   font-size: 2rem;
-  flex-grow: 1;
 
   @media (max-width: 520px) {
     font-size: 1.5rem;
@@ -48,8 +50,7 @@ const NavStateName = styled.h2`
 `;
 
 const NavTimer = styled.div`
-  /* background: red; */
-  flex-grow: 1;
+  /*  */
 `;
 
 const VotingList = styled.div`
@@ -93,10 +94,7 @@ const Navi = styled.div`
       height: 2rem;
       width: 2rem;
       border-radius: 50%;
-
-      /* position: fixed;
-      top: 2.5rem;
-      right: 2.5rem; */
+      position: absolute;
       background-image: radial-gradient(green, blue);
       transition: transform 0.3s;
     }
@@ -106,14 +104,7 @@ const Navi = styled.div`
       width: 2.5rem;
       border-radius: 50%;
       margin: 0;
-      /* position: absolute;
-      top: 0;
-      left: 0; */
-      /* position: fixed;
-      top: 2.3rem;
-      right: 2.3rem; */
       z-index: 3;
-      box-shadow: 0 0.5rem 1.5rem rgba(black, 0.1);
       text-align: center;
       display: flex;
       justify-content: center;
@@ -147,10 +138,6 @@ const Navi = styled.div`
       padding: 0;
       list-style: none;
       text-align: center;
-    }
-
-    &_item {
-      /* margin: 1rem; */
     }
 
     &_link {
@@ -254,7 +241,7 @@ class App extends Component {
               <label htmlFor="navi-toggle" className="navi_button">
                 <span className="navi_icon">&nbsp;</span>
               </label>
-              {/* <div className="navi-background" /> */}
+              <div className="navi-background" />
               <div className="navi_nav">
                 <ul className="navi_list">
                   <li className="navi_item">
@@ -281,16 +268,16 @@ class App extends Component {
         <MainApp className="d-flex">
           <Container className="d-flex flex-column">
             <VotingList className="d-flex justify-content-around">
-              <VotingListItem selected>1</VotingListItem>
-              <VotingListItem>2</VotingListItem>
-              <VotingListItem>3</VotingListItem>
-              <VotingListItem>4</VotingListItem>
-              <VotingListItem>5</VotingListItem>
-              <VotingListItem selected>6</VotingListItem>
-              <VotingListItem>7</VotingListItem>
-              <VotingListItem>8</VotingListItem>
-              <VotingListItem>9</VotingListItem>
-              <VotingListItem>10</VotingListItem>
+              {this.props.game.selectedNumbers.map(selNum => (
+                <VotingListItem key={selNum} selected>
+                  {selNum}
+                </VotingListItem>
+              ))}
+              {_.range(1, 11)
+                .filter(e => !this.props.game.selectedNumbers.includes(e))
+                .map(notSelNum => (
+                  <VotingListItem key={notSelNum}>{notSelNum}</VotingListItem>
+                ))}
             </VotingList>
 
             <PopUp className="flex-grow-1">

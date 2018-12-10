@@ -7,8 +7,10 @@ export default (state = Array(10).fill({ role: '', isAlive: true, fouls: { amoun
     switch (action.type) {
       case 'ADD_ROLE':
         draft[action.payload.playerNumber].role = action.payload.role;
+        return;
       case 'KILL_PLAYER':
         draft[action.playerNumber].isAlive = false;
+        return;
       case 'ADD_FOUL': {
         const playerFouls = draft[action.playerNumber].fouls;
         playerFouls.amount === 2 && (playerFouls.muted = true);

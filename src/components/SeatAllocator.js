@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
+import { connect } from 'react-redux';
+
+import { addToSelectedNumbers, clearSelectedNumbers } from '../redux/actions/gameActions';
 
 const PopUpButton = styled.button`
   background: #70b2ff;
@@ -35,34 +38,53 @@ const BigCircle = styled.div`
       `}
 `;
 
-export default class SeatAllocator extends Component {
+class SeatAllocator extends Component {
   state = { randomNumber: null };
 
   seats = _.shuffle(_.range(1, 11));
 
   stopInterval = () => {
     clearInterval(this.interval);
-    this.seats.length && this.setState({ randomNumber: this.seats.pop() });
+    const randomNumber = this.seats.pop();
+    this.setState({ randomNumber });
+    this.props.addToSelectedNumbers(randomNumber);
   };
 
   randomClicked = () => {
+    if (!this.seats.length) return;
     let i = 0;
     this.interval = setInterval(() => {
-      this.seats.length && this.setState({ randomNumber: _.random(1, 10) });
+      this.setState({ randomNumber: _.random(1, 10) });
       ++i === 20 && this.stopInterval();
-    }, 20);
+    }, 40);
   };
 
-  render = () => (
-    <Fragment>
-      <BigCircle
-        className="d-flex justify-content-center align-items-center"
-        onClick={this.randomClicked}
-        number={this.state.randomNumber}
-      >
-        {this.state.randomNumber || 'нажми'}
-      </BigCircle>
-      <PopUpButton>{this.seats.length ? 'пропустить' : 'играть'}</PopUpButton>
-    </Fragment>
-  );
+  render = () => {
+    return (
+      <Fragment>
+        <BigCircle
+          className="d-flex justify-content-center align-items-center"
+          onClick={this.randomClicked}
+          number={this.state.randomNumber}
+        >
+          {this.state.randomNumber || 'нажми'}
+        </BigCircle>
+        <PopUpButton>{this.seats.length ? 'пропустить' : 'играть'}</PopUpButton>
+      </Fragment>
+    );
+  };
 }
+
+const mapStateToProps = state => ({
+  game: state.game,
+});
+
+const mapDispatchToProps = dispatch => ({
+  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
+  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SeatAllocator);
