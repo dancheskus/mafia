@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
+import { connect } from 'react-redux';
 
 import NavBar from './NavBar';
 import NumbersPanel from './NumbersPanel';
 import PopUp from './PopUp';
+import SeatAllocator from './SeatAllocator';
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -19,18 +21,27 @@ const MainApp = styled.div`
   }
 `;
 
-export default class App extends Component {
+class App extends Component {
   render() {
+    const PopUpChildComponent = { SeatAllocator }[this.props.game.gameState.phase];
     return (
       <AppWrapper className="d-flex flex-column">
         <NavBar />
         <MainApp className="d-flex">
-          <Container className="d-flex flex-column">
-            <NumbersPanel />
-            <PopUp />
+          <Container className="d-flex flex-column justify-content-between">
+            {this.props.game.gameState.phase !== 'startScreen' && <NumbersPanel />}
+
+            {this.props.game.gameState.phase === 'SeatAllocator' && (
+              <PopUp>
+                <PopUpChildComponent />
+              </PopUp>
+            )}
           </Container>
         </MainApp>
       </AppWrapper>
     );
   }
 }
+
+const mapStateToProps = state => ({ game: state.game });
+export default connect(mapStateToProps)(App);

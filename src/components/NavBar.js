@@ -2,15 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
-import { seatAllocatorColor } from '../colors';
 import NavMenu from './NavMenu/index';
+import colors from '../colors';
 
 const Navigation = styled.div`
   background: #46494e;
 
   .container > * {
     padding: 10px;
-    color: ${seatAllocatorColor};
+    color: ${colors.seatAllocator.navBarText};
     display: flex;
     justify-content: center;
     align-items: center;

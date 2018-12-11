@@ -3,14 +3,10 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import styled from 'styled-components';
 
-import {
-  seatAllocatorColor,
-  numberPanelItemsSeatAllocatorColorSelected,
-  numberPanelItemsSeatAllocatorColor,
-} from '../colors';
+import colors from '../colors';
 
 const Panel = styled.div`
-  background: ${seatAllocatorColor};
+  background: ${colors.seatAllocator.numbersPanel};
   padding: 10px;
   border-radius: 15px;
   margin-bottom: 15px;
@@ -19,8 +15,7 @@ const Panel = styled.div`
 const PanelItem = styled.div`
   height: 30px;
   width: 30px;
-  background: ${props =>
-    props.selected ? numberPanelItemsSeatAllocatorColorSelected : numberPanelItemsSeatAllocatorColor};
+  background: ${props => (props.selected ? colors.seatAllocator.numberSelected : colors.seatAllocator.number)};
   border-radius: 50%;
   color: white;
   display: flex;
