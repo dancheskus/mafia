@@ -1,5 +1,5 @@
 export default {
-  seatAllocator: {
+  SeatAllocator: {
     navBarText: '#71B2FE',
     numbersPanel: '#71B2FE',
     number: '#98C8FF',
@@ -9,7 +9,7 @@ export default {
     popupButton: '#70b2ff',
     popupText: '#3E97FE',
   },
-  roleDealing: {
+  RoleDealing: {
     navBarText: '#FB6F6F',
     numbersPanel: '#2D2D2D',
     number: '#CBC2B7',

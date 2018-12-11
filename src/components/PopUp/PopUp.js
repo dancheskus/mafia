@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import colors from '../colors';
+import colors from '../../colors';
 
 const StyledPopUp = styled.div`
-  background: ${colors.seatAllocator.popupBackground};
+  background: ${colors.SeatAllocator.popupBackground};
   border-radius: 10px;
   box-shadow: 0px 9px 24px -2px rgba(0, 0, 0, 0.52);
   user-select: none;
@@ -32,7 +32,7 @@ const MinimizeButton = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: ${colors.seatAllocator.popupButton};
+  background: ${colors.SeatAllocator.popupButton};
   position: absolute;
   top: 15px;
   right: 15px;
@@ -53,7 +53,7 @@ const MinimizeButton = styled.div`
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: ${colors.seatAllocator.popupBackground};
+    background: ${colors.SeatAllocator.popupBackground};
   }
 `;
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import styled from 'styled-components';
@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import colors from '../colors';
 
 const Panel = styled.div`
-  background: ${colors.seatAllocator.numbersPanel};
+  background: ${props => colors[props.color].numbersPanel};
   padding: 10px;
   border-radius: 15px;
   margin-bottom: 15px;
@@ -15,7 +15,7 @@ const Panel = styled.div`
 const PanelItem = styled.div`
   height: 30px;
   width: 30px;
-  background: ${props => (props.selected ? colors.seatAllocator.numberSelected : colors.seatAllocator.number)};
+  background: ${props => (props.selected ? colors[props.color].numberSelected : colors[props.color].number)};
   border-radius: 50%;
   color: white;
   display: flex;
@@ -26,19 +26,35 @@ const PanelItem = styled.div`
 `;
 
 const NumbersPanel = props => (
-  <Panel className="d-flex justify-content-around">
-    {props.game.selectedNumbers.map(selNum => (
-      <PanelItem key={selNum} selected>
-        {selNum}
-      </PanelItem>
-    ))}
+  <Fragment>
+    {props.game.gameState.phase === 'SeatAllocator' && (
+      <Panel color={props.game.gameState.phase} className="d-flex justify-content-around">
+        {props.game.selectedNumbers.map(selNum => (
+          <PanelItem color={props.game.gameState.phase} key={selNum} selected>
+            {selNum}
+          </PanelItem>
+        ))}
 
-    {_.range(1, 11)
-      .filter(e => !props.game.selectedNumbers.includes(e))
-      .map(notSelNum => (
-        <PanelItem key={notSelNum}>{notSelNum}</PanelItem>
-      ))}
-  </Panel>
+        {_.range(1, 11)
+          .filter(e => !props.game.selectedNumbers.includes(e))
+          .map(notSelNum => (
+            <PanelItem color={props.game.gameState.phase} key={notSelNum}>
+              {notSelNum}
+            </PanelItem>
+          ))}
+      </Panel>
+    )}
+
+    {props.game.gameState.phase === 'RoleDealing' && (
+      <Panel color={props.game.gameState.phase} className="d-flex justify-content-around">
+        {_.range(1, 11).map(num => (
+          <PanelItem color={props.game.gameState.phase} key={num} selected={num === props.game.selectedNumbers[0]}>
+            {num}
+          </PanelItem>
+        ))}
+      </Panel>
+    )}
+  </Fragment>
 );
 
 const mapStateToProps = state => ({ game: state.game });

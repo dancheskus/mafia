@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from '../redux/actions/gameActions';
-import colors from '../colors';
+import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from '../../redux/actions/gameActions';
+import colors from '../../colors';
 
 const PopUpButton = styled.button`
-  background: ${colors.seatAllocator.popupButton};
+  background: ${colors.SeatAllocator.popupButton};
   padding: 10px 25px;
   outline: none;
   border: none;
@@ -25,8 +25,8 @@ const BigCircle = styled.div`
   text-transform: uppercase;
   ${props =>
     props.number
-      ? ` font-size: 9rem; color: ${colors.seatAllocator.popupText}; background: white; `
-      : `font-size: 2.3rem; color: white; background: ${colors.seatAllocator.popupCircleBackground}; `}
+      ? ` font-size: 9rem; color: ${colors.SeatAllocator.popupText}; background: white; `
+      : `font-size: 2.3rem; color: white; background: ${colors.SeatAllocator.popupCircleBackground}; `}
 `;
 
 class SeatAllocator extends Component {
@@ -44,7 +44,7 @@ class SeatAllocator extends Component {
     // }, 2000);
   };
 
-  buttonClicked = () => this.props.changeGameState({ phase: 'roleDealing' }) && this.props.clearSelectedNumbers();
+  buttonClicked = () => this.props.changeGameState({ phase: 'RoleDealing' }) && this.props.clearSelectedNumbers();
 
   randomClicked = () => {
     if (!this.seats.length) return;

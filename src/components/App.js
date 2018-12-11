@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 
 import NavBar from './NavBar';
 import NumbersPanel from './NumbersPanel';
-import PopUp from './PopUp';
-import SeatAllocator from './SeatAllocator';
+import PopUp from './PopUp/PopUp';
+import SeatAllocator from './PopUp/SeatAllocator';
 
 const AppWrapper = styled.div`
   height: 100vh;
