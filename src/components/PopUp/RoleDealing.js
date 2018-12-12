@@ -3,21 +3,23 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from '../../redux/actions/gameActions';
+import {
+  addToSelectedNumbers,
+  clearSelectedNumbers,
+  changeGameState,
+  lightModeOn,
+} from '../../redux/actions/gameActions';
 import colors from '../../colors';
 import PopUpButton from './style/PopUpButton';
-
-const BigCircle = styled.div`
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  font-weight: 600;
-  text-transform: uppercase;
-  ${props =>
-    props.number
-      ? ` font-size: 9rem; color: ${colors.SeatAllocator.popupText}; background: white; `
-      : `font-size: 2.3rem; color: white; background: ${colors.SeatAllocator.popupCircleBackground}; `}
-`;
+import {
+  EyeIcon,
+  DonRingIcon,
+  SherifOkIcon,
+  ThumbUpIcon,
+  ThumbDownIcon,
+  RandomCubeIcon,
+  ListIcon,
+} from '../../img/svgIcons';
 
 class SeatAllocator extends Component {
   state = { randomNumber: null };
@@ -29,12 +31,9 @@ class SeatAllocator extends Component {
     const randomNumber = this.seats.pop();
     this.setState({ randomNumber });
     this.props.addToSelectedNumbers(randomNumber);
-    // setTimeout(() => {
-    //   this.setState({ randomNumber: null });
-    // }, 2000);
   };
 
-  buttonClicked = () => this.props.changeGameState({ phase: 'RoleDealing' }) && this.props.clearSelectedNumbers();
+  buttonClicked = () => this.props.lightModeOn();
 
   randomClicked = () => {
     if (!this.seats.length) return;
@@ -46,18 +45,19 @@ class SeatAllocator extends Component {
   };
 
   render = () => {
+    const lightMode = this.props.game.lightMode;
     return (
       <Fragment>
-        <BigCircle
-          className="d-flex justify-content-center align-items-center"
-          onClick={this.randomClicked}
-          number={this.state.randomNumber}
-        >
-          {this.state.randomNumber || 'нажми'}
-        </BigCircle>
-        <PopUpButton color={this.props.game.gameState.phase} onClick={this.buttonClicked}>
+        <PopUpButton color={this.props.game.gameState.phase} light={lightMode} onClick={this.buttonClicked}>
           {this.seats.length ? 'пропустить' : 'играть'}
         </PopUpButton>
+        <EyeIcon size={'10%'} />
+        <DonRingIcon size={'10%'} />
+        <SherifOkIcon size={'10%'} />
+        <ThumbUpIcon size={'10%'} />
+        <ThumbDownIcon size={'10%'} />
+        <RandomCubeIcon size={'10%'} />
+        <ListIcon size={'10%'} />
       </Fragment>
     );
   };
@@ -71,6 +71,7 @@ const mapDispatchToProps = dispatch => ({
   addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
   clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
   changeGameState: payload => dispatch(changeGameState(payload)),
+  lightModeOn: () => dispatch(lightModeOn()),
 });
 
 export default connect(

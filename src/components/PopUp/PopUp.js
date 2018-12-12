@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import colors from '../../colors';
 
 const StyledPopUp = styled.div`
-  background: ${colors.SeatAllocator.popupBackground};
+  background: ${props =>
+    props.light ? colors[props.color].popupBackgroundLight : colors[props.color].popupBackground};
+
   border-radius: 10px;
   box-shadow: 0px 9px 24px -2px rgba(0, 0, 0, 0.52);
   user-select: none;
@@ -32,10 +34,11 @@ const MinimizeButton = styled.div`
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: ${colors.SeatAllocator.popupButton};
+  background: ${props => (props.light ? colors[props.color].popupButtonLight : colors[props.color].popupButton)};
   position: absolute;
   top: 15px;
   right: 15px;
+  cursor: pointer;
   transition: all 0.2s;
 
   &:hover {
@@ -53,7 +56,8 @@ const MinimizeButton = styled.div`
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: ${colors.SeatAllocator.popupBackground};
+    background: ${props =>
+      props.light ? colors[props.color].popupBackgroundLight : colors[props.color].popupBackground};
   }
 `;
 
@@ -62,12 +66,16 @@ class PopUp extends Component {
 
   minimizeClicked = () => this.setState({ minimized: !this.state.minimized });
 
-  render = () => (
-    <StyledPopUp minimized={this.state.minimized}>
-      <MinimizeButton onClick={this.minimizeClicked} />
-      {!this.state.minimized ? this.props.children : null}
-    </StyledPopUp>
-  );
+  render = () => {
+    const phase = this.props.game.gameState.phase;
+    const lightMode = this.props.game.lightMode;
+    return (
+      <StyledPopUp color={phase} light={lightMode} minimized={this.state.minimized}>
+        <MinimizeButton color={phase} light={lightMode} onClick={this.minimizeClicked} />
+        {!this.state.minimized ? this.props.children : null}
+      </StyledPopUp>
+    );
+  };
 }
 
 const mapStateToProps = state => ({ game: state.game });

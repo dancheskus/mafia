@@ -7,6 +7,7 @@ import NavBar from './NavBar';
 import NumbersPanel from './NumbersPanel';
 import PopUp from './PopUp/PopUp';
 import SeatAllocator from './PopUp/SeatAllocator';
+import RoleDealing from './PopUp/RoleDealing';
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -23,15 +24,16 @@ const MainApp = styled.div`
 
 class App extends Component {
   render() {
-    const PopUpChildComponent = { SeatAllocator }[this.props.game.gameState.phase];
+    const phase = this.props.game.gameState.phase;
+    const PopUpChildComponent = { SeatAllocator, RoleDealing }[phase];
     return (
       <AppWrapper className="d-flex flex-column">
         <NavBar />
         <MainApp className="d-flex">
           <Container className="d-flex flex-column justify-content-between">
-            {this.props.game.gameState.phase !== 'startScreen' && <NumbersPanel />}
+            {phase !== 'startScreen' && <NumbersPanel />}
 
-            {this.props.game.gameState.phase === 'SeatAllocator' && (
+            {(phase === 'SeatAllocator' || phase === 'RoleDealing') && (
               <PopUp>
                 <PopUpChildComponent />
               </PopUp>
