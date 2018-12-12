@@ -2,18 +2,9 @@ import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { lightModeOn } from '../../redux/actions/gameActions';
-import colors from '../../colors';
-import PopUpButton from './style/PopUpButton';
-import {
-  EyeIcon,
-  DonRingIcon,
-  SherifOkIcon,
-  ThumbUpIcon,
-  ThumbDownIcon,
-  RandomCubeIcon,
-  ListIcon,
-} from '../../img/svgIcons';
+import colors from '../../../colors';
+import PopUpButton from '../style/PopUpButton';
+import { RandomCubeIcon, ListIcon } from '../../../img/svgIcons';
 
 const SvgWrapper = styled.div`
   display: flex;

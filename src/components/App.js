@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import NavBar from './NavBar';
 import NumbersPanel from './NumbersPanel';
-import PopUp from './PopUp/PopUp';
+import PopUp from './PopUp';
 import SeatAllocator from './PopUp/SeatAllocator';
 import RoleDealing from './PopUp/RoleDealing';
 

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 
-import NavMenu from './NavMenu/index';
+import NavMenu from './NavMenu';
 import colors from '../colors';
 
 const StyledNavigation = styled.div`

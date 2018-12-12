@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import colors from '../../colors';
+import { MaximizeIcon, MinimizeIcon } from '../../img/svgIcons';
 
 const StyledPopUp = styled.div`
   background: ${props =>
@@ -39,25 +40,10 @@ const MinimizeButton = styled.div`
   top: 15px;
   right: 15px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: filter 0.3s;
 
   &:hover {
-    transform: scale(1.3);
-
-    &::after {
-      width: 7px;
-      height: 7px;
-    }
-  }
-
-  &::after {
-    transition: all 0.2s;
-    content: '';
-    width: 0;
-    height: 0;
-    border-radius: 50%;
-    background: ${props =>
-      props.light ? colors[props.color].popupBackgroundLight : colors[props.color].popupBackground};
+    filter: brightness(110%);
   }
 `;
 
@@ -71,7 +57,9 @@ class PopUp extends Component {
     const lightMode = this.props.game.lightMode;
     return (
       <StyledPopUp color={phase} light={lightMode} minimized={this.state.minimized}>
-        <MinimizeButton color={phase} light={lightMode} onClick={this.minimizeClicked} />
+        <MinimizeButton color={phase} light={lightMode} onClick={this.minimizeClicked}>
+          {this.state.minimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
+        </MinimizeButton>
         {!this.state.minimized ? this.props.children : null}
       </StyledPopUp>
     );
