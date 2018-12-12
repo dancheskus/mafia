@@ -10,6 +10,11 @@ export default styled.button`
   font-size: 1.1rem;
   text-transform: uppercase;
   cursor: pointer;
+  transition: filter 0.2s;
+
+  &:hover {
+    filter: brightness(110%);
+  }
 
   &:focus {
     outline: none;
