@@ -22,5 +22,7 @@ export default {
     popupTextLight: '#FFD8D8',
     popupIcon: '#686A6E',
     popupIconLight: '#FFD8D8',
+    dealingMode: '#818385',
+    dealingModeSelected: '#B2B2B2',
   },
 };

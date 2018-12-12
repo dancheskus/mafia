@@ -27,6 +27,7 @@ const NavStateName = styled.h2`
   margin: 0;
   font-weight: 300;
   font-size: 2rem;
+  text-transform: uppercase;
 
   @media (max-width: 520px) {
     font-size: 1.5rem;
@@ -37,15 +38,22 @@ const NavTimer = styled.div`
   /*  */
 `;
 
-const Navigation = props => (
-  <StyledNavigation color={props.game.gameState.phase}>
-    <Container className="d-flex justify-content-between p-0">
-      <NavStateName>РАЗДАЧА НОМЕРОВ</NavStateName>
-      <NavTimer>1:00</NavTimer>
-      <NavMenu />
-    </Container>
-  </StyledNavigation>
-);
+const Navigation = props => {
+  const phase = props.game.gameState.phase;
+  let title = '';
+  if (phase === 'SeatAllocator') title = 'раздача номеров';
+  if (phase === 'RoleDealing') title = 'раздача ролей';
+
+  return (
+    <StyledNavigation color={props.game.gameState.phase}>
+      <Container className="d-flex justify-content-between p-0">
+        <NavStateName>{title}</NavStateName>
+        <NavTimer>1:00</NavTimer>
+        <NavMenu />
+      </Container>
+    </StyledNavigation>
+  );
+};
 
 const mapStateToProps = state => ({ game: state.game });
 export default connect(mapStateToProps)(Navigation);
