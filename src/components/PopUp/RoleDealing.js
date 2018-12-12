@@ -1,14 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
-import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import {
-  addToSelectedNumbers,
-  clearSelectedNumbers,
-  changeGameState,
-  lightModeOn,
-} from '../../redux/actions/gameActions';
+import { lightModeOn } from '../../redux/actions/gameActions';
 import colors from '../../colors';
 import PopUpButton from './style/PopUpButton';
 import {
@@ -42,28 +36,10 @@ const SvgWrapper = styled.div`
   }
 `;
 
-class SeatAllocator extends Component {
-  state = { randomNumber: null, randomModeSelected: true, manualModeSelected: false };
-
-  seats = _.shuffle(_.range(1, 11));
-
-  stopInterval = () => {
-    clearInterval(this.interval);
-    const randomNumber = this.seats.pop();
-    this.setState({ randomNumber });
-    this.props.addToSelectedNumbers(randomNumber);
-  };
+class RoleDealing extends Component {
+  state = { randomModeSelected: true, manualModeSelected: false };
 
   buttonClicked = () => this.props.lightModeOn();
-
-  randomClicked = () => {
-    if (!this.seats.length) return;
-    let i = 0;
-    this.interval = setInterval(() => {
-      this.setState({ randomNumber: _.random(1, 10) });
-      ++i === 20 && this.stopInterval();
-    }, 40);
-  };
 
   render = () => {
     const lightMode = this.props.game.lightMode;
@@ -93,18 +69,5 @@ class SeatAllocator extends Component {
   };
 }
 
-const mapStateToProps = state => ({
-  game: state.game,
-});
-
-const mapDispatchToProps = dispatch => ({
-  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
-  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
-  changeGameState: payload => dispatch(changeGameState(payload)),
-  lightModeOn: () => dispatch(lightModeOn()),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SeatAllocator);
+const mapStateToProps = state => ({ game: state.game });
+export default connect(mapStateToProps)(RoleDealing);
