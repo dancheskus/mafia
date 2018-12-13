@@ -29,9 +29,6 @@ class SeatAllocator extends Component {
     const randomNumber = this.seats.pop();
     this.setState({ randomNumber });
     this.props.addToSelectedNumbers(randomNumber);
-    // setTimeout(() => {
-    //   this.setState({ randomNumber: null });
-    // }, 2000);
   };
 
   buttonClicked = () => this.props.changeGameState({ phase: 'RoleDealing' }) && this.props.clearSelectedNumbers();

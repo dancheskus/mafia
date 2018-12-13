@@ -6,7 +6,7 @@ export default (state = Array(10).fill({ role: '', isAlive: true, fouls: { amoun
   produce(state, draft => {
     switch (action.type) {
       case 'ADD_ROLE':
-        draft[action.payload.playerNumber].role = action.payload.role;
+        draft[action.payload.playerNumber - 1].role = action.payload.role;
         return;
       case 'KILL_PLAYER':
         draft[action.playerNumber].isAlive = false;

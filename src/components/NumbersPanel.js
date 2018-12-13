@@ -27,47 +27,50 @@ const PanelItem = styled.div`
   cursor: ${props => (props.pointer ? 'pointer' : 'default')};
 `;
 
-const NumbersPanel = props => (
-  <Fragment>
-    {props.game.gameState.phase === 'SeatAllocator' && (
-      <Panel color={props.game.gameState.phase} className="d-flex justify-content-around">
-        {props.game.selectedNumbers.map(selNum => (
-          <PanelItem color={props.game.gameState.phase} key={selNum} selected>
-            {selNum}
-          </PanelItem>
-        ))}
-
-        {_.range(1, 11)
-          .filter(e => !props.game.selectedNumbers.includes(e))
-          .map(notSelNum => (
-            <PanelItem color={props.game.gameState.phase} key={notSelNum}>
-              {notSelNum}
+const NumbersPanel = props => {
+  const phase = props.game.gameState.phase;
+  return (
+    <Fragment>
+      {phase === 'SeatAllocator' && (
+        <Panel color={phase} className="d-flex justify-content-around">
+          {props.game.selectedNumbers.map(selNum => (
+            <PanelItem color={phase} key={selNum} selected>
+              {selNum}
             </PanelItem>
           ))}
-      </Panel>
-    )}
 
-    {props.game.gameState.phase === 'RoleDealing' && (
-      <Panel color={props.game.gameState.phase} className="d-flex justify-content-around">
-        {_.range(1, 11).map(num => (
-          <PanelItem
-            pointer={props.game.numbersPanelClickable}
-            color={props.game.gameState.phase}
-            key={num}
-            selected={num === props.game.selectedNumbers[0]}
-            onClick={() => {
-              if (!props.game.numbersPanelClickable) return;
-              props.clearSelectedNumbers();
-              props.addToSelectedNumbers(num);
-            }}
-          >
-            {num}
-          </PanelItem>
-        ))}
-      </Panel>
-    )}
-  </Fragment>
-);
+          {_.range(1, 11)
+            .filter(e => !props.game.selectedNumbers.includes(e))
+            .map(notSelNum => (
+              <PanelItem color={phase} key={notSelNum}>
+                {notSelNum}
+              </PanelItem>
+            ))}
+        </Panel>
+      )}
+
+      {phase === 'RoleDealing' && (
+        <Panel color={phase} className="d-flex justify-content-around">
+          {_.range(1, 11).map(num => (
+            <PanelItem
+              pointer={props.game.numbersPanelClickable}
+              color={phase}
+              key={num}
+              selected={num === props.game.selectedNumbers[0]}
+              onClick={() => {
+                if (!props.game.numbersPanelClickable) return;
+                props.clearSelectedNumbers();
+                props.addToSelectedNumbers(num);
+              }}
+            >
+              {num}
+            </PanelItem>
+          ))}
+        </Panel>
+      )}
+    </Fragment>
+  );
+};
 
 const mapStateToProps = state => ({ game: state.game });
 const mapDispatchToProps = dispatch => ({

@@ -43,6 +43,7 @@ const Navigation = props => {
   let title = '';
   if (phase === 'SeatAllocator') title = 'раздача номеров';
   if (phase === 'RoleDealing') title = 'раздача ролей';
+  if (phase === 'ZeroNight') title = `0 ночь`;
 
   return (
     <StyledNavigation color={props.game.gameState.phase}>
