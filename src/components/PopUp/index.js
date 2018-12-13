@@ -13,6 +13,7 @@ const StyledPopUp = styled.div`
   box-shadow: 0px 9px 24px -2px rgba(0, 0, 0, 0.52);
   user-select: none;
   position: relative;
+  height: 100%;
 
   ${props =>
     props.minimized

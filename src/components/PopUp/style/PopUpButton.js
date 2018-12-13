@@ -9,12 +9,20 @@ export default styled.button`
   border-radius: 30px;
   font-size: 1.1rem;
   text-transform: uppercase;
-  cursor: pointer;
   transition: filter 0.2s;
-
+  ${props =>
+    props.disabled
+      ? `
+  filter: brightness(60%);
+  cursor: default;
+  `
+      : `
+  cursor: pointer;
   &:hover {
     filter: brightness(110%);
   }
+  
+  `}
 
   &:focus {
     outline: none;

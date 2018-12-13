@@ -1,7 +1,126 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import _ from 'lodash';
 
-export default class ManualMode extends Component {
-  state = {};
+import { addRole } from './../../../redux/actions/playersActions';
+import { changeGameState, numbersPanelClickable, addToSelectedNumbers } from './../../../redux/actions/gameActions';
+import PopUpButton from '../style/PopUpButton';
+import colors from '../../../colors';
+import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SherifOkIcon } from './../../../img/svgIcons';
 
-  render = () => <div>Manual</div>;
+const RoleSelectionWrapper = styled.div`
+  height: 80%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const RoleSelection = styled.div`
+  width: 50%;
+  height: 80%;
+  display: flex;
+  flex-wrap: wrap;
+
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid transparent;
+    transition: border 0.1s;
+  }
+`;
+
+const Mirnij = styled.div`
+  background: ${colors.RoleDealing.popupBackgroundLight};
+  width: 50%;
+  border: ${props => (props.selected ? '2px solid white' : null)} !important;
+  border-radius: 10px 0 0 0;
+`;
+const Don = styled.div`
+  background: ${colors.RoleDealing.popupButton};
+  width: 50%;
+  border: ${props => (props.selected ? '2px solid white' : null)} !important;
+  border-radius: 0 10px 0 0;
+`;
+const Mafia = styled.div`
+  background: ${colors.RoleDealing.popupButton};
+  width: 50%;
+  border: ${props => (props.selected ? '2px solid white' : null)} !important;
+  border-radius: 0 0 0 10px;
+`;
+const Sherif = styled.div`
+  background: ${colors.RoleDealing.popupBackgroundLight};
+  width: 50%;
+  border: ${props => (props.selected ? '2px solid white' : null)} !important;
+  border-radius: 0 0 10px 0;
+`;
+
+class ManualMode extends Component {
+  state = { buttonDisabled: true };
+  componentDidMount = () => {
+    this.props.addToSelectedNumbers(1);
+    this.props.numbersPanelClickable();
+  };
+
+  componentDidUpdate = () => {
+    if (!this.state.buttonDisabled) return;
+    const allPlayerRoles = this.props.players.map(player => player.role);
+    const { МАФИЯ, ШЕРИФ, ДОН } = _.countBy(allPlayerRoles);
+    if (МАФИЯ + ШЕРИФ + ДОН === 4) this.setState({ buttonDisabled: false });
+  };
+
+  changeSelection = role => {
+    this.props.addRole({ playerNumber: this.props.game.selectedNumbers[0], role });
+  };
+
+  render = () => {
+    const currentPlayerRole = this.props.players[this.props.game.selectedNumbers[0] - 1]
+      ? this.props.players[this.props.game.selectedNumbers[0] - 1].role
+      : null;
+
+    return (
+      <Fragment>
+        <RoleSelectionWrapper>
+          <RoleSelection>
+            <Mirnij onClick={() => this.changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
+              <ThumbUpIcon size={'60%'} fill={colors.RoleDealing.popupIconLight} />
+            </Mirnij>
+            <Don onClick={() => this.changeSelection('ДОН')} selected={currentPlayerRole === 'ДОН'}>
+              <DonRingIcon size={'60%'} fill={colors.RoleDealing.popupIcon} />
+            </Don>
+            <Mafia onClick={() => this.changeSelection('МАФИЯ')} selected={currentPlayerRole === 'МАФИЯ'}>
+              <ThumbDownIcon size={'60%'} fill={colors.RoleDealing.popupIcon} />
+            </Mafia>
+            <Sherif onClick={() => this.changeSelection('ШЕРИФ')} selected={currentPlayerRole === 'ШЕРИФ'}>
+              <SherifOkIcon size={'60%'} fill={colors.RoleDealing.popupIconLight} />
+            </Sherif>
+          </RoleSelection>
+        </RoleSelectionWrapper>
+        <div className="flex-grow-1 d-flex align-items-center">
+          <PopUpButton color="RoleDealing" disabled={this.state.buttonDisabled}>
+            Играть
+          </PopUpButton>
+        </div>
+      </Fragment>
+    );
+  };
 }
+
+const mapStateToProps = state => ({
+  game: state.game,
+  players: state.players,
+});
+
+const mapDispatchToProps = dispatch => ({
+  addRole: payload => dispatch(addRole(payload)),
+  changeGameState: payload => dispatch(changeGameState(payload)),
+  numbersPanelClickable: () => dispatch(numbersPanelClickable()),
+  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ManualMode);

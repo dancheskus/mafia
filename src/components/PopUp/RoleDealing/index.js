@@ -38,7 +38,7 @@ class RoleDealing extends Component {
     const lightMode = this.props.game.lightMode;
     return (
       <Fragment>
-        {!this.state.modeApproved ? (
+        {/* {!this.state.modeApproved ? (
           <Fragment>
             <SvgWrapper>
               <div
@@ -64,8 +64,8 @@ class RoleDealing extends Component {
           <RandomMode />
         ) : (
           <ManualMode />
-        )}
-        {/* <RandomMode /> */}
+        )} */}
+        <ManualMode />
       </Fragment>
     );
   };

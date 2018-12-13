@@ -2,7 +2,10 @@
 
 import produce from 'immer';
 
-export default (state = Array(10).fill({ role: '', isAlive: true, fouls: { amount: 0, muted: false } }), action) =>
+export default (
+  state = Array(10).fill({ role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } }),
+  action
+) =>
   produce(state, draft => {
     switch (action.type) {
       case 'ADD_ROLE':
