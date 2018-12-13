@@ -2,22 +2,8 @@ export const thisRoundFirstPlayer = playerNumber => ({ type: 'THIS_ROUND_FIRST_P
 export const changeActivePlayer = playerNumber => ({ type: 'CHANGE_ACTIVE_PLAYER', playerNumber });
 export const changeGameState = payload => ({ type: 'CHANGE_GAME_STATE', payload });
 export const addToSelectedNumbers = playerNumber => ({ type: 'ADD_TO_SELECTED_NUMBERS', playerNumber });
+export const clearSelectedNumbers = () => ({ type: 'CLEAR_SELECTED_NUMBERS' });
 export const lightModeOn = () => ({ type: 'LIGHT_MODE_ON' });
 export const lightModeOff = () => ({ type: 'LIGHT_MODE_OFF' });
-export const clearSelectedNumbers = () => ({ type: 'CLEAR_SELECTED_NUMBERS' });
-
-// import { thisRoundFirstPlayer, changeActivePlayer, changeGameState, addToSelectedNumbers, clearSelectedNumbers } from '../redux/actions/gameActions';
-
-// const mapStateToProps = state => ({
-//   game: state.game,
-// });
-
-// const mapDispatchToProps = dispatch => ({
-//   thisRoundFirstPlayer: playerNumber => dispatch(changeGameState(playerNumber)),
-//   changeActivePlayer: playerNumber => dispatch(changeGameState(playerNumber)),
-//   changeGameState: payload => dispatch(changeGameState(payload)),
-//   addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
-//   lightModeOn: () => dispatch(lightModeOn()),
-//   lightModeOff: () => dispatch(lightModeOff()),
-//   clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
-// });
+export const numbersPanelNotClickable = () => ({ type: 'NUMBERS_PANEL_NOT_CLICKABLE' });
+export const numbersPanelClickable = () => ({ type: 'NUMBERS_PANEL_CLICKABLE' });

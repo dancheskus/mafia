@@ -4,6 +4,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 
 import colors from '../colors';
+import { addToSelectedNumbers, clearSelectedNumbers } from '../redux/actions/gameActions';
 
 const Panel = styled.div`
   background: ${props => colors[props.color].numbersPanel};
@@ -23,6 +24,7 @@ const PanelItem = styled.div`
   align-items: center;
   font-weight: 500;
   box-shadow: 0px 9px 35px -8px rgba(0, 0, 0, 0.49);
+  cursor: ${props => (props.pointer ? 'pointer' : 'default')};
 `;
 
 const NumbersPanel = props => (
@@ -48,7 +50,17 @@ const NumbersPanel = props => (
     {props.game.gameState.phase === 'RoleDealing' && (
       <Panel color={props.game.gameState.phase} className="d-flex justify-content-around">
         {_.range(1, 11).map(num => (
-          <PanelItem color={props.game.gameState.phase} key={num} selected={num === props.game.selectedNumbers[0]}>
+          <PanelItem
+            pointer={props.game.numbersPanelClickable}
+            color={props.game.gameState.phase}
+            key={num}
+            selected={num === props.game.selectedNumbers[0]}
+            onClick={() => {
+              if (!props.game.numbersPanelClickable) return;
+              props.clearSelectedNumbers();
+              props.addToSelectedNumbers(num);
+            }}
+          >
             {num}
           </PanelItem>
         ))}
@@ -58,4 +70,11 @@ const NumbersPanel = props => (
 );
 
 const mapStateToProps = state => ({ game: state.game });
-export default connect(mapStateToProps)(NumbersPanel);
+const mapDispatchToProps = dispatch => ({
+  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
+  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NumbersPanel);

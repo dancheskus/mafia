@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import colors from '../../../colors';
 import PopUpButton from '../style/PopUpButton';
+import RandomMode from './RandomMode';
+import ManualMode from './ManualMode';
 import { RandomCubeIcon, ListIcon } from '../../../img/svgIcons';
 
 const SvgWrapper = styled.div`
@@ -28,33 +30,41 @@ const SvgWrapper = styled.div`
 `;
 
 class RoleDealing extends Component {
-  state = { randomModeSelected: true, manualModeSelected: false };
+  state = { randomModeSelected: true, manualModeSelected: false, modeApproved: false };
 
-  buttonClicked = () => this.props.lightModeOn();
+  buttonClicked = () => this.setState({ modeApproved: true });
 
   render = () => {
     const lightMode = this.props.game.lightMode;
     return (
       <Fragment>
-        <SvgWrapper>
-          <div
-            className="flex-grow-1 d-flex align-items-center justify-content-center"
-            onClick={() => this.setState({ randomModeSelected: true, manualModeSelected: false })}
-          >
-            <RandomCubeIcon className={this.state.randomModeSelected ? 'selected' : null} size={'100px'} />
-          </div>
-          <div
-            className="flex-grow-1 d-flex align-items-center justify-content-center"
-            onClick={() => this.setState({ manualModeSelected: true, randomModeSelected: false })}
-          >
-            <ListIcon className={this.state.manualModeSelected ? 'selected' : null} size={'100px'} />
-          </div>
-        </SvgWrapper>
-        <div className="flex-grow-1 d-flex align-items-center">
-          <PopUpButton color={this.props.game.gameState.phase} light={lightMode} onClick={this.buttonClicked}>
-            {this.state.randomModeSelected ? 'автоматически' : 'вручную'}
-          </PopUpButton>
-        </div>
+        {!this.state.modeApproved ? (
+          <Fragment>
+            <SvgWrapper>
+              <div
+                className="flex-grow-1 d-flex align-items-center justify-content-center"
+                onClick={() => this.setState({ randomModeSelected: true, manualModeSelected: false })}
+              >
+                <RandomCubeIcon className={this.state.randomModeSelected ? 'selected' : null} size={'100px'} />
+              </div>
+              <div
+                className="flex-grow-1 d-flex align-items-center justify-content-center"
+                onClick={() => this.setState({ manualModeSelected: true, randomModeSelected: false })}
+              >
+                <ListIcon className={this.state.manualModeSelected ? 'selected' : null} size={'100px'} />
+              </div>
+            </SvgWrapper>
+            <div className="flex-grow-1 d-flex align-items-center">
+              <PopUpButton color={this.props.game.gameState.phase} light={lightMode} onClick={this.buttonClicked}>
+                {this.state.randomModeSelected ? 'автоматически' : 'вручную'}
+              </PopUpButton>
+            </div>
+          </Fragment>
+        ) : this.state.randomModeSelected ? (
+          <RandomMode />
+        ) : (
+          <ManualMode />
+        )}
       </Fragment>
     );
   };

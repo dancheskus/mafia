@@ -9,6 +9,7 @@ export default (
     gameState: { phase: 'RoleDealing', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, day, night, voting, carCrash, endOfGame
     lightMode: false,
     selectedNumbers: [],
+    numbersPanelClickable: false,
   },
   action
 ) =>
@@ -43,6 +44,14 @@ export default (
 
       case 'CLEAR_SELECTED_NUMBERS':
         draft.selectedNumbers = [];
+        return;
+
+      case 'NUMBERS_PANEL_NOT_CLICKABLE':
+        draft.numbersPanelClickable = false;
+        return;
+
+      case 'NUMBERS_PANEL_CLICKABLE':
+        draft.numbersPanelClickable = true;
         return;
     }
   });
