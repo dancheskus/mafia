@@ -63,19 +63,11 @@ const Sherif = styled.div`
 `;
 
 class ManualMode extends Component {
-  state = { buttonDisabled: true };
   componentDidMount = () => {
     this.props.addToSelectedNumbers(1);
     this.props.numbersPanelClickable();
   };
 
-  componentDidUpdate = () => {
-    const { МАФИЯ, ШЕРИФ, ДОН } = _.countBy(this.props.players.map(player => player.role));
-    if (this.state.buttonDisabled === true && МАФИЯ === 2 && ШЕРИФ === 1 && ДОН === 1)
-      this.setState({ buttonDisabled: false });
-    if (this.state.buttonDisabled === false && (МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1))
-      this.setState({ buttonDisabled: true });
-  };
   changeSelection = role => {
     this.props.addRole({ playerNumber: this.props.game.selectedNumbers[0], role });
   };
@@ -89,6 +81,8 @@ class ManualMode extends Component {
     const currentPlayerRole = this.props.players[this.props.game.selectedNumbers[0] - 1]
       ? this.props.players[this.props.game.selectedNumbers[0] - 1].role
       : null;
+
+    const { МАФИЯ, ШЕРИФ, ДОН } = _.countBy(this.props.players.map(player => player.role));
 
     return (
       <Fragment>
@@ -109,7 +103,11 @@ class ManualMode extends Component {
           </RoleSelection>
         </RoleSelectionWrapper>
         <div className="flex-grow-1 d-flex align-items-center">
-          <PopUpButton onClick={this.startGameClicked} color="RoleDealing" disabled={this.state.buttonDisabled}>
+          <PopUpButton
+            onClick={this.startGameClicked}
+            color="RoleDealing"
+            disabled={МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1}
+          >
             Играть
           </PopUpButton>
         </div>
