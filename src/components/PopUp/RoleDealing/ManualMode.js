@@ -4,7 +4,12 @@ import styled from 'styled-components';
 import _ from 'lodash';
 
 import { addRole } from './../../../redux/actions/playersActions';
-import { changeGameState, numbersPanelClickable, addToSelectedNumbers } from './../../../redux/actions/gameActions';
+import {
+  changeGameState,
+  numbersPanelClickable,
+  addToSelectedNumbers,
+  clearSelectedNumbers,
+} from './../../../redux/actions/gameActions';
 import PopUpButton from '../style/PopUpButton';
 import colors from '../../../colors';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SherifOkIcon } from './../../../img/svgIcons';
@@ -65,14 +70,19 @@ class ManualMode extends Component {
   };
 
   componentDidUpdate = () => {
-    if (!this.state.buttonDisabled) return;
-    const allPlayerRoles = this.props.players.map(player => player.role);
-    const { МАФИЯ, ШЕРИФ, ДОН } = _.countBy(allPlayerRoles);
-    if (МАФИЯ + ШЕРИФ + ДОН === 4) this.setState({ buttonDisabled: false });
+    const { МАФИЯ, ШЕРИФ, ДОН } = _.countBy(this.props.players.map(player => player.role));
+    if (this.state.buttonDisabled === true && МАФИЯ === 2 && ШЕРИФ === 1 && ДОН === 1)
+      this.setState({ buttonDisabled: false });
+    if (this.state.buttonDisabled === false && (МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1))
+      this.setState({ buttonDisabled: true });
   };
-
   changeSelection = role => {
     this.props.addRole({ playerNumber: this.props.game.selectedNumbers[0], role });
+  };
+
+  startGameClicked = () => {
+    this.props.clearSelectedNumbers();
+    this.props.changeGameState({ phase: 'ZeroNight' });
   };
 
   render = () => {
@@ -99,7 +109,7 @@ class ManualMode extends Component {
           </RoleSelection>
         </RoleSelectionWrapper>
         <div className="flex-grow-1 d-flex align-items-center">
-          <PopUpButton color="RoleDealing" disabled={this.state.buttonDisabled}>
+          <PopUpButton onClick={this.startGameClicked} color="RoleDealing" disabled={this.state.buttonDisabled}>
             Играть
           </PopUpButton>
         </div>
@@ -118,6 +128,7 @@ const mapDispatchToProps = dispatch => ({
   changeGameState: payload => dispatch(changeGameState(payload)),
   numbersPanelClickable: () => dispatch(numbersPanelClickable()),
   addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
+  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
 });
 
 export default connect(

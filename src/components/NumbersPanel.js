@@ -29,6 +29,8 @@ const PanelItem = styled.div`
 
 const NumbersPanel = props => {
   const phase = props.game.gameState.phase;
+  const numbersPanelClickable = props.game.numbersPanelClickable;
+
   return (
     <Fragment>
       {phase === 'SeatAllocator' && (
@@ -63,7 +65,11 @@ const NumbersPanel = props => {
                 props.addToSelectedNumbers(num);
               }}
             >
-              {num}
+              {numbersPanelClickable && props.players[num - 1].role === 'МАФИЯ' && 'М'}
+              {numbersPanelClickable && props.players[num - 1].role === 'ШЕРИФ' && 'Ш'}
+              {numbersPanelClickable && props.players[num - 1].role === 'ДОН' && 'Д'}
+              {numbersPanelClickable && props.players[num - 1].role === 'МИРНЫЙ' && num}
+              {!numbersPanelClickable && num}
             </PanelItem>
           ))}
         </Panel>
@@ -72,7 +78,7 @@ const NumbersPanel = props => {
   );
 };
 
-const mapStateToProps = state => ({ game: state.game });
+const mapStateToProps = ({ game, players }) => ({ game, players });
 const mapDispatchToProps = dispatch => ({
   addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
   clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
