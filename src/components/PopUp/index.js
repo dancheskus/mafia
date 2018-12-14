@@ -48,6 +48,15 @@ const MinimizeButton = styled.div`
   }
 `;
 
+const ChildWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-around;
+  align-items: center;
+  display: ${props => props.hidden && 'none'};
+`;
+
 class PopUp extends Component {
   state = { minimized: false };
 
@@ -63,11 +72,15 @@ class PopUp extends Component {
             {this.state.minimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
           </MinimizeButton>
         )}
-        {!this.state.minimized ? this.props.children : null}
+        {/* {!this.state.minimized ? this.props.children : this.props.children} */}
+
+        <ChildWrapper hidden={this.state.minimized}>
+          <this.props.popupChild />
+        </ChildWrapper>
       </StyledPopUp>
     );
   };
 }
 
-const mapStateToProps = state => ({ game: state.game });
+const mapStateToProps = ({ game }) => ({ game });
 export default connect(mapStateToProps)(PopUp);

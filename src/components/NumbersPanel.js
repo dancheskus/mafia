@@ -33,7 +33,7 @@ const NumbersPanel = props => {
 
   return (
     <Fragment>
-      {phase === 'SeatAllocator' && (
+      {(phase === 'SeatAllocator' || phase === 'ZeroNight') && (
         <Panel color={phase} className="d-flex justify-content-around">
           {props.game.selectedNumbers.map(selNum => (
             <PanelItem color={phase} key={selNum} selected>

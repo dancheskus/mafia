@@ -8,7 +8,7 @@ import NumbersPanel from './NumbersPanel';
 import PopUp from './PopUp';
 import SeatAllocator from './PopUp/SeatAllocator';
 import RoleDealing from './PopUp/RoleDealing';
-import Timer from './Timer';
+import ZeroNight from './PopUp/ZeroNight';
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -26,26 +26,24 @@ const MainApp = styled.div`
 class App extends Component {
   render() {
     const phase = this.props.game.gameState.phase;
-    const PopUpChildComponent = { SeatAllocator, RoleDealing }[phase];
-    return (
-      // <AppWrapper className="d-flex flex-column">
-      //   <NavBar />
-      //   <MainApp className="d-flex">
-      //     <Container className="d-flex flex-column justify-content-between">
-      //       {phase !== 'startScreen' && <NumbersPanel />}
+    const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight }[phase];
 
-      //       {(phase === 'SeatAllocator' || phase === 'RoleDealing') && (
-      //         <PopUp>
-      //           <PopUpChildComponent />
-      //         </PopUp>
-      //       )}
-      //     </Container>
-      //   </MainApp>
-      // </AppWrapper>
-      <Timer />
+    return (
+      <AppWrapper className="d-flex flex-column">
+        <NavBar />
+        <MainApp className="d-flex">
+          <Container className="d-flex flex-column justify-content-between">
+            {phase !== 'startScreen' && <NumbersPanel />}
+
+            {(phase === 'SeatAllocator' || phase === 'RoleDealing' || phase === 'ZeroNight') && (
+              <PopUp popupChild={PopUpChildComponent} />
+            )}
+          </Container>
+        </MainApp>
+      </AppWrapper>
     );
   }
 }
 
-const mapStateToProps = state => ({ game: state.game });
+const mapStateToProps = ({ game }) => ({ game });
 export default connect(mapStateToProps)(App);
