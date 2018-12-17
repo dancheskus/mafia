@@ -11,7 +11,6 @@ const StyledPopUp = styled.div`
 
   border-radius: 10px;
   box-shadow: 0px 9px 24px -2px rgba(0, 0, 0, 0.52);
-  user-select: none;
   position: relative;
   height: 100%;
 
@@ -66,12 +65,8 @@ class PopUp extends Component {
     return (
       <StyledPopUp color={phase} light={lightMode} minimized={this.state.minimized}>
         {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && (
-          <MinimizeButton className="minimize-button" color={phase} light={lightMode} onClick={this.minimizeClicked}>
-            {this.state.minimized ? (
-              <MaximizeIcon className="resize-button" size={'50%'} />
-            ) : (
-              <MinimizeIcon className="resize-button" size={'50%'} />
-            )}
+          <MinimizeButton color={phase} light={lightMode} onClick={this.minimizeClicked}>
+            {this.state.minimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
           </MinimizeButton>
         )}
 

@@ -15,15 +15,15 @@ export default (
         draft[action.playerNumber].isAlive = false;
         return;
       case 'ADD_FOUL': {
-        const playerFouls = draft[action.playerNumber].fouls;
+        const playerFouls = draft[action.playerNumber - 1].fouls;
         playerFouls.amount === 2 && (playerFouls.muted = true);
-        playerFouls.amount === 3 && (draft[action.playerNumber].isAlive = false);
+        playerFouls.amount === 3 && (draft[action.playerNumber - 1].isAlive = false);
         playerFouls.amount < 4 && playerFouls.amount++;
         return;
       }
       case 'REMOVE_FOUL': {
-        const playerFouls = draft[action.playerNumber].fouls;
-        playerFouls.amount < 4 && playerFouls.amount-- && (playerFouls.muted = false);
+        const playerFouls = draft[action.playerNumber - 1].fouls;
+        playerFouls.amount < 4 && playerFouls.amount > 0 && playerFouls.amount-- && (playerFouls.muted = false);
         return;
       }
     }

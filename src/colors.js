@@ -50,7 +50,7 @@ export default {
     deadPlayerCardNumber: '#717171',
     warningPlayerCardBackground: '#FF8888',
     warningPlayerCardNumber: '#686C75',
-    currentPlayerBorder: '#000',
+    activePlayer: '#000',
     playerOpensTable: '#3EF538',
     removeFoulBackground: '#D4C7B2',
     addFoulIconBackground: '#8A8A8A',

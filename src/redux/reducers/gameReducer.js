@@ -4,8 +4,8 @@ import produce from 'immer';
 
 export default (
   state = {
-    thisRoundFirstPlayer: 0,
-    activePlayer: 0,
+    opensTable: 1,
+    activePlayer: 1,
     gameState: { phase: 'Day', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
     lightMode: false,
     selectedNumbers: [],
@@ -15,8 +15,8 @@ export default (
 ) =>
   produce(state, draft => {
     switch (action.type) {
-      case 'THIS_ROUND_FIRST_PLAYER':
-        draft.thisRoundFirstPlayer = action.playerNumber;
+      case 'OPENS_TABLE':
+        draft.opensTable = action.playerNumber;
         return;
 
       case 'CHANGE_ACTIVE_PLAYER':
