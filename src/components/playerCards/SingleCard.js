@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
@@ -23,14 +23,24 @@ const Card = styled.div`
 `;
 
 const PlayerNumber = styled.div`
-  background: ${props => (props.isAlive ? colors.Day.playerCardBackground : colors.Day.deadPlayerCardBackground)};
+  background: ${props =>
+    !props.isAlive
+      ? colors.Day.deadPlayerCardBackground
+      : props.isMuted
+      ? colors.Day.warningPlayerCardBackground
+      : colors.Day.playerCardBackground};
   flex-grow: 1;
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 4rem;
-  color: ${props => (props.isAlive ? colors.Day.playerCardNumber : colors.Day.deadPlayerCardNumber)};
+  color: ${props =>
+    !props.isAlive
+      ? colors.Day.deadPlayerCardNumber
+      : props.isMuted
+      ? colors.Day.deadPlayerCardNumber
+      : colors.Day.playerCardNumber};
   position: relative;
 
   ::before {
@@ -72,7 +82,7 @@ const AddFoul = styled.div`
   background: ${props =>
     props.amount === 2
       ? colors.Day.addSecondFoulBackground
-      : props.amount === 3
+      : props.amount === 3 || props.amount === 4
       ? colors.Day.addThirdFoulBackground
       : colors.Day.addFoulBackground};
 `;
@@ -87,39 +97,70 @@ const FoulIcon = styled.div`
   align-items: center;
 `;
 
-const SingleCard = props => {
-  const addFoul = () => props.addFoul(props.number);
-  const removeFoul = () => props.removeFoul(props.number);
+class SingleCard extends Component {
+  state = { foulsAmount: this.props.players[this.props.number - 1].fouls.amount };
 
-  const isAlive = props.players[props.number - 1].isAlive;
+  timer;
 
-  return (
-    <CardContainer order={props.order}>
-      <Card activePlayer={props.game.activePlayer === props.number}>
-        <PlayerNumber isAlive={isAlive} opensTable={props.game.opensTable === props.number}>
-          {props.number}
-        </PlayerNumber>
+  addFoul = () => {
+    if (this.state.foulsAmount === 4) return;
 
-        <FoulContainer isAlive={isAlive}>
-          <RemoveFoul onClick={removeFoul}>
-            <FoulIcon remove>
-              <MinimizeIcon size={'50%'} />
-            </FoulIcon>
-          </RemoveFoul>
-          <AddFoul amount={props.players[props.number - 1].fouls.amount} onClick={addFoul}>
-            {props.players[props.number - 1].fouls.amount ? (
-              '!'.repeat(props.players[props.number - 1].fouls.amount)
-            ) : (
-              <FoulIcon>
-                <MaximizeIcon size={'50%'} />
+    this.setState({ foulsAmount: this.state.foulsAmount + 1 });
+
+    if (this.state.foulsAmount !== 3) return this.props.addFoul(this.props.number);
+
+    this.timer = setTimeout(() => {
+      this.props.addFoul(this.props.number);
+    }, 2000);
+  };
+
+  removeFoul = () => {
+    if (this.state.foulsAmount === 0) return;
+    this.setState({ foulsAmount: this.state.foulsAmount - 1 });
+    if (this.state.foulsAmount === 4) {
+      clearTimeout(this.timer);
+    } else {
+      this.props.removeFoul(this.props.number);
+    }
+  };
+
+  render = () => {
+    // const foulsAmount = this.props.players[this.props.number - 1].fouls.amount;
+    const isMuted = this.props.players[this.props.number - 1].fouls.muted;
+    const isAlive = this.props.players[this.props.number - 1].isAlive;
+
+    return (
+      <CardContainer order={this.props.order}>
+        <Card activePlayer={this.props.game.activePlayer === this.props.number}>
+          <PlayerNumber
+            isMuted={isMuted}
+            isAlive={isAlive}
+            opensTable={this.props.game.opensTable === this.props.number}
+          >
+            {this.props.number}
+          </PlayerNumber>
+
+          <FoulContainer isAlive={isAlive}>
+            <RemoveFoul onClick={this.removeFoul}>
+              <FoulIcon remove>
+                <MinimizeIcon size={'50%'} />
               </FoulIcon>
-            )}
-          </AddFoul>
-        </FoulContainer>
-      </Card>
-    </CardContainer>
-  );
-};
+            </RemoveFoul>
+            <AddFoul amount={this.state.foulsAmount} onClick={this.addFoul}>
+              {this.state.foulsAmount ? (
+                '!'.repeat(this.state.foulsAmount)
+              ) : (
+                <FoulIcon>
+                  <MaximizeIcon size={'50%'} />
+                </FoulIcon>
+              )}
+            </AddFoul>
+          </FoulContainer>
+        </Card>
+      </CardContainer>
+    );
+  };
+}
 
 const mapStateToProps = ({ game, players }) => ({ game, players });
 
