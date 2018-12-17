@@ -9,6 +9,7 @@ import PopUp from './PopUp';
 import SeatAllocator from './PopUp/SeatAllocator';
 import RoleDealing from './PopUp/RoleDealing';
 import ZeroNight from './PopUp/ZeroNight';
+import PlayerCards from './playerCards';
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -38,6 +39,8 @@ class App extends Component {
             {(phase === 'SeatAllocator' || phase === 'RoleDealing' || phase === 'ZeroNight') && (
               <PopUp popupChild={PopUpChildComponent} />
             )}
+
+            {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && <PlayerCards />}
           </Container>
         </MainApp>
       </AppWrapper>
