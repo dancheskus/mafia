@@ -6,7 +6,7 @@ export default (
   state = {
     thisRoundFirstPlayer: 0,
     activePlayer: 0,
-    gameState: { phase: 'ZeroNight', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
+    gameState: { phase: 'Day', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
     lightMode: false,
     selectedNumbers: [],
     numbersPanelClickable: false,

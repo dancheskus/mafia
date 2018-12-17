@@ -40,21 +40,23 @@ const NavTimer = styled.div`
 
 const Navigation = props => {
   const phase = props.game.gameState.phase;
+  const dayNumber = props.game.gameState.dayNumber;
   let title = '';
   if (phase === 'SeatAllocator') title = 'раздача номеров';
   if (phase === 'RoleDealing') title = 'раздача ролей';
-  if (phase === 'ZeroNight') title = `0 ночь`;
+  if (phase === 'ZeroNight') title = '0 ночь';
+  if (phase === 'Day') title = `${dayNumber} день`;
 
   return (
-    <StyledNavigation color={props.game.gameState.phase}>
+    <StyledNavigation color={phase}>
       <Container className="d-flex justify-content-between p-0">
         <NavStateName>{title}</NavStateName>
-        <NavTimer>1:00</NavTimer>
+        {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'ZeroNight' && <NavTimer>1:00</NavTimer>}
         <NavMenu />
       </Container>
     </StyledNavigation>
   );
 };
 
-const mapStateToProps = state => ({ game: state.game });
+const mapStateToProps = ({ game }) => ({ game });
 export default connect(mapStateToProps)(Navigation);
