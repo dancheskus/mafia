@@ -91,8 +91,8 @@ class RandomMode extends Component {
   );
 }
 
-const mapStateToProps = state => ({
-  game: state.game,
+const mapStateToProps = ({ game }) => ({
+  game,
 });
 
 const mapDispatchToProps = dispatch => ({

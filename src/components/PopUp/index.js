@@ -17,13 +17,20 @@ const StyledPopUp = styled.div`
 
   ${props =>
     props.minimized
-      ? ` width: 100px; height: 100px; `
+      ? `
+        width: 100px; height: 100px;
+        div:not(.minimize-button),
+        h1,
+        button {
+          display: none;
+        }
+      `
       : `
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      align-items: center;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
       `};
 `;
 
@@ -48,15 +55,6 @@ const MinimizeButton = styled.div`
   }
 `;
 
-const ChildWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: space-around;
-  align-items: center;
-  display: ${props => props.hidden && 'none'};
-`;
-
 class PopUp extends Component {
   state = { minimized: false };
 
@@ -68,15 +66,16 @@ class PopUp extends Component {
     return (
       <StyledPopUp color={phase} light={lightMode} minimized={this.state.minimized}>
         {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && (
-          <MinimizeButton color={phase} light={lightMode} onClick={this.minimizeClicked}>
-            {this.state.minimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
+          <MinimizeButton className="minimize-button" color={phase} light={lightMode} onClick={this.minimizeClicked}>
+            {this.state.minimized ? (
+              <MaximizeIcon className="resize-button" size={'50%'} />
+            ) : (
+              <MinimizeIcon className="resize-button" size={'50%'} />
+            )}
           </MinimizeButton>
         )}
-        {/* {!this.state.minimized ? this.props.children : this.props.children} */}
 
-        <ChildWrapper hidden={this.state.minimized}>
-          <this.props.popupChild />
-        </ChildWrapper>
+        <this.props.popupChild />
       </StyledPopUp>
     );
   };

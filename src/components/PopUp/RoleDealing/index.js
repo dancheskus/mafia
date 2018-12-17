@@ -66,7 +66,7 @@ class RoleDealing extends Component {
           <ManualMode />
         )} */}
 
-        <ManualMode />
+        <RandomMode />
       </Fragment>
     );
   };
