@@ -125,7 +125,6 @@ class SingleCard extends Component {
   };
 
   render = () => {
-    // const foulsAmount = this.props.players[this.props.number - 1].fouls.amount;
     const isMuted = this.props.players[this.props.number - 1].fouls.muted;
     const isAlive = this.props.players[this.props.number - 1].isAlive;
 

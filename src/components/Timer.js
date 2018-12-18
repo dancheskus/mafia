@@ -1,29 +1,41 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import { PauseIcon, ResetIcon, PlayIcon } from '../img/svgIcons';
 import colors from '../colors';
+import NavBarCircleButton from './style/NavBarCircleButton';
 
-const TimerWrapper = styled.div`
+const TimeAndPlayWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-size: 400%;
-  color: white;
+
+  ${props =>
+    props.mini
+      ? `width: 45px;
+      cursor: pointer;
+      background: ${colors.Day.deadPlayerCardNumber};
+      border-radius: 5px;`
+      : `font-size: 400%;
+      color: white;`}
 `;
 
 const StartStopButton = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  ${props =>
+    !props.mini &&
+    `
   background: ${props => colors[props.color].popupButton};
   width: 50px;
   height: 50px;
   border-radius: 50%;
+      `}
 `;
-const ResetButton = styled.div``;
 
 class Timer extends Component {
   initialState = { timerWorking: false, secondsLeft: this.props.time || 60 };
@@ -54,17 +66,31 @@ class Timer extends Component {
     const time = this.state.secondsLeft;
     const minutes = Math.floor(time / 60);
     const seconds = time - minutes * 60;
+    const isMini = this.props.mini;
 
     return (
-      <TimerWrapper>
-        {`${minutes}:${seconds < 10 ? '0' + seconds : seconds}`}
-        <StartStopButton color={this.props.game.gameState.phase} onClick={this.startPauseClicked}>
-          {this.state.timerWorking ? <PauseIcon size={'80%'} /> : <PlayIcon size={'80%'} />}
-        </StartStopButton>
-        {/* <button onClick={this.resetClicked}>
-          <ResetIcon size={'80%'}  />
-        </button> */}
-      </TimerWrapper>
+      <>
+        <TimeAndPlayWrapper mini={isMini} onClick={isMini && this.startPauseClicked}>
+          {`${minutes}:${seconds < 10 ? '0' + seconds : seconds}`}
+          <StartStopButton
+            mini={isMini}
+            color={this.props.game.gameState.phase}
+            onClick={!isMini && this.startPauseClicked}
+          >
+            {this.state.timerWorking ? (
+              <PauseIcon size={isMini ? '35%' : '80%'} />
+            ) : (
+              <PlayIcon size={isMini ? '35%' : '80%'} />
+            )}
+          </StartStopButton>
+        </TimeAndPlayWrapper>
+
+        {isMini && (
+          <NavBarCircleButton onClick={this.resetClicked}>
+            <ResetIcon size={'70%'} />
+          </NavBarCircleButton>
+        )}
+      </>
     );
   };
 }

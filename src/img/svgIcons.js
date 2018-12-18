@@ -125,3 +125,13 @@ export const ResetIcon = ({ fill = '#fff', size = '100%', className }) => (
     />
   </svg>
 );
+
+export const NextIcon = ({ fill = '#fff', size = '100%', className }) => (
+  <svg width={size} height={size} viewBox={'-1.3 0 9.648 16.373'} className={className}>
+    <path
+      fill={fill}
+      d="M631.039,4.839a1.413,1.413,0,0,0,0,2.047l5.7,5.7-5.7,5.7a1.447,1.447,0,0,0,2.047,2.047l6.725-6.725a1.413,1.413,0,0,0,0-2.047l-6.725-6.725A1.413,1.413,0,0,0,631.039,4.839Z"
+      transform="translate(-630.6 -4.4)"
+    />
+  </svg>
+);

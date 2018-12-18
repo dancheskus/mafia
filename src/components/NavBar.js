@@ -2,9 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
+import { changeActivePlayer, changeGameState } from '../redux/actions/gameActions';
 
 import NavMenu from './NavMenu';
 import colors from '../colors';
+import NavBarCircleButton from './style/NavBarCircleButton';
+import { NextIcon, ThumbUpIcon } from '../img/svgIcons';
+import Timer from './Timer';
 
 const StyledNavigation = styled.div`
   background: #46494e;
@@ -34,8 +38,12 @@ const NavStateName = styled.h2`
   }
 `;
 
-const NavTimer = styled.div`
-  /*  */
+const ButtonsWrapper = styled.div`
+  > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const Navigation = props => {
@@ -47,11 +55,30 @@ const Navigation = props => {
   if (phase === 'ZeroNight') title = '0 ночь';
   if (phase === 'Day') title = `${dayNumber} день`;
 
+  const nextClicked = () => {
+    props.changeActivePlayer(props.game.activePlayer === 10 ? 1 : props.game.activePlayer + 1);
+  };
+
+  const toVotingClicked = () => {
+    props.changeGameState({ phase: 'Voting' });
+  };
+
+  const lastSpeaker =
+    props.game.opensTable - props.game.activePlayer === 1 || props.game.opensTable - props.game.activePlayer === -9;
+
   return (
     <StyledNavigation color={phase}>
       <Container className="d-flex justify-content-between p-0">
         <NavStateName>{title}</NavStateName>
-        {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'ZeroNight' && <NavTimer>1:00</NavTimer>}
+        {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'ZeroNight' && (
+          <ButtonsWrapper>
+            <Timer mini key={props.game.activePlayer} />
+            <NavBarCircleButton onClick={lastSpeaker ? toVotingClicked : nextClicked}>
+              {lastSpeaker ? <ThumbUpIcon size="50%" /> : <NextIcon size="50%" />}
+            </NavBarCircleButton>
+          </ButtonsWrapper>
+        )}
+
         <NavMenu />
       </Container>
     </StyledNavigation>
@@ -59,4 +86,11 @@ const Navigation = props => {
 };
 
 const mapStateToProps = ({ game }) => ({ game });
-export default connect(mapStateToProps)(Navigation);
+const mapDispatchToProps = dispatch => ({
+  changeActivePlayer: playerNumber => dispatch(changeActivePlayer(playerNumber)),
+  changeGameState: payload => dispatch(changeGameState(payload)),
+});
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Navigation);
