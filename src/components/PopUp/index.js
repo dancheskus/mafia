@@ -10,26 +10,36 @@ const StyledPopUp = styled.div`
     props.light ? colors[props.color].popupBackgroundLight : colors[props.color].popupBackground};
 
   border-radius: 10px;
-  box-shadow: 0px 9px 24px -2px rgba(0, 0, 0, 0.52);
-  position: relative;
+  box-shadow: 3px 10px 9px -4px rgba(0, 0, 0, 0.31);
+  position: absolute;
+  bottom: 0;
+  left: 0;
   height: 100%;
+  width: 100%;
+  z-index: 111;
+  transition: height 0.3s, width 0.3s;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+
+  div:not(.minimize-button),
+  h1,
+  button {
+    opacity: 1;
+    transition: opacity 0.1s;
+  }
 
   ${props =>
-    props.minimized
-      ? `
+    props.minimized &&
+    `
         width: 100px; height: 100px;
         div:not(.minimize-button),
         h1,
         button {
-          display: none;
+          opacity:0;
         }
-      `
-      : `
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
       `};
 `;
 
@@ -48,8 +58,9 @@ const MinimizeButton = styled.div`
   right: 15px;
   cursor: pointer;
   transition: filter 0.3s;
+  z-index: 222;
 
-  &:hover {
+  :hover {
     filter: brightness(110%);
   }
 `;
@@ -65,7 +76,7 @@ class PopUp extends Component {
     return (
       <StyledPopUp color={phase} light={lightMode} minimized={this.state.minimized}>
         {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && (
-          <MinimizeButton color={phase} light={lightMode} onClick={this.minimizeClicked}>
+          <MinimizeButton className="minimize-button" color={phase} light={lightMode} onClick={this.minimizeClicked}>
             {this.state.minimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
           </MinimizeButton>
         )}

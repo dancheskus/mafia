@@ -18,10 +18,27 @@ const AppWrapper = styled.div`
 
 const MainApp = styled.div`
   flex-grow: 1;
+  min-height: 0;
   background-image: radial-gradient(circle at right bottom, #8b96af, #666a73);
   .container {
     padding: 15px;
   }
+`;
+
+const MainContentWrapper = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column-reverse;
+  position: relative;
+  justify-content: center;
+  min-height: 0;
+`;
+
+const PopUpContainer = styled.div`
+  align-self: center;
+  position: absolute;
+  height: 96%;
+  width: 96%;
 `;
 
 class App extends Component {
@@ -36,11 +53,15 @@ class App extends Component {
           <Container className="d-flex flex-column justify-content-between">
             {phase !== 'startScreen' && <NumbersPanel />}
 
-            {(phase === 'SeatAllocator' || phase === 'RoleDealing' || phase === 'ZeroNight') && (
-              <PopUp popupChild={PopUpChildComponent} />
-            )}
+            <MainContentWrapper>
+              <PopUpContainer>
+                {(phase === 'SeatAllocator' || phase === 'RoleDealing' || phase === 'ZeroNight') && (
+                  <PopUp popupChild={PopUpChildComponent} />
+                )}
+              </PopUpContainer>
 
-            {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && <PlayerCards />}
+              {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && <PlayerCards />}
+            </MainContentWrapper>
           </Container>
         </MainApp>
       </AppWrapper>

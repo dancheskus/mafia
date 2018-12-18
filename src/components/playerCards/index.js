@@ -8,6 +8,7 @@ const CardsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   height: 100%;
+  min-height: 0;
   flex-direction: column-reverse;
 `;
 

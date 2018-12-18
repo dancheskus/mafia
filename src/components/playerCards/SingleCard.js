@@ -10,7 +10,7 @@ const CardContainer = styled.div`
   width: 50%;
   display: flex;
   padding: 2px;
-  height: 20%;
+  flex-basis: 20%;
   order: ${props => props.order};
 `;
 
