@@ -145,6 +145,7 @@ class SingleCard extends Component {
                 <MinimizeIcon size={'50%'} />
               </FoulIcon>
             </RemoveFoul>
+
             <AddFoul amount={this.state.foulsAmount} onClick={this.addFoul}>
               {this.state.foulsAmount ? (
                 '!'.repeat(this.state.foulsAmount)

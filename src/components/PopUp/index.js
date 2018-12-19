@@ -41,6 +41,7 @@ const StyledPopUp = styled.div`
           opacity:0;
         }
       `};
+  pointer-events: all;
 `;
 
 const MinimizeButton = styled.div`
@@ -68,7 +69,9 @@ const MinimizeButton = styled.div`
 class PopUp extends Component {
   state = { minimized: false };
 
-  minimizeClicked = () => this.setState({ minimized: !this.state.minimized });
+  minimizeClicked = () => {
+    this.setState({ minimized: !this.state.minimized });
+  };
 
   render = () => {
     const phase = this.props.game.gameState.phase;

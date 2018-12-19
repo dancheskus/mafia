@@ -42,6 +42,10 @@ export default (
         draft.selectedNumbers.push(action.playerNumber);
         return;
 
+      case 'REMOVE_LAST_SELECTED_NUMBER':
+        draft.selectedNumbers.pop();
+        return;
+
       case 'CLEAR_SELECTED_NUMBERS':
         draft.selectedNumbers = [];
         return;

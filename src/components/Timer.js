@@ -70,12 +70,12 @@ class Timer extends Component {
 
     return (
       <>
-        <TimeAndPlayWrapper mini={isMini} onClick={isMini && this.startPauseClicked}>
+        <TimeAndPlayWrapper mini={isMini} onClick={isMini ? this.startPauseClicked : null}>
           {`${minutes}:${seconds < 10 ? '0' + seconds : seconds}`}
           <StartStopButton
             mini={isMini}
             color={this.props.game.gameState.phase}
-            onClick={!isMini && this.startPauseClicked}
+            onClick={!isMini ? this.startPauseClicked : null}
           >
             {this.state.timerWorking ? (
               <PauseIcon size={isMini ? '35%' : '80%'} />

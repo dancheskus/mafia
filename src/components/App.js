@@ -39,6 +39,7 @@ const PopUpContainer = styled.div`
   position: absolute;
   height: 96%;
   width: 96%;
+  pointer-events: none;
 `;
 
 class App extends Component {
@@ -51,14 +52,14 @@ class App extends Component {
         <NavBar />
         <MainApp className="d-flex">
           <Container className="d-flex flex-column justify-content-between">
-            {phase !== 'startScreen' && <NumbersPanel />}
+            {phase !== 'startScreen' && <NumbersPanel key={this.props.game.activePlayer} />}
 
             <MainContentWrapper>
-              <PopUpContainer>
-                {(phase === 'SeatAllocator' || phase === 'RoleDealing' || phase === 'ZeroNight') && (
+              {(phase === 'SeatAllocator' || phase === 'RoleDealing' || phase === 'ZeroNight') && (
+                <PopUpContainer>
                   <PopUp popupChild={PopUpChildComponent} />
-                )}
-              </PopUpContainer>
+                </PopUpContainer>
+              )}
 
               {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && <PlayerCards />}
             </MainContentWrapper>
