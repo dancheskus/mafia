@@ -11,6 +11,15 @@ const Panel = styled.div`
   padding: 10px;
   border-radius: 15px;
   margin-bottom: 15px;
+  display: flex;
+  justify-content: ${props => (props.itemsCentered ? 'center' : 'space-around')};
+  ${props =>
+    props.itemsCentered &&
+    `
+    > div:not(:first-child) {
+      margin-left: 10px
+    }
+  `}
 `;
 
 const PanelItem = styled.div`
@@ -38,7 +47,7 @@ class NumbersPanel extends Component {
     return (
       <>
         {(phase === 'SeatAllocator' || phase === 'ZeroNight') && (
-          <Panel color={phase} className="d-flex justify-content-around">
+          <Panel color={phase}>
             {this.props.game.selectedNumbers.map(selNum => (
               <PanelItem color={phase} key={selNum} selected>
                 {selNum}
@@ -56,7 +65,7 @@ class NumbersPanel extends Component {
         )}
 
         {phase === 'Day' && (
-          <Panel color={phase} className="d-flex justify-content-around">
+          <Panel color={phase}>
             {this.props.game.selectedNumbers.map(selNum => {
               const lastAddedNumber =
                 selNum === _.last(this.props.game.selectedNumbers) && this.state.playerAddedNumber;
@@ -80,25 +89,38 @@ class NumbersPanel extends Component {
 
             {_.range(1, 11)
               .filter(e => !this.props.game.selectedNumbers.includes(e))
-              .map(notSelNum => (
-                <PanelItem
-                  color={phase}
-                  key={notSelNum}
-                  pointer={!this.state.playerAddedNumber}
-                  onClick={() => {
-                    if (this.state.playerAddedNumber) return;
-                    this.props.addToSelectedNumbers(notSelNum);
-                    this.setState({ playerAddedNumber: true });
-                  }}
-                >
-                  {notSelNum}
-                </PanelItem>
-              ))}
+              .map(notSelNum => {
+                if (this.props.players[notSelNum - 1].isAlive)
+                  return (
+                    <PanelItem
+                      color={phase}
+                      key={notSelNum}
+                      pointer={!this.state.playerAddedNumber}
+                      onClick={() => {
+                        if (this.state.playerAddedNumber) return;
+                        this.props.addToSelectedNumbers(notSelNum);
+                        this.setState({ playerAddedNumber: true });
+                      }}
+                    >
+                      {notSelNum}
+                    </PanelItem>
+                  );
+              })}
+          </Panel>
+        )}
+
+        {phase === 'Voting' && (
+          <Panel color={phase} itemsCentered>
+            {this.props.game.selectedNumbers.map(selNum => (
+              <PanelItem color={phase} key={selNum}>
+                {selNum}
+              </PanelItem>
+            ))}
           </Panel>
         )}
 
         {phase === 'RoleDealing' && (
-          <Panel color={phase} className="d-flex justify-content-around">
+          <Panel color={phase}>
             {_.range(1, 11).map(num => (
               <PanelItem
                 pointer={numbersPanelClickable}

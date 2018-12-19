@@ -40,24 +40,28 @@ const RoleSelection = styled.div`
 const Mirnij = styled.div`
   background: ${colors.RoleDealing.popupBackgroundLight};
   width: 50%;
+  height: 50%;
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
   border-radius: 10px 0 0 0;
 `;
 const Don = styled.div`
   background: ${colors.RoleDealing.popupButton};
   width: 50%;
+  height: 50%;
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
   border-radius: 0 10px 0 0;
 `;
 const Mafia = styled.div`
   background: ${colors.RoleDealing.popupButton};
   width: 50%;
+  height: 50%;
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
   border-radius: 0 0 0 10px;
 `;
 const Sherif = styled.div`
   background: ${colors.RoleDealing.popupBackgroundLight};
   width: 50%;
+  height: 50%;
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
   border-radius: 0 0 10px 0;
 `;

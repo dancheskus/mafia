@@ -54,6 +54,7 @@ const Navigation = props => {
   if (phase === 'RoleDealing') title = 'раздача ролей';
   if (phase === 'ZeroNight') title = '0 ночь';
   if (phase === 'Day') title = `${dayNumber} день`;
+  if (phase === 'Voting') title = 'Голосование';
 
   const nextClicked = () => {
     props.changeActivePlayer(props.game.activePlayer === 10 ? 1 : props.game.activePlayer + 1);

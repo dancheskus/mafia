@@ -10,6 +10,7 @@ import SeatAllocator from './PopUp/SeatAllocator';
 import RoleDealing from './PopUp/RoleDealing';
 import ZeroNight from './PopUp/ZeroNight';
 import PlayerCards from './playerCards';
+import Voting from './Voting';
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -34,18 +35,10 @@ const MainContentWrapper = styled.div`
   min-height: 0;
 `;
 
-const PopUpContainer = styled.div`
-  align-self: center;
-  position: absolute;
-  height: 96%;
-  width: 96%;
-  pointer-events: none;
-`;
-
 class App extends Component {
   render() {
     const phase = this.props.game.gameState.phase;
-    const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight }[phase];
+    const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting }[phase];
 
     return (
       <AppWrapper className="d-flex flex-column">
@@ -55,11 +48,10 @@ class App extends Component {
             {phase !== 'startScreen' && <NumbersPanel key={this.props.game.activePlayer} />}
 
             <MainContentWrapper>
-              {(phase === 'SeatAllocator' || phase === 'RoleDealing' || phase === 'ZeroNight') && (
-                <PopUpContainer>
-                  <PopUp popupChild={PopUpChildComponent} />
-                </PopUpContainer>
-              )}
+              {(phase === 'SeatAllocator' ||
+                phase === 'RoleDealing' ||
+                phase === 'ZeroNight' ||
+                phase === 'Voting') && <PopUp popupChild={PopUpChildComponent} />}
 
               {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && <PlayerCards />}
             </MainContentWrapper>

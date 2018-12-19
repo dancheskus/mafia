@@ -12,10 +12,10 @@ const StyledPopUp = styled.div`
   border-radius: 10px;
   box-shadow: 3px 10px 9px -4px rgba(0, 0, 0, 0.31);
   position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
+  height: calc(100% - 20px);
+  width: calc(100% - 20px);
+  bottom: 10px;
+  left: 10px;
   z-index: 111;
   transition: height 0.3s, width 0.3s;
 
@@ -28,7 +28,7 @@ const StyledPopUp = styled.div`
   h1,
   button {
     opacity: 1;
-    transition: opacity 0.2s;
+    transition: opacity 0.2s, transform 0.3s;
   }
 
   ${props =>
@@ -39,9 +39,9 @@ const StyledPopUp = styled.div`
         h1,
         button {
           opacity:0;
+    transform: translateX(-160%);
         }
       `};
-  pointer-events: all;
 `;
 
 const MinimizeButton = styled.div`
