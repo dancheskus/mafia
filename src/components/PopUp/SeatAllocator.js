@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import _ from 'lodash';
 import { connect } from 'react-redux';
@@ -44,7 +44,7 @@ class SeatAllocator extends Component {
 
   render = () => {
     return (
-      <Fragment>
+      <>
         <BigCircle
           className="d-flex justify-content-center align-items-center"
           onClick={this.randomClicked}
@@ -55,7 +55,7 @@ class SeatAllocator extends Component {
         <PopUpButton color={this.props.game.gameState.phase} onClick={this.buttonClicked}>
           {this.seats.length ? 'пропустить' : 'играть'}
         </PopUpButton>
-      </Fragment>
+      </>
     );
   };
 }

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
@@ -23,24 +23,24 @@ class ZeroNight extends Component {
   };
 
   render = () => (
-    <Fragment>
+    <>
       {this.state.dogovorka ? (
-        <Fragment>
+        <>
           <Label>Договорка</Label>
           <Timer />
           <PopUpButton onClick={() => this.setState({ dogovorka: false })} color="ZeroNight">
             Далее
           </PopUpButton>
-        </Fragment>
+        </>
       ) : (
-        <Fragment>
+        <>
           <Label>Знакомство с шерифом и доном</Label>
           <PopUpButton onClick={this.startGame} color="ZeroNight">
             День
           </PopUpButton>
-        </Fragment>
+        </>
       )}
-    </Fragment>
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
@@ -37,9 +37,9 @@ class RoleDealing extends Component {
   render = () => {
     const lightMode = this.props.game.lightMode;
     return (
-      <Fragment>
+      <>
         {!this.state.modeApproved ? (
-          <Fragment>
+          <>
             <SvgWrapper>
               <div
                 className="flex-grow-1 d-flex align-items-center justify-content-center"
@@ -59,13 +59,13 @@ class RoleDealing extends Component {
                 {this.state.randomModeSelected ? 'автоматически' : 'вручную'}
               </PopUpButton>
             </div>
-          </Fragment>
+          </>
         ) : this.state.randomModeSelected ? (
           <RandomMode />
         ) : (
           <ManualMode />
         )}
-      </Fragment>
+      </>
     );
   };
 }

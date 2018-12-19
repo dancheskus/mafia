@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import _ from 'lodash';
@@ -85,7 +85,7 @@ class ManualMode extends Component {
     const { МАФИЯ, ШЕРИФ, ДОН } = _.countBy(this.props.players.map(player => player.role));
 
     return (
-      <Fragment>
+      <>
         <RoleSelectionWrapper>
           <RoleSelection>
             <Mirnij onClick={() => this.changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
@@ -111,7 +111,7 @@ class ManualMode extends Component {
             Играть
           </PopUpButton>
         </div>
-      </Fragment>
+      </>
     );
   };
 }

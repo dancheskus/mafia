@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import styled from 'styled-components';
@@ -32,7 +32,7 @@ const NumbersPanel = props => {
   const numbersPanelClickable = props.game.numbersPanelClickable;
 
   return (
-    <Fragment>
+    <>
       {(phase === 'SeatAllocator' || phase === 'ZeroNight' || phase === 'Day') && (
         <Panel color={phase} className="d-flex justify-content-around">
           {props.game.selectedNumbers.map(selNum => (
@@ -74,7 +74,7 @@ const NumbersPanel = props => {
           ))}
         </Panel>
       )}
-    </Fragment>
+    </>
   );
 };
 

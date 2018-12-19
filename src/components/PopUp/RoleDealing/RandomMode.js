@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -80,12 +80,12 @@ class RandomMode extends Component {
           (this.state.role === 'ШЕРИФ' && <SherifOkIcon size={'30%'} fill={popupIconLight} />))}
 
       {this.state.role && (
-        <Fragment>
+        <>
           <RoleName light={this.props.game.lightMode}>{this.state.role}</RoleName>
           <PopUpButton color="RoleDealing" light={this.props.game.lightMode}>
             Закрыть
           </PopUpButton>
-        </Fragment>
+        </>
       )}
     </Card>
   );

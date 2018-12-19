@@ -28,7 +28,7 @@ const StyledPopUp = styled.div`
   h1,
   button {
     opacity: 1;
-    transition: opacity 0.1s;
+    transition: opacity 0.2s;
   }
 
   ${props =>
