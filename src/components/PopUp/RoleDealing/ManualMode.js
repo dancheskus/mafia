@@ -68,7 +68,7 @@ const Sherif = styled.div`
 
 class ManualMode extends Component {
   componentDidMount = () => {
-    this.props.addToSelectedNumbers(1);
+    this.props.addToSelectedNumbers(0);
     this.props.numbersPanelClickable();
   };
 
@@ -82,8 +82,8 @@ class ManualMode extends Component {
   };
 
   render = () => {
-    const currentPlayerRole = this.props.players[this.props.game.selectedNumbers[0] - 1]
-      ? this.props.players[this.props.game.selectedNumbers[0] - 1].role
+    const currentPlayerRole = this.props.players[this.props.game.selectedNumbers[0]]
+      ? this.props.players[this.props.game.selectedNumbers[0]].role
       : null;
 
     const { МАФИЯ, ШЕРИФ, ДОН } = _.countBy(this.props.players.map(player => player.role));

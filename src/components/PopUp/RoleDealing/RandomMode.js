@@ -38,7 +38,7 @@ class RandomMode extends Component {
   state = { role: null };
   allRoles = _.shuffle(_.concat(_.fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН'));
 
-  componentDidMount = () => this.props.addToSelectedNumbers(1);
+  componentDidMount = () => this.props.addToSelectedNumbers(0);
 
   cardClicked = () => {
     const playerNumber = this.props.game.selectedNumbers[0];

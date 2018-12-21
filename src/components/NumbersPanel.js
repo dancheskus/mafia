@@ -34,7 +34,7 @@ const PanelItem = styled.div`
   font-weight: 500;
   box-shadow: 0px 9px 35px -8px rgba(0, 0, 0, 0.49);
   cursor: ${props => (props.pointer ? 'pointer' : 'default')};
-  ${props => props.pointer && `border: 2px solid ${colors.Day.addSecondFoulBackground};`}
+  ${props => props.border && `border: 2px solid ${colors.Day.addSecondFoulBackground};`}
 `;
 
 class NumbersPanel extends Component {
@@ -50,15 +50,15 @@ class NumbersPanel extends Component {
           <Panel color={phase}>
             {this.props.game.selectedNumbers.map(selNum => (
               <PanelItem color={phase} key={selNum} selected>
-                {selNum}
+                {selNum + 1}
               </PanelItem>
             ))}
 
-            {_.range(1, 11)
+            {_.range(0, 10)
               .filter(e => !this.props.game.selectedNumbers.includes(e))
               .map(notSelNum => (
                 <PanelItem color={phase} key={notSelNum}>
-                  {notSelNum}
+                  {notSelNum + 1}
                 </PanelItem>
               ))}
           </Panel>
@@ -75,6 +75,7 @@ class NumbersPanel extends Component {
                   color={phase}
                   key={selNum}
                   pointer={lastAddedNumber}
+                  border={lastAddedNumber}
                   onClick={() => {
                     if (!lastAddedNumber) return;
                     this.props.removeLastSelectedNumber();
@@ -82,27 +83,28 @@ class NumbersPanel extends Component {
                   }}
                   selected
                 >
-                  {selNum}
+                  {selNum + 1}
                 </PanelItem>
               );
             })}
 
-            {_.range(1, 11)
+            {_.range(0, 10)
               .filter(e => !this.props.game.selectedNumbers.includes(e))
               .map(notSelNum => {
-                if (this.props.players[notSelNum - 1].isAlive)
+                if (this.props.players[notSelNum].isAlive)
                   return (
                     <PanelItem
                       color={phase}
                       key={notSelNum}
                       pointer={!this.state.playerAddedNumber}
+                      border={!this.state.playerAddedNumber}
                       onClick={() => {
                         if (this.state.playerAddedNumber) return;
                         this.props.addToSelectedNumbers(notSelNum);
                         this.setState({ playerAddedNumber: true });
                       }}
                     >
-                      {notSelNum}
+                      {notSelNum + 1}
                     </PanelItem>
                   );
               })}
@@ -121,7 +123,7 @@ class NumbersPanel extends Component {
 
         {phase === 'RoleDealing' && (
           <Panel color={phase}>
-            {_.range(1, 11).map(num => (
+            {_.range(0, 10).map(num => (
               <PanelItem
                 pointer={numbersPanelClickable}
                 color={phase}
@@ -133,11 +135,11 @@ class NumbersPanel extends Component {
                   this.props.addToSelectedNumbers(num);
                 }}
               >
-                {numbersPanelClickable && this.props.players[num - 1].role === 'МАФИЯ' && 'М'}
-                {numbersPanelClickable && this.props.players[num - 1].role === 'ШЕРИФ' && 'Ш'}
-                {numbersPanelClickable && this.props.players[num - 1].role === 'ДОН' && 'Д'}
-                {numbersPanelClickable && this.props.players[num - 1].role === 'МИРНЫЙ' && num}
-                {!numbersPanelClickable && num}
+                {numbersPanelClickable && this.props.players[num].role === 'МАФИЯ' && 'М'}
+                {numbersPanelClickable && this.props.players[num].role === 'ШЕРИФ' && 'Ш'}
+                {numbersPanelClickable && this.props.players[num].role === 'ДОН' && 'Д'}
+                {numbersPanelClickable && this.props.players[num].role === 'МИРНЫЙ' && num + 1}
+                {!numbersPanelClickable && num + 1}
               </PanelItem>
             ))}
           </Panel>

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 import { changeActivePlayer, changeGameState } from '../redux/actions/gameActions';
+import _ from 'lodash';
 
 import NavMenu from './NavMenu';
 import colors from '../colors';
@@ -56,16 +57,42 @@ const Navigation = props => {
   if (phase === 'Day') title = `${dayNumber} день`;
   if (phase === 'Voting') title = 'Голосование';
 
-  const nextClicked = () => {
-    props.changeActivePlayer(props.game.activePlayer === 10 ? 1 : props.game.activePlayer + 1);
-  };
+  const lastSpeaker =
+    props.game.opensTable - props.game.activePlayer === 1 || props.game.opensTable - props.game.activePlayer === -9;
+
+  const nextPlayer = i => (props.players[(i + 1) % 10].isAlive ? (i + 1) % 10 : nextPlayer((i + 1) % 10));
+
+  // const nextPlayer = () => {
+  //   let nextPlayer = props.game.activePlayer + 1;
+
+  //   while (!props.players[nextPlayer - 1].isAlive) {
+  //     nextPlayer++;
+  //     if (nextPlayer === 11) nextPlayer = 1;
+  //   }
+
+  //   return nextPlayer;
+  // };
+
+  // const nextClicked = () => {
+  //   // const alivePlayersBeforeOpener = _.filter(
+  //   //   props.players,
+  //   //   (player, i) => player.isAlive && i < props.game.opensTable - 1
+  //   // );
+
+  //   // console.log(alivePlayersBeforeOpener);
+  //   const allPlayers = props.players;
+  //   const activePlayer = props.game.activePlayer;
+  //   const lastAlivePlayer = _.findLastIndex(allPlayers, player => player.isAlive) + 1;
+  //   const searchFromIndex = activePlayer < lastAlivePlayer ? activePlayer : 0;
+  //   const nextPlayer = _.findIndex(allPlayers, player => player.isAlive, searchFromIndex) + 1;
+
+  //   // if (nextPlayer === props.game.opensTable) return toVotingClicked();
+  //   props.changeActivePlayer(nextPlayer);
+  // };
 
   const toVotingClicked = () => {
     props.changeGameState({ phase: 'Voting' });
   };
-
-  const lastSpeaker =
-    props.game.opensTable - props.game.activePlayer === 1 || props.game.opensTable - props.game.activePlayer === -9;
 
   return (
     <StyledNavigation color={phase}>
@@ -74,7 +101,8 @@ const Navigation = props => {
         {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'ZeroNight' && (
           <ButtonsWrapper>
             <Timer mini key={props.game.activePlayer} />
-            <NavBarCircleButton onClick={lastSpeaker ? toVotingClicked : nextClicked}>
+            {/* <NavBarCircleButton onClick={lastSpeaker ? toVotingClicked : nextClicked}> */}
+            <NavBarCircleButton onClick={() => props.changeActivePlayer(nextPlayer(props.game.activePlayer))}>
               {lastSpeaker ? <ThumbUpIcon size="50%" /> : <NextIcon size="50%" />}
             </NavBarCircleButton>
           </ButtonsWrapper>
@@ -86,7 +114,7 @@ const Navigation = props => {
   );
 };
 
-const mapStateToProps = ({ game }) => ({ game });
+const mapStateToProps = ({ game, players }) => ({ game, players });
 const mapDispatchToProps = dispatch => ({
   changeActivePlayer: playerNumber => dispatch(changeActivePlayer(playerNumber)),
   changeGameState: payload => dispatch(changeGameState(payload)),

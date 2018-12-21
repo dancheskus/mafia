@@ -19,7 +19,7 @@ class ZeroNight extends Component {
 
   startGame = () => {
     this.props.changeGameState({ phase: 'Day', dayNumber: 1 });
-    this.props.changeActivePlayer(1);
+    this.props.changeActivePlayer(0);
   };
 
   render = () => (

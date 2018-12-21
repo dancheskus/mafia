@@ -9,20 +9,20 @@ export default (
   produce(state, draft => {
     switch (action.type) {
       case 'ADD_ROLE':
-        draft[action.payload.playerNumber - 1].role = action.payload.role;
+        draft[action.payload.playerNumber].role = action.payload.role;
         return;
       case 'KILL_PLAYER':
         draft[action.playerNumber].isAlive = false;
         return;
       case 'ADD_FOUL': {
-        const playerFouls = draft[action.playerNumber - 1].fouls;
+        const playerFouls = draft[action.playerNumber].fouls;
         playerFouls.amount === 2 && (playerFouls.muted = true);
-        playerFouls.amount === 3 && (draft[action.playerNumber - 1].isAlive = false);
+        playerFouls.amount === 3 && (draft[action.playerNumber].isAlive = false);
         playerFouls.amount < 4 && playerFouls.amount++;
         return;
       }
       case 'REMOVE_FOUL': {
-        const playerFouls = draft[action.playerNumber - 1].fouls;
+        const playerFouls = draft[action.playerNumber].fouls;
         playerFouls.amount < 4 && playerFouls.amount > 0 && playerFouls.amount-- && (playerFouls.muted = false);
         return;
       }

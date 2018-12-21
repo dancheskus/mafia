@@ -98,7 +98,7 @@ const FoulIcon = styled.div`
 `;
 
 class SingleCard extends Component {
-  state = { foulsAmount: this.props.players[this.props.number - 1].fouls.amount };
+  state = { foulsAmount: this.props.players[this.props.number].fouls.amount };
 
   timer;
 
@@ -125,8 +125,8 @@ class SingleCard extends Component {
   };
 
   render = () => {
-    const isMuted = this.props.players[this.props.number - 1].fouls.muted;
-    const isAlive = this.props.players[this.props.number - 1].isAlive;
+    const isMuted = this.props.players[this.props.number].fouls.muted;
+    const isAlive = this.props.players[this.props.number].isAlive;
 
     return (
       <CardContainer order={this.props.order}>
@@ -136,7 +136,7 @@ class SingleCard extends Component {
             isAlive={isAlive}
             opensTable={this.props.game.opensTable === this.props.number}
           >
-            {this.props.number}
+            {this.props.number + 1}
           </PlayerNumber>
 
           <FoulContainer isAlive={isAlive}>

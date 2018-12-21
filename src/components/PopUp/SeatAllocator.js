@@ -22,19 +22,20 @@ const BigCircle = styled.div`
 class SeatAllocator extends Component {
   state = { randomNumber: null };
 
-  seats = _.shuffle(_.range(1, 11));
+  seats = _.shuffle(_.range(0, 10));
 
   stopInterval = () => {
     clearInterval(this.interval);
+    this.interval = false;
     const randomNumber = this.seats.pop();
-    this.setState({ randomNumber });
+    this.setState({ randomNumber: randomNumber + 1 });
     this.props.addToSelectedNumbers(randomNumber);
   };
 
   buttonClicked = () => this.props.changeGameState({ phase: 'RoleDealing' }) && this.props.clearSelectedNumbers();
 
   randomClicked = () => {
-    if (!this.seats.length) return;
+    if (!this.seats.length || this.interval) return;
     let i = 0;
     this.interval = setInterval(() => {
       this.setState({ randomNumber: _.random(1, 10) });
@@ -50,7 +51,7 @@ class SeatAllocator extends Component {
           onClick={this.randomClicked}
           number={this.state.randomNumber}
         >
-          {this.state.randomNumber || 'нажми'}
+          {this.state.randomNumber ? this.state.randomNumber : 'нажми'}
         </BigCircle>
         <PopUpButton color={this.props.game.gameState.phase} onClick={this.buttonClicked}>
           {this.seats.length ? 'пропустить' : 'играть'}

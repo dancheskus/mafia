@@ -4,9 +4,9 @@ import produce from 'immer';
 
 export default (
   state = {
-    opensTable: 1,
-    activePlayer: 1,
-    gameState: { phase: 'ZeroNight', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
+    opensTable: 3,
+    activePlayer: 5,
+    gameState: { phase: 'Day', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
     lightMode: false,
     selectedNumbers: [],
     numbersPanelClickable: false,

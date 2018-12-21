@@ -16,12 +16,12 @@ class PlayerCards extends Component {
   render = () => (
     <CardsWrapper>
       {this.props.players.map((player, i) => {
-        const plNum = i + 1;
+        const plNum = i;
         return (
           <SingleCard
             key={i}
             number={plNum}
-            order={plNum === 10 ? 6 : plNum === 9 ? 7 : plNum === 7 ? 9 : plNum === 6 ? 10 : plNum}
+            order={plNum === 9 ? 5 : plNum === 8 ? 6 : plNum === 6 ? 8 : plNum === 5 ? 9 : plNum}
           />
         );
       })}
