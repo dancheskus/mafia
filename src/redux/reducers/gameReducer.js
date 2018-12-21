@@ -6,9 +6,9 @@ export default (
   state = {
     opensTable: 3,
     activePlayer: 5,
-    gameState: { phase: 'Day', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
+    gameState: { phase: 'Voting', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
     lightMode: false,
-    selectedNumbers: [],
+    selectedNumbers: [4, 7, 1],
     numbersPanelClickable: false,
   },
   action
