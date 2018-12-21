@@ -41,6 +41,8 @@ class Timer extends Component {
   initialState = { timerWorking: false, secondsLeft: this.props.time || 60 };
   state = this.initialState;
 
+  componentWillUnmount = () => this.stopTimer();
+
   resetClicked = () => {
     this.stopTimer();
     this.setState({ ...this.initialState });
