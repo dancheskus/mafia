@@ -10,7 +10,7 @@ import SeatAllocator from './PopUp/SeatAllocator';
 import RoleDealing from './PopUp/RoleDealing';
 import ZeroNight from './PopUp/ZeroNight';
 import PlayerCards from './playerCards';
-import Voting from './Voting';
+import Voting from './PopUp/Voting';
 
 const AppWrapper = styled.div`
   height: 100vh;
