@@ -3,6 +3,7 @@ import colors from '../../../../colors';
 
 export const ResultsLabel = styled.div`
   text-transform: uppercase;
+  text-align: center;
   color: ${colors.Voting.popupTextInverse};
 `;
 

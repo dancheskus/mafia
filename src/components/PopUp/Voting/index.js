@@ -12,6 +12,7 @@ import Timer from '../../Timer';
 import CarCrashNotification from './CarCrashNotification';
 import EndOfVotingNotification from './EndOfVotingNotification';
 import TimerForPlayer from './TimerForPlayer';
+import { ResultsLabel } from './style/Results';
 
 class Voting extends Component {
   initialState = {
@@ -36,13 +37,10 @@ class Voting extends Component {
   };
 
   votingFinishedClicked = () => {
-    if (this.state.lastMinuteFor.length > 0) {
-      this.goToNight();
-      return this.okClicked();
-    }
+    if (this.state.lastMinuteFor.length > 0) return this.goToNight();
 
     const { handsAmount } = this.state;
-    let largestNumber = Math.max(...handsAmount);
+    const largestNumber = Math.max(...handsAmount);
     const newVotingList = [];
     handsAmount.filter((el, i) => el === largestNumber && newVotingList.push(this.props.game.selectedNumbers[i]));
 
@@ -101,6 +99,7 @@ class Voting extends Component {
   };
 
   okClicked = () => this.setState({ carCrashLabel: false, endOfVoting: false });
+
   goToNight = () => this.props.changeGameState({ phase: 'Night', dayNumber: this.props.game.gameState.dayNumber + 1 });
 
   render = () => {
@@ -131,9 +130,11 @@ class Voting extends Component {
 
     return (
       <>
-        <Circle>
-          {this.state.carCrash === 2 ? <span>ВСЕ</span> : this.props.game.selectedNumbers[this.state.currentPlayer]}
-        </Circle>
+        {this.state.carCrash === 1 && <ResultsLabel className="h2">Повторное голосование</ResultsLabel>}
+
+        {this.state.carCrash === 2 && <ResultsLabel className="h2">Выгнать всех выставленных?</ResultsLabel>}
+
+        {this.state.carCrash !== 2 && <Circle>{this.props.game.selectedNumbers[this.state.currentPlayer]}</Circle>}
 
         {this.state.timer && this.state.carCrash !== 2 ? (
           <Timer time={30} key={this.state.currentPlayer} />
