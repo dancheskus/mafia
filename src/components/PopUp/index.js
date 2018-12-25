@@ -12,10 +12,10 @@ const StyledPopUp = styled.div`
   border-radius: 10px;
   box-shadow: 3px 10px 9px -4px rgba(0, 0, 0, 0.31);
   position: absolute;
-  height: calc(100% - 20px);
-  width: calc(100% - 20px);
-  bottom: 10px;
-  left: 10px;
+  height: calc(100% - 40px);
+  width: calc(100% - 40px);
+  bottom: 20px;
+  left: 20px;
   z-index: 111;
   transition: height 0.3s, width 0.3s;
 

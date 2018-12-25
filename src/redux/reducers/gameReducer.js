@@ -4,11 +4,11 @@ import produce from 'immer';
 
 export default (
   state = {
-    opensTable: 3,
-    activePlayer: 5,
-    gameState: { phase: 'Voting', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
+    opensTable: 0,
+    activePlayer: 0,
+    gameState: { phase: 'Day', dayNumber: 0 }, // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
     lightMode: false,
-    selectedNumbers: [4, 7, 1, 2, 9],
+    selectedNumbers: [],
     numbersPanelClickable: false,
   },
   action

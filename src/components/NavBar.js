@@ -8,7 +8,7 @@ import _ from 'lodash';
 import NavMenu from './NavMenu';
 import colors from '../colors';
 import NavBarCircleButton from './style/NavBarCircleButton';
-import { NextIcon, ThumbUpIcon } from '../img/svgIcons';
+import { NextIcon, ThumbUpIcon, EyeIcon } from '../img/svgIcons';
 import Timer from './Timer';
 
 const StyledNavigation = styled.div`
@@ -69,18 +69,29 @@ const Navigation = props => {
     props.players[mod(i, 10)].isAlive ? props.changeActivePlayer(mod(i, 10)) : goToNextAlivePlayer(i + 1);
 
   const toVotingClicked = () => {
-    props.changeGameState({ phase: 'Voting' });
+    props.game.selectedNumbers.length
+      ? props.changeGameState({ phase: 'Voting' })
+      : props.changeGameState({ phase: 'Night', dayNumber: props.game.gameState.dayNumber + 1 });
   };
 
   return (
     <StyledNavigation color={phase}>
       <Container className="d-flex justify-content-between p-0">
         <NavStateName>{title}</NavStateName>
-        {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'ZeroNight' && (
+
+        {phase === 'Day' && (
           <ButtonsWrapper>
             <Timer mini key={props.game.activePlayer} />
             <NavBarCircleButton onClick={lastSpeaker ? toVotingClicked : () => goToNextAlivePlayer()}>
-              {lastSpeaker ? <ThumbUpIcon size="50%" /> : <NextIcon size="50%" />}
+              {lastSpeaker ? (
+                props.game.selectedNumbers.length === 0 ? (
+                  <EyeIcon size="50%" />
+                ) : (
+                  <ThumbUpIcon size="50%" />
+                )
+              ) : (
+                <NextIcon size="50%" />
+              )}
             </NavBarCircleButton>
           </ButtonsWrapper>
         )}

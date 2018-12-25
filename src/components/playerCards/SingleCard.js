@@ -127,14 +127,15 @@ class SingleCard extends Component {
   render = () => {
     const isMuted = this.props.players[this.props.number].fouls.muted;
     const isAlive = this.props.players[this.props.number].isAlive;
+    const phase = this.props.game.gameState.phase;
 
     return (
       <CardContainer order={this.props.order}>
-        <Card activePlayer={this.props.game.activePlayer === this.props.number}>
+        <Card activePlayer={phase === 'Day' && this.props.game.activePlayer === this.props.number}>
           <PlayerNumber
             isMuted={isMuted}
             isAlive={isAlive}
-            opensTable={this.props.game.opensTable === this.props.number}
+            opensTable={phase === 'Day' && this.props.game.opensTable === this.props.number}
           >
             {this.props.number + 1}
           </PlayerNumber>

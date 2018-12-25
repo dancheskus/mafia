@@ -107,6 +107,17 @@ class Voting extends Component {
     const avaliableHandsAmount = this.state.handsAmount[this.props.game.selectedNumbers.length - 1];
     const lastPlayer = this.state.currentPlayer === this.props.game.selectedNumbers.length - 1;
 
+    if (this.props.game.gameState.dayNumber === 0 && this.props.game.selectedNumbers.length <= 1)
+      return (
+        <>
+          <ResultsLabel className="h2">Голосование не проводится</ResultsLabel>
+
+          <PopUpButton color="Voting" onClick={this.goToNight}>
+            Ночь
+          </PopUpButton>
+        </>
+      );
+
     if (this.state.carCrashLabel) return <CarCrashNotification okClicked={this.okClicked} />;
 
     if (this.state.endOfVoting)
