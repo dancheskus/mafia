@@ -11,4 +11,8 @@ export default styled.div`
   align-items: center;
   font-size: 6rem;
   color: ${colors.Voting.popupText};
+
+  span {
+    font-size: 4rem;
+  }
 `;

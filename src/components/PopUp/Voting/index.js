@@ -6,8 +6,10 @@ import PopUpButton from '../style/PopUpButton';
 import HandsButton from './style/HandsButton';
 import Circle from './style/Circle';
 import BlockOfHands from './style/BlockOfHands';
-import { clearSelectedNumbers, addToSelectedNumbers } from '../../../redux/actions/gameActions';
+import { clearSelectedNumbers, addToSelectedNumbers, changeGameState } from '../../../redux/actions/gameActions';
+import { killPlayer } from '../../../redux/actions/playersActions';
 import Timer from '../../Timer';
+import { ResultsLabel, ResultsNumbers } from './style/Results';
 
 class Voting extends Component {
   initialState = {
@@ -16,6 +18,9 @@ class Voting extends Component {
     currentPlayer: 0,
     timer: false,
     carCrash: 0,
+    carCrashLabel: false,
+    endOfVoting: false,
+    lastMinuteFor: [],
   };
   state = { ...this.initialState };
 
@@ -29,20 +34,45 @@ class Voting extends Component {
   };
 
   votingFinishedClicked = () => {
+    if (this.state.lastMinuteFor.length > 0) {
+      this.goToNight();
+      return this.okClicked();
+    }
+
     const { handsAmount } = this.state;
     let largestNumber = Math.max(...handsAmount);
     const newVotingList = [];
     handsAmount.filter((el, i) => el === largestNumber && newVotingList.push(this.props.game.selectedNumbers[i]));
 
-    if (newVotingList.length > 1) {
+    if (newVotingList.length > 1 && this.state.carCrash !== 2) {
       this.props.clearSelectedNumbers();
       newVotingList.map(num => this.props.addToSelectedNumbers(num));
       this.setState({ ...this.initialState, timer: true });
 
+      if (!this.state.carCrash) this.setState({ carCrashLabel: true });
+
       if (this.state.carCrash) this.setState({ carCrash: 2 });
+    } else {
+      this.setState({ endOfVoting: true });
+      this.setState({ lastMinuteFor: this.state.lastMinuteFor.concat(newVotingList[0]) });
     }
 
     this.state.timer && this.setState({ ...this.initialState, carCrash: 1 });
+
+    if (this.state.carCrash === 2) {
+      const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
+      const avaliableHandsAmount = 10 - deadPlayers;
+
+      this.setState({ endOfVoting: true });
+
+      if (handsAmount[0] > avaliableHandsAmount / 2) {
+        this.setState({ lastMinuteFor: this.state.lastMinuteFor.concat(this.props.game.selectedNumbers) });
+
+        this.props.game.selectedNumbers.map(player => {
+          this.props.killPlayer(player - 1);
+        });
+      }
+    }
   };
 
   nextButtonClicked = () => {
@@ -55,20 +85,91 @@ class Voting extends Component {
     }
 
     if (this.props.game.selectedNumbers.length - 2 === currentPlayer) {
+      const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
       const arr = [...handsAmount];
-      arr[currentPlayer + 1] = handsLeft - this.state.handsAmount[currentPlayer];
+      arr[currentPlayer + 1] = handsLeft - this.state.handsAmount[currentPlayer] - deadPlayers;
       this.setState({ handsAmount: arr });
     }
   };
 
+  okClicked = () => this.setState({ carCrashLabel: false, endOfVoting: false });
+  goToNight = () => this.props.changeGameState({ phase: 'Night', dayNumber: this.props.game.gameState.dayNumber + 1 });
+
   render = () => {
     const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
-    const avaliableHandsAmount = this.state.handsAmount[this.props.game.selectedNumbers.length - 1] - deadPlayers;
+    const avaliableHandsAmount = this.state.handsAmount[this.props.game.selectedNumbers.length - 1];
     const lastPlayer = this.state.currentPlayer === this.props.game.selectedNumbers.length - 1;
+
+    if (this.state.carCrashLabel)
+      return (
+        <>
+          <ResultsLabel className="h1">ПЕРЕГОЛОСОВКА</ResultsLabel>
+          <ResultsNumbers>
+            {this.props.game.selectedNumbers.map(num => (
+              <div key={num}>{num}</div>
+            ))}
+          </ResultsNumbers>
+
+          <PopUpButton color="Voting" onClick={this.okClicked}>
+            ОК
+          </PopUpButton>
+        </>
+      );
+
+    if (this.state.endOfVoting)
+      return (
+        <>
+          {this.state.lastMinuteFor.length > 0 ? (
+            <>
+              <ResultsLabel className="h1">Игру покидает</ResultsLabel>
+              <ResultsNumbers>
+                {this.state.lastMinuteFor.map(num => (
+                  <div key={num}>{num}</div>
+                ))}
+              </ResultsNumbers>
+
+              <PopUpButton color="Voting" onClick={this.okClicked}>
+                ОК
+              </PopUpButton>
+            </>
+          ) : (
+            <>
+              <ResultsLabel className="h1">Никто не уходит</ResultsLabel>
+              <PopUpButton color="Voting" onClick={this.goToNight}>
+                Ночь
+              </PopUpButton>
+            </>
+          )}
+        </>
+      );
+
+    if (this.state.lastMinuteFor.length > 0)
+      return (
+        <>
+          <Circle>
+            {this.state.carCrash === 2
+              ? this.props.game.selectedNumbers[this.state.currentPlayer]
+              : this.state.lastMinuteFor.length > 1
+              ? this.state.lastMinuteFor[this.state.currentPlayer]
+              : this.state.lastMinuteFor}
+          </Circle>
+
+          <Timer key={this.state.currentPlayer} />
+
+          <PopUpButton
+            color="Voting"
+            onClick={lastPlayer || this.state.carCrash === 2 ? this.votingFinishedClicked : this.nextButtonClicked}
+          >
+            {lastPlayer || this.state.carCrash === 2 ? 'Ночь' : 'Далее'}
+          </PopUpButton>
+        </>
+      );
 
     return (
       <>
-        <Circle>{this.state.carCrash === 2 ? 'ВСЕ' : this.props.game.selectedNumbers[this.state.currentPlayer]}</Circle>
+        <Circle>
+          {this.state.carCrash === 2 ? <span>ВСЕ</span> : this.props.game.selectedNumbers[this.state.currentPlayer]}
+        </Circle>
 
         {this.state.timer && this.state.carCrash !== 2 ? (
           <Timer time={30} key={this.state.currentPlayer} />
@@ -89,8 +190,11 @@ class Voting extends Component {
           </BlockOfHands>
         )}
 
-        <PopUpButton color="Voting" onClick={lastPlayer ? this.votingFinishedClicked : this.nextButtonClicked}>
-          {lastPlayer ? 'Завершить' : 'Далее'}
+        <PopUpButton
+          color="Voting"
+          onClick={lastPlayer || this.state.carCrash === 2 ? this.votingFinishedClicked : this.nextButtonClicked}
+        >
+          {lastPlayer || this.state.carCrash === 2 ? 'Завершить' : 'Далее'}
         </PopUpButton>
       </>
     );
@@ -102,6 +206,8 @@ const mapStateToProps = ({ game, players }) => ({ game, players });
 const mapDispatchToProps = dispatch => ({
   clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
   addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
+  killPlayer: playerNumber => dispatch(killPlayer(playerNumber)),
+  changeGameState: payload => dispatch(changeGameState(payload)),
 });
 
 export default connect(
