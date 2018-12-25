@@ -8,7 +8,7 @@ export default (
     activePlayer: 5,
     gameState: { phase: 'Voting', dayNumber: 0 }, // startScreen, SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
     lightMode: false,
-    selectedNumbers: [4, 7, 1],
+    selectedNumbers: [4, 7, 1, 2, 9],
     numbersPanelClickable: false,
   },
   action

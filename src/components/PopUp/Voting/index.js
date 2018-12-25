@@ -9,7 +9,9 @@ import BlockOfHands from './style/BlockOfHands';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState } from '../../../redux/actions/gameActions';
 import { killPlayer } from '../../../redux/actions/playersActions';
 import Timer from '../../Timer';
-import { ResultsLabel, ResultsNumbers } from './style/Results';
+import CarCrashNotification from './CarCrashNotification';
+import EndOfVotingNotification from './EndOfVotingNotification';
+import TimerForPlayer from './TimerForPlayer';
 
 class Voting extends Component {
   initialState = {
@@ -77,10 +79,16 @@ class Voting extends Component {
 
   nextButtonClicked = () => {
     const { currentPlayer, handsAmount, handsLeft } = this.state;
+    const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
+
     if (currentPlayer < this.props.game.selectedNumbers.length - 1) {
+      const handsLeft = this.state.handsAmount.length >= 1 ? 10 - this.state.handsAmount.reduce((a, b) => a + b) : 10;
+
+      if (handsLeft - deadPlayers === 0) return this.votingFinishedClicked();
+
       this.setState({
         currentPlayer: currentPlayer + 1,
-        handsLeft: this.state.handsAmount.length >= 1 ? 10 - this.state.handsAmount.reduce((a, b) => a + b) : 10,
+        handsLeft,
       });
     }
 
@@ -100,69 +108,25 @@ class Voting extends Component {
     const avaliableHandsAmount = this.state.handsAmount[this.props.game.selectedNumbers.length - 1];
     const lastPlayer = this.state.currentPlayer === this.props.game.selectedNumbers.length - 1;
 
-    if (this.state.carCrashLabel)
-      return (
-        <>
-          <ResultsLabel className="h1">ПЕРЕГОЛОСОВКА</ResultsLabel>
-          <ResultsNumbers>
-            {this.props.game.selectedNumbers.map(num => (
-              <div key={num}>{num}</div>
-            ))}
-          </ResultsNumbers>
-
-          <PopUpButton color="Voting" onClick={this.okClicked}>
-            ОК
-          </PopUpButton>
-        </>
-      );
+    if (this.state.carCrashLabel) return <CarCrashNotification okClicked={this.okClicked} />;
 
     if (this.state.endOfVoting)
       return (
-        <>
-          {this.state.lastMinuteFor.length > 0 ? (
-            <>
-              <ResultsLabel className="h1">Игру покидает</ResultsLabel>
-              <ResultsNumbers>
-                {this.state.lastMinuteFor.map(num => (
-                  <div key={num}>{num}</div>
-                ))}
-              </ResultsNumbers>
-
-              <PopUpButton color="Voting" onClick={this.okClicked}>
-                ОК
-              </PopUpButton>
-            </>
-          ) : (
-            <>
-              <ResultsLabel className="h1">Никто не уходит</ResultsLabel>
-              <PopUpButton color="Voting" onClick={this.goToNight}>
-                Ночь
-              </PopUpButton>
-            </>
-          )}
-        </>
+        <EndOfVotingNotification
+          okClicked={this.okClicked}
+          goToNight={this.goToNight}
+          lastMinuteFor={this.state.lastMinuteFor}
+        />
       );
 
     if (this.state.lastMinuteFor.length > 0)
       return (
-        <>
-          <Circle>
-            {this.state.carCrash === 2
-              ? this.props.game.selectedNumbers[this.state.currentPlayer]
-              : this.state.lastMinuteFor.length > 1
-              ? this.state.lastMinuteFor[this.state.currentPlayer]
-              : this.state.lastMinuteFor}
-          </Circle>
-
-          <Timer key={this.state.currentPlayer} />
-
-          <PopUpButton
-            color="Voting"
-            onClick={lastPlayer || this.state.carCrash === 2 ? this.votingFinishedClicked : this.nextButtonClicked}
-          >
-            {lastPlayer || this.state.carCrash === 2 ? 'Ночь' : 'Далее'}
-          </PopUpButton>
-        </>
+        <TimerForPlayer
+          state={this.state}
+          lastPlayer={lastPlayer}
+          votingFinishedClicked={this.votingFinishedClicked}
+          nextButtonClicked={this.nextButtonClicked}
+        />
       );
 
     return (
