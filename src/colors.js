@@ -60,6 +60,11 @@ export default {
     lightRoleBackground: '#FB6F6F',
     roleText: '#fff',
     roleTextDead: '#717171',
+    flippedDeadCardBackground: '#232323',
+    buttonText: '#636363',
+    buttonTextInverse: '#fff',
+    handsAmountBackground: '#fff',
+    handsAmountSelectedBackground: '#636363',
   },
   Day: {
     navBarText: '#E9E1D4',

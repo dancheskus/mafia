@@ -4,8 +4,8 @@ import PopUpButton from '../style/PopUpButton';
 import Circle from './style/Circle';
 import Timer from './../../Timer';
 
-const TimerForPlayer = props => {
-  const { lastMinuteFor, currentPlayer } = props.state;
+const TimerForPlayer = ({ lastPlayer, votingFinishedClicked, nextButtonClicked, state }) => {
+  const { lastMinuteFor, currentPlayer } = state;
 
   return (
     <>
@@ -13,8 +13,8 @@ const TimerForPlayer = props => {
 
       <Timer key={currentPlayer} />
 
-      <PopUpButton color="Voting" onClick={props.lastPlayer ? props.votingFinishedClicked : props.nextButtonClicked}>
-        {props.lastPlayer ? 'Ночь' : 'Далее'}
+      <PopUpButton color="Voting" onClick={lastPlayer ? votingFinishedClicked : nextButtonClicked}>
+        {lastPlayer ? 'Ночь' : 'Далее'}
       </PopUpButton>
     </>
   );

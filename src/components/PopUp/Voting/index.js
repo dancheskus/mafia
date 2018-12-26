@@ -25,6 +25,7 @@ class Voting extends Component {
     endOfVoting: false,
     lastMinuteFor: [],
   };
+
   state = { ...this.initialState };
 
   componentWillMount = () => {
@@ -35,9 +36,10 @@ class Voting extends Component {
   };
 
   handClicked = num => {
-    if (this.state.currentPlayer === this.props.game.selectedNumbers.length - 1) return;
-
     const { currentPlayer, handsAmount } = this.state;
+
+    if (currentPlayer === this.props.game.selectedNumbers.length - 1) return;
+
     const arr = [...handsAmount];
     arr[currentPlayer] = handsAmount[currentPlayer] === num ? null : num;
     this.setState({ handsAmount: arr });
@@ -111,10 +113,12 @@ class Voting extends Component {
 
   render = () => {
     const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
-    const avaliableHandsAmount = this.state.handsAmount[this.props.game.selectedNumbers.length - 1];
-    const lastPlayer = this.state.currentPlayer === this.props.game.selectedNumbers.length - 1;
+    const { carCrash, currentPlayer } = this.state;
+    const { gameState, selectedNumbers } = this.props.game;
+    const avaliableHandsAmount = this.state.handsAmount[selectedNumbers.length - 1];
+    const lastPlayer = this.state.currentPlayer === selectedNumbers.length - 1;
 
-    if (this.props.game.gameState.dayNumber === 0 && this.props.game.selectedNumbers.length === 1)
+    if (gameState.dayNumber === 0 && selectedNumbers.length === 1)
       return (
         <>
           <ResultsLabel className="h2">Голосование не проводится</ResultsLabel>
@@ -136,21 +140,10 @@ class Voting extends Component {
         />
       );
 
-    if (this.props.game.gameState.dayNumber === 1 && this.props.game.selectedNumbers.length === 1) {
+    if (this.state.lastMinuteFor.length > 0 || (gameState.dayNumber === 1 && selectedNumbers.length === 1))
       return (
         <TimerForPlayer
-          state={this.state}
-          lastPlayer={lastPlayer}
-          votingFinishedClicked={this.votingFinishedClicked}
-          nextButtonClicked={this.nextButtonClicked}
-        />
-      );
-    }
-
-    if (this.state.lastMinuteFor.length > 0)
-      return (
-        <TimerForPlayer
-          state={this.state}
+          state={{ ...this.state }}
           lastPlayer={lastPlayer}
           votingFinishedClicked={this.votingFinishedClicked}
           nextButtonClicked={this.nextButtonClicked}
@@ -159,22 +152,20 @@ class Voting extends Component {
 
     return (
       <>
-        {this.state.carCrash === 1 && <ResultsLabel className="h2">Повторное голосование</ResultsLabel>}
+        {carCrash === 1 && <ResultsLabel className="h2">Повторное голосование</ResultsLabel>}
 
-        {this.state.carCrash === 2 && <ResultsLabel className="h2">Выгнать всех выставленных?</ResultsLabel>}
+        {carCrash === 2 && <ResultsLabel className="h2">Выгнать всех выставленных?</ResultsLabel>}
 
-        {this.state.carCrash !== 2 && <Circle>{this.props.game.selectedNumbers[this.state.currentPlayer] + 1}</Circle>}
+        {carCrash !== 2 && <Circle>{selectedNumbers[currentPlayer] + 1}</Circle>}
 
-        {this.state.timer && this.state.carCrash !== 2 ? (
-          <Timer time={30} key={this.state.currentPlayer} />
+        {this.state.timer && carCrash !== 2 ? (
+          <Timer time={30} key={currentPlayer} />
         ) : (
           <BlockOfHands className="col-10 col-md-8 col-lg-6">
             {_.range(1, 11).map(num => (
               <HandsButton
                 disabled={lastPlayer ? num !== avaliableHandsAmount : num > this.state.handsLeft - deadPlayers}
-                selected={
-                  lastPlayer ? num === avaliableHandsAmount : this.state.handsAmount[this.state.currentPlayer] === num
-                }
+                selected={lastPlayer ? num === avaliableHandsAmount : this.state.handsAmount[currentPlayer] === num}
                 onClick={() => this.handClicked(num)}
                 key={num}
               >
@@ -186,25 +177,16 @@ class Voting extends Component {
 
         <PopUpButton
           color="Voting"
-          onClick={lastPlayer || this.state.carCrash === 2 ? this.votingFinishedClicked : this.nextButtonClicked}
+          onClick={lastPlayer || carCrash === 2 ? this.votingFinishedClicked : this.nextButtonClicked}
         >
-          {lastPlayer || this.state.carCrash === 2 ? 'Завершить' : 'Далее'}
+          {lastPlayer || carCrash === 2 ? 'Завершить' : 'Далее'}
         </PopUpButton>
       </>
     );
   };
 }
 
-const mapStateToProps = ({ game, players }) => ({ game, players });
-
-const mapDispatchToProps = dispatch => ({
-  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
-  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
-  killPlayer: playerNumber => dispatch(killPlayer(playerNumber)),
-  changeGameState: payload => dispatch(changeGameState(payload)),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ game, players }) => ({ game, players }),
+  { clearSelectedNumbers, addToSelectedNumbers, killPlayer, changeGameState }
 )(Voting);

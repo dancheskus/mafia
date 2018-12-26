@@ -20,20 +20,31 @@ export default styled.button`
   }
 
   border: none;
-  background: ${props =>
+
+  ${props =>
+    props.shooting
+      ? `
+  background: ${props.selected ? colors.Night.handsAmountSelectedBackground : colors.Night.handsAmountBackground};
+  color: ${props.selected ? colors.Night.buttonTextInverse : colors.Night.buttonText};
+      `
+      : `
+  background: ${
     props.selected
       ? colors.Voting.handsAmountSelectedBackground
       : props.disabled
       ? colors.Voting.handsAmountDisabledBackground
-      : colors.Voting.handsAmountBackground};
-  border-radius: 10px;
-  margin: ${margin}px;
-  color: ${props =>
+      : colors.Voting.handsAmountBackground
+  };
+  color: ${
     props.selected
       ? colors.Voting.popupTextInverse
       : props.disabled
       ? colors.Voting.handsAmountDisabledText
-      : colors.Voting.popupText};
+      : colors.Voting.popupText
+  };
+  `}
+  border-radius: 10px;
+  margin: ${margin}px;
   font-size: 2rem;
   padding: 0;
   ${props => !props.disabled && 'cursor: pointer'};

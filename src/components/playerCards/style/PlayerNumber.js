@@ -5,7 +5,7 @@ export default styled.div`
   background: ${props =>
     !props.isAlive
       ? props.flipped
-        ? '#232323'
+        ? colors.Night.flippedDeadCardBackground
         : colors.Day.deadPlayerCardBackground
       : props.isMuted
       ? colors.Day.warningPlayerCardBackground
