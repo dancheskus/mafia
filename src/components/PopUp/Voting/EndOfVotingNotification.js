@@ -9,7 +9,7 @@ export default props => (
         <ResultsLabel className="h1">Игру покидает</ResultsLabel>
         <ResultsNumbers>
           {props.lastMinuteFor.map(num => (
-            <div key={num}>{num}</div>
+            <div key={num}>{num + 1}</div>
           ))}
         </ResultsNumbers>
 

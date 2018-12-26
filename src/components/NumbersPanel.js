@@ -115,7 +115,7 @@ class NumbersPanel extends Component {
           <Panel color={phase} itemsCentered>
             {this.props.game.selectedNumbers.map(selNum => (
               <PanelItem color={phase} key={selNum} selected>
-                {selNum}
+                {selNum + 1}
               </PanelItem>
             ))}
           </Panel>

@@ -27,6 +27,13 @@ class Voting extends Component {
   };
   state = { ...this.initialState };
 
+  componentWillMount = () => {
+    if (this.props.game.gameState.dayNumber === 1 && this.props.game.selectedNumbers.length === 1) {
+      this.votingFinishedClicked();
+      this.props.killPlayer(this.props.game.selectedNumbers[0]);
+    }
+  };
+
   handClicked = num => {
     if (this.state.currentPlayer === this.props.game.selectedNumbers.length - 1) return;
 
@@ -69,7 +76,7 @@ class Voting extends Component {
         this.setState({ lastMinuteFor: this.state.lastMinuteFor.concat(this.props.game.selectedNumbers) });
 
         this.props.game.selectedNumbers.map(player => {
-          this.props.killPlayer(player - 1);
+          this.props.killPlayer(player);
         });
       }
     }
@@ -107,7 +114,7 @@ class Voting extends Component {
     const avaliableHandsAmount = this.state.handsAmount[this.props.game.selectedNumbers.length - 1];
     const lastPlayer = this.state.currentPlayer === this.props.game.selectedNumbers.length - 1;
 
-    if (this.props.game.gameState.dayNumber === 0 && this.props.game.selectedNumbers.length <= 1)
+    if (this.props.game.gameState.dayNumber === 0 && this.props.game.selectedNumbers.length === 1)
       return (
         <>
           <ResultsLabel className="h2">Голосование не проводится</ResultsLabel>
@@ -129,6 +136,17 @@ class Voting extends Component {
         />
       );
 
+    if (this.props.game.gameState.dayNumber === 1 && this.props.game.selectedNumbers.length === 1) {
+      return (
+        <TimerForPlayer
+          state={this.state}
+          lastPlayer={lastPlayer}
+          votingFinishedClicked={this.votingFinishedClicked}
+          nextButtonClicked={this.nextButtonClicked}
+        />
+      );
+    }
+
     if (this.state.lastMinuteFor.length > 0)
       return (
         <TimerForPlayer
@@ -145,7 +163,7 @@ class Voting extends Component {
 
         {this.state.carCrash === 2 && <ResultsLabel className="h2">Выгнать всех выставленных?</ResultsLabel>}
 
-        {this.state.carCrash !== 2 && <Circle>{this.props.game.selectedNumbers[this.state.currentPlayer]}</Circle>}
+        {this.state.carCrash !== 2 && <Circle>{this.props.game.selectedNumbers[this.state.currentPlayer] + 1}</Circle>}
 
         {this.state.timer && this.state.carCrash !== 2 ? (
           <Timer time={30} key={this.state.currentPlayer} />

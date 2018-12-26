@@ -5,25 +5,16 @@ import Circle from './style/Circle';
 import Timer from './../../Timer';
 
 const TimerForPlayer = props => {
-  const { carCrash, lastMinuteFor, currentPlayer } = props.state;
+  const { lastMinuteFor, currentPlayer } = props.state;
 
   return (
     <>
-      <Circle>
-        {carCrash === 2
-          ? props.game.selectedNumbers[currentPlayer]
-          : lastMinuteFor.length > 1
-          ? lastMinuteFor[currentPlayer]
-          : lastMinuteFor}
-      </Circle>
+      <Circle>{lastMinuteFor.length > 1 ? lastMinuteFor[currentPlayer] + 1 : lastMinuteFor[0] + 1}</Circle>
 
       <Timer key={currentPlayer} />
 
-      <PopUpButton
-        color="Voting"
-        onClick={props.lastPlayer || carCrash === 2 ? props.votingFinishedClicked : props.nextButtonClicked}
-      >
-        {props.lastPlayer || carCrash === 2 ? 'Ночь' : 'Далее'}
+      <PopUpButton color="Voting" onClick={props.lastPlayer ? props.votingFinishedClicked : props.nextButtonClicked}>
+        {props.lastPlayer ? 'Ночь' : 'Далее'}
       </PopUpButton>
     </>
   );
