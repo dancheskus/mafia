@@ -47,6 +47,19 @@ const ButtonsWrapper = styled.div`
   }
 `;
 
+const DayButton = styled.button`
+  :hover,
+  :focus,
+  :active {
+    outline: none;
+  }
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+`;
+
 const mod = (n, m) => ((n % m) + m) % m;
 
 const Navigation = props => {
@@ -94,6 +107,17 @@ const Navigation = props => {
               )}
             </NavBarCircleButton>
           </ButtonsWrapper>
+        )}
+
+        {phase === 'Night' && (
+          <DayButton
+            onClick={() => props.changeGameState({ phase: 'Day', dayNumber: props.game.gameState.dayNumber + 1 })}
+          >
+            День
+            <NavBarCircleButton>
+              <NextIcon size="50%" />
+            </NavBarCircleButton>
+          </DayButton>
         )}
 
         <NavMenu />

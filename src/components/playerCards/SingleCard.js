@@ -3,8 +3,10 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import colors from '../../colors';
-import { MinimizeIcon, MaximizeIcon } from './../../img/svgIcons';
+import { MinimizeIcon, MaximizeIcon, EyeIcon, EyeIconCrossed } from './../../img/svgIcons';
 import { addFoul, removeFoul } from './../../redux/actions/playersActions';
+import PlayerNumber from './style/PlayerNumber';
+import FoulContainer from './style/FoulContainer';
 
 const CardContainer = styled.div`
   width: 50%;
@@ -20,57 +22,22 @@ const Card = styled.div`
   flex-grow: 1;
   border: 4px solid ${props => (props.activePlayer ? colors.Day.activePlayer : 'transparent')};
   display: flex;
-`;
-
-const PlayerNumber = styled.div`
-  background: ${props =>
-    !props.isAlive
-      ? colors.Day.deadPlayerCardBackground
-      : props.isMuted
-      ? colors.Day.warningPlayerCardBackground
-      : colors.Day.playerCardBackground};
-  flex-grow: 1;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 4rem;
-  color: ${props =>
-    !props.isAlive
-      ? colors.Day.deadPlayerCardNumber
-      : props.isMuted
-      ? colors.Day.deadPlayerCardNumber
-      : colors.Day.playerCardNumber};
   position: relative;
 
-  ::before {
-    content: '';
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    filter: blur(3px);
-    background: ${props => props.opensTable && colors.Day.playerOpensTable};
+  span {
     position: absolute;
-    top: 7px;
-    left: 7px;
-  }
-`;
+    left: 5px;
+    bottom: 5px;
+    width: 10%;
 
-const FoulContainer = styled.div`
-  width: 50%;
-  height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  display: ${props => !props.isAlive && 'none'};
-
-  > div {
-    width: 100%;
-    height: 50%;
-    color: white;
-    font-size: 2.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    path {
+      fill: ${props =>
+        props.isAlive
+          ? colors.Night.eyeIconFront
+          : props.flipped
+          ? colors.Night.eyeIconBackDead
+          : colors.Night.eyeIconBack};
+    }
   }
 `;
 
@@ -98,7 +65,7 @@ const FoulIcon = styled.div`
 `;
 
 class SingleCard extends Component {
-  state = { foulsAmount: this.props.players[this.props.number].fouls.amount };
+  state = { foulsAmount: this.props.players[this.props.number].fouls.amount, cardFlipped: false };
 
   timer;
 
@@ -128,16 +95,24 @@ class SingleCard extends Component {
     const isMuted = this.props.players[this.props.number].fouls.muted;
     const isAlive = this.props.players[this.props.number].isAlive;
     const phase = this.props.game.gameState.phase;
+    const role = this.props.players[this.props.number].role;
 
     return (
       <CardContainer order={this.props.order}>
-        <Card activePlayer={phase === 'Day' && this.props.game.activePlayer === this.props.number}>
+        <Card
+          flipped={this.state.cardFlipped}
+          isAlive={isAlive}
+          activePlayer={phase === 'Day' && this.props.game.activePlayer === this.props.number}
+        >
           <PlayerNumber
+            flipped={this.state.cardFlipped}
+            darkSide={role === 'МАФИЯ' || role === 'ДОН'}
+            role={role}
             isMuted={isMuted}
             isAlive={isAlive}
             opensTable={phase === 'Day' && this.props.game.opensTable === this.props.number}
           >
-            {this.props.number + 1}
+            <div className="number">{this.props.number + 1}</div>
           </PlayerNumber>
 
           <FoulContainer isAlive={isAlive}>
@@ -157,6 +132,18 @@ class SingleCard extends Component {
               )}
             </AddFoul>
           </FoulContainer>
+
+          {phase === 'Night' && (
+            <>
+              <span
+                onClick={() => {
+                  this.setState({ cardFlipped: !this.state.cardFlipped });
+                }}
+              >
+                {this.state.cardFlipped ? <EyeIconCrossed /> : <EyeIcon />}
+              </span>
+            </>
+          )}
         </Card>
       </CardContainer>
     );
