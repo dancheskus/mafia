@@ -84,6 +84,9 @@ export default {
     addFoulBackground: '#8A8A8A',
     addSecondFoulBackground: '#F28E0C',
     addThirdFoulBackground: '#FB6F6F',
+    popupBackground: '#373737',
+    popupButton: '#484848',
+    popupNightResult: '#F51C1C',
   },
 
   Voting: {

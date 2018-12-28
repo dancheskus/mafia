@@ -90,9 +90,9 @@ class NumbersPanel extends Component {
 
             {_.range(0, 10)
               .filter(e => !this.props.game.selectedNumbers.includes(e))
-              .map(notSelNum => {
-                if (this.props.players[notSelNum].isAlive)
-                  return (
+              .map(
+                notSelNum =>
+                  this.props.players[notSelNum].isAlive && (
                     <PanelItem
                       color={phase}
                       key={notSelNum}
@@ -106,8 +106,8 @@ class NumbersPanel extends Component {
                     >
                       {notSelNum + 1}
                     </PanelItem>
-                  );
-              })}
+                  )
+              )}
           </Panel>
         )}
 

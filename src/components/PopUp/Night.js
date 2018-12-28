@@ -4,7 +4,7 @@ import _ from 'lodash';
 import styled from 'styled-components';
 
 import { killPlayer } from '../../redux/actions/playersActions';
-import { changeGameState } from './../../redux/actions/gameActions';
+import { changeGameState, addToSelectedNumbers } from './../../redux/actions/gameActions';
 import BlockOfHands from './Voting/style/BlockOfHands';
 import HandsButton from './Voting/style/HandsButton';
 import colors from '../../colors';
@@ -17,7 +17,7 @@ const Label = styled.div`
 `;
 
 class Night extends Component {
-  state = { playerToKill: null, questionsTime: false, nightResults: false };
+  state = { playerToKill: null, questionsTime: false };
 
   selectPlayer = num => this.setState({ playerToKill: num === this.state.playerToKill ? null : num });
 
@@ -27,29 +27,6 @@ class Night extends Component {
   };
 
   render = () => {
-    // if (this.state.nightResults)
-    //   return (
-    //     <>
-    //       {this.state.playerToKill ? (
-    //         <>
-    //           <Label className="h2">Ночью был убит</Label>
-    //           {this.state.playerToKill}
-    //         </>
-    //       ) : (
-    //         <>
-    //           <Label className="h2">Несострел</Label>
-    //         </>
-    //       )}
-
-    //       <PopUpButton
-    //         onClick={this.props.changeGameState({ pahse: 'Day', dayNumber: this.props.game.gameState.dayNumber + 1 })}
-    //         color="Night"
-    //       >
-    //         День
-    //       </PopUpButton>
-    //     </>
-    //   );
-
     if (this.state.questionsTime)
       return (
         <>
@@ -57,8 +34,14 @@ class Night extends Component {
 
           <Label className="h2">Шериф ищет черных игроков</Label>
 
-          <PopUpButton onClick={() => this.setState({ nightResults: true })} color="Night">
-            Далее
+          <PopUpButton
+            onClick={() => {
+              this.state.playerToKill && this.props.addToSelectedNumbers(this.state.playerToKill);
+              this.props.changeGameState({ phase: 'Day', dayNumber: this.props.game.gameState.dayNumber + 1 });
+            }}
+            color="Night"
+          >
+            День
           </PopUpButton>
         </>
       );
@@ -90,5 +73,5 @@ class Night extends Component {
 
 export default connect(
   ({ game }) => ({ game }),
-  { killPlayer, changeGameState }
+  { killPlayer, changeGameState, addToSelectedNumbers }
 )(Night);

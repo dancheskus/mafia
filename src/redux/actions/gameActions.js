@@ -8,3 +8,5 @@ export const lightModeOn = () => ({ type: 'LIGHT_MODE_ON' });
 export const lightModeOff = () => ({ type: 'LIGHT_MODE_OFF' });
 export const numbersPanelNotClickable = () => ({ type: 'NUMBERS_PANEL_NOT_CLICKABLE' });
 export const numbersPanelClickable = () => ({ type: 'NUMBERS_PANEL_CLICKABLE' });
+export const closePopup = () => ({ type: 'CLOSE_POPUP' });
+export const openPopup = () => ({ type: 'OPEN_POPUP' });

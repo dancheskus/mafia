@@ -6,10 +6,12 @@ export default (
   state = {
     opensTable: 0,
     activePlayer: 0,
-    gameState: { phase: 'Night', dayNumber: 1 }, // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
+    gameState: { phase: 'Night', dayNumber: 0 },
+    // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
     lightMode: false,
     selectedNumbers: [],
     numbersPanelClickable: false,
+    popupOpened: true,
   },
   action
 ) =>
@@ -56,6 +58,14 @@ export default (
 
       case 'NUMBERS_PANEL_CLICKABLE':
         draft.numbersPanelClickable = true;
+        return;
+
+      case 'CLOSE_POPUP':
+        draft.popupOpened = false;
+        return;
+
+      case 'OPEN_POPUP':
+        draft.popupOpened = true;
         return;
     }
   });

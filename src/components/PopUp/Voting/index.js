@@ -77,9 +77,7 @@ class Voting extends Component {
       if (handsAmount[0] > avaliableHandsAmount / 2) {
         this.setState({ lastMinuteFor: this.state.lastMinuteFor.concat(this.props.game.selectedNumbers) });
 
-        this.props.game.selectedNumbers.map(player => {
-          this.props.killPlayer(player);
-        });
+        this.props.game.selectedNumbers.map(player => this.props.killPlayer(player));
       }
     }
   };
@@ -109,7 +107,10 @@ class Voting extends Component {
 
   okClicked = () => this.setState({ carCrashLabel: false, endOfVoting: false });
 
-  goToNight = () => this.props.changeGameState({ phase: 'Night', dayNumber: this.props.game.gameState.dayNumber + 1 });
+  goToNight = () => {
+    this.props.clearSelectedNumbers();
+    this.props.changeGameState({ phase: 'Night', dayNumber: this.props.game.gameState.dayNumber + 1 });
+  };
 
   render = () => {
     const deadPlayers = this.props.players.filter(player => !player.isAlive).length;

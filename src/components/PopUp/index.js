@@ -42,6 +42,8 @@ const StyledPopUp = styled.div`
     transform: translateX(-160%);
         }
       `};
+
+  display: ${props => !props.opened && 'none'};
 `;
 
 const MinimizeButton = styled.div`
@@ -77,7 +79,7 @@ class PopUp extends Component {
     const phase = this.props.game.gameState.phase;
     const lightMode = this.props.game.lightMode;
     return (
-      <StyledPopUp color={phase} light={lightMode} minimized={this.state.minimized}>
+      <StyledPopUp opened={this.props.opened} color={phase} light={lightMode} minimized={this.state.minimized}>
         {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && (
           <MinimizeButton className="minimize-button" color={phase} light={lightMode} onClick={this.minimizeClicked}>
             {this.state.minimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}

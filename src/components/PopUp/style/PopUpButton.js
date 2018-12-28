@@ -10,6 +10,7 @@ export default styled.button`
   font-size: 1.1rem;
   text-transform: uppercase;
   transition: filter 0.2s;
+
   ${props =>
     props.disabled
       ? `

@@ -12,6 +12,7 @@ import ZeroNight from './PopUp/ZeroNight';
 import PlayerCards from './PlayerCards';
 import Voting from './PopUp/Voting';
 import Night from './PopUp/Night';
+import Day from './PopUp/Day';
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -39,7 +40,7 @@ const MainContentWrapper = styled.div`
 class App extends Component {
   render() {
     const phase = this.props.game.gameState.phase;
-    const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night }[phase];
+    const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day }[phase];
 
     return (
       <AppWrapper className="d-flex flex-column">
@@ -49,7 +50,7 @@ class App extends Component {
             {phase !== 'startScreen' && <NumbersPanel key={this.props.game.activePlayer} />}
 
             <MainContentWrapper>
-              {phase !== 'Day' && <PopUp popupChild={PopUpChildComponent} />}
+              {<PopUp opened={this.props.game.popupOpened} popupChild={PopUpChildComponent} />}
 
               {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && <PlayerCards />}
             </MainContentWrapper>

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 import { changeActivePlayer, changeGameState } from '../redux/actions/gameActions';
-import _ from 'lodash';
 
 import NavMenu from './NavMenu';
 import colors from '../colors';
