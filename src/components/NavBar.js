@@ -71,6 +71,7 @@ const Navigation = props => {
   if (phase === 'Day') title = `${dayNumber} день`;
   if (phase === 'Voting') title = 'Голосование';
   if (phase === 'Night') title = `${dayNumber} Ночь`;
+  if (phase === 'EndOfGame') title = `Конец игры`;
 
   const findLastSpeaker = (i = props.game.opensTable - 1) =>
     props.players[mod(i, 10)].isAlive ? mod(i, 10) : findLastSpeaker(i - 1);

@@ -116,4 +116,16 @@ export default {
     handsAmountDisabledBackground: '#435784',
     handsAmountDisabledText: '#7E8CAB',
   },
+
+  EndOfGame: {
+    navBarText: '#fff',
+    numbersPanel: '#484848',
+    number: '#F37F7F',
+    numberSelected: '#000',
+    popupBackground: '#373737',
+    popupBackgroundLight: '#FB6F6F',
+    popupButton: '#484848',
+    popupButtonLight: '#FF8282',
+    popupText: '#fff',
+  },
 };

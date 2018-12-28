@@ -5,8 +5,10 @@ import { connect } from 'react-redux';
 import colors from '../../colors';
 import { MinimizeIcon, MaximizeIcon, EyeIcon, EyeIconCrossed } from './../../img/svgIcons';
 import { addFoul, removeFoul } from './../../redux/actions/playersActions';
+import { changeGameState } from '../../redux/actions/gameActions';
 import PlayerNumber from './style/PlayerNumber';
 import FoulContainer from './style/FoulContainer';
+import checkForEnd from '../../helpers/checkForEnd';
 
 const CardContainer = styled.div`
   width: 50%;
@@ -78,6 +80,7 @@ class SingleCard extends Component {
 
     this.timer = setTimeout(() => {
       this.props.addFoul(this.props.number);
+      checkForEnd(this.props.players) && this.props.changeGameState({ phase: 'EndOfGame' });
     }, 2000);
   };
 
@@ -150,14 +153,7 @@ class SingleCard extends Component {
   };
 }
 
-const mapStateToProps = ({ game, players }) => ({ game, players });
-
-const mapDispatchToProps = dispatch => ({
-  addFoul: playerNumber => dispatch(addFoul(playerNumber)),
-  removeFoul: playerNumber => dispatch(removeFoul(playerNumber)),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ game, players }) => ({ game, players }),
+  { addFoul, removeFoul, changeGameState }
 )(SingleCard);

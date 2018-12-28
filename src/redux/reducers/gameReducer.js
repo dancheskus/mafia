@@ -1,13 +1,14 @@
 /* eslint-disable */
 
+import _ from 'lodash';
 import produce from 'immer';
 
 export default (
   state = {
     opensTable: 0,
     activePlayer: 0,
-    gameState: { phase: 'Night', dayNumber: 0 },
-    // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, CarCrash, EndOfGame
+    gameState: { phase: 'RoleDealing', dayNumber: 2 },
+    // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, EndOfGame
     lightMode: false,
     selectedNumbers: [],
     numbersPanelClickable: false,

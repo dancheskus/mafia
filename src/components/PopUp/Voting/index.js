@@ -29,7 +29,7 @@ class Voting extends Component {
   state = { ...this.initialState };
 
   componentWillMount = () => {
-    if (this.props.game.gameState.dayNumber === 1 && this.props.game.selectedNumbers.length === 1) {
+    if (this.props.game.gameState.dayNumber > 1 && this.props.game.selectedNumbers.length === 1) {
       this.votingFinishedClicked();
       this.props.killPlayer(this.props.game.selectedNumbers[0]);
     }
@@ -119,7 +119,7 @@ class Voting extends Component {
     const avaliableHandsAmount = this.state.handsAmount[selectedNumbers.length - 1];
     const lastPlayer = this.state.currentPlayer === selectedNumbers.length - 1;
 
-    if (gameState.dayNumber === 0 && selectedNumbers.length === 1)
+    if (gameState.dayNumber === 1 && selectedNumbers.length === 1)
       return (
         <>
           <ResultsLabel className="h2">Голосование не проводится</ResultsLabel>

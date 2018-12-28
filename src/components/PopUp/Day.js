@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { clearSelectedNumbers, closePopup } from '../../redux/actions/gameActions';
+import { clearSelectedNumbers, closePopup, openPopup } from '../../redux/actions/gameActions';
 import Circle from './Voting/style/Circle';
 import PopUpButton from './style/PopUpButton';
 import { ResultsLabel } from './Voting/style/Results';
@@ -12,9 +12,11 @@ import colors from '../../colors';
 class Day extends Component {
   state = { killedPlayer: this.props.game.selectedNumbers[0] };
 
+  componentWillUnmount = () => this.props.openPopup();
+
   componentDidMount = () => {
     this.props.clearSelectedNumbers();
-    this.props.game.gameState.dayNumber === 0 && this.props.closePopup();
+    this.props.game.gameState.dayNumber === 1 && this.props.closePopup();
   };
 
   render = () => (
@@ -42,5 +44,5 @@ class Day extends Component {
 
 export default connect(
   ({ game }) => ({ game }),
-  { clearSelectedNumbers, closePopup }
+  { clearSelectedNumbers, closePopup, openPopup }
 )(Day);

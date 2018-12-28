@@ -9,6 +9,7 @@ import BlockOfHands from './Voting/style/BlockOfHands';
 import HandsButton from './Voting/style/HandsButton';
 import colors from '../../colors';
 import PopUpButton from './style/PopUpButton';
+import checkForEnd from '../../helpers/checkForEnd';
 
 const Label = styled.div`
   text-transform: uppercase;
@@ -20,6 +21,10 @@ class Night extends Component {
   state = { playerToKill: null, questionsTime: false };
 
   selectPlayer = num => this.setState({ playerToKill: num === this.state.playerToKill ? null : num });
+
+  componentWillUnmount = () => {
+    checkForEnd(this.props.players) && this.props.changeGameState({ phase: 'EndOfGame' });
+  };
 
   killPlayer = () => {
     this.state.playerToKill && this.props.killPlayer(this.state.playerToKill - 1);
@@ -72,6 +77,6 @@ class Night extends Component {
 }
 
 export default connect(
-  ({ game }) => ({ game }),
+  ({ game, players }) => ({ game, players }),
   { killPlayer, changeGameState, addToSelectedNumbers }
 )(Night);
