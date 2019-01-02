@@ -12,7 +12,7 @@ const Panel = styled.div`
   border-radius: 15px;
   margin-bottom: 15px;
   display: flex;
-  justify-content: ${props => (props.itemsCentered ? 'center' : 'space-around')};
+  justify-content: ${props => (props.itemsCentered ? 'center' : 'space-evenly')};
   ${props =>
     props.itemsCentered &&
     `

@@ -1,8 +1,22 @@
 /* eslint-disable */
 import produce from 'immer';
 
+const initialState = [
+  { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
+  { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
+  { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
+  { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
+  { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
+  { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
+  { role: 'ШЕРИФ', isAlive: true, fouls: { amount: 0, muted: false } },
+  { role: 'ДОН', isAlive: true, fouls: { amount: 0, muted: false } },
+  { role: 'МАФИЯ', isAlive: true, fouls: { amount: 0, muted: false } },
+  { role: 'МАФИЯ', isAlive: true, fouls: { amount: 0, muted: false } },
+];
+
 export default (
-  state = Array(10).fill({ role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } }),
+  // state = Array(10).fill({ role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } }),
+  state = initialState,
   action
 ) =>
   produce(state, draft => {
