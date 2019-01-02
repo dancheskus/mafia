@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import colors from '../../../../colors';
+import colors from '../../../colors';
 
 const margin = 3;
 
@@ -24,8 +24,20 @@ export default styled.button`
   ${props =>
     props.shooting
       ? `
-  background: ${props.selected ? colors.Night.handsAmountSelectedBackground : colors.Night.handsAmountBackground};
-  color: ${props.selected ? colors.Night.buttonTextInverse : colors.Night.buttonText};
+  background: ${
+    props.selected
+      ? colors.Night.handsAmountSelectedBackground
+      : props.disabled
+      ? colors.Night.handsAmountDisabledBackground
+      : colors.Night.handsAmountBackground
+  };
+  color: ${
+    props.selected
+      ? colors.Night.buttonTextInverse
+      : props.disabled
+      ? colors.Night.handsAmountDisabledText
+      : colors.Night.buttonText
+  };
       `
       : `
   background: ${

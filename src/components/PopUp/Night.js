@@ -5,8 +5,8 @@ import styled from 'styled-components';
 
 import { killPlayer } from '../../redux/actions/playersActions';
 import { changeGameState, addToSelectedNumbers } from './../../redux/actions/gameActions';
-import BlockOfHands from './Voting/style/BlockOfHands';
-import HandsButton from './Voting/style/HandsButton';
+import VotingBlock from '../common/styled-components/VotingBlock';
+import VotingSingleElement from '../common/styled-components/VotingSingleElement';
 import colors from '../../colors';
 import PopUpButton from './style/PopUpButton';
 import checkForEnd from '../../helpers/checkForEnd';
@@ -55,18 +55,19 @@ class Night extends Component {
       <>
         <Label className="h2">В кого стреляет мафия?</Label>
 
-        <BlockOfHands className="col-10 col-md-8 col-lg-6">
-          {_.range(1, 11).map(num => (
-            <HandsButton
+        <VotingBlock className="col-10 col-md-8 col-lg-6">
+          {_.range(0, 10).map(num => (
+            <VotingSingleElement
+              disabled={!this.props.players[num].isAlive}
               shooting
               selected={this.state.playerToKill === num}
               onClick={() => this.selectPlayer(num)}
               key={num}
             >
-              <div className="number">{num}</div>
-            </HandsButton>
+              <div className="number">{num + 1}</div>
+            </VotingSingleElement>
           ))}
-        </BlockOfHands>
+        </VotingBlock>
 
         <PopUpButton onClick={this.killPlayer} color="Night">
           Далее

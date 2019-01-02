@@ -3,9 +3,9 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 
 import PopUpButton from '../style/PopUpButton';
-import HandsButton from './style/HandsButton';
+import VotingSingleElement from '../../common/styled-components/VotingSingleElement';
 import Circle from './style/Circle';
-import BlockOfHands from './style/BlockOfHands';
+import VotingBlock from '../../common/styled-components/VotingBlock';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState } from '../../../redux/actions/gameActions';
 import { killPlayer } from '../../../redux/actions/playersActions';
 import Timer from '../../Timer';
@@ -162,18 +162,18 @@ class Voting extends Component {
         {this.state.timer && carCrash !== 2 ? (
           <Timer time={30} key={currentPlayer} />
         ) : (
-          <BlockOfHands className="col-10 col-md-8 col-lg-6">
+          <VotingBlock className="col-10 col-md-8 col-lg-6">
             {_.range(1, 11).map(num => (
-              <HandsButton
+              <VotingSingleElement
                 disabled={lastPlayer ? num !== avaliableHandsAmount : num > this.state.handsLeft - deadPlayers}
                 selected={lastPlayer ? num === avaliableHandsAmount : this.state.handsAmount[currentPlayer] === num}
                 onClick={() => this.handClicked(num)}
                 key={num}
               >
                 <div className="number">{num}</div>
-              </HandsButton>
+              </VotingSingleElement>
             ))}
-          </BlockOfHands>
+          </VotingBlock>
         )}
 
         <PopUpButton

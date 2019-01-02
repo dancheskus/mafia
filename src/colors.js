@@ -64,7 +64,9 @@ export default {
     buttonText: '#636363',
     buttonTextInverse: '#fff',
     handsAmountBackground: '#fff',
-    handsAmountSelectedBackground: '#636363',
+    handsAmountSelectedBackground: '#858585',
+    handsAmountDisabledBackground: '#444444',
+    handsAmountDisabledText: '#4e4e4e',
   },
   Day: {
     navBarText: '#E9E1D4',
