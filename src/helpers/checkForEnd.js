@@ -5,5 +5,5 @@ export default players => {
     players.map(player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ' ? 'black' : 'red'))
   );
 
-  return allAlivePlayers.red === allAlivePlayers.black || !allAlivePlayers.black;
+  return { status: allAlivePlayers.red === allAlivePlayers.black || !allAlivePlayers.black, allAlivePlayers };
 };

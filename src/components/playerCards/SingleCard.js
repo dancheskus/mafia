@@ -80,7 +80,7 @@ class SingleCard extends Component {
 
     this.timer = setTimeout(() => {
       this.props.addFoul(this.props.number);
-      checkForEnd(this.props.players) && this.props.changeGameState({ phase: 'EndOfGame' });
+      checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
     }, 2000);
   };
 
