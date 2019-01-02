@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
-import { changeActivePlayer, changeGameState } from '../redux/actions/gameActions';
 
+import { changeActivePlayer, changeGameState } from '../redux/actions/gameActions';
+import { unmutePlayer } from './../redux/actions/playersActions';
 import NavMenu from './NavMenu';
 import colors from '../colors';
 import NavBarCircleButton from './style/NavBarCircleButton';
@@ -46,19 +47,6 @@ const ButtonsWrapper = styled.div`
   }
 `;
 
-const DayButton = styled.button`
-  :hover,
-  :focus,
-  :active {
-    outline: none;
-  }
-  border: none;
-  background: none;
-  cursor: pointer;
-  text-transform: uppercase;
-  font-size: 1.6rem;
-`;
-
 const mod = (n, m) => ((n % m) + m) % m;
 
 const Navigation = props => {
@@ -78,13 +66,15 @@ const Navigation = props => {
 
   const lastSpeaker = props.game.activePlayer === findLastSpeaker();
 
-  const goToNextAlivePlayer = (i = props.game.activePlayer + 1) =>
+  const goToNextAlivePlayer = (i = props.game.activePlayer + 1) => {
+    props.unmutePlayer(mod(i - 1, 10));
     props.players[mod(i, 10)].isAlive ? props.changeActivePlayer(mod(i, 10)) : goToNextAlivePlayer(i + 1);
+  };
 
   const toVotingClicked = () => {
     props.game.selectedNumbers.length
       ? props.changeGameState({ phase: 'Voting' })
-      : props.changeGameState({ phase: 'Night', dayNumber: props.game.gameState.dayNumber + 1 });
+      : props.changeGameState({ phase: 'Night' });
   };
 
   return (
@@ -109,29 +99,13 @@ const Navigation = props => {
           </ButtonsWrapper>
         )}
 
-        {phase === 'Night' && (
-          <DayButton
-            onClick={() => props.changeGameState({ phase: 'Day', dayNumber: props.game.gameState.dayNumber + 1 })}
-          >
-            День
-            <NavBarCircleButton>
-              <NextIcon size="50%" />
-            </NavBarCircleButton>
-          </DayButton>
-        )}
-
         <NavMenu />
       </Container>
     </StyledNavigation>
   );
 };
 
-const mapStateToProps = ({ game, players }) => ({ game, players });
-const mapDispatchToProps = dispatch => ({
-  changeActivePlayer: playerNumber => dispatch(changeActivePlayer(playerNumber)),
-  changeGameState: payload => dispatch(changeGameState(payload)),
-});
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ game, players }) => ({ game, players }),
+  { changeActivePlayer, changeGameState, unmutePlayer }
 )(Navigation);

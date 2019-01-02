@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PopUpButton from './style/PopUpButton';
 import Timer from '../Timer';
 import colors from '../../colors';
-import { changeGameState, changeActivePlayer } from './../../redux/actions/gameActions';
+import { changeGameState } from './../../redux/actions/gameActions';
 
 const Label = styled.h1`
   color: ${colors.ZeroNight.popupText};
@@ -17,10 +17,7 @@ const Label = styled.h1`
 class ZeroNight extends Component {
   state = { dogovorka: true };
 
-  startGame = () => {
-    this.props.changeGameState({ phase: 'Day', dayNumber: 1 });
-    this.props.changeActivePlayer(0);
-  };
+  startGame = () => this.props.changeGameState({ phase: 'Day', dayNumber: 1 });
 
   render = () => (
     <>
@@ -44,14 +41,7 @@ class ZeroNight extends Component {
   );
 }
 
-const mapStateToProps = ({ game }) => ({ game });
-
-const mapDispatchToProps = dispatch => ({
-  changeGameState: payload => dispatch(changeGameState(payload)),
-  changeActivePlayer: playerNumber => dispatch(changeActivePlayer(playerNumber)),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ game }) => ({ game }),
+  { changeGameState }
 )(ZeroNight);

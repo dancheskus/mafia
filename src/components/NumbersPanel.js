@@ -121,6 +121,16 @@ class NumbersPanel extends Component {
           </Panel>
         )}
 
+        {phase === 'EndOfGame' && (
+          <Panel color={phase}>
+            {this.props.players.map((player, i) => (
+              <PanelItem color={phase} key={i} selected={player.role === 'ДОН' || player.role === 'МАФИЯ'}>
+                {i + 1}
+              </PanelItem>
+            ))}
+          </Panel>
+        )}
+
         {phase === 'RoleDealing' && (
           <Panel color={phase}>
             {_.range(0, 10).map(num => (
@@ -149,13 +159,7 @@ class NumbersPanel extends Component {
   };
 }
 
-const mapStateToProps = ({ game, players }) => ({ game, players });
-const mapDispatchToProps = dispatch => ({
-  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
-  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
-  removeLastSelectedNumber: () => dispatch(removeLastSelectedNumber()),
-});
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ game, players }) => ({ game, players }),
+  { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber }
 )(NumbersPanel);

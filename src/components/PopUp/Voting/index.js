@@ -109,7 +109,7 @@ class Voting extends Component {
 
   goToNight = () => {
     this.props.clearSelectedNumbers();
-    this.props.changeGameState({ phase: 'Night', dayNumber: this.props.game.gameState.dayNumber + 1 });
+    this.props.changeGameState({ phase: 'Night' });
   };
 
   render = () => {

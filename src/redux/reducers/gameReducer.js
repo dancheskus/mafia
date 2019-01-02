@@ -7,21 +7,18 @@ export default (
   state = {
     opensTable: 0,
     activePlayer: 0,
-    gameState: { phase: 'RoleDealing', dayNumber: 2 },
+    gameState: { phase: 'RoleDealing', dayNumber: 0 },
     // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, EndOfGame
     lightMode: false,
     selectedNumbers: [],
     numbersPanelClickable: false,
     popupOpened: true,
   },
-  action
+  action,
+  root
 ) =>
   produce(state, draft => {
     switch (action.type) {
-      case 'OPENS_TABLE':
-        draft.opensTable = action.playerNumber;
-        return;
-
       case 'CHANGE_ACTIVE_PLAYER':
         draft.activePlayer = action.playerNumber;
         return;
@@ -31,6 +28,15 @@ export default (
           phase: action.payload.phase,
           dayNumber: action.payload.dayNumber || state.gameState.dayNumber,
         };
+        if (action.payload.phase === 'Day' && draft.gameState.dayNumber > 1) {
+          const goToNextAlivePlayer = (i = state.opensTable + 1) => {
+            root.players[i % 10].isAlive
+              ? ((draft.activePlayer = i % 10), (draft.opensTable = i % 10))
+              : goToNextAlivePlayer(i + 1);
+          };
+
+          goToNextAlivePlayer();
+        }
         return;
 
       case 'LIGHT_MODE_ON':

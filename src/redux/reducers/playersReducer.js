@@ -25,5 +25,9 @@ export default (
         playerFouls.amount < 4 && playerFouls.amount > 0 && playerFouls.amount-- && (playerFouls.muted = false);
         return;
       }
+      case 'UNMUTE_PLAYER': {
+        draft[action.playerNumber].fouls.muted = false;
+        return;
+      }
     }
   });
