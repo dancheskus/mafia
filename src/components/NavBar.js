@@ -7,7 +7,7 @@ import { changeActivePlayer, changeGameState } from 'redux/actions/gameActions';
 import { unmutePlayer } from 'redux/actions/playersActions';
 import NavMenu from './NavMenu';
 import colors from '../colors';
-import NavBarCircleButton from './style/NavBarCircleButton';
+import NavBarCircleButton from './styled-components/NavBarCircleButton';
 import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 import Timer from './Timer';
 

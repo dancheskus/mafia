@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { PauseIcon, ResetIcon, PlayIcon, MutedIcon } from 'icons/svgIcons';
 import colors from '../colors';
-import NavBarCircleButton from './style/NavBarCircleButton';
+import NavBarCircleButton from './styled-components/NavBarCircleButton';
 
 const TimeAndPlayWrapper = styled.div`
   display: flex;
@@ -115,6 +115,4 @@ class Timer extends Component {
   };
 }
 
-const mapStateToProps = ({ game }) => ({ game });
-
-export default connect(mapStateToProps)(Timer);
+export default connect(({ game }) => ({ game }))(Timer);

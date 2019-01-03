@@ -6,8 +6,8 @@ import colors from 'colors.js';
 import { MinimizeIcon, MaximizeIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul } from 'redux/actions/playersActions';
 import { changeGameState, skipVotingDec, skipVotingInc } from 'redux/actions/gameActions';
-import PlayerNumber from './style/PlayerNumber';
-import FoulContainer from './style/FoulContainer';
+import PlayerNumber from './styled-components/PlayerNumber';
+import FoulContainer from './styled-components/FoulContainer';
 import checkForEnd from 'helpers/checkForEnd';
 
 const CardContainer = styled.div`

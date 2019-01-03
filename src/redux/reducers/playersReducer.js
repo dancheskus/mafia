@@ -2,7 +2,7 @@
 import produce from 'immer';
 
 const initialState = [
-  { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: true } },
+  { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
