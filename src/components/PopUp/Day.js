@@ -6,7 +6,7 @@ import Circle from './Voting/style/Circle';
 import PopUpButton from './style/PopUpButton';
 import { ResultsLabel } from './Voting/style/Results';
 import Timer from '../Timer';
-import { CylinderIcon } from './../../img/svgIcons';
+import { CylinderIcon } from './../../icons/svgIcons';
 import colors from '../../colors';
 
 class Day extends Component {

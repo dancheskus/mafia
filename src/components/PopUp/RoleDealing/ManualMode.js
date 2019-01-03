@@ -3,16 +3,16 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import _ from 'lodash';
 
-import { addRole } from './../../../redux/actions/playersActions';
+import { addRole } from 'redux/actions/playersActions';
 import {
   changeGameState,
   numbersPanelClickable,
   addToSelectedNumbers,
   clearSelectedNumbers,
-} from './../../../redux/actions/gameActions';
+} from 'redux/actions/gameActions';
 import PopUpButton from '../style/PopUpButton';
 import colors from '../../../colors';
-import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SherifOkIcon } from './../../../img/svgIcons';
+import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 
 const RoleSelectionWrapper = styled.div`
   height: 80%;
@@ -102,7 +102,7 @@ class ManualMode extends Component {
               <ThumbDownIcon size={'60%'} fill={colors.RoleDealing.popupIcon} />
             </Mafia>
             <Sherif onClick={() => this.changeSelection('ШЕРИФ')} selected={currentPlayerRole === 'ШЕРИФ'}>
-              <SherifOkIcon size={'60%'} fill={colors.RoleDealing.popupIconLight} />
+              <SheriffOkIcon size={'60%'} fill={colors.RoleDealing.popupIconLight} />
             </Sherif>
           </RoleSelection>
         </RoleSelectionWrapper>

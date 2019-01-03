@@ -6,7 +6,7 @@ import colors from '../../../colors';
 import PopUpButton from '../style/PopUpButton';
 import RandomMode from './RandomMode';
 import ManualMode from './ManualMode';
-import { RandomCubeIcon, ListIcon } from '../../../img/svgIcons';
+import { RandomCubeIcon, ListIcon } from '../../../icons/svgIcons';
 
 const SvgWrapper = styled.div`
   display: flex;

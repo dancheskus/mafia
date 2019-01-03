@@ -5,13 +5,13 @@ const initialState = [
   { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
-  { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
+  { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
   { role: 'ШЕРИФ', isAlive: true, fouls: { amount: 0, muted: false } },
-  { role: 'ДОН', isAlive: false, fouls: { amount: 0, muted: false } },
-  { role: 'МАФИЯ', isAlive: false, fouls: { amount: 0, muted: false } },
-  { role: 'МАФИЯ', isAlive: false, fouls: { amount: 0, muted: false } },
+  { role: 'ДОН', isAlive: true, fouls: { amount: 0, muted: false } },
+  { role: 'МАФИЯ', isAlive: true, fouls: { amount: 0, muted: false } },
+  { role: 'МАФИЯ', isAlive: true, fouls: { amount: 0, muted: false } },
 ];
 
 export default (

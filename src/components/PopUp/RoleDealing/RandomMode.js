@@ -12,7 +12,7 @@ import {
 } from './../../../redux/actions/gameActions';
 import { addRole } from './../../../redux/actions/playersActions';
 import colors from '../../../colors';
-import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SherifOkIcon } from './../../../img/svgIcons';
+import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import PopUpButton from '../style/PopUpButton';
 const { popupIcon, popupIconLight } = colors.RoleDealing;
 
@@ -77,7 +77,7 @@ class RandomMode extends Component {
         ((this.state.role === 'МАФИЯ' && <ThumbDownIcon size={'30%'} fill={popupIcon} />) ||
           (this.state.role === 'ДОН' && <DonRingIcon size={'30%'} fill={popupIcon} />) ||
           (this.state.role === 'МИРНЫЙ' && <ThumbUpIcon size={'30%'} fill={popupIconLight} />) ||
-          (this.state.role === 'ШЕРИФ' && <SherifOkIcon size={'30%'} fill={popupIconLight} />))}
+          (this.state.role === 'ШЕРИФ' && <SheriffOkIcon size={'30%'} fill={popupIconLight} />))}
 
       {this.state.role && (
         <>

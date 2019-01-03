@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import colors from '../../colors';
-import { MaximizeIcon, MinimizeIcon } from '../../img/svgIcons';
+import { MaximizeIcon, MinimizeIcon } from '../../icons/svgIcons';
 
 const StyledPopUp = styled.div`
   background: ${props =>

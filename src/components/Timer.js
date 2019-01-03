@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import { PauseIcon, ResetIcon, PlayIcon } from '../img/svgIcons';
+import { PauseIcon, ResetIcon, PlayIcon } from 'icons/svgIcons';
 import colors from '../colors';
 import NavBarCircleButton from './style/NavBarCircleButton';
 

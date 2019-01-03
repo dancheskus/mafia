@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import colors from '../../colors';
-import { MinimizeIcon, MaximizeIcon, EyeIcon, EyeIconCrossed } from './../../img/svgIcons';
+import { MinimizeIcon, MaximizeIcon, EyeIcon, EyeIconCrossed } from './../../icons/svgIcons';
 import { addFoul, removeFoul } from './../../redux/actions/playersActions';
 import { changeGameState } from '../../redux/actions/gameActions';
 import PlayerNumber from './style/PlayerNumber';
