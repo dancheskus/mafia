@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 
-import { changeActivePlayer, changeGameState } from 'redux/actions/gameActions';
+import { changeActivePlayer, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { unmutePlayer } from 'redux/actions/playersActions';
 import NavMenu from './NavMenu';
 import colors from '../colors';
@@ -72,9 +72,10 @@ const Navigation = props => {
   };
 
   const toVotingClicked = () => {
-    props.game.selectedNumbers.length
-      ? props.changeGameState({ phase: 'Voting' })
-      : props.changeGameState({ phase: 'Night' });
+    if (props.game.selectedNumbers.length) return props.changeGameState({ phase: 'Voting' });
+
+    props.skipVotingDec();
+    props.changeGameState({ phase: 'Night' });
   };
   const alivePlayers = props.players.filter(x => x.isAlive).length;
 
@@ -119,5 +120,5 @@ const Navigation = props => {
 
 export default connect(
   ({ game, players }) => ({ game, players }),
-  { changeActivePlayer, changeGameState, unmutePlayer }
+  { changeActivePlayer, changeGameState, unmutePlayer, skipVotingDec }
 )(Navigation);

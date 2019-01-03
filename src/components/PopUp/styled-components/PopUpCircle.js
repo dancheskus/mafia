@@ -10,7 +10,7 @@ export default styled.div`
   justify-content: center;
   align-items: center;
   font-size: 6rem;
-  color: ${colors.Voting.popupText};
+  color: ${props => (props.color === 'Night' ? colors.Night.popupLabel : colors.Voting.popupText)};
 
   span {
     font-size: 4rem;

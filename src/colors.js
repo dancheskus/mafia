@@ -112,6 +112,7 @@ export default {
     popupButton: '#889DCE',
     popupText: '#6D80AB',
     handsAmountBackground: '#fff',
+    popupTextInverse: '#fff',
     handsAmountSelectedBackground: '#759EFF',
     handsAmountDisabledBackground: '#435784',
     handsAmountDisabledText: '#7E8CAB',

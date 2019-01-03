@@ -24,7 +24,7 @@ class Day extends Component {
       {this.state.killedPlayer ? (
         <>
           <PopUpLabel className="h1">Убит</PopUpLabel>
-          <Circle>{this.state.killedPlayer}</Circle>
+          <Circle color="Night">{this.state.killedPlayer + 1}</Circle>
           <Timer />
         </>
       ) : (

@@ -91,7 +91,9 @@ class Night extends Component {
     if (this.state.donTime)
       return (
         <>
-          <PopUpLabel className="h2">Дон ищет шерифа</PopUpLabel>
+          <PopUpLabel color="Night" className="h2">
+            Дон ищет шерифа
+          </PopUpLabel>
 
           <Sheriff>
             <SheriffStarIcon />
@@ -106,7 +108,9 @@ class Night extends Component {
 
     return (
       <>
-        <PopUpLabel className="h2">В кого стреляет мафия?</PopUpLabel>
+        <PopUpLabel color="Night" className="h2">
+          В кого стреляет мафия?
+        </PopUpLabel>
 
         <VotingBlock className="col-10 col-md-8 col-lg-6">
           {_.range(0, 10).map(num => (
