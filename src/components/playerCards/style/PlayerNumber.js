@@ -4,9 +4,7 @@ import colors from '../../../colors';
 export default styled.div`
   background: ${props =>
     !props.isAlive
-      ? props.flipped
-        ? colors.Night.flippedDeadCardBackground
-        : colors.Day.deadPlayerCardBackground
+      ? colors.Day.deadPlayerCardBackground
       : props.isMuted
       ? colors.Day.warningPlayerCardBackground
       : colors.Day.playerCardBackground};
@@ -35,35 +33,4 @@ export default styled.div`
     top: 7px;
     left: 7px;
   }
-
-  .number {
-    display: ${props => props.flipped && 'none'};
-  }
-
-  ${props =>
-    props.flipped &&
-    `
-  ::after {
-    content: '${props.role === 'МАФИЯ' ? 'М' : props.role === 'ДОН' ? 'Д' : props.role === 'МИРНЫЙ' ? 'Ж' : 'Ш'}';
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2.5rem;
-    color: ${props.isAlive ? colors.Night.roleText : colors.Night.roleTextDead};
-    width: 60px;
-    height: 60px;
-    background: ${
-      !props.isAlive
-        ? colors.Night.darkRoleBackgroundDead
-        : props.darkSide
-        ? colors.Night.darkRoleBackground
-        : colors.Night.lightRoleBackground
-    };
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  `}
 `;

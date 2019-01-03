@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import colors from '../../colors';
-import { MinimizeIcon, MaximizeIcon, EyeIcon, EyeIconCrossed } from './../../icons/svgIcons';
-import { addFoul, removeFoul } from './../../redux/actions/playersActions';
-import { changeGameState } from '../../redux/actions/gameActions';
+import colors from 'colors.js';
+import { MinimizeIcon, MaximizeIcon } from 'icons/svgIcons';
+import { addFoul, removeFoul } from 'redux/actions/playersActions';
+import { changeGameState } from 'redux/actions/gameActions';
 import PlayerNumber from './style/PlayerNumber';
 import FoulContainer from './style/FoulContainer';
-import checkForEnd from '../../helpers/checkForEnd';
+import checkForEnd from 'helpers/checkForEnd';
 
 const CardContainer = styled.div`
   width: 50%;
@@ -25,22 +25,6 @@ const Card = styled.div`
   border: 4px solid ${props => (props.activePlayer ? colors.Day.activePlayer : 'transparent')};
   display: flex;
   position: relative;
-
-  span {
-    position: absolute;
-    left: 5px;
-    bottom: 5px;
-    width: 10%;
-
-    path {
-      fill: ${props =>
-        props.isAlive
-          ? colors.Night.eyeIconFront
-          : props.flipped
-          ? colors.Night.eyeIconBackDead
-          : colors.Night.eyeIconBack};
-    }
-  }
 `;
 
 const RemoveFoul = styled.div`
@@ -67,7 +51,7 @@ const FoulIcon = styled.div`
 `;
 
 class SingleCard extends Component {
-  state = { foulsAmount: this.props.players[this.props.number].fouls.amount, cardFlipped: false };
+  state = { foulsAmount: this.props.players[this.props.number].fouls.amount };
 
   timer;
 
@@ -102,13 +86,8 @@ class SingleCard extends Component {
 
     return (
       <CardContainer order={this.props.order}>
-        <Card
-          flipped={this.state.cardFlipped}
-          isAlive={isAlive}
-          activePlayer={phase === 'Day' && this.props.game.activePlayer === this.props.number}
-        >
+        <Card isAlive={isAlive} activePlayer={phase === 'Day' && this.props.game.activePlayer === this.props.number}>
           <PlayerNumber
-            flipped={this.state.cardFlipped}
             darkSide={role === 'МАФИЯ' || role === 'ДОН'}
             role={role}
             isMuted={isMuted}
@@ -135,18 +114,6 @@ class SingleCard extends Component {
               )}
             </AddFoul>
           </FoulContainer>
-
-          {phase === 'Night' && (
-            <>
-              <span
-                onClick={() => {
-                  this.setState({ cardFlipped: !this.state.cardFlipped });
-                }}
-              >
-                {this.state.cardFlipped ? <EyeIconCrossed /> : <EyeIcon />}
-              </span>
-            </>
-          )}
         </Card>
       </CardContainer>
     );

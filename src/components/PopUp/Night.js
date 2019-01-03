@@ -9,8 +9,8 @@ import VotingBlock from '../common/styled-components/VotingBlock';
 import VotingSingleElement from '../common/styled-components/VotingSingleElement';
 import colors from 'colors.js';
 import PopUpButton from './style/PopUpButton';
-import checkForEnd from '../../helpers/checkForEnd';
-import { SheriffStarIcon, TargetIcon } from './../../icons/svgIcons';
+import checkForEnd from 'helpers/checkForEnd';
+import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
 
 const Label = styled.div`
   text-transform: uppercase;
