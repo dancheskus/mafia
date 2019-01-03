@@ -1,11 +1,5 @@
 import styled from 'styled-components';
-import colors from '../../../../colors';
-
-export const ResultsLabel = styled.div`
-  text-transform: uppercase;
-  text-align: center;
-  color: ${colors.Voting.popupTextInverse};
-`;
+import colors from 'colors.js';
 
 export const ResultsNumbers = styled.div`
   display: flex;

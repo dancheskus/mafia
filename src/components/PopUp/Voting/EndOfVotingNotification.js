@@ -1,12 +1,13 @@
 import React from 'react';
-import PopUpButton from '../style/PopUpButton';
-import { ResultsLabel, ResultsNumbers } from './style/Results';
+import PopUpButton from '../styled-components/PopUpButton';
+import { ResultsNumbers } from './style/Results';
+import PopUpLabel from '../styled-components/PopUpLabel';
 
 export default props => (
   <>
     {props.lastMinuteFor.length > 0 ? (
       <>
-        <ResultsLabel className="h1">Игру покидает</ResultsLabel>
+        <PopUpLabel className="h1">Игру покидает</PopUpLabel>
         <ResultsNumbers>
           {props.lastMinuteFor.map(num => (
             <div key={num}>{num + 1}</div>
@@ -19,7 +20,7 @@ export default props => (
       </>
     ) : (
       <>
-        <ResultsLabel className="h1">Никто не уходит</ResultsLabel>
+        <PopUpLabel className="h1">Никто не уходит</PopUpLabel>
         <PopUpButton color="Voting" onClick={props.goToNight}>
           Ночь
         </PopUpButton>

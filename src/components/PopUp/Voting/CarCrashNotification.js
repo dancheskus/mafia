@@ -1,11 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import PopUpButton from '../style/PopUpButton';
-import { ResultsLabel, ResultsNumbers } from './style/Results';
+import PopUpButton from '../styled-components/PopUpButton';
+import { ResultsNumbers } from './style/Results';
+import PopUpLabel from '../styled-components/PopUpLabel';
 
 const CarCrashNotification = props => (
   <>
-    <ResultsLabel className="h1">ПЕРЕГОЛОСОВКА</ResultsLabel>
+    <PopUpLabel className="h1">ПЕРЕГОЛОСОВКА</PopUpLabel>
     <ResultsNumbers>
       {props.game.selectedNumbers.map(num => (
         <div key={num}>{num + 1}</div>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import PopUpButton from '../style/PopUpButton';
+import PopUpButton from '../styled-components/PopUpButton';
 import VotingSingleElement from '../../common/styled-components/VotingSingleElement';
 import Circle from './style/Circle';
 import VotingBlock from '../../common/styled-components/VotingBlock';
@@ -12,7 +12,7 @@ import Timer from '../../Timer';
 import CarCrashNotification from './CarCrashNotification';
 import EndOfVotingNotification from './EndOfVotingNotification';
 import TimerForPlayer from './TimerForPlayer';
-import { ResultsLabel } from './style/Results';
+import PopUpLabel from '../styled-components/PopUpLabel';
 
 class Voting extends Component {
   initialState = {
@@ -123,8 +123,8 @@ class Voting extends Component {
     if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || skipVoting > 0)
       return (
         <>
-          <ResultsLabel className="h2">Голосование не проводится</ResultsLabel>
-          {skipVoting > 0 && <ResultsLabel className="h3">Игрок получил 4-й фол</ResultsLabel>}
+          <PopUpLabel className="h2">Голосование не проводится</PopUpLabel>
+          {skipVoting > 0 && <PopUpLabel className="h3">Игрок получил 4-й фол</PopUpLabel>}
 
           <PopUpButton color="Voting" onClick={this.goToNight}>
             Ночь
@@ -158,9 +158,9 @@ class Voting extends Component {
 
     return (
       <>
-        {carCrash === 1 && <ResultsLabel className="h2">Повторное голосование</ResultsLabel>}
+        {carCrash === 1 && <PopUpLabel className="h2">Повторное голосование</PopUpLabel>}
 
-        {carCrash === 2 && <ResultsLabel className="h2">Выгнать всех выставленных?</ResultsLabel>}
+        {carCrash === 2 && <PopUpLabel className="h2">Выгнать всех выставленных?</PopUpLabel>}
 
         {carCrash !== 2 && <Circle>{selectedNumbers[currentPlayer] + 1}</Circle>}
 

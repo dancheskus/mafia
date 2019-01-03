@@ -7,16 +7,10 @@ import { killPlayer } from 'redux/actions/playersActions';
 import { changeGameState, addToSelectedNumbers } from 'redux/actions/gameActions';
 import VotingBlock from '../common/styled-components/VotingBlock';
 import VotingSingleElement from '../common/styled-components/VotingSingleElement';
-import colors from 'colors.js';
-import PopUpButton from './style/PopUpButton';
+import PopUpButton from './styled-components/PopUpButton';
 import checkForEnd from 'helpers/checkForEnd';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
-
-const Label = styled.div`
-  text-transform: uppercase;
-  color: ${colors.Night.popupText};
-  text-align: center;
-`;
+import PopUpLabel from './styled-components/PopUpLabel';
 
 const Sheriff = styled.div`
   height: 50%;
@@ -67,7 +61,9 @@ class Night extends Component {
     if (this.state.sheriffTime)
       return (
         <>
-          <Label className="h2">Шериф ищет черных игроков</Label>
+          <PopUpLabel color="Night" className="h2">
+            Шериф ищет черных игроков
+          </PopUpLabel>
           <DarkPlayers>
             {this.props.players
               .map((player, i) => (player.role === 'МАФИЯ' || player.role === 'ДОН' ? i : null))
@@ -95,7 +91,7 @@ class Night extends Component {
     if (this.state.donTime)
       return (
         <>
-          <Label className="h2">Дон ищет шерифа</Label>
+          <PopUpLabel className="h2">Дон ищет шерифа</PopUpLabel>
 
           <Sheriff>
             <SheriffStarIcon />
@@ -110,7 +106,7 @@ class Night extends Component {
 
     return (
       <>
-        <Label className="h2">В кого стреляет мафия?</Label>
+        <PopUpLabel className="h2">В кого стреляет мафия?</PopUpLabel>
 
         <VotingBlock className="col-10 col-md-8 col-lg-6">
           {_.range(0, 10).map(num => (

@@ -1,18 +1,10 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import PopUpButton from './style/PopUpButton';
+import PopUpButton from './styled-components/PopUpButton';
 import Timer from '../Timer';
-import colors from '../../colors';
 import { changeGameState } from './../../redux/actions/gameActions';
-
-const Label = styled.h1`
-  color: ${colors.ZeroNight.popupText};
-  text-transform: uppercase;
-  font-size: 300%;
-  text-align: center;
-`;
+import PopUpLabel from './styled-components/PopUpLabel';
 
 class ZeroNight extends Component {
   state = { dogovorka: true };
@@ -23,7 +15,9 @@ class ZeroNight extends Component {
     <>
       {this.state.dogovorka ? (
         <>
-          <Label>Договорка</Label>
+          <PopUpLabel color="ZeroNight" className="h1">
+            Договорка
+          </PopUpLabel>
           <Timer />
           <PopUpButton onClick={() => this.setState({ dogovorka: false })} color="ZeroNight">
             Далее
@@ -31,7 +25,9 @@ class ZeroNight extends Component {
         </>
       ) : (
         <>
-          <Label>Знакомство с шерифом и доном</Label>
+          <PopUpLabel color="ZeroNight" className="h2">
+            Знакомство с шерифом и доном
+          </PopUpLabel>
           <PopUpButton onClick={this.startGame} color="ZeroNight">
             День
           </PopUpButton>

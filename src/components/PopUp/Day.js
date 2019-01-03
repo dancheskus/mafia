@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import { clearSelectedNumbers, closePopup, openPopup } from '../../redux/actions/gameActions';
 import Circle from './Voting/style/Circle';
-import PopUpButton from './style/PopUpButton';
-import { ResultsLabel } from './Voting/style/Results';
+import PopUpButton from './styled-components/PopUpButton';
+import PopUpLabel from './styled-components/PopUpLabel';
 import Timer from '../Timer';
 import { CylinderIcon } from './../../icons/svgIcons';
 import colors from '../../colors';
@@ -23,13 +23,13 @@ class Day extends Component {
     <>
       {this.state.killedPlayer ? (
         <>
-          <ResultsLabel className="h1">Убит</ResultsLabel>
+          <PopUpLabel className="h1">Убит</PopUpLabel>
           <Circle>{this.state.killedPlayer}</Circle>
           <Timer />
         </>
       ) : (
         <>
-          <ResultsLabel className="h1">Несострел</ResultsLabel>
+          <PopUpLabel className="h1">Несострел</PopUpLabel>
           <Circle>
             <CylinderIcon fill={colors.Day.popupNightResult} size="80%" />
           </Circle>
