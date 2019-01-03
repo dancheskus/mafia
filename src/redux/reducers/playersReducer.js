@@ -5,7 +5,7 @@ const initialState = [
   { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: true } },
   { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
-  { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
+  { role: 'МИРНЫЙ', isAlive: true, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
   { role: 'МИРНЫЙ', isAlive: false, fouls: { amount: 0, muted: false } },
   { role: 'ШЕРИФ', isAlive: false, fouls: { amount: 0, muted: false } },

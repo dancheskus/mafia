@@ -13,6 +13,7 @@ export default (
     selectedNumbers: [],
     numbersPanelClickable: false,
     popupOpened: true,
+    skipVoting: 0,
   },
   action,
   root
@@ -73,6 +74,14 @@ export default (
 
       case 'OPEN_POPUP':
         draft.popupOpened = true;
+        return;
+
+      case 'SKIP_VOTING_INC':
+        draft.skipVoting++;
+        return;
+
+      case 'SKIP_VOTING_DEC':
+        draft.skipVoting > 0 && draft.skipVoting--;
         return;
     }
   });

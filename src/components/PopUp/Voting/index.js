@@ -6,8 +6,8 @@ import PopUpButton from '../style/PopUpButton';
 import VotingSingleElement from '../../common/styled-components/VotingSingleElement';
 import Circle from './style/Circle';
 import VotingBlock from '../../common/styled-components/VotingBlock';
-import { clearSelectedNumbers, addToSelectedNumbers, changeGameState } from '../../../redux/actions/gameActions';
-import { killPlayer } from '../../../redux/actions/playersActions';
+import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
+import { killPlayer } from 'redux/actions/playersActions';
 import Timer from '../../Timer';
 import CarCrashNotification from './CarCrashNotification';
 import EndOfVotingNotification from './EndOfVotingNotification';
@@ -109,20 +109,22 @@ class Voting extends Component {
 
   goToNight = () => {
     this.props.clearSelectedNumbers();
+    this.props.skipVotingDec();
     this.props.changeGameState({ phase: 'Night' });
   };
 
   render = () => {
     const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
     const { carCrash, currentPlayer } = this.state;
-    const { gameState, selectedNumbers } = this.props.game;
+    const { gameState, selectedNumbers, skipVoting } = this.props.game;
     const avaliableHandsAmount = this.state.handsAmount[selectedNumbers.length - 1];
     const lastPlayer = this.state.currentPlayer === selectedNumbers.length - 1;
 
-    if (gameState.dayNumber === 1 && selectedNumbers.length === 1)
+    if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || skipVoting > 0)
       return (
         <>
           <ResultsLabel className="h2">Голосование не проводится</ResultsLabel>
+          {skipVoting > 0 && <ResultsLabel className="h3">Игрок получил 4-й фол</ResultsLabel>}
 
           <PopUpButton color="Voting" onClick={this.goToNight}>
             Ночь
@@ -141,14 +143,17 @@ class Voting extends Component {
         />
       );
 
-    if (this.state.lastMinuteFor.length > 0 || (gameState.dayNumber === 1 && selectedNumbers.length === 1))
+    // ДАЕТСЯ ПОСЛЕДНЯЯ МИНУТА, ТОМУ/ТЕМ КОГО ВЫГНАЛИ
+    if (this.state.lastMinuteFor.length > 0)
       return (
-        <TimerForPlayer
-          state={{ ...this.state }}
-          lastPlayer={lastPlayer}
-          votingFinishedClicked={this.votingFinishedClicked}
-          nextButtonClicked={this.nextButtonClicked}
-        />
+        <>
+          <TimerForPlayer
+            state={{ ...this.state }}
+            lastPlayer={lastPlayer}
+            votingFinishedClicked={this.votingFinishedClicked}
+            nextButtonClicked={this.nextButtonClicked}
+          />
+        </>
       );
 
     return (
@@ -189,5 +194,5 @@ class Voting extends Component {
 
 export default connect(
   ({ game, players }) => ({ game, players }),
-  { clearSelectedNumbers, addToSelectedNumbers, killPlayer, changeGameState }
+  { clearSelectedNumbers, addToSelectedNumbers, killPlayer, changeGameState, skipVotingDec }
 )(Voting);

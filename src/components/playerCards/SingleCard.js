@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import colors from 'colors.js';
 import { MinimizeIcon, MaximizeIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul } from 'redux/actions/playersActions';
-import { changeGameState } from 'redux/actions/gameActions';
+import { changeGameState, skipVotingDec, skipVotingInc } from 'redux/actions/gameActions';
 import PlayerNumber from './style/PlayerNumber';
 import FoulContainer from './style/FoulContainer';
 import checkForEnd from 'helpers/checkForEnd';
@@ -65,6 +65,9 @@ class SingleCard extends Component {
     this.timer = setTimeout(() => {
       this.props.addFoul(this.props.number);
       checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
+
+      const phase = this.props.game.gameState.phase;
+      if (phase === 'Day') this.props.skipVotingInc();
     }, 2000);
   };
 
@@ -122,5 +125,5 @@ class SingleCard extends Component {
 
 export default connect(
   ({ game, players }) => ({ game, players }),
-  { addFoul, removeFoul, changeGameState }
+  { addFoul, removeFoul, changeGameState, skipVotingDec, skipVotingInc }
 )(SingleCard);

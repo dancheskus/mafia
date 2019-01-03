@@ -10,7 +10,6 @@ import colors from '../colors';
 import NavBarCircleButton from './style/NavBarCircleButton';
 import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 import Timer from './Timer';
-import checkForEnd from 'helpers/checkForEnd';
 
 const StyledNavigation = styled.div`
   background: #46494e;
