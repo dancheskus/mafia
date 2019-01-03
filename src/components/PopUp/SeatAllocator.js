@@ -64,17 +64,7 @@ class SeatAllocator extends Component {
   };
 }
 
-const mapStateToProps = state => ({
-  game: state.game,
-});
-
-const mapDispatchToProps = dispatch => ({
-  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
-  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
-  changeGameState: payload => dispatch(changeGameState(payload)),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ game }) => ({ game }),
+  { addToSelectedNumbers, clearSelectedNumbers, changeGameState }
 )(SeatAllocator);

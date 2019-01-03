@@ -7,7 +7,7 @@ export default (
   state = {
     opensTable: 0,
     activePlayer: 0,
-    gameState: { phase: 'ZeroNight', dayNumber: 0 },
+    gameState: { phase: 'RoleDealing', dayNumber: 0 },
     // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, EndOfGame
     lightMode: false,
     selectedNumbers: [],

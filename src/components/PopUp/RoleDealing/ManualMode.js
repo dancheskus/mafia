@@ -28,40 +28,34 @@ const RoleSelection = styled.div`
   display: flex;
   flex-wrap: wrap;
 
-  div {
+  > div {
     display: flex;
     justify-content: center;
     align-items: center;
     border: 2px solid transparent;
     transition: border 0.1s;
+    width: 50%;
+    height: 50%;
   }
 `;
 
 const Mirnij = styled.div`
   background: ${colors.RoleDealing.popupBackgroundLight};
-  width: 50%;
-  height: 50%;
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
   border-radius: 10px 0 0 0;
 `;
 const Don = styled.div`
   background: ${colors.RoleDealing.popupButton};
-  width: 50%;
-  height: 50%;
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
   border-radius: 0 10px 0 0;
 `;
 const Mafia = styled.div`
   background: ${colors.RoleDealing.popupButton};
-  width: 50%;
-  height: 50%;
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
   border-radius: 0 0 0 10px;
 `;
 const Sherif = styled.div`
   background: ${colors.RoleDealing.popupBackgroundLight};
-  width: 50%;
-  height: 50%;
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
   border-radius: 0 0 10px 0;
 `;
@@ -120,20 +114,7 @@ class ManualMode extends Component {
   };
 }
 
-const mapStateToProps = state => ({
-  game: state.game,
-  players: state.players,
-});
-
-const mapDispatchToProps = dispatch => ({
-  addRole: payload => dispatch(addRole(payload)),
-  changeGameState: payload => dispatch(changeGameState(payload)),
-  numbersPanelClickable: () => dispatch(numbersPanelClickable()),
-  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
-  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ game, players }) => ({ game, players }),
+  { addRole, changeGameState, numbersPanelClickable, addToSelectedNumbers, clearSelectedNumbers }
 )(ManualMode);

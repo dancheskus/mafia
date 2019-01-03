@@ -9,9 +9,9 @@ import {
   clearSelectedNumbers,
   addToSelectedNumbers,
   changeGameState,
-} from './../../../redux/actions/gameActions';
-import { addRole } from './../../../redux/actions/playersActions';
-import colors from '../../../colors';
+} from 'redux/actions/gameActions';
+import { addRole } from 'redux/actions/playersActions';
+import colors from 'colors.js';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import PopUpButton from '../styled-components/PopUpButton';
 const { popupIcon, popupIconLight } = colors.RoleDealing;
@@ -91,20 +91,7 @@ class RandomMode extends Component {
   );
 }
 
-const mapStateToProps = ({ game }) => ({
-  game,
-});
-
-const mapDispatchToProps = dispatch => ({
-  lightModeOff: () => dispatch(lightModeOff()),
-  lightModeOn: () => dispatch(lightModeOn()),
-  clearSelectedNumbers: () => dispatch(clearSelectedNumbers()),
-  addToSelectedNumbers: playerNumber => dispatch(addToSelectedNumbers(playerNumber)),
-  addRole: payload => dispatch(addRole(payload)),
-  changeGameState: payload => dispatch(changeGameState(payload)),
-});
-
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
+  ({ game }) => ({ game }),
+  { lightModeOff, lightModeOn, clearSelectedNumbers, addToSelectedNumbers, addRole, changeGameState }
 )(RandomMode);

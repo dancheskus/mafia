@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PopUpButton from '../styled-components/PopUpButton';
-import { ResultsNumbers } from './style/Results';
+import { ResultsNumbers } from './styled-components/Results';
 import PopUpLabel from '../styled-components/PopUpLabel';
 
 const CarCrashNotification = props => (

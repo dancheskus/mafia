@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import PopUpButton from '../styled-components/PopUpButton';
 import VotingSingleElement from '../../common/styled-components/VotingSingleElement';
-import Circle from './style/Circle';
+import Circle from '../styled-components/PopUpCircle';
 import VotingBlock from '../../common/styled-components/VotingBlock';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';

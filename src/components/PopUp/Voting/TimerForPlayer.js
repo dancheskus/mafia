@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PopUpButton from '../styled-components/PopUpButton';
-import Circle from './style/Circle';
+import Circle from '../styled-components/PopUpCircle';
 import Timer from './../../Timer';
 
 const TimerForPlayer = ({ lastPlayer, votingFinishedClicked, nextButtonClicked, state }) => {
@@ -20,6 +20,4 @@ const TimerForPlayer = ({ lastPlayer, votingFinishedClicked, nextButtonClicked, 
   );
 };
 
-const mapStateToProps = ({ game }) => ({ game });
-
-export default connect(mapStateToProps)(TimerForPlayer);
+export default connect(({ game }) => ({ game }))(TimerForPlayer);

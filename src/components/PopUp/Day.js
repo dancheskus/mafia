@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { clearSelectedNumbers, closePopup, openPopup } from '../../redux/actions/gameActions';
-import Circle from './Voting/style/Circle';
+import Circle from './styled-components/PopUpCircle';
 import PopUpButton from './styled-components/PopUpButton';
 import PopUpLabel from './styled-components/PopUpLabel';
 import Timer from '../Timer';

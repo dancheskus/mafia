@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import checkForEnd from '../../helpers/checkForEnd';
+import checkForEnd from 'helpers/checkForEnd';
 
 const GameResult = styled.div`
   width: 90%;
