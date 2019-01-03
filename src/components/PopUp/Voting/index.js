@@ -13,6 +13,7 @@ import CarCrashNotification from './CarCrashNotification';
 import EndOfVotingNotification from './EndOfVotingNotification';
 import TimerForPlayer from './TimerForPlayer';
 import PopUpLabel from '../styled-components/PopUpLabel';
+import checkForEnd from 'helpers/checkForEnd';
 
 class Voting extends Component {
   initialState = {
@@ -28,8 +29,16 @@ class Voting extends Component {
 
   state = { ...this.initialState };
 
+  componentWillUpdate = () => {
+    checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
+  };
+
   componentWillMount = () => {
-    if (this.props.game.gameState.dayNumber > 1 && this.props.game.selectedNumbers.length === 1) {
+    if (
+      this.props.game.gameState.dayNumber > 1 &&
+      this.props.game.selectedNumbers.length === 1 &&
+      this.props.game.skipVoting === 0
+    ) {
       this.votingFinishedClicked();
       this.props.killPlayer(this.props.game.selectedNumbers[0]);
     }

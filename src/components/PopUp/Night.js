@@ -67,7 +67,7 @@ class Night extends Component {
           <DarkPlayers>
             {this.props.players
               .map((player, i) => (player.role === 'МАФИЯ' || player.role === 'ДОН' ? i : null))
-              .filter(x => x)
+              .filter(x => x !== null)
               .map(plNum => (
                 <Target key={plNum}>
                   <TargetIcon size="85%" />

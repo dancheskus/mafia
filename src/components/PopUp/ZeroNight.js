@@ -64,12 +64,12 @@ class ZeroNight extends Component {
             <Icon>
               <SheriffStarIcon size="86%" />
               <span>{this.props.players.findIndex(player => player.role === 'ШЕРИФ') + 1}</span>
-              <div class="label">ШЕРИФ</div>
+              <div className="label">ШЕРИФ</div>
             </Icon>
             <Icon>
               <TargetIcon />
               <span>{this.props.players.findIndex(player => player.role === 'ДОН') + 1}</span>
-              <div class="label">ДОН</div>
+              <div className="label">ДОН</div>
             </Icon>
           </TwoIcons>
           <PopUpButton onClick={this.startGame} color="ZeroNight">
