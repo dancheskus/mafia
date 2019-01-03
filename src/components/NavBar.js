@@ -10,6 +10,7 @@ import colors from '../colors';
 import NavBarCircleButton from './style/NavBarCircleButton';
 import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 import Timer from './Timer';
+import checkForEnd from 'helpers/checkForEnd';
 
 const StyledNavigation = styled.div`
   background: #46494e;
@@ -76,6 +77,7 @@ const Navigation = props => {
       ? props.changeGameState({ phase: 'Voting' })
       : props.changeGameState({ phase: 'Night' });
   };
+  const alivePlayers = props.players.filter(x => x.isAlive).length;
 
   return (
     <StyledNavigation color={phase}>
@@ -84,7 +86,18 @@ const Navigation = props => {
 
         {phase === 'Day' && (
           <ButtonsWrapper>
-            <Timer mini key={props.game.activePlayer} />
+            <Timer
+              time={
+                props.players[props.game.activePlayer].fouls.muted
+                  ? alivePlayers === 3 || alivePlayers === 4
+                    ? 30
+                    : 0
+                  : 60
+              }
+              autostart={props.game.activePlayer !== props.game.opensTable}
+              mini
+              key={props.game.activePlayer}
+            />
             <NavBarCircleButton onClick={lastSpeaker ? toVotingClicked : () => goToNextAlivePlayer()}>
               {lastSpeaker ? (
                 props.game.selectedNumbers.length === 0 ? (

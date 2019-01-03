@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from '../../redux/actions/gameActions';
-import colors from '../../colors';
+import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
+import colors from 'colors.js';
 import PopUpButton from './style/PopUpButton';
 
 const BigCircle = styled.div`
@@ -30,6 +30,9 @@ class SeatAllocator extends Component {
     const randomNumber = this.seats.pop();
     this.setState({ randomNumber: randomNumber + 1 });
     this.props.addToSelectedNumbers(randomNumber);
+    setTimeout(() => {
+      this.setState({ randomNumber: null });
+    }, 1000);
   };
 
   buttonClicked = () => this.props.changeGameState({ phase: 'RoleDealing' }) && this.props.clearSelectedNumbers();
