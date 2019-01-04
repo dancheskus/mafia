@@ -2,21 +2,19 @@
 
 import produce from 'immer';
 
-export default (
-  state = {
-    opensTable: 0,
-    activePlayer: 0,
-    gameState: { phase: 'RoleDealing', dayNumber: 0 },
-    // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, EndOfGame
-    lightMode: false,
-    selectedNumbers: [],
-    numbersPanelClickable: false,
-    popupOpened: true,
-    skipVoting: 0,
-  },
-  action,
-  root
-) =>
+const initialState = {
+  opensTable: 0,
+  activePlayer: 0,
+  gameState: { phase: 'SeatAllocator', dayNumber: 0 },
+  // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, EndOfGame
+  lightMode: false,
+  selectedNumbers: [],
+  numbersPanelClickable: false,
+  popupOpened: true,
+  skipVoting: 0,
+};
+
+export default (state = initialState, action, root) =>
   produce(state, draft => {
     switch (action.type) {
       case 'CHANGE_ACTIVE_PLAYER':
@@ -82,5 +80,8 @@ export default (
       case 'SKIP_VOTING_DEC':
         draft.skipVoting > 0 && draft.skipVoting--;
         return;
+
+      case 'RESET_GAME_REDUCER':
+        return initialState;
     }
   });

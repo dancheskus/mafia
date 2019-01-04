@@ -1,45 +1,59 @@
-import React from 'react';
-import NavMenu from './style';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default () => (
-  <NavMenu>
-    <input type="checkbox" className="navi_check" id="navi-toggle" />
-    <label htmlFor="navi-toggle" className="navi_button">
-      <span className="navi_icon">&nbsp;</span>
-    </label>
-    <div className="navi-background" />
-    <div className="navi_nav">
-      <ul className="navi_list">
-        <li className="navi_item">
-          <a href="/" className="navi_link">
-            Настройки
-          </a>
-        </li>
+import StyledNavMenu from './style';
+import { resetPlayersReducer } from 'redux/actions/playersActions';
+import { resetGameReducer } from 'redux/actions/gameActions';
 
-        <li className="navi_item">
-          <a href="/" className="navi_link">
-            Плеер
-          </a>
-        </li>
+class NavMenu extends Component {
+  state = { checked: false };
 
-        <li className="navi_item">
-          <a
-            onClick={() => {
-              console.log(4);
-            }}
-            href="/"
-            className="navi_link"
-          >
-            Новая игра
-          </a>
-        </li>
+  render = () => (
+    <StyledNavMenu>
+      <input
+        type="checkbox"
+        onChange={() => this.setState({ checked: !this.state.checked })}
+        checked={this.state.checked}
+        className="navi_check"
+        id="navi-toggle"
+      />
+      <label htmlFor="navi-toggle" className="navi_button">
+        <span className="navi_icon">&nbsp;</span>
+      </label>
+      <div className="navi-background" />
+      <div className="navi_nav">
+        <ul className="navi_list">
+          <li className="navi_item">
+            <div className="navi_link">Настройки</div>
+          </li>
 
-        <li className="navi_item">
-          <a href="/" className="navi_link">
-            Выход
-          </a>
-        </li>
-      </ul>
-    </div>
-  </NavMenu>
-);
+          <li className="navi_item">
+            <div className="navi_link">Плеер</div>
+          </li>
+
+          <li className="navi_item">
+            <div
+              onClick={() => {
+                this.props.resetGameReducer();
+                this.props.resetPlayersReducer();
+                this.setState({ checked: false });
+              }}
+              className="navi_link"
+            >
+              Новая игра
+            </div>
+          </li>
+
+          <li className="navi_item">
+            <div className="navi_link">Выход</div>
+          </li>
+        </ul>
+      </div>
+    </StyledNavMenu>
+  );
+}
+
+export default connect(
+  ({ game }) => ({ game }),
+  { resetPlayersReducer, resetGameReducer }
+)(NavMenu);

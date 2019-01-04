@@ -11,3 +11,4 @@ export const closePopup = () => ({ type: 'CLOSE_POPUP' });
 export const openPopup = () => ({ type: 'OPEN_POPUP' });
 export const skipVotingInc = () => ({ type: 'SKIP_VOTING_INC' });
 export const skipVotingDec = () => ({ type: 'SKIP_VOTING_DEC' });
+export const resetGameReducer = () => ({ type: 'RESET_GAME_REDUCER' });

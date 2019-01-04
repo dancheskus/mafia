@@ -59,19 +59,16 @@ export default styled.div`
     }
 
     &_link {
-      &:link,
-      &:visited {
-        display: inline-block;
-        font-size: 2rem;
-        font-weight: 300;
-        padding: 0.5rem 1rem;
-        color: #fff;
-        text-decoration: none;
-        text-transform: uppercase;
-        background-image: linear-gradient(120deg, transparent 0%, transparent 50%, white 0%);
-        background-size: 240%;
-        transition: all 0.4s;
-      }
+      display: inline-block;
+      font-size: 2rem;
+      font-weight: 300;
+      padding: 0.5rem 1rem;
+      color: #fff;
+      text-decoration: none;
+      text-transform: uppercase;
+      background-image: linear-gradient(120deg, transparent 0%, transparent 50%, white 0%);
+      background-size: 240%;
+      transition: all 0.4s;
 
       &:hover,
       &:active {
