@@ -22,7 +22,7 @@ export default styled.div`
       width: 2.5rem;
       border-radius: 50%;
       margin: 0;
-      z-index: 3;
+      z-index: 300;
       text-align: center;
       display: flex;
       justify-content: center;
@@ -43,7 +43,7 @@ export default styled.div`
       position: fixed;
       top: 0;
       right: -2000px;
-      z-index: 2;
+      z-index: 200;
 
       display: flex;
       justify-content: center;

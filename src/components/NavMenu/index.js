@@ -15,11 +15,25 @@ export default () => (
             Настройки
           </a>
         </li>
+
         <li className="navi_item">
           <a href="/" className="navi_link">
             Плеер
           </a>
         </li>
+
+        <li className="navi_item">
+          <a
+            onClick={() => {
+              console.log(4);
+            }}
+            href="/"
+            className="navi_link"
+          >
+            Новая игра
+          </a>
+        </li>
+
         <li className="navi_item">
           <a href="/" className="navi_link">
             Выход

@@ -13,6 +13,7 @@ import Timer from './Timer';
 
 const StyledNavigation = styled.div`
   background: #46494e;
+  z-index: 300;
 
   .container > * {
     padding: 10px;
