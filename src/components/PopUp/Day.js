@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { clearSelectedNumbers, closePopup, openPopup } from '../../redux/actions/gameActions';
+import { clearSelectedNumbers, closePopup, openPopup } from 'redux/actions/gameActions';
 import Circle from './styled-components/PopUpCircle';
 import PopUpButton from './styled-components/PopUpButton';
 import PopUpLabel from './styled-components/PopUpLabel';
 import Timer from '../Timer';
-import { CylinderIcon } from './../../icons/svgIcons';
-import colors from '../../colors';
+import { CylinderIcon } from 'icons/svgIcons';
+import colors from 'colors.js';
 
 class Day extends Component {
   state = { killedPlayer: this.props.game.selectedNumbers[0] };

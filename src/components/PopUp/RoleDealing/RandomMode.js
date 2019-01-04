@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+import { shuffle, concat, fill } from 'lodash';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
@@ -36,7 +36,7 @@ const ScaledPopUpButton = styled(PopUpButton)`
 
 class RandomMode extends Component {
   state = { role: null };
-  allRoles = _.shuffle(_.concat(_.fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН'));
+  allRoles = shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН'));
 
   componentDidMount = () => this.props.addToSelectedNumbers(0);
 

@@ -1,6 +1,5 @@
 /* eslint-disable */
 
-import _ from 'lodash';
 import produce from 'immer';
 
 export default (

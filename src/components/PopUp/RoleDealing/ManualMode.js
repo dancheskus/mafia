@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import _ from 'lodash';
+import { countBy } from 'lodash';
 
 import { addRole } from 'redux/actions/playersActions';
 import {
@@ -11,7 +11,7 @@ import {
   clearSelectedNumbers,
 } from 'redux/actions/gameActions';
 import PopUpButton from '../styled-components/PopUpButton';
-import colors from '../../../colors';
+import colors from 'colors.js';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 
 const RoleSelectionWrapper = styled.div`
@@ -80,7 +80,7 @@ class ManualMode extends Component {
       ? this.props.players[this.props.game.selectedNumbers[0]].role
       : null;
 
-    const { МАФИЯ, ШЕРИФ, ДОН } = _.countBy(this.props.players.map(player => player.role));
+    const { МАФИЯ, ШЕРИФ, ДОН } = countBy(this.props.players.map(player => player.role));
 
     return (
       <>

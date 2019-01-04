@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import { range } from 'lodash';
 import styled from 'styled-components';
 
 import { killPlayer } from 'redux/actions/playersActions';
@@ -113,7 +113,7 @@ class Night extends Component {
         </PopUpLabel>
 
         <VotingBlock className="col-10 col-md-8 col-lg-6">
-          {_.range(0, 10).map(num => (
+          {range(0, 10).map(num => (
             <VotingSingleElement
               disabled={!this.props.players[num].isAlive}
               shooting

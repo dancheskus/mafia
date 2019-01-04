@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import { range, last } from 'lodash';
 import styled from 'styled-components';
 
-import colors from '../colors';
+import colors from 'colors.js';
 import { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber } from '../redux/actions/gameActions';
 
 const Panel = styled.div`
@@ -54,7 +54,7 @@ class NumbersPanel extends Component {
               </PanelItem>
             ))}
 
-            {_.range(0, 10)
+            {range(0, 10)
               .filter(e => !this.props.game.selectedNumbers.includes(e))
               .map(notSelNum => (
                 <PanelItem color={phase} key={notSelNum}>
@@ -67,8 +67,7 @@ class NumbersPanel extends Component {
         {phase === 'Day' && (
           <Panel color={phase}>
             {this.props.game.selectedNumbers.map(selNum => {
-              const lastAddedNumber =
-                selNum === _.last(this.props.game.selectedNumbers) && this.state.playerAddedNumber;
+              const lastAddedNumber = selNum === last(this.props.game.selectedNumbers) && this.state.playerAddedNumber;
 
               return (
                 <PanelItem
@@ -88,7 +87,7 @@ class NumbersPanel extends Component {
               );
             })}
 
-            {_.range(0, 10)
+            {range(0, 10)
               .filter(e => !this.props.game.selectedNumbers.includes(e))
               .map(
                 notSelNum =>
@@ -133,7 +132,7 @@ class NumbersPanel extends Component {
 
         {phase === 'RoleDealing' && (
           <Panel color={phase}>
-            {_.range(0, 10).map(num => (
+            {range(0, 10).map(num => (
               <PanelItem
                 pointer={numbersPanelClickable}
                 color={phase}

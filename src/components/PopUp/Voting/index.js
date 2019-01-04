@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+import { range } from 'lodash';
 import { connect } from 'react-redux';
 
 import PopUpButton from '../styled-components/PopUpButton';
@@ -177,7 +177,7 @@ class Voting extends Component {
           <Timer time={30} key={currentPlayer} />
         ) : (
           <VotingBlock className="col-10 col-md-8 col-lg-6">
-            {_.range(1, 11).map(num => (
+            {range(1, 11).map(num => (
               <VotingSingleElement
                 disabled={lastPlayer ? num !== avaliableHandsAmount : num > this.state.handsLeft - deadPlayers}
                 selected={lastPlayer ? num === avaliableHandsAmount : this.state.handsAmount[currentPlayer] === num}

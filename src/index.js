@@ -6,6 +6,7 @@ import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import throttle from 'lodash/throttle';
+
 import configureStore from './redux/configureStore';
 import { saveState } from 'redux/localStorage';
 

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import colors from '../../../colors';
+import colors from 'colors.js';
 import PopUpButton from '../styled-components/PopUpButton';
 import RandomMode from './RandomMode';
 import ManualMode from './ManualMode';
-import { RandomCubeIcon, ListIcon } from '../../../icons/svgIcons';
+import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
 
 const SvgWrapper = styled.div`
   display: flex;

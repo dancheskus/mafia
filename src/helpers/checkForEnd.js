@@ -1,7 +1,7 @@
-import _ from 'lodash';
+import { countBy } from 'lodash';
 
 export default players => {
-  const allAlivePlayers = _.countBy(
+  const allAlivePlayers = countBy(
     players.map(player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ' ? 'black' : 'red'))
   );
 

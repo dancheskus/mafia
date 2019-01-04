@@ -13,9 +13,3 @@ export default () =>
     loadState(),
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
   );
-
-// export default () =>
-//   createStore(
-//     combineReducers({ game: gameReducer, players: playersReducer }),
-//     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-//   );

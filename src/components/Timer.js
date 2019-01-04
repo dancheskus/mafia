@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import { PauseIcon, ResetIcon, PlayIcon, MutedIcon } from 'icons/svgIcons';
-import colors from '../colors';
+import colors from 'colors.js';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 
 const TimeAndPlayWrapper = styled.div`

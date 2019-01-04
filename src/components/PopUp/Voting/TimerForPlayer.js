@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import PopUpButton from '../styled-components/PopUpButton';
 import Circle from '../styled-components/PopUpCircle';
 import Timer from './../../Timer';

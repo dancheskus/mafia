@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import _ from 'lodash';
+import { shuffle, range, random } from 'lodash';
 import { connect } from 'react-redux';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
@@ -22,7 +22,7 @@ const BigCircle = styled.div`
 class SeatAllocator extends Component {
   state = { randomNumber: null };
 
-  seats = _.shuffle(_.range(0, 10));
+  seats = shuffle(range(0, 10));
 
   stopInterval = () => {
     clearInterval(this.interval);
@@ -41,7 +41,7 @@ class SeatAllocator extends Component {
     if (!this.seats.length || this.interval) return;
     let i = 0;
     this.interval = setInterval(() => {
-      this.setState({ randomNumber: _.random(1, 10) });
+      this.setState({ randomNumber: random(1, 10) });
       ++i === 20 && this.stopInterval();
     }, 40);
   };
