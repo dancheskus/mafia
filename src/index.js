@@ -5,9 +5,17 @@ import './style/index.scss';
 import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
+import throttle from 'lodash/throttle';
 import configureStore from './redux/configureStore';
+import { saveState } from 'redux/localStorage';
 
 const store = configureStore();
+
+store.subscribe(
+  throttle(() => {
+    saveState(store.getState());
+  }, 1000)
+);
 
 const jsx = (
   <Provider store={store}>

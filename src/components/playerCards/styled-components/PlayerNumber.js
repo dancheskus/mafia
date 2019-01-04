@@ -27,8 +27,8 @@ export default styled.div`
     width: 13px;
     height: 13px;
     border-radius: 50%;
-    filter: blur(3px);
     background: ${props => props.opensTable && colors.Day.playerOpensTable};
+    opacity: 0.7;
     position: absolute;
     top: 7px;
     left: 7px;

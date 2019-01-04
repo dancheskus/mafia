@@ -1,4 +1,4 @@
-export default {
+const colors = {
   SeatAllocator: {
     navBarText: '#71B2FE',
     numbersPanel: '#71B2FE',
@@ -39,34 +39,6 @@ export default {
     popupIconLight: '#FFD8D8',
     popupLabel: '#FB6F6F',
   },
-  Night: {
-    navBarText: '#FB6F6F',
-    numbersPanel: '#2D2D2D',
-    number: '#CBC2B7',
-    numberSelected: '#FB6F6F',
-    popupBackground: '#373737',
-    popupBackgroundLight: '#FB6F6F',
-    popupButton: '#484848',
-    popupButtonLight: '#FF8282',
-    popupTextLight: '#FFD8D8',
-    popupIcon: '#686A6E',
-    popupIconLight: '#FFD8D8',
-    eyeIconFront: '#ADB4C2',
-    eyeIconBack: '#686A6E',
-    eyeIconBackDead: '#4E4E4E',
-    darkRoleBackground: '#000',
-    darkRoleBackgroundDead: '#3E3E3E',
-    lightRoleBackground: '#FB6F6F',
-    roleText: '#fff',
-    roleTextDead: '#717171',
-    buttonText: '#636363',
-    buttonTextInverse: '#fff',
-    handsAmountBackground: '#fff',
-    handsAmountSelectedBackground: '#858585',
-    handsAmountDisabledBackground: '#444444',
-    handsAmountDisabledText: '#4e4e4e',
-    popupLabel: '#FB6F6F',
-  },
   Day: {
     navBarText: '#E9E1D4',
     numbersPanel: '#E9E1D4',
@@ -79,7 +51,7 @@ export default {
     warningPlayerCardBackground: '#FF8888',
     warningPlayerCardNumber: '#686C75',
     activePlayer: '#000',
-    playerOpensTable: '#3EF538',
+    playerOpensTable: '#8A8A8A',
     removeFoulBackground: '#D4C7B2',
     addFoulIconBackground: '#8A8A8A',
     addFoulBackground: '#8A8A8A',
@@ -130,3 +102,23 @@ export default {
     popupText: '#fff',
   },
 };
+
+colors.Night = {
+  ...colors.ZeroNight,
+  eyeIconFront: '#ADB4C2',
+  eyeIconBack: '#686A6E',
+  eyeIconBackDead: '#4E4E4E',
+  darkRoleBackground: '#000',
+  darkRoleBackgroundDead: '#3E3E3E',
+  lightRoleBackground: '#FB6F6F',
+  roleText: '#fff',
+  roleTextDead: '#717171',
+  buttonText: '#636363',
+  buttonTextInverse: '#fff',
+  handsAmountBackground: '#fff',
+  handsAmountSelectedBackground: '#858585',
+  handsAmountDisabledBackground: '#444444',
+  handsAmountDisabledText: '#4e4e4e',
+};
+
+export default colors;
