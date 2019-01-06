@@ -21,7 +21,7 @@ class Day extends Component {
 
   render = () => (
     <>
-      {this.state.killedPlayer ? (
+      {this.state.killedPlayer >= 0 ? (
         <>
           <PopUpLabel className="h1">Убит</PopUpLabel>
           <Circle color="Night">{this.state.killedPlayer + 1}</Circle>

@@ -53,7 +53,7 @@ class Night extends Component {
   };
 
   killPlayer = () => {
-    this.state.playerToKill && this.props.killPlayer(this.state.playerToKill);
+    this.state.playerToKill >= 0 && this.props.killPlayer(this.state.playerToKill);
     this.setState({ donTime: true });
   };
 
@@ -78,7 +78,7 @@ class Night extends Component {
 
           <PopUpButton
             onClick={() => {
-              this.state.playerToKill && this.props.addToSelectedNumbers(this.state.playerToKill);
+              this.state.playerToKill >= 0 && this.props.addToSelectedNumbers(this.state.playerToKill);
               this.props.changeGameState({ phase: 'Day', dayNumber: this.props.game.gameState.dayNumber + 1 });
             }}
             color="Night"
