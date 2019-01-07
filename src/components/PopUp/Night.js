@@ -5,8 +5,7 @@ import styled from 'styled-components';
 
 import { killPlayer } from 'redux/actions/playersActions';
 import { changeGameState, addToSelectedNumbers } from 'redux/actions/gameActions';
-import VotingBlock from '../common/styled-components/VotingBlock';
-import VotingSingleElement from '../common/styled-components/VotingSingleElement';
+import { VotingSingleElement, VotingBlock } from 'components/common';
 import checkForEnd from 'helpers/checkForEnd';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
 import { PopUpLabel, PopUpButton } from './styled-components';

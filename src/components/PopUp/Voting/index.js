@@ -3,8 +3,7 @@ import { range } from 'lodash';
 import { connect } from 'react-redux';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
-import VotingSingleElement from 'components/common/styled-components/VotingSingleElement';
-import VotingBlock from 'components/common/styled-components/VotingBlock';
+import { VotingSingleElement, VotingBlock } from 'components/common';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
 import Timer from 'components/Timer';

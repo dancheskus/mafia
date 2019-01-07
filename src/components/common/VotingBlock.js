@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export default styled.div`
+export const VotingBlock = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
