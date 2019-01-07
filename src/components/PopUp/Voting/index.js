@@ -17,62 +17,72 @@ import checkForEnd from 'helpers/checkForEnd';
 
 class Voting extends Component {
   initialState = {
-    handsAmount: Array(this.props.game.selectedNumbers.length).fill(0),
-    handsLeft: 10,
-    currentPlayer: 0,
-    timer: false,
-    carCrash: 0,
-    carCrashLabel: false,
-    endOfVoting: false,
-    lastMinuteFor: [],
+    votesPerPlayer: Array(this.props.game.selectedNumbers.length).fill(0), // Кол-во проголосовавших за каждого игрока
+    avaliableVoters: 10, // Кол-во живых и не проголосовавших
+    currentPlayer: 0, // За кого голосуют в данный момент (от 0 до кол-во выставленных)
+    timer: false, // Включен ли режим таймера
+    carCrash: 0, // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
+    сarCrashNotification: false, // Уведомление об автокатастрофе
+    endOfVoting: false, // Заверешено ли голосование
+    lastMinuteFor: [], // Игрок(и), которых выводят из города
   };
 
   state = { ...this.initialState };
 
   componentWillUpdate = () => {
+    // При обновлении компонента, при необходимых условиях, завершаем игру
     checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
   };
 
   componentWillMount = () => {
+    // При подключении компонента
     if (
+      // Если не 1-ый день и выставлен только 1 игрок и не пропускается голосование
       this.props.game.gameState.dayNumber > 1 &&
       this.props.game.selectedNumbers.length === 1 &&
       this.props.game.skipVoting === 0
     ) {
+      // Заканчиваем голосование убивая единственного выставленного игрока
       this.votingFinishedClicked();
       this.props.killPlayer(this.props.game.selectedNumbers[0]);
     }
   };
 
   handClicked = num => {
-    const { currentPlayer, handsAmount } = this.state;
+    // Функция отвечает за выбор или снятие выбора кол-во голосов.
+    const { currentPlayer, votesPerPlayer } = this.state;
 
-    if (currentPlayer === this.props.game.selectedNumbers.length - 1) return;
+    if (currentPlayer === this.props.game.selectedNumbers.length - 1) return; // На последнем игроке снять выбор нельзя
 
-    const arr = [...handsAmount];
-    arr[currentPlayer] = handsAmount[currentPlayer] === num ? null : num;
-    this.setState({ handsAmount: arr });
+    const arr = [...votesPerPlayer];
+    arr[currentPlayer] = votesPerPlayer[currentPlayer] === num ? null : num;
+    this.setState({ votesPerPlayer: arr });
   };
 
   votingFinishedClicked = () => {
-    if (this.state.lastMinuteFor.length > 0) return this.goToNight();
+    const { lastMinuteFor, votesPerPlayer } = this.state;
 
-    const { handsAmount } = this.state;
-    const largestNumber = Math.max(...handsAmount);
+    if (lastMinuteFor.length > 0) return this.goToNight(); // Если определены игроки покидающие город и нажата кнопка, то переходим в ночь
+
+    const largestNumber = Math.max(...votesPerPlayer); // Вычисляем максимальное кол-во проголосовавших в 1-го игрока
     const newVotingList = [];
-    handsAmount.filter((el, i) => el === largestNumber && newVotingList.push(this.props.game.selectedNumbers[i]));
+    votesPerPlayer.filter((el, i) => el === largestNumber && newVotingList.push(this.props.game.selectedNumbers[i]));
+    // Если макс. число одно, то в новом списке будет 1 игрок, которого и выгонят. Если будет больше, то в массив будут добавлятся игроки с одинаковым кол-вом голосов
+
+    if (newVotingList.length === 1 && !this.state.timer) this.props.killPlayer(newVotingList[0]);
 
     if (newVotingList.length > 1 && this.state.carCrash !== 2) {
+      // Если одинаковое кол-во рук и автокатастрофа !== 2
       this.props.clearSelectedNumbers();
       newVotingList.map(num => this.props.addToSelectedNumbers(num));
       this.setState({ ...this.initialState, timer: true });
 
-      if (!this.state.carCrash) this.setState({ carCrashLabel: true });
+      if (!this.state.carCrash) this.setState({ сarCrashNotification: true });
 
       if (this.state.carCrash) this.setState({ carCrash: 2 });
     } else {
       this.setState({ endOfVoting: true });
-      this.setState({ lastMinuteFor: this.state.lastMinuteFor.concat(newVotingList[0]) });
+      this.setState({ lastMinuteFor: lastMinuteFor.concat(newVotingList[0]) });
     }
 
     this.state.timer && this.setState({ ...this.initialState, carCrash: 1 });
@@ -83,8 +93,8 @@ class Voting extends Component {
 
       this.setState({ endOfVoting: true });
 
-      if (handsAmount[0] > avaliableHandsAmount / 2) {
-        this.setState({ lastMinuteFor: this.state.lastMinuteFor.concat(this.props.game.selectedNumbers) });
+      if (votesPerPlayer[0] > avaliableHandsAmount / 2) {
+        this.setState({ lastMinuteFor: lastMinuteFor.concat(this.props.game.selectedNumbers) });
 
         this.props.game.selectedNumbers.map(player => this.props.killPlayer(player));
       }
@@ -92,29 +102,32 @@ class Voting extends Component {
   };
 
   nextButtonClicked = () => {
-    const { currentPlayer, handsAmount, handsLeft } = this.state;
+    const { currentPlayer, votesPerPlayer, avaliableVoters } = this.state;
     const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
+    const votingPlayersAmount = this.props.game.selectedNumbers.length;
 
-    if (currentPlayer < this.props.game.selectedNumbers.length - 1) {
-      const handsLeft = this.state.handsAmount.length >= 1 ? 10 - this.state.handsAmount.reduce((a, b) => a + b) : 10;
+    if (currentPlayer < votingPlayersAmount - 1) {
+      // Если НЕ последний игрок, увеличиваем игрока на 1 и вычисляем оставшееся кол-во рук. Если руки закончились, завершаем голосование.
+      const avaliableVoters =
+        this.state.votesPerPlayer.length >= 1 ? 10 - this.state.votesPerPlayer.reduce((a, b) => a + b) : 10;
 
-      if (handsLeft - deadPlayers === 0) return this.votingFinishedClicked();
+      if (avaliableVoters - deadPlayers === 0) return this.votingFinishedClicked();
 
       this.setState({
         currentPlayer: currentPlayer + 1,
-        handsLeft,
+        avaliableVoters,
       });
     }
 
-    if (this.props.game.selectedNumbers.length - 2 === currentPlayer) {
-      const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
-      const arr = [...handsAmount];
-      arr[currentPlayer + 1] = handsLeft - this.state.handsAmount[currentPlayer] - deadPlayers;
-      this.setState({ handsAmount: arr });
+    if (votingPlayersAmount - 2 === currentPlayer) {
+      // Если последний игрок, в него голосуют оставшиеся руки минус мертвые игроки
+      const arr = [...votesPerPlayer];
+      arr[currentPlayer + 1] = avaliableVoters - this.state.votesPerPlayer[currentPlayer] - deadPlayers;
+      this.setState({ votesPerPlayer: arr });
     }
   };
 
-  okClicked = () => this.setState({ carCrashLabel: false, endOfVoting: false });
+  closeNotification = () => this.setState({ сarCrashNotification: false, endOfVoting: false });
 
   goToNight = () => {
     this.props.clearSelectedNumbers();
@@ -126,7 +139,7 @@ class Voting extends Component {
     const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
     const { carCrash, currentPlayer } = this.state;
     const { gameState, selectedNumbers, skipVoting } = this.props.game;
-    const avaliableHandsAmount = this.state.handsAmount[selectedNumbers.length - 1];
+    const avaliableHandsAmount = this.state.votesPerPlayer[selectedNumbers.length - 1];
     const lastPlayer = this.state.currentPlayer === selectedNumbers.length - 1;
 
     if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || skipVoting > 0)
@@ -141,12 +154,12 @@ class Voting extends Component {
         </>
       );
 
-    if (this.state.carCrashLabel) return <CarCrashNotification okClicked={this.okClicked} />;
+    if (this.state.сarCrashNotification) return <CarCrashNotification closeNotification={this.closeNotification} />;
 
     if (this.state.endOfVoting)
       return (
         <EndOfVotingNotification
-          okClicked={this.okClicked}
+          closeNotification={this.closeNotification}
           goToNight={this.goToNight}
           lastMinuteFor={this.state.lastMinuteFor}
         />
@@ -179,8 +192,8 @@ class Voting extends Component {
           <VotingBlock className="col-10 col-md-8 col-lg-6">
             {range(1, 11).map(num => (
               <VotingSingleElement
-                disabled={lastPlayer ? num !== avaliableHandsAmount : num > this.state.handsLeft - deadPlayers}
-                selected={lastPlayer ? num === avaliableHandsAmount : this.state.handsAmount[currentPlayer] === num}
+                disabled={lastPlayer ? num !== avaliableHandsAmount : num > this.state.avaliableVoters - deadPlayers}
+                selected={lastPlayer ? num === avaliableHandsAmount : this.state.votesPerPlayer[currentPlayer] === num}
                 onClick={() => this.handClicked(num)}
                 key={num}
               >

@@ -14,7 +14,7 @@ const CarCrashNotification = props => (
       ))}
     </ResultsNumbers>
 
-    <PopUpButton color="Voting" onClick={props.okClicked}>
+    <PopUpButton color="Voting" onClick={props.closeNotification}>
       ОК
     </PopUpButton>
   </>

@@ -44,7 +44,7 @@ const Target = styled.div`
 `;
 
 class Night extends Component {
-  state = { playerToKill: null, donTime: false, sheriffTime: false };
+  state = { playerToKill: undefined, donTime: false, sheriffTime: false };
 
   selectPlayer = num => this.setState({ playerToKill: num === this.state.playerToKill ? null : num });
 
