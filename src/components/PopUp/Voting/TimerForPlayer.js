@@ -1,8 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import PopUpButton from '../styled-components/PopUpButton';
-import Circle from '../styled-components/PopUpCircle';
+import { PopUpCircle, PopUpButton } from '../styled-components';
 import Timer from './../../Timer';
 
 const TimerForPlayer = ({ lastPlayer, votingFinishedClicked, nextButtonClicked, state }) => {
@@ -10,7 +9,7 @@ const TimerForPlayer = ({ lastPlayer, votingFinishedClicked, nextButtonClicked, 
 
   return (
     <>
-      <Circle>{lastMinuteFor.length > 1 ? lastMinuteFor[currentPlayer] + 1 : lastMinuteFor[0] + 1}</Circle>
+      <PopUpCircle>{lastMinuteFor.length > 1 ? lastMinuteFor[currentPlayer] + 1 : lastMinuteFor[0] + 1}</PopUpCircle>
 
       <Timer key={currentPlayer} />
 

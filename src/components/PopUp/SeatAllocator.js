@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
 import colors from 'colors.js';
-import PopUpButton from './styled-components/PopUpButton';
+import { PopUpButton } from './styled-components';
 
 const BigCircle = styled.div`
   width: 220px;

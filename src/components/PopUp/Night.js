@@ -7,10 +7,9 @@ import { killPlayer } from 'redux/actions/playersActions';
 import { changeGameState, addToSelectedNumbers } from 'redux/actions/gameActions';
 import VotingBlock from '../common/styled-components/VotingBlock';
 import VotingSingleElement from '../common/styled-components/VotingSingleElement';
-import PopUpButton from './styled-components/PopUpButton';
 import checkForEnd from 'helpers/checkForEnd';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
-import PopUpLabel from './styled-components/PopUpLabel';
+import { PopUpLabel, PopUpButton } from './styled-components';
 
 const Sheriff = styled.div`
   height: 50%;

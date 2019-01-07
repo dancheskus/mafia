@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import PopUpButton from './styled-components/PopUpButton';
+import { PopUpButton, PopUpLabel } from './styled-components';
 import Timer from '../Timer';
 import { changeGameState } from 'redux/actions/gameActions';
-import PopUpLabel from './styled-components/PopUpLabel';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
 
 const Icon = styled.div`

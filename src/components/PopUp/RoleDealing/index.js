@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import colors from 'colors.js';
-import PopUpButton from '../styled-components/PopUpButton';
+import { PopUpButton } from '../styled-components';
 import RandomMode from './RandomMode';
 import ManualMode from './ManualMode';
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';

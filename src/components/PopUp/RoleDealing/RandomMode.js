@@ -13,7 +13,7 @@ import {
 import { addRole } from 'redux/actions/playersActions';
 import colors from 'colors.js';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
-import PopUpButton from '../styled-components/PopUpButton';
+import { PopUpButton } from '../styled-components';
 const { popupIcon, popupIconLight } = colors.RoleDealing;
 
 const Card = styled.div`

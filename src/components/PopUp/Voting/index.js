@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { range } from 'lodash';
 import { connect } from 'react-redux';
 
-import PopUpButton from '../styled-components/PopUpButton';
-import Circle from '../styled-components/PopUpCircle';
-import PopUpLabel from '../styled-components/PopUpLabel';
+import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import VotingSingleElement from 'components/common/styled-components/VotingSingleElement';
 import VotingBlock from 'components/common/styled-components/VotingBlock';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
@@ -188,7 +186,7 @@ class Voting extends Component {
 
         {carCrash === 2 && <PopUpLabel className="h2">Выгнать всех выставленных?</PopUpLabel>}
 
-        {carCrash !== 2 && <Circle>{selectedNumbers[currentPlayer] + 1}</Circle>}
+        {carCrash !== 2 && <PopUpCircle>{selectedNumbers[currentPlayer] + 1}</PopUpCircle>}
 
         {this.state.timer && carCrash !== 2 ? (
           <Timer time={30} key={currentPlayer} />

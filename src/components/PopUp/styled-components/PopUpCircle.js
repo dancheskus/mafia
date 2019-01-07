@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import colors from 'colors.js';
 
-export default styled.div`
+export const PopUpCircle = styled.div`
   width: 180px;
   height: 180px;
   background: #fff;

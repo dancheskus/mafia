@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { clearSelectedNumbers, closePopup, openPopup } from 'redux/actions/gameActions';
-import Circle from './styled-components/PopUpCircle';
-import PopUpButton from './styled-components/PopUpButton';
-import PopUpLabel from './styled-components/PopUpLabel';
+import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 import Timer from '../Timer';
 import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'colors.js';
@@ -24,15 +22,15 @@ class Day extends Component {
       {this.state.killedPlayer >= 0 ? (
         <>
           <PopUpLabel className="h1">Убит</PopUpLabel>
-          <Circle color="Night">{this.state.killedPlayer + 1}</Circle>
+          <PopUpCircle color="Night">{this.state.killedPlayer + 1}</PopUpCircle>
           <Timer />
         </>
       ) : (
         <>
           <PopUpLabel className="h1">Несострел</PopUpLabel>
-          <Circle>
+          <PopUpCircle>
             <CylinderIcon fill={colors.Day.popupNightResult} size="80%" />
-          </Circle>
+          </PopUpCircle>
         </>
       )}
       <PopUpButton color="Day" onClick={() => this.props.closePopup()}>
