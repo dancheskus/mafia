@@ -67,7 +67,7 @@ class SingleCard extends Component {
       checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
 
       const phase = this.props.game.gameState.phase;
-      if (phase === 'Day') this.props.skipVotingInc();
+      if (phase === 'Day' || phase === 'Voting') this.props.skipVotingInc();
     }, 2000);
   };
 

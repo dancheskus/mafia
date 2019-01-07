@@ -3,16 +3,16 @@ import { range } from 'lodash';
 import { connect } from 'react-redux';
 
 import PopUpButton from '../styled-components/PopUpButton';
-import VotingSingleElement from '../../common/styled-components/VotingSingleElement';
 import Circle from '../styled-components/PopUpCircle';
-import VotingBlock from '../../common/styled-components/VotingBlock';
+import PopUpLabel from '../styled-components/PopUpLabel';
+import VotingSingleElement from 'components/common/styled-components/VotingSingleElement';
+import VotingBlock from 'components/common/styled-components/VotingBlock';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
-import Timer from '../../Timer';
+import Timer from 'components/Timer';
 import CarCrashNotification from './CarCrashNotification';
 import EndOfVotingNotification from './EndOfVotingNotification';
 import TimerForPlayer from './TimerForPlayer';
-import PopUpLabel from '../styled-components/PopUpLabel';
 import checkForEnd from 'helpers/checkForEnd';
 
 class Voting extends Component {
@@ -131,7 +131,7 @@ class Voting extends Component {
 
   goToNight = () => {
     this.props.clearSelectedNumbers();
-    this.props.skipVotingDec();
+    this.state.lastMinuteFor.length === 0 && this.props.skipVotingDec();
     this.props.changeGameState({ phase: 'Night' });
   };
 
@@ -142,9 +142,13 @@ class Voting extends Component {
     const avaliableHandsAmount = this.state.votesPerPlayer[selectedNumbers.length - 1];
     const lastPlayer = this.state.currentPlayer === selectedNumbers.length - 1;
 
-    if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || skipVoting > 0)
+    if (
+      (gameState.dayNumber === 1 && selectedNumbers.length === 1) ||
+      (skipVoting > 0 && this.state.lastMinuteFor.length === 0)
+    )
       return (
         <>
+          {console.table({ ...this.state })}
           <PopUpLabel className="h2">Голосование не проводится</PopUpLabel>
           {skipVoting > 0 && <PopUpLabel className="h3">Игрок получил 4-й фол</PopUpLabel>}
 
