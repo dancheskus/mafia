@@ -8,7 +8,7 @@ const initialState = {
   gameState: { phase: 'Voting', dayNumber: 2 },
   // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, EndOfGame
   lightMode: false,
-  selectedNumbers: [0, 5, 1],
+  selectedNumbers: [0, 5, 1, 3],
   numbersPanelClickable: false,
   popupOpened: true,
   skipVoting: 0,

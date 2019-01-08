@@ -6,15 +6,17 @@ import Timer from './../../Timer';
 
 const TimerForPlayer = ({ lastPlayer, votingFinishedClicked, nextButtonClicked, state }) => {
   const { lastMinuteFor, currentPlayer } = state;
-  console.log(lastPlayer);
+
+  const exitLastMinute = lastPlayer || lastMinuteFor.length === 1;
+
   return (
     <>
       <PopUpCircle>{lastMinuteFor.length > 1 ? lastMinuteFor[currentPlayer] + 1 : lastMinuteFor[0] + 1}</PopUpCircle>
 
       <Timer key={currentPlayer} />
 
-      <PopUpButton color="Voting" onClick={lastPlayer ? votingFinishedClicked : nextButtonClicked}>
-        {lastPlayer ? 'Ночь' : 'Далее'}
+      <PopUpButton color="Voting" onClick={exitLastMinute ? votingFinishedClicked : nextButtonClicked}>
+        {exitLastMinute ? 'Ночь' : 'Далее'}
       </PopUpButton>
     </>
   );

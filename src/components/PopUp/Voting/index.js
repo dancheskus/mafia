@@ -30,6 +30,10 @@ class Voting extends Component {
   componentWillUpdate = () => {
     // При обновлении компонента, при необходимых условиях, завершаем игру
     checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
+    console.table({
+      currentPlayer: this.state.currentPlayer,
+      selectedNumbersLength: this.props.game.selectedNumbers.length - 1,
+    });
   };
 
   componentWillMount = () => {
