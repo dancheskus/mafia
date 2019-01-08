@@ -6,7 +6,7 @@ import Timer from './../../Timer';
 
 const TimerForPlayer = ({ lastPlayer, votingFinishedClicked, nextButtonClicked, state }) => {
   const { lastMinuteFor, currentPlayer } = state;
-
+  console.log(lastPlayer);
   return (
     <>
       <PopUpCircle>{lastMinuteFor.length > 1 ? lastMinuteFor[currentPlayer] + 1 : lastMinuteFor[0] + 1}</PopUpCircle>

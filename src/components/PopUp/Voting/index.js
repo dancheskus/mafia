@@ -11,11 +11,12 @@ import CarCrashNotification from './CarCrashNotification';
 import EndOfVotingNotification from './EndOfVotingNotification';
 import TimerForPlayer from './TimerForPlayer';
 import checkForEnd from 'helpers/checkForEnd';
+import VictimSelector from 'components/common/VictimSelector';
 
 class Voting extends Component {
   initialState = {
     votesPerPlayer: Array(this.props.game.selectedNumbers.length).fill(0), // Кол-во проголосовавших за каждого игрока
-    avaliableVoters: 10, // Кол-во живых и не проголосовавших
+    avaliableVoters: 10 - this.props.players.filter(player => !player.isAlive).length, // Кол-во живых и не проголосовавших
     currentPlayer: 0, // За кого голосуют в данный момент (от 0 до кол-во выставленных)
     timer: false, // Включен ли режим таймера
     carCrash: 0, // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
@@ -45,11 +46,8 @@ class Voting extends Component {
     }
   };
 
-  handClicked = num => {
-    // Функция отвечает за выбор или снятие выбора кол-во голосов.
+  onNumberSelected = num => {
     const { currentPlayer, votesPerPlayer } = this.state;
-
-    if (currentPlayer === this.props.game.selectedNumbers.length - 1) return; // На последнем игроке снять выбор нельзя
 
     const arr = [...votesPerPlayer];
     arr[currentPlayer] = votesPerPlayer[currentPlayer] === num ? null : num;
@@ -98,28 +96,31 @@ class Voting extends Component {
     }
   };
 
+  countAvaliableVoters = () => {
+    const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
+    const avaliableVoters =
+      this.state.votesPerPlayer.length >= 1 ? 10 - this.state.votesPerPlayer.reduce((a, b) => a + b) : 10;
+
+    this.setState({ avaliableVoters: avaliableVoters - deadPlayers });
+  };
+
   nextButtonClicked = () => {
     const { currentPlayer, votesPerPlayer, avaliableVoters } = this.state;
-    const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
     const votingPlayersAmount = this.props.game.selectedNumbers.length;
+    const votersLeft = avaliableVoters - this.state.votesPerPlayer[currentPlayer];
+
+    this.countAvaliableVoters();
 
     if (currentPlayer < votingPlayersAmount - 1) {
       // Если НЕ последний игрок, увеличиваем игрока на 1 и вычисляем оставшееся кол-во рук. Если руки закончились, завершаем голосование.
-      const avaliableVoters =
-        this.state.votesPerPlayer.length >= 1 ? 10 - this.state.votesPerPlayer.reduce((a, b) => a + b) : 10;
-
-      if (avaliableVoters - deadPlayers === 0) return this.votingFinishedClicked();
-
-      this.setState({
-        currentPlayer: currentPlayer + 1,
-        avaliableVoters,
-      });
+      if (votersLeft === 0) return this.votingFinishedClicked();
+      this.setState({ currentPlayer: currentPlayer + 1 });
     }
 
     if (votingPlayersAmount - 2 === currentPlayer) {
       // Если последний игрок, в него голосуют оставшиеся руки минус мертвые игроки
       const arr = [...votesPerPlayer];
-      arr[currentPlayer + 1] = avaliableVoters - this.state.votesPerPlayer[currentPlayer] - deadPlayers;
+      arr[currentPlayer + 1] = votersLeft;
       this.setState({ votesPerPlayer: arr });
     }
   };
@@ -133,7 +134,6 @@ class Voting extends Component {
   };
 
   render = () => {
-    const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
     const { carCrash, currentPlayer } = this.state;
     const { gameState, selectedNumbers, skipVoting } = this.props.game;
     const avaliableHandsAmount = this.state.votesPerPlayer[selectedNumbers.length - 1];
@@ -170,6 +170,7 @@ class Voting extends Component {
     if (this.state.lastMinuteFor.length > 0)
       return (
         <>
+          {console.log(this.state.currentPlayer, selectedNumbers.length - 1)}
           <TimerForPlayer
             state={{ ...this.state }}
             lastPlayer={lastPlayer}
@@ -190,18 +191,12 @@ class Voting extends Component {
         {this.state.timer && carCrash !== 2 ? (
           <Timer time={30} key={currentPlayer} />
         ) : (
-          <VotingBlock className="col-10 col-md-8 col-lg-6">
-            {range(1, 11).map(num => (
-              <VotingSingleElement
-                disabled={lastPlayer ? num !== avaliableHandsAmount : num > this.state.avaliableVoters - deadPlayers}
-                selected={lastPlayer ? num === avaliableHandsAmount : this.state.votesPerPlayer[currentPlayer] === num}
-                onClick={() => this.handClicked(num)}
-                key={num}
-              >
-                <div className="number">{num}</div>
-              </VotingSingleElement>
-            ))}
-          </VotingBlock>
+          <VictimSelector
+            lastPlayer={lastPlayer}
+            votesLeft={this.state.avaliableVoters}
+            key={this.state.currentPlayer}
+            onNumberSelected={this.onNumberSelected} // callback
+          />
         )}
 
         <PopUpButton
