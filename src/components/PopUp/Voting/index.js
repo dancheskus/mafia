@@ -196,9 +196,9 @@ class Voting extends Component {
           <Timer time={30} key={currentPlayer} />
         ) : (
           <VictimSelector
-            lastPlayer={lastPlayer}
-            votesLeft={this.state.avaliableVoters}
-            key={this.state.currentPlayer}
+            lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке
+            votesLeft={this.state.avaliableVoters} // для disabled кнопки
+            key={this.state.currentPlayer} // чтобы перерендеривался каждый раз
             onNumberSelected={this.onNumberSelected} // callback
           />
         )}
