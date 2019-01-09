@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
-import { killPlayer } from 'redux/actions/playersActions';
-import EndOfVotingNotification from './EndOfVotingNotification';
-import TimerForPlayer from './TimerForPlayer';
+import EndOfVoting from './EndOfVoting';
 import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/common/VictimSelector';
 import CarCrash from './CarCrash';
@@ -17,7 +15,7 @@ class Voting extends Component {
     currentPlayer: 0, // За кого голосуют в данный момент (от 0 до кол-во выставленных)
     carCrash: false, // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
     carCrashClosed: false, // true, после первой автокатастрофы
-    endOfVotingNotification: false,
+    endOfVoting: false,
     lastMinuteFor: [], // Игрок(и), которых выводят из города
   };
 
@@ -38,7 +36,6 @@ class Voting extends Component {
     ) {
       // Заканчиваем голосование убивая единственного выставленного игрока
       this.votingFinishedClicked();
-      this.props.killPlayer(this.props.game.selectedNumbers[0]);
     }
   };
 
@@ -52,37 +49,38 @@ class Voting extends Component {
 
   closeCarCrash = () => this.setState({ ...this.initialState, carCrashClosed: true });
 
-  closeNotification = () => this.setState({ endOfVotingNotification: false });
-
-  votingFinishedClicked = killAll => {
-    const { lastMinuteFor, votesPerPlayer } = this.state;
-
-    if (killAll === true) {
-      // killAll передается только из CarCrash. true - если большинство проголосовало за вывод всех из игры
-      this.setState({
-        ...this.initialState,
-        endOfVotingNotification: true,
-        lastMinuteFor: lastMinuteFor.concat(this.props.game.selectedNumbers),
-      });
-
-      return this.props.game.selectedNumbers.map(player => this.props.killPlayer(player));
-    }
-
-    if (killAll === false) return this.setState({ ...this.initialState, endOfVotingNotification: true });
-
-    if (lastMinuteFor.length > 0) return this.goToNight(); // Если определены игроки покидающие город и нажата кнопка, то переходим в ночь
+  getNewVotingList = () => {
+    const { votesPerPlayer } = this.state;
 
     const largestNumber = Math.max(...votesPerPlayer); // Вычисляем максимальное кол-во проголосовавших в одного игрока
     const newVotingList = [];
     votesPerPlayer.filter((el, i) => el === largestNumber && newVotingList.push(this.props.game.selectedNumbers[i]));
     // Если макс. число одно, то в новом списке будет 1 игрок, которого и выгонят. Если будет больше, то в массив будут добавлятся игроки с одинаковым кол-вом голосов
 
+    return newVotingList;
+  };
+
+  votingFinishedClicked = killAll => {
+    const { lastMinuteFor } = this.state;
+    const newVotingList = this.getNewVotingList();
+
     if (newVotingList.length === 1) {
-      // Если выставлен 1 игрок, то он умирает
-      this.setState({ endOfVotingNotification: true, lastMinuteFor: lastMinuteFor.concat(newVotingList[0]) });
-      this.props.killPlayer(newVotingList[0]);
+      // Если остался 1 игрок, то он умирает
+      this.setState({ endOfVoting: true, lastMinuteFor: lastMinuteFor.concat(newVotingList[0]) });
     }
 
+    // УБИЙСТВО ВСЕХ ПОСЛЕ АВТОКАТАСТРОФЫ
+    if (killAll === true) {
+      this.setState({
+        endOfVoting: true,
+        lastMinuteFor: lastMinuteFor.concat(this.props.game.selectedNumbers),
+      });
+    }
+
+    // УБИЙСТВО НИКОГО ПОСЛЕ АВТОКАТАСТРОФЫ
+    if (killAll === false) return this.setState({ lastMinuteFor: [], endOfVoting: true });
+
+    // ВКЛЮЧЕНИЕ АВТОКАТАСТРОФЫ
     if (newVotingList.length > 1) {
       // Если выставлено больше 2 игроков
       if (!this.state.carCrashClosed) {
@@ -130,17 +128,18 @@ class Voting extends Component {
   };
 
   render = () => {
-    const { carCrash, currentPlayer } = this.state;
+    const { currentPlayer } = this.state;
     const { gameState, selectedNumbers, skipVoting } = this.props.game;
-    const avaliableHandsAmount = this.state.votesPerPlayer[selectedNumbers.length - 1];
-    const lastPlayer = this.state.currentPlayer === selectedNumbers.length - 1;
+    const lastPlayer = currentPlayer === selectedNumbers.length - 1;
+
+    if (this.state.endOfVoting) return <EndOfVoting lastMinuteFor={this.state.lastMinuteFor} />;
 
     if (this.state.carCrash)
       return (
         <CarCrash
           closeCarCrash={this.closeCarCrash}
           secondTime={this.state.carCrashClosed}
-          endOfVoting={this.votingFinishedClicked}
+          votingFinishedClicked={this.votingFinishedClicked}
         />
       );
 
@@ -156,28 +155,6 @@ class Voting extends Component {
           <PopUpButton color="Voting" onClick={this.goToNight}>
             Ночь
           </PopUpButton>
-        </>
-      );
-
-    if (this.state.endOfVotingNotification)
-      return (
-        <EndOfVotingNotification
-          closeNotification={this.closeNotification}
-          goToNight={this.goToNight}
-          lastMinuteFor={this.state.lastMinuteFor}
-        />
-      );
-
-    // ДАЕТСЯ ПОСЛЕДНЯЯ МИНУТА, ТОМУ/ТЕМ КОГО ВЫГНАЛИ
-    if (this.state.lastMinuteFor.length > 0)
-      return (
-        <>
-          <TimerForPlayer
-            state={{ ...this.state }}
-            lastPlayer={lastPlayer}
-            votingFinishedClicked={this.votingFinishedClicked}
-            nextButtonClicked={this.nextButtonClicked}
-          />
         </>
       );
 
@@ -204,5 +181,5 @@ class Voting extends Component {
 
 export default connect(
   ({ game, players }) => ({ game, players }),
-  { clearSelectedNumbers, addToSelectedNumbers, killPlayer, changeGameState, skipVotingDec }
+  { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec }
 )(Voting);

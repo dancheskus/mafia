@@ -5,10 +5,10 @@ import produce from 'immer';
 const initialState = {
   opensTable: 0,
   activePlayer: 0,
-  gameState: { phase: 'Night', dayNumber: 2 },
+  gameState: { phase: 'Voting', dayNumber: 2 },
   // SeatAllocator, RoleDealing, ZeroNight, Day, Night, Voting, EndOfGame
   lightMode: false,
-  selectedNumbers: [],
+  selectedNumbers: [3, 7, 4],
   numbersPanelClickable: false,
   popupOpened: true,
   skipVoting: 0,

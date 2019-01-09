@@ -20,7 +20,7 @@ class CarCrash extends Component {
   stopVoting = () => {
     const alivePlayers = this.props.players.filter(player => player.isAlive).length;
 
-    this.props.endOfVoting(this.state.selectedNumber > alivePlayers / 2);
+    this.props.votingFinishedClicked(this.state.selectedNumber > alivePlayers / 2);
   };
 
   render = () => {

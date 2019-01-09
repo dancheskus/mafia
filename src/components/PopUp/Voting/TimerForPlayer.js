@@ -1,25 +1,34 @@
-import React from 'react';
+// КОМПОНЕНТ ДОЛЖЕН ПРИНИМАТЬ:
+// 1. список уходящих игроков
+// 2. коллбэк уводящий в ночь
+
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { PopUpCircle, PopUpButton } from '../styled-components';
 import Timer from './../../Timer';
 
-const TimerForPlayer = ({ lastPlayer, votingFinishedClicked, nextButtonClicked, state }) => {
-  const { lastMinuteFor, currentPlayer } = state;
+class TimerForPlayer extends Component {
+  state = { currentPlayer: 0, listOfPlayers: this.props.listOfPlayers };
 
-  const exitLastMinute = lastPlayer || lastMinuteFor.length === 1;
+  nextPlayer = () => this.setState({ currentPlayer: this.state.currentPlayer + 1 });
 
-  return (
-    <>
-      <PopUpCircle>{lastMinuteFor.length > 1 ? lastMinuteFor[currentPlayer] + 1 : lastMinuteFor[0] + 1}</PopUpCircle>
+  render = () => {
+    const { currentPlayer, listOfPlayers } = this.state;
+    const lastPlayer = listOfPlayers.length - 1 - currentPlayer === 0;
 
-      <Timer key={currentPlayer} />
+    return (
+      <>
+        <PopUpCircle>{listOfPlayers[currentPlayer] + 1}</PopUpCircle>
 
-      <PopUpButton color="Voting" onClick={exitLastMinute ? votingFinishedClicked : nextButtonClicked}>
-        {exitLastMinute ? 'Ночь' : 'Далее'}
-      </PopUpButton>
-    </>
-  );
-};
+        <Timer key={currentPlayer} />
+
+        <PopUpButton color="Voting" onClick={lastPlayer ? this.props.goToNight : this.nextPlayer}>
+          {lastPlayer ? 'Ночь' : 'Далее'}
+        </PopUpButton>
+      </>
+    );
+  };
+}
 
 export default connect(({ game }) => ({ game }))(TimerForPlayer);
