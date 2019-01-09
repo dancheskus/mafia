@@ -3,7 +3,7 @@ import colors from 'colors.js';
 
 const margin = 3;
 
-export const VotingSingleElement = styled.button`
+export default styled.button`
   :hover,
   :focus,
   :active {

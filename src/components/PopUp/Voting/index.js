@@ -1,12 +1,9 @@
 import React, { Component } from 'react';
-import { range } from 'lodash';
 import { connect } from 'react-redux';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
-import { VotingSingleElement, VotingBlock } from 'components/common';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
-import Timer from 'components/Timer';
 import EndOfVotingNotification from './EndOfVotingNotification';
 import TimerForPlayer from './TimerForPlayer';
 import checkForEnd from 'helpers/checkForEnd';
@@ -16,7 +13,7 @@ import CarCrash from './CarCrash';
 class Voting extends Component {
   initialState = {
     votesPerPlayer: Array(this.props.game.selectedNumbers.length).fill(0), // Кол-во проголосовавших за каждого игрока
-    avaliableVoters: 10 - this.props.players.filter(player => !player.isAlive).length, // Кол-во живых и не проголосовавших
+    avaliableVoters: 9 - this.props.players.filter(player => !player.isAlive).length, // Кол-во живых и не проголосовавших
     currentPlayer: 0, // За кого голосуют в данный момент (от 0 до кол-во выставленных)
     carCrash: false, // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
     carCrashClosed: false, // true, после первой автокатастрофы
@@ -49,7 +46,7 @@ class Voting extends Component {
     const { currentPlayer, votesPerPlayer } = this.state;
 
     const arr = [...votesPerPlayer];
-    arr[currentPlayer] = votesPerPlayer[currentPlayer] === num ? null : num;
+    arr[currentPlayer] = votesPerPlayer[currentPlayer] === num + 1 ? null : num + 1;
     this.setState({ votesPerPlayer: arr });
   };
 
@@ -100,7 +97,7 @@ class Voting extends Component {
   countAvaliableVoters = () => {
     const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
     const avaliableVoters =
-      this.state.votesPerPlayer.length >= 1 ? 10 - this.state.votesPerPlayer.reduce((a, b) => a + b) : 10;
+      this.state.votesPerPlayer.length >= 1 ? 9 - this.state.votesPerPlayer.reduce((a, b) => a + b) : 9;
 
     this.setState({ avaliableVoters: avaliableVoters - deadPlayers });
   };
@@ -108,7 +105,7 @@ class Voting extends Component {
   nextButtonClicked = () => {
     const { currentPlayer, votesPerPlayer, avaliableVoters } = this.state;
     const votingPlayersAmount = this.props.game.selectedNumbers.length;
-    const votersLeft = avaliableVoters - this.state.votesPerPlayer[currentPlayer];
+    const votersLeft = avaliableVoters - this.state.votesPerPlayer[currentPlayer] + 1;
 
     this.countAvaliableVoters();
 

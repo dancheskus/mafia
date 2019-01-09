@@ -14,7 +14,7 @@ class CarCrash extends Component {
   nextPlayer = () => this.setState({ currentPlayer: this.state.currentPlayer + 1 });
 
   onNumberSelected = num => {
-    this.setState({ selectedNumber: num === this.state.selectedNumber ? null : num });
+    this.setState({ selectedNumber: num + 1 === this.state.selectedNumber ? null : num + 1 });
   };
 
   stopVoting = () => {
@@ -34,7 +34,7 @@ class CarCrash extends Component {
         <>
           <PopUpLabel className="h2">Выгнать всех выставленных?</PopUpLabel>
 
-          <VictimSelector onNumberSelected={this.onNumberSelected} votesLeft={10 - deadPlayers} />
+          <VictimSelector onNumberSelected={this.onNumberSelected} votesLeft={9 - deadPlayers} />
 
           <PopUpButton color="Voting" onClick={this.stopVoting}>
             Завершить

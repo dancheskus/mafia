@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { range } from 'lodash';
 import styled from 'styled-components';
 
 import { killPlayer } from 'redux/actions/playersActions';
 import { changeGameState, addToSelectedNumbers } from 'redux/actions/gameActions';
-import { VotingSingleElement, VotingBlock } from 'components/common';
 import checkForEnd from 'helpers/checkForEnd';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
 import { PopUpLabel, PopUpButton } from './styled-components';
+import VictimSelector from '../common/VictimSelector';
 
 const Sheriff = styled.div`
   height: 50%;
@@ -44,7 +43,7 @@ const Target = styled.div`
 class Night extends Component {
   state = { playerToKill: undefined, donTime: false, sheriffTime: false };
 
-  selectPlayer = num => this.setState({ playerToKill: num === this.state.playerToKill ? null : num });
+  onNumberSelected = num => this.setState({ playerToKill: num === this.state.playerToKill ? null : num });
 
   componentWillUnmount = () => {
     checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
@@ -110,19 +109,7 @@ class Night extends Component {
           В кого стреляет мафия?
         </PopUpLabel>
 
-        <VotingBlock className="col-10 col-md-8 col-lg-6">
-          {range(0, 10).map(num => (
-            <VotingSingleElement
-              disabled={!this.props.players[num].isAlive}
-              shooting
-              selected={this.state.playerToKill === num}
-              onClick={() => this.selectPlayer(num)}
-              key={num}
-            >
-              <div className="number">{num + 1}</div>
-            </VotingSingleElement>
-          ))}
-        </VotingBlock>
+        <VictimSelector shooting onNumberSelected={this.onNumberSelected} />
 
         <PopUpButton onClick={this.killPlayer} color="Night">
           Далее

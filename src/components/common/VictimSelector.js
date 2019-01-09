@@ -11,7 +11,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { range } from 'lodash';
 
-import { VotingSingleElement, VotingBlock } from 'components/common';
+import VotingSingleElement from './VotingSingleElement';
+import VotingBlock from './VotingBlock';
 
 class VictimSelector extends Component {
   state = { selectedNumber: null };
@@ -22,18 +23,19 @@ class VictimSelector extends Component {
   };
 
   render = () => {
-    const { lastPlayer, votesLeft } = this.props;
+    const { lastPlayer, votesLeft, shooting } = this.props;
 
     return (
       <VotingBlock className="col-10 col-md-8 col-lg-6">
-        {range(1, 11).map(num => (
+        {range(0, 10).map(num => (
           <VotingSingleElement
+            shooting={shooting}
             selected={lastPlayer ? num === votesLeft : this.state.selectedNumber === num}
-            disabled={lastPlayer ? num !== votesLeft : num > votesLeft}
+            disabled={shooting ? !this.props.players[num].isAlive : lastPlayer ? num !== votesLeft : num > votesLeft}
             onClick={() => this.selectNumber(num)}
             key={num}
           >
-            <div className="number">{num}</div>
+            <div className="number">{num + 1}</div>
           </VotingSingleElement>
         ))}
       </VotingBlock>
@@ -41,4 +43,4 @@ class VictimSelector extends Component {
   };
 }
 
-export default connect(({ game }) => ({ game }))(VictimSelector);
+export default connect(({ game, players }) => ({ game, players }))(VictimSelector);
