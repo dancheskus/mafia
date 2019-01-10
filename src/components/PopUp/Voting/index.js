@@ -27,16 +27,11 @@ class Voting extends Component {
   };
 
   componentWillMount = () => {
-    // При подключении компонента
-    if (
-      // Если не 1-ый день и выставлен только 1 игрок и не пропускается голосование
-      this.props.game.gameState.dayNumber > 1 &&
-      this.props.game.selectedNumbers.length === 1 &&
-      this.props.game.skipVoting === 0
-    ) {
-      // Заканчиваем голосование убивая единственного выставленного игрока
-      this.votingFinishedClicked();
-    }
+    const { gameState, selectedNumbers, skipVoting } = this.props.game;
+    // Если не 1-ый день и выставлен только 1 игрок и не пропускается голосование, заканчиваем голосование убивая единственного выставленного игрока
+    if (gameState.dayNumber > 1 && selectedNumbers.length === 1 && !skipVoting) this.votingFinishedClicked();
+
+    if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || skipVoting) this.setState({ endOfVoting: true });
   };
 
   onNumberSelected = num => {
@@ -121,18 +116,19 @@ class Voting extends Component {
     }
   };
 
-  goToNight = () => {
-    this.props.clearSelectedNumbers();
-    this.state.lastMinuteFor.length === 0 && this.props.skipVotingDec();
-    this.props.changeGameState({ phase: 'Night' });
-  };
+  // goToNight = () => {
+  //   console.log(4);
+  //   this.props.clearSelectedNumbers();
+  //   this.state.lastMinuteFor.length === 0 && this.props.skipVotingDec();
+  //   this.props.changeGameState({ phase: 'Night' });
+  // };
 
   render = () => {
     const { currentPlayer } = this.state;
-    const { gameState, selectedNumbers, skipVoting } = this.props.game;
+    const { selectedNumbers, skipVoting } = this.props.game;
     const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 
-    if (this.state.endOfVoting) return <EndOfVoting lastMinuteFor={this.state.lastMinuteFor} />;
+    if (this.state.endOfVoting || skipVoting) return <EndOfVoting lastMinuteFor={this.state.lastMinuteFor} />;
 
     if (this.state.carCrash)
       return (
@@ -143,20 +139,20 @@ class Voting extends Component {
         />
       );
 
-    if (
-      (gameState.dayNumber === 1 && selectedNumbers.length === 1) ||
-      (skipVoting > 0 && this.state.lastMinuteFor.length === 0)
-    )
-      return (
-        <>
-          <PopUpLabel className="h2">Голосование не проводится</PopUpLabel>
-          {skipVoting > 0 && <PopUpLabel className="h3">Игрок получил 4-й фол</PopUpLabel>}
+    // if (
+    //   (gameState.dayNumber === 1 && selectedNumbers.length === 1) ||
+    //   (skipVoting > 0 && this.state.lastMinuteFor.length === 0)
+    // )
+    //   return (
+    // <>
+    //   <PopUpLabel className="h2">Голосование не проводится</PopUpLabel>
+    //   {skipVoting > 0 && <PopUpLabel className="h3">Игрок получил 4-й фол</PopUpLabel>}
 
-          <PopUpButton color="Voting" onClick={this.goToNight}>
-            Ночь
-          </PopUpButton>
-        </>
-      );
+    //   <PopUpButton color="Voting" onClick={this.goToNight}>
+    //     Ночь
+    //   </PopUpButton>
+    // </>
+    //   );
 
     return (
       <>
