@@ -90,7 +90,7 @@ class Timer extends Component {
           ) : (
             <>
               {this.props.killedOnLastMinute ? (
-                <>4 фол</>
+                '4 фол'
               ) : (
                 <>
                   {`${minutes}:${seconds < 10 ? '0' + seconds : seconds}`}

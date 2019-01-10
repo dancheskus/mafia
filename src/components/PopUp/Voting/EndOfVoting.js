@@ -5,7 +5,7 @@ import { killPlayer } from 'redux/actions/playersActions';
 import { clearSelectedNumbers, changeGameState, skipVotingDec } from './../../../redux/actions/gameActions';
 import { ResultsNumbers } from './styled-components/Results';
 import { PopUpLabel, PopUpButton } from '../styled-components';
-import TimerForPlayer from './TimerForPlayer';
+import PlayersLastMinute from './PlayersLastMinute';
 
 class EndOfVoting extends Component {
   state = { notification: true, alivePlayers: this.props.players.filter(player => player.isAlive).length };
@@ -89,7 +89,7 @@ class EndOfVoting extends Component {
       );
 
     return (
-      <TimerForPlayer
+      <PlayersLastMinute
         listOfPlayers={lastMinuteFor}
         killedOnLastMinute={this.killedOnLastMinute}
         goToNight={this.goToNight}

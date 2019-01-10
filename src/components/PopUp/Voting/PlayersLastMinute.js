@@ -6,9 +6,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { PopUpCircle, PopUpButton } from '../styled-components';
-import Timer from './../../Timer';
+import Timer from 'components/Timer';
 
-class TimerForPlayer extends Component {
+class PlayersLastMinute extends Component {
   state = { currentPlayer: 0, listOfPlayers: this.props.listOfPlayers };
 
   nextPlayer = () => this.setState({ currentPlayer: this.state.currentPlayer + 1 });
@@ -31,4 +31,4 @@ class TimerForPlayer extends Component {
   };
 }
 
-export default connect(({ game }) => ({ game }))(TimerForPlayer);
+export default connect(({ game }) => ({ game }))(PlayersLastMinute);
