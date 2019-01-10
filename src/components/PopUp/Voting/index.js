@@ -116,19 +116,20 @@ class Voting extends Component {
     }
   };
 
-  // goToNight = () => {
-  //   console.log(4);
-  //   this.props.clearSelectedNumbers();
-  //   this.state.lastMinuteFor.length === 0 && this.props.skipVotingDec();
-  //   this.props.changeGameState({ phase: 'Night' });
-  // };
-
   render = () => {
     const { currentPlayer } = this.state;
     const { selectedNumbers, skipVoting } = this.props.game;
     const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 
-    if (this.state.endOfVoting || skipVoting) return <EndOfVoting lastMinuteFor={this.state.lastMinuteFor} />;
+    if (this.state.endOfVoting || skipVoting)
+      return (
+        <EndOfVoting
+          votingSkipped={
+            this.state.avaliableVoters === this.initialState.avaliableVoters && this.state.lastMinuteFor.length === 0
+          }
+          lastMinuteFor={this.state.lastMinuteFor}
+        />
+      );
 
     if (this.state.carCrash)
       return (
@@ -138,21 +139,6 @@ class Voting extends Component {
           votingFinishedClicked={this.votingFinishedClicked}
         />
       );
-
-    // if (
-    //   (gameState.dayNumber === 1 && selectedNumbers.length === 1) ||
-    //   (skipVoting > 0 && this.state.lastMinuteFor.length === 0)
-    // )
-    //   return (
-    // <>
-    //   <PopUpLabel className="h2">Голосование не проводится</PopUpLabel>
-    //   {skipVoting > 0 && <PopUpLabel className="h3">Игрок получил 4-й фол</PopUpLabel>}
-
-    //   <PopUpButton color="Voting" onClick={this.goToNight}>
-    //     Ночь
-    //   </PopUpButton>
-    // </>
-    //   );
 
     return (
       <>

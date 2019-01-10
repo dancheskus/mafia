@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import colors from 'colors.js';
 import { MinimizeIcon, MaximizeIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul } from 'redux/actions/playersActions';
-import { changeGameState, skipVotingDec, skipVotingInc } from 'redux/actions/gameActions';
+import { changeGameState, skipVotingInc } from 'redux/actions/gameActions';
 import PlayerNumber from './styled-components/PlayerNumber';
 import FoulContainer from './styled-components/FoulContainer';
 import checkForEnd from 'helpers/checkForEnd';
@@ -125,5 +125,5 @@ class SingleCard extends Component {
 
 export default connect(
   ({ game, players }) => ({ game, players }),
-  { addFoul, removeFoul, changeGameState, skipVotingDec, skipVotingInc }
+  { addFoul, removeFoul, changeGameState, skipVotingInc }
 )(SingleCard);

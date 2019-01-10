@@ -37,7 +37,7 @@ class EndOfVoting extends Component {
 
   goToNight = () => {
     this.props.clearSelectedNumbers();
-    this.props.lastMinuteFor.length === 0 && this.props.skipVotingDec();
+    this.props.votingSkipped && this.props.skipVotingDec();
     this.props.changeGameState({ phase: 'Night' });
 
     this.props.lastMinuteFor.map(plNum => this.props.killPlayer(plNum));
@@ -46,10 +46,10 @@ class EndOfVoting extends Component {
   render = () => {
     const {
       lastMinuteFor,
-      game: { gameState, selectedNumbers, skipVoting },
+      game: { skipVoting },
     } = this.props;
 
-    if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || (skipVoting && lastMinuteFor.length === 0))
+    if (this.props.votingSkipped)
       return (
         <>
           <PopUpLabel className="h2">Голосование не проводится</PopUpLabel>
@@ -88,7 +88,13 @@ class EndOfVoting extends Component {
         </>
       );
 
-    return <TimerForPlayer listOfPlayers={lastMinuteFor} goToNight={this.goToNight} />;
+    return (
+      <TimerForPlayer
+        listOfPlayers={lastMinuteFor}
+        killedOnLastMinute={this.killedOnLastMinute}
+        goToNight={this.goToNight}
+      />
+    );
   };
 }
 
