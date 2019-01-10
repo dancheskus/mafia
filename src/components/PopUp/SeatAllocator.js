@@ -24,13 +24,18 @@ class SeatAllocator extends Component {
 
   seats = shuffle(range(0, 10));
 
+  componentWillUnmount = () => {
+    clearInterval(this.interval);
+    clearTimeout(this.timeout);
+  };
+
   stopInterval = () => {
     clearInterval(this.interval);
     this.interval = false;
     const randomNumber = this.seats.pop();
     this.setState({ randomNumber: randomNumber + 1 });
     this.props.addToSelectedNumbers(randomNumber);
-    setTimeout(() => {
+    this.timeout = setTimeout(() => {
       this.setState({ randomNumber: null });
     }, 1000);
   };
