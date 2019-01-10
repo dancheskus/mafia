@@ -8,29 +8,29 @@ import { PopUpLabel, PopUpButton } from '../styled-components';
 import PlayersLastMinute from './PlayersLastMinute';
 
 class EndOfVoting extends Component {
-  state = { notification: true, alivePlayers: this.props.players.filter(player => player.isAlive).length };
+  state = { notification: true, alivePlayersCount: this.props.players.filter(player => player.isAlive).length };
 
   componentDidUpdate = () => {
-    const newDeadPlayer = this.state.alivePlayers !== this.props.players.filter(player => player.isAlive).length;
-    newDeadPlayer && this.newDeadPlayer();
+    const newDeadPlayer = this.state.alivePlayersCount !== this.props.players.filter(player => player.isAlive).length;
+    newDeadPlayer && this.onNewDeadPlayer();
   };
 
   killedOnLastMinute = Array(this.props.lastMinuteFor.length).fill(false);
 
-  newDeadPlayer = () => {
+  onNewDeadPlayer = () => {
     const { lastMinuteFor, players, skipVotingDec } = this.props;
 
     lastMinuteFor.forEach((plNum, i) => {
       const playerJustKilled = !players[plNum].isAlive && !this.killedOnLastMinute[i];
       if (playerJustKilled) {
-        setTimeout(() => {
-          skipVotingDec();
-        }, 1);
+        // setTimeout(() => {
+        skipVotingDec();
+        // }, 1);
         this.killedOnLastMinute[i] = true;
       }
     });
 
-    this.setState({ alivePlayers: players.filter(player => player.isAlive).length });
+    this.setState({ alivePlayersCount: players.filter(player => player.isAlive).length });
   };
 
   closeNotification = () => this.setState({ notification: false });
