@@ -8,29 +8,12 @@ import { PopUpLabel, PopUpButton } from '../styled-components';
 import PlayersLastMinute from './PlayersLastMinute';
 
 class EndOfVoting extends Component {
-  state = { notification: true, alivePlayersCount: this.props.players.filter(player => player.isAlive).length };
-
-  componentDidUpdate = () => {
-    const newDeadPlayer = this.state.alivePlayersCount !== this.props.players.filter(player => player.isAlive).length;
-    newDeadPlayer && this.onNewDeadPlayer();
-  };
+  state = { notification: true };
 
   killedOnLastMinute = Array(this.props.lastMinuteFor.length).fill(false);
 
-  onNewDeadPlayer = () => {
-    const { lastMinuteFor, players, skipVotingDec } = this.props;
-
-    lastMinuteFor.forEach((plNum, i) => {
-      const playerJustKilled = !players[plNum].isAlive && !this.killedOnLastMinute[i];
-      if (playerJustKilled) {
-        // setTimeout(() => {
-        skipVotingDec();
-        // }, 1);
-        this.killedOnLastMinute[i] = true;
-      }
-    });
-
-    this.setState({ alivePlayersCount: players.filter(player => player.isAlive).length });
+  componentDidUpdate = () => {
+    this.killedOnLastMinute = this.props.lastMinuteFor.map(plNum => !this.props.players[plNum].isAlive);
   };
 
   closeNotification = () => this.setState({ notification: false });
@@ -40,7 +23,10 @@ class EndOfVoting extends Component {
     this.props.votingSkipped && this.props.skipVotingDec();
     this.props.changeGameState({ phase: 'Night' });
 
-    this.props.lastMinuteFor.map(plNum => this.props.killPlayer(plNum));
+    this.props.lastMinuteFor.forEach(plNum => {
+      if (!this.props.players[plNum].isAlive) this.props.skipVotingDec();
+      this.props.killPlayer(plNum);
+    });
   };
 
   render = () => {
