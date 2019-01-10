@@ -19,7 +19,7 @@ const TimeAndPlayWrapper = styled.div`
       background: ${colors.Day.deadPlayerCardNumber};
       border-radius: 5px;`
       : `font-size: 400%;
-      color: white;`}
+      color: ${props.time > 10 ? 'white' : '#FB6F6F'};`}
 `;
 
 const StartStopButton = styled.div`
@@ -82,25 +82,37 @@ class Timer extends Component {
 
     return (
       <>
-        <TimeAndPlayWrapper mini={isMini} onClick={isMini ? this.startPauseClicked : null}>
+        <TimeAndPlayWrapper mini={isMini} time={time} onClick={isMini ? this.startPauseClicked : null}>
           {this.props.time === 0 ? (
             <Muted>
               <MutedIcon size="70%" fill={colors.Day.navBarText} />
             </Muted>
           ) : (
             <>
-              {`${minutes}:${seconds < 10 ? '0' + seconds : seconds}`}
-              <StartStopButton
-                mini={isMini}
-                color={this.props.game.gameState.phase}
-                onClick={!isMini ? this.startPauseClicked : null}
-              >
-                {this.state.timerWorking ? (
-                  <PauseIcon size={isMini ? '35%' : '80%'} />
-                ) : (
-                  <PlayIcon size={isMini ? '35%' : '80%'} />
-                )}
-              </StartStopButton>
+              {this.props.killedOnLastMinute ? (
+                <>4 фол</>
+              ) : (
+                <>
+                  {`${minutes}:${seconds < 10 ? '0' + seconds : seconds}`}
+                  <StartStopButton
+                    mini={isMini}
+                    color={this.props.game.gameState.phase}
+                    onClick={!isMini ? this.startPauseClicked : null}
+                  >
+                    {this.state.timerWorking ? (
+                      <PauseIcon
+                        fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'}
+                        size={isMini ? '35%' : '80%'}
+                      />
+                    ) : (
+                      <PlayIcon
+                        fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'}
+                        size={isMini ? '35%' : '80%'}
+                      />
+                    )}
+                  </StartStopButton>
+                </>
+              )}
             </>
           )}
         </TimeAndPlayWrapper>
