@@ -21,8 +21,11 @@ class EndOfVoting extends Component {
     const { lastMinuteFor, players, skipVotingDec } = this.props;
 
     lastMinuteFor.forEach((plNum, i) => {
-      if (!players[plNum].isAlive && !this.killedOnLastMinute[i]) {
-        skipVotingDec();
+      const playerJustKilled = !players[plNum].isAlive && !this.killedOnLastMinute[i];
+      if (playerJustKilled) {
+        setTimeout(() => {
+          skipVotingDec();
+        }, 1);
         this.killedOnLastMinute[i] = true;
       }
     });
