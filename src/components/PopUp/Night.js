@@ -46,11 +46,12 @@ class Night extends Component {
   onNumberSelected = num => this.setState({ playerToKill: num === this.state.playerToKill ? null : num });
 
   componentWillUnmount = () => {
-    checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
+    checkForEnd(this.props.players, this.state.playerToKill).status &&
+      this.props.changeGameState({ phase: 'EndOfGame' });
   };
 
   killPlayer = () => {
-    this.state.playerToKill >= 0 && this.props.killPlayer(this.state.playerToKill);
+    // this.state.playerToKill >= 0 && this.props.killPlayer(this.state.playerToKill);
     this.setState({ donTime: true });
   };
 
