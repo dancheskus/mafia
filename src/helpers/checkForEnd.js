@@ -1,14 +1,16 @@
 import { countBy } from 'lodash';
 
-export default (players, lastKilledPlayer) => {
+export default (players, lastRemovedPlayer) => {
   const allAlivePlayers = countBy(
     players.map(player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ' ? 'black' : 'red'))
   );
 
-  if (lastKilledPlayer >= 0) {
-    const role = players[lastKilledPlayer].role;
-    role === 'ДОН' || role === 'МАФИЯ' ? (allAlivePlayers.black -= 1) : (allAlivePlayers.red -= 1);
-    allAlivePlayers.false += 1;
+  if (lastRemovedPlayer && lastRemovedPlayer[0] >= 0) {
+    lastRemovedPlayer.map(playerNumber => {
+      const role = players[playerNumber].role;
+      role === 'ДОН' || role === 'МАФИЯ' ? (allAlivePlayers.black -= 1) : (allAlivePlayers.red -= 1);
+      allAlivePlayers.false += 1;
+    });
   }
 
   return { status: allAlivePlayers.red === allAlivePlayers.black || !allAlivePlayers.black, allAlivePlayers };
