@@ -4,7 +4,12 @@ services:
   mafia:
     container_name: mafia
     build: .
+    restart: unless-stopped
+    networks:
+      nginx_net:
     environment:
       - NODE_ENV=production
-    ports:
-      - 80:5000
+
+networks:
+  nginx_net:
+    external: true
