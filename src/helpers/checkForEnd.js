@@ -5,7 +5,7 @@ export default (players, lastKilledPlayer) => {
     players.map(player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ' ? 'black' : 'red'))
   );
 
-  if (lastKilledPlayer) {
+  if (lastKilledPlayer >= 0) {
     const role = players[lastKilledPlayer].role;
     role === 'ДОН' || role === 'МАФИЯ' ? (allAlivePlayers.black -= 1) : (allAlivePlayers.red -= 1);
     allAlivePlayers.false += 1;

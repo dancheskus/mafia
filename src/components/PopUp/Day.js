@@ -32,7 +32,7 @@ class Day extends Component {
         <>
           <PopUpLabel className="h1">Убит</PopUpLabel>
           <PopUpCircle color="Night">{this.state.killedPlayer + 1}</PopUpCircle>
-          <Timer />
+          <Timer killedOnLastMinute={!this.props.players[this.state.killedPlayer].isAlive} />
         </>
       ) : (
         <>
@@ -50,6 +50,6 @@ class Day extends Component {
 }
 
 export default connect(
-  ({ game }) => ({ game }),
+  ({ game, players }) => ({ game, players }),
   { clearSelectedNumbers, closePopup, openPopup, killPlayer, changeGameState }
 )(Day);
