@@ -22,6 +22,8 @@ const BigCircle = styled.div`
 class SeatAllocator extends Component {
   state = { randomNumber: null };
 
+  componentDidMount = () => this.props.clearSelectedNumbers();
+
   seats = shuffle(range(0, 10));
 
   componentWillUnmount = () => {
@@ -36,7 +38,7 @@ class SeatAllocator extends Component {
     this.setState({ randomNumber: randomNumber + 1 });
     this.props.addToSelectedNumbers(randomNumber);
     this.timeout = setTimeout(() => {
-      this.setState({ randomNumber: null });
+      this.setState({ randomNumber: this.seats.length ? null : this.state.randomNumber });
     }, 1000);
   };
 
