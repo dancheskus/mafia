@@ -21,11 +21,7 @@ const GameResult = styled.div`
 class EndOfGame extends Component {
   render = () => {
     const { black, red } = checkForEnd(this.props.players).allAlivePlayers;
-    return (
-      <>
-        <GameResult>{black === red ? 'Победа черных' : 'Победа красных'}</GameResult>
-      </>
-    );
+    return <GameResult>{black >= red ? 'Победа черных' : 'Победа красных'}</GameResult>;
   };
 }
 

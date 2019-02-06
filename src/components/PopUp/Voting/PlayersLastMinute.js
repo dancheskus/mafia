@@ -9,13 +9,16 @@ import { PopUpCircle, PopUpButton } from '../styled-components';
 import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';
+import { killPlayer } from 'redux/actions/playersActions';
 
 class PlayersLastMinute extends Component {
   state = { currentPlayer: 0, listOfPlayers: this.props.listOfPlayers };
 
   componentWillMount = () => {
-    checkForEnd(this.props.players, this.state.listOfPlayers).status &&
+    if (checkForEnd(this.props.players, this.state.listOfPlayers).status) {
       this.props.changeGameState({ phase: 'EndOfGame' });
+      this.state.listOfPlayers.map(plNum => this.props.killPlayer(plNum));
+    }
   };
 
   nextPlayer = () => this.setState({ currentPlayer: this.state.currentPlayer + 1 });
@@ -40,5 +43,5 @@ class PlayersLastMinute extends Component {
 
 export default connect(
   ({ game, players }) => ({ game, players }),
-  { changeGameState }
+  { changeGameState, killPlayer }
 )(PlayersLastMinute);
