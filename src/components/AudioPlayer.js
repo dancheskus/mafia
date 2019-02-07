@@ -70,11 +70,12 @@ class AudioPlayer extends Component {
           <>
             <ReactPlayer
               url={`${musicUrl}${this.state.songList[this.state.songNumber]}`}
-              playing={this.state.isPlaying}
+              // playing={this.state.isPlaying}
+              playing
               height="0px"
               width="0px"
-              volume={this.state.volume}
-              onEnded={this.nextSong}
+              // volume={this.state.volume}
+              // onEnded={this.nextSong}
             />
 
             {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
