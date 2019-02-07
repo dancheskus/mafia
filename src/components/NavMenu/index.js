@@ -14,8 +14,8 @@ class NavMenu extends Component {
       <input
         type="checkbox"
         onChange={() => this.setState({ checked: !this.state.checked })}
-        checked
-        // checked={this.state.checked}
+        // checked
+        checked={this.state.checked}
         className="navi_check"
         id="navi-toggle"
       />

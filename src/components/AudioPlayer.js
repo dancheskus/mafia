@@ -1,36 +1,66 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
+import { shuffle } from 'lodash';
+import { connect } from 'react-redux';
 
 const musicUrl = 'https://mafia-city.ml/music/';
 
-export default class AudioPlayer extends Component {
-  state = { volume: 1, isPlaying: false, songList: [], songName: '' };
+class AudioPlayer extends Component {
+  state = { volume: 1, isPlaying: false, songList: [], songNumber: 0 };
 
-  getRandomSong = list => list[Math.floor(Math.random() * list.length)];
-
-  componentWillMount = () => {
+  componentDidMount = () => {
     axios.get('https://mafia-city.ml/music/').then(res => {
-      const songList = res.data.map(el => el.name);
-      this.setState({ songList, songName: this.getRandomSong(songList) });
+      this.setState({ songList: shuffle(res.data.map(el => el.name)) });
     });
+
+    const phase = this.props.game.gameState.phase;
+    const musicAllowed = phase === 'Night' || phase === 'ZeroNight';
+    if (musicAllowed) this.setState({ isPlaying: true });
+  };
+
+  componentDidUpdate = prevProps => {
+    const prevPhase = prevProps.game.gameState.phase;
+    const phase = this.props.game.gameState.phase;
+    const musicAllowed = phase === 'Night' || phase === 'ZeroNight';
+    if (prevPhase !== phase && musicAllowed) this.setState({ isPlaying: true });
+    if (!musicAllowed && this.state.isPlaying) this.setState({ isPlaying: false });
   };
 
   playPause = () => this.setState({ isPlaying: !this.state.isPlaying });
-  nextSong = () => this.setState({ songName: this.getRandomSong(this.state.songList) });
 
-  render = () => (
-    <>
-      <ReactPlayer
-        url={`${musicUrl}${this.state.songName}`}
-        playing={this.state.isPlaying}
-        // controls
-        height="55px"
-        width="400px"
-        volume={this.state.volume}
-      />
-      <button onClick={this.playPause}>{this.state.isPlaying ? 'PAUSE' : 'PLAY'}</button>
-      <button onClick={this.nextSong}>NEXT SONG</button>
-    </>
-  );
+  nextSong = () => {
+    this.setState({ songNumber: (this.state.songNumber + 1) % this.state.songList.length });
+  };
+
+  render = () => {
+    const { phase } = this.props.game.gameState;
+
+    return (
+      <>
+        {this.state.songList.length && (
+          <>
+            <ReactPlayer
+              url={`${musicUrl}${this.state.songList[this.state.songNumber]}`}
+              playing={this.state.isPlaying}
+              // controls
+              height="0px"
+              width="0px"
+              volume={this.state.volume}
+              onEnded={this.nextSong}
+            />
+
+            {(phase === 'Night' || phase === 'ZeroNight') && (
+              <>
+                <button onClick={this.playPause}>{this.state.isPlaying ? 'PAUSE' : 'PLAY'}</button>
+                <button onClick={this.nextSong}>NEXT SONG</button>
+              </>
+            )}
+          </>
+        )}
+      </>
+    );
+  };
 }
+
+export default connect(({ game }) => ({ game }))(AudioPlayer);
