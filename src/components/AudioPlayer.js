@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 const musicUrl = 'https://mafia-city.ml/music/';
 
 class AudioPlayer extends Component {
-  state = { volume: 1, isPlaying: false, songList: [], songNumber: 0 };
+  state = { volume: 1, isPlaying: false, isPlayingVisualStatus: false, songList: [], songNumber: 0 };
 
   componentDidMount = () => {
     axios.get('https://mafia-city.ml/music/').then(res => {
@@ -16,18 +16,42 @@ class AudioPlayer extends Component {
 
     const phase = this.props.game.gameState.phase;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight';
-    if (musicAllowed) this.setState({ isPlaying: true });
+    if (musicAllowed) this.setState({ isPlaying: true, isPlayingVisualStatus: true });
   };
 
   componentDidUpdate = prevProps => {
     const prevPhase = prevProps.game.gameState.phase;
     const phase = this.props.game.gameState.phase;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight';
-    if (prevPhase !== phase && musicAllowed) this.setState({ isPlaying: true });
-    if (!musicAllowed && this.state.isPlaying) this.setState({ isPlaying: false });
+    if (prevPhase !== phase) musicAllowed ? this.play() : this.pause();
   };
 
-  playPause = () => this.setState({ isPlaying: !this.state.isPlaying });
+  playPause = () => (this.state.isPlayingVisualStatus ? this.pause() : this.play());
+
+  play = () => {
+    clearInterval(this.volumeDown);
+    this.setState({ volume: 0, isPlaying: true, isPlayingVisualStatus: true });
+
+    this.volumeUp = setInterval(() => {
+      if (this.state.volume > 0.97) {
+        clearInterval(this.volumeUp);
+      }
+      this.setState({ volume: this.state.volume + 0.01 });
+    }, 20);
+  };
+
+  pause = () => {
+    clearInterval(this.volumeUp);
+    this.setState({ isPlayingVisualStatus: false });
+
+    this.volumeDown = setInterval(() => {
+      if (this.state.volume < 0.02) {
+        clearInterval(this.volumeDown);
+        this.setState({ isPlaying: false });
+      }
+      this.setState({ volume: this.state.volume - 0.01 });
+    }, 20);
+  };
 
   nextSong = () => {
     this.setState({ songNumber: (this.state.songNumber + 1) % this.state.songList.length });
@@ -52,7 +76,7 @@ class AudioPlayer extends Component {
 
             {(phase === 'Night' || phase === 'ZeroNight') && (
               <>
-                <button onClick={this.playPause}>{this.state.isPlaying ? 'PAUSE' : 'PLAY'}</button>
+                <button onClick={this.playPause}>{this.state.isPlayingVisualStatus ? 'PAUSE' : 'PLAY'}</button>
                 <button onClick={this.nextSong}>NEXT SONG</button>
               </>
             )}
