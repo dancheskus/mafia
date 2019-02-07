@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import StyledNavMenu from './style';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
-import AudioPlayer from '../AudioPlayer';
 
 class NavMenu extends Component {
   state = { checked: false };
@@ -30,10 +29,6 @@ class NavMenu extends Component {
           </li>
 
           <li className="navi_item">
-            <div className="navi_link">Плеер</div>
-          </li>
-
-          <li className="navi_item">
             <div
               onClick={() => {
                 this.props.resetGameReducer();
@@ -44,14 +39,6 @@ class NavMenu extends Component {
             >
               Новая игра
             </div>
-          </li>
-
-          <li className="navi_item">
-            <div className="navi_link">Выход</div>
-          </li>
-
-          <li className="navi_item">
-            <AudioPlayer />
           </li>
         </ul>
       </div>

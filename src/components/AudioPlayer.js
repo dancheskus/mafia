@@ -4,6 +4,10 @@ import axios from 'axios';
 import { shuffle } from 'lodash';
 import { connect } from 'react-redux';
 
+import { PlayIcon, PauseIcon } from 'icons/svgIcons';
+import { NextIcon } from './../icons/svgIcons';
+import NavBarCircleButton from './styled-components/NavBarCircleButton';
+
 const musicUrl = 'https://mafia-city.ml/music/';
 
 class AudioPlayer extends Component {
@@ -15,14 +19,14 @@ class AudioPlayer extends Component {
     });
 
     const phase = this.props.game.gameState.phase;
-    const musicAllowed = phase === 'Night' || phase === 'ZeroNight';
+    const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
     if (musicAllowed) this.setState({ isPlaying: true, isPlayingVisualStatus: true });
   };
 
   componentDidUpdate = prevProps => {
     const prevPhase = prevProps.game.gameState.phase;
     const phase = this.props.game.gameState.phase;
-    const musicAllowed = phase === 'Night' || phase === 'ZeroNight';
+    const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
     if (prevPhase !== phase) musicAllowed ? this.play() : this.pause();
   };
 
@@ -67,17 +71,21 @@ class AudioPlayer extends Component {
             <ReactPlayer
               url={`${musicUrl}${this.state.songList[this.state.songNumber]}`}
               playing={this.state.isPlaying}
-              // controls
               height="0px"
               width="0px"
               volume={this.state.volume}
               onEnded={this.nextSong}
             />
 
-            {(phase === 'Night' || phase === 'ZeroNight') && (
+            {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
               <>
-                <button onClick={this.playPause}>{this.state.isPlayingVisualStatus ? 'PAUSE' : 'PLAY'}</button>
-                <button onClick={this.nextSong}>NEXT SONG</button>
+                <NavBarCircleButton onClick={this.playPause}>
+                  {this.state.isPlayingVisualStatus ? <PauseIcon /> : <PlayIcon />}
+                </NavBarCircleButton>
+
+                <NavBarCircleButton onClick={this.nextSong}>
+                  <NextIcon size="60%" />
+                </NavBarCircleButton>
               </>
             )}
           </>
