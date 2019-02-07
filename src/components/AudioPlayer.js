@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
 
-const regex = /(?<=>).+(?=\.mp3)/g;
+const regex = />.+(?=\.mp3)/g;
 
 const url = 'https://mafia-city.ml/music/';
 
@@ -13,7 +13,8 @@ export default class AudioPlayer extends Component {
 
   componentWillMount = () => {
     axios.get('https://mafia-city.ml/music/').then(res => {
-      const songList = res.data.match(regex);
+      const songList = res.data.match(regex).map(name => name.substr(1));
+      console.log(songList);
       this.setState({ songList, songName: this.getRandomSong(songList) });
     });
   };
