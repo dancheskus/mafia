@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import StyledNavMenu from './style';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
+import AudioPlayer from '../AudioPlayer';
 
 class NavMenu extends Component {
   state = { checked: false };
@@ -13,7 +14,8 @@ class NavMenu extends Component {
       <input
         type="checkbox"
         onChange={() => this.setState({ checked: !this.state.checked })}
-        checked={this.state.checked}
+        checked
+        // checked={this.state.checked}
         className="navi_check"
         id="navi-toggle"
       />
@@ -46,6 +48,10 @@ class NavMenu extends Component {
 
           <li className="navi_item">
             <div className="navi_link">Выход</div>
+          </li>
+
+          <li className="navi_item">
+            <AudioPlayer />
           </li>
         </ul>
       </div>
