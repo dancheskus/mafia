@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import ReactPlayer from 'react-player';
 import axios from 'axios';
 
-const regex = />.+(?=\.mp3)/g;
-
-const url = 'https://mafia-city.ml/music/';
+const musicUrl = 'https://mafia-city.ml/music/';
 
 export default class AudioPlayer extends Component {
   state = { volume: 1, isPlaying: false, songList: [], songName: '' };
@@ -13,8 +11,7 @@ export default class AudioPlayer extends Component {
 
   componentWillMount = () => {
     axios.get('https://mafia-city.ml/music/').then(res => {
-      const songList = res.data.match(regex).map(name => name.substr(1));
-      console.log(songList);
+      const songList = res.data.map(el => el.name);
       this.setState({ songList, songName: this.getRandomSong(songList) });
     });
   };
@@ -25,7 +22,7 @@ export default class AudioPlayer extends Component {
   render = () => (
     <>
       <ReactPlayer
-        url={`${url}${this.state.songName}.mp3`}
+        url={`${musicUrl}${this.state.songName}`}
         playing={this.state.isPlaying}
         // controls
         height="55px"
