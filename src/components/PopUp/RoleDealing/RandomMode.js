@@ -35,19 +35,23 @@ const ScaledPopUpButton = styled(PopUpButton)`
 `;
 
 class RandomMode extends Component {
-  state = { role: null };
+  state = { role: null, cardDisabled: false };
   allRoles = shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН'));
 
   componentDidMount = () => this.props.addToSelectedNumbers(0);
+  componentWillUnmount = () => clearTimeout(this.timeout);
 
   cardClicked = () => {
     const playerNumber = this.props.game.selectedNumbers[0];
     if (this.state.role) {
-      this.setState({ role: null });
+      this.setState({ role: null, cardDisabled: true });
       this.props.lightModeOff();
       const prevSelectedNumber = playerNumber;
       this.props.clearSelectedNumbers();
       this.props.addToSelectedNumbers(prevSelectedNumber + 1);
+      this.timeout = setTimeout(() => {
+        this.setState({ cardDisabled: false });
+      }, 1000);
       return;
     }
 
@@ -65,7 +69,7 @@ class RandomMode extends Component {
   };
 
   render = () => (
-    <Card onClick={this.cardClicked}>
+    <Card onClick={!this.state.cardDisabled ? this.cardClicked : undefined}>
       {!this.state.role && !!this.allRoles.length && <EyeIcon size={'40%'} fill={popupIcon} />}
       {!this.state.role && !this.allRoles.length && (
         <ScaledPopUpButton onClick={this.startGameClicked} color="RoleDealing">
