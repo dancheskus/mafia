@@ -114,11 +114,11 @@ const Navigation = props => {
           </ButtonsWrapper>
         )}
 
-        {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
-          <ButtonsWrapper>
-            <AudioPlayer />
-          </ButtonsWrapper>
-        )}
+        <ButtonsWrapper
+          style={{ display: phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && 'none' }}
+        >
+          <AudioPlayer />
+        </ButtonsWrapper>
 
         <NavMenu />
       </Container>
