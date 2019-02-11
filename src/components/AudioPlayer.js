@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import ReactPlayer from 'react-player';
+// import ReactPlayer from 'react-player';
 import axios from 'axios';
 import { shuffle } from 'lodash';
 import { connect } from 'react-redux';
+import ReactHowler from 'react-howler';
 
 import { PlayIcon, PauseIcon } from 'icons/svgIcons';
 import { NextIcon } from './../icons/svgIcons';
@@ -68,13 +69,19 @@ class AudioPlayer extends Component {
       <>
         {this.state.songList.length && (
           <>
-            <ReactPlayer
+            {/* <ReactPlayer
               url={`${musicUrl}${this.state.songList[this.state.songNumber]}`}
               playing={this.state.isPlaying}
               height="0px"
               width="0px"
               volume={this.state.volume}
               onEnded={this.nextSong}
+            /> */}
+
+            <ReactHowler
+              src={`${musicUrl}${this.state.songList[this.state.songNumber]}`}
+              playing={this.state.isPlaying}
+              volume={this.state.volume}
             />
 
             {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
