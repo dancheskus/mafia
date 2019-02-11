@@ -82,6 +82,7 @@ class AudioPlayer extends Component {
               src={`${musicUrl}${this.state.songList[this.state.songNumber]}`}
               playing={this.state.isPlaying}
               volume={this.state.volume}
+              html5={true}
             />
 
             {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
