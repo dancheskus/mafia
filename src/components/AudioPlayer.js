@@ -1,27 +1,44 @@
 import React, { Component } from 'react';
-// import ReactPlayer from 'react-player';
 import axios from 'axios';
 import { shuffle } from 'lodash';
 import { connect } from 'react-redux';
-import ReactHowler from 'react-howler';
+import RingLoader from 'react-spinners/RingLoader';
+import { Howl } from 'howler';
 
 import { PlayIcon, PauseIcon } from 'icons/svgIcons';
 import { NextIcon } from './../icons/svgIcons';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 
 const musicUrl = 'https://mafia-city.ml/music/';
+const fadeDuration = 2000;
 
 class AudioPlayer extends Component {
-  state = { volume: 1, isPlaying: false, isPlayingVisualStatus: false, songList: [], songNumber: 0 };
+  state = {
+    isPlayingVisualStatus: false,
+    songList: [],
+    songNumber: 0,
+    songLoaded: false,
+  };
+
+  loadSong = () => {
+    if (this.sound) this.sound.unload();
+
+    this.sound = new Howl({ src: `${musicUrl}${this.state.songList[this.state.songNumber]}` });
+    this.sound.play();
+
+    this.sound.on('load', () => this.setState({ songLoaded: true }));
+  };
 
   componentDidMount = () => {
     axios.get('https://mafia-city.ml/music/').then(res => {
-      this.setState({ songList: shuffle(res.data.map(el => el.name)) });
+      this.setState({ songList: shuffle(res.data.map(el => el.name)) }, () => {
+        this.loadSong();
+      });
     });
 
     const phase = this.props.game.gameState.phase;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
-    if (musicAllowed) this.setState({ isPlaying: true, isPlayingVisualStatus: true });
+    if (musicAllowed) this.setState({ isPlayingVisualStatus: true });
   };
 
   componentDidUpdate = prevProps => {
@@ -31,35 +48,33 @@ class AudioPlayer extends Component {
     if (prevPhase !== phase) musicAllowed ? this.play() : this.pause();
   };
 
-  playPause = () => (this.state.isPlayingVisualStatus ? this.pause() : this.play());
+  playPause = (_, { sound, play, pause } = this) => {
+    sound.on('fade', () => sound.volume() === 0 && sound.pause());
 
-  play = () => {
-    clearInterval(this.volumeDown);
-    this.setState({ volume: 0, isPlaying: true, isPlayingVisualStatus: true });
-
-    this.volumeUp = setInterval(() => {
-      if (this.state.volume > 0.97) {
-        clearInterval(this.volumeUp);
-      }
-      this.setState({ volume: this.state.volume + 0.01 });
-    }, 20);
+    sound.playing() ? pause() : play();
   };
 
   pause = () => {
-    clearInterval(this.volumeUp);
+    // Ставим на пузу
     this.setState({ isPlayingVisualStatus: false });
+    this.sound.fade(this.sound.volume(), 0, fadeDuration);
+  };
 
-    this.volumeDown = setInterval(() => {
-      if (this.state.volume < 0.02) {
-        clearInterval(this.volumeDown);
-        this.setState({ isPlaying: false });
-      }
-      this.setState({ volume: this.state.volume - 0.01 });
-    }, 20);
+  play = () => {
+    // Воспроизводим
+    this.setState({ isPlayingVisualStatus: true });
+    this.sound.fade(0, 1, fadeDuration);
+    this.sound.play();
   };
 
   nextSong = () => {
-    this.setState({ songNumber: (this.state.songNumber + 1) % this.state.songList.length });
+    this.setState(
+      {
+        songLoaded: false,
+        songNumber: (this.state.songNumber + 1) % this.state.songList.length,
+      },
+      () => this.loadSong()
+    );
   };
 
   render = () => {
@@ -69,26 +84,18 @@ class AudioPlayer extends Component {
       <>
         {this.state.songList.length && (
           <>
-            {/* <ReactPlayer
-              url={`${musicUrl}${this.state.songList[this.state.songNumber]}`}
-              playing={this.state.isPlaying}
-              height="0px"
-              width="0px"
-              volume={this.state.volume}
-              onEnded={this.nextSong}
-            /> */}
-
-            <ReactHowler
-              src={`${musicUrl}${this.state.songList[this.state.songNumber]}`}
-              playing={this.state.isPlaying}
-              volume={this.state.volume}
-              html5={true}
-            />
-
             {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
               <>
                 <NavBarCircleButton onClick={this.playPause}>
-                  {this.state.isPlayingVisualStatus ? <PauseIcon /> : <PlayIcon />}
+                  {this.state.songLoaded ? (
+                    this.state.isPlayingVisualStatus ? (
+                      <PauseIcon />
+                    ) : (
+                      <PlayIcon />
+                    )
+                  ) : (
+                    <RingLoader sizeUnit={'px'} size={20} color={'white'} />
+                  )}
                 </NavBarCircleButton>
 
                 <NavBarCircleButton onClick={this.nextSong}>
