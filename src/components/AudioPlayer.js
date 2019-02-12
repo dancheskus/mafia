@@ -19,7 +19,10 @@ class AudioPlayer extends Component {
     if (this.sound) this.sound.unload();
 
     this.sound = new Howl({ src: `${musicUrl}${this.state.audioList[this.state.audioNumber]}` });
-    this.sound.play();
+
+    const phase = this.props.game.gameState.phase;
+    const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
+    if (musicAllowed) this.play();
 
     this.sound.once('load', () => this.setState({ audioLoaded: true }));
   };
@@ -28,9 +31,6 @@ class AudioPlayer extends Component {
     axios.get('https://mafia-city.ml/music/').then(res => {
       this.setState({ audioList: shuffle(res.data.map(el => el.name)) }, () => {
         this.loadAudio();
-        const phase = this.props.game.gameState.phase;
-        const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
-        if (musicAllowed) this.play();
       });
     });
   };
