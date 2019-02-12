@@ -18,7 +18,10 @@ class AudioPlayer extends Component {
   loadAudio = () => {
     if (this.sound) this.sound.unload();
 
-    this.sound = new Howl({ src: `${musicUrl}${this.state.audioList[this.state.audioNumber]}` });
+    this.sound = new Howl({
+      src: `${musicUrl}${this.state.audioList[this.state.audioNumber]}`,
+      onend: () => this.nextAudio(),
+    });
 
     const phase = this.props.game.gameState.phase;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
