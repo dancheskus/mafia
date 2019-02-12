@@ -13,67 +13,74 @@ const musicUrl = 'https://mafia-city.ml/music/';
 const fadeDuration = 2000;
 
 class AudioPlayer extends Component {
-  state = {
-    isPlayingVisualStatus: false,
-    songList: [],
-    songNumber: 0,
-    songLoaded: false,
-  };
+  state = { isPlayingVisualStatus: false, audioList: [], audioNumber: 0, audioLoaded: false };
 
-  loadSong = () => {
+  loadAudio = () => {
     if (this.sound) this.sound.unload();
 
-    this.sound = new Howl({ src: `${musicUrl}${this.state.songList[this.state.songNumber]}` });
+    this.sound = new Howl({ src: `${musicUrl}${this.state.audioList[this.state.audioNumber]}` });
     this.sound.play();
 
-    this.sound.on('load', () => this.setState({ songLoaded: true }));
+    this.sound.once('load', () => this.setState({ audioLoaded: true }));
   };
 
   componentDidMount = () => {
     axios.get('https://mafia-city.ml/music/').then(res => {
-      this.setState({ songList: shuffle(res.data.map(el => el.name)) }, () => {
-        this.loadSong();
+      this.setState({ audioList: shuffle(res.data.map(el => el.name)) }, () => {
+        this.loadAudio();
+        const phase = this.props.game.gameState.phase;
+        const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
+        if (musicAllowed) this.play();
       });
     });
-
-    const phase = this.props.game.gameState.phase;
-    const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
-    if (musicAllowed) this.setState({ isPlayingVisualStatus: true });
   };
 
   componentDidUpdate = prevProps => {
     const prevPhase = prevProps.game.gameState.phase;
     const phase = this.props.game.gameState.phase;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
-    if (prevPhase !== phase) musicAllowed ? this.play() : this.pause();
+    const musicWasAllowed = prevPhase === 'Night' || prevPhase === 'ZeroNight' || prevPhase === 'RoleDealing';
+
+    if (!musicWasAllowed && musicAllowed) this.play();
+    if (musicWasAllowed && !musicAllowed) this.pause();
   };
 
   playPause = (_, { sound, play, pause } = this) => {
-    sound.on('fade', () => sound.volume() === 0 && sound.pause());
-
     sound.playing() ? pause() : play();
   };
 
   pause = () => {
     // Ставим на пузу
     this.setState({ isPlayingVisualStatus: false });
+    this.sound.once('fade', () => this.sound.pause());
     this.sound.fade(this.sound.volume(), 0, fadeDuration);
   };
 
   play = () => {
     // Воспроизводим
-    this.setState({ isPlayingVisualStatus: true });
-    this.sound.fade(0, 1, fadeDuration);
-    this.sound.play();
+    const startPlaying = () => {
+      this.setState({ isPlayingVisualStatus: true });
+      this.sound.fade(0, 1, fadeDuration);
+      this.sound.play();
+    };
+
+    if (this.sound.playing()) {
+      // Если уже запущено
+      this.pause();
+      return this.sound.once('pause', () => startPlaying());
+    }
+
+    // Если не запущено
+    startPlaying();
   };
 
-  nextSong = () => {
+  nextAudio = () => {
     this.setState(
       {
-        songLoaded: false,
-        songNumber: (this.state.songNumber + 1) % this.state.songList.length,
+        audioLoaded: false,
+        audioNumber: (this.state.audioNumber + 1) % this.state.audioList.length,
       },
-      () => this.loadSong()
+      () => this.loadAudio()
     );
   };
 
@@ -82,12 +89,12 @@ class AudioPlayer extends Component {
 
     return (
       <>
-        {this.state.songList.length && (
+        {this.state.audioList.length && (
           <>
             {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
               <>
                 <NavBarCircleButton onClick={this.playPause}>
-                  {this.state.songLoaded ? (
+                  {this.state.audioLoaded ? (
                     this.state.isPlayingVisualStatus ? (
                       <PauseIcon />
                     ) : (
@@ -98,7 +105,7 @@ class AudioPlayer extends Component {
                   )}
                 </NavBarCircleButton>
 
-                <NavBarCircleButton onClick={this.nextSong}>
+                <NavBarCircleButton onClick={this.nextAudio}>
                   <NextIcon size="60%" />
                 </NavBarCircleButton>
               </>
