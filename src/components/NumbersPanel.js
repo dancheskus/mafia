@@ -74,7 +74,7 @@ class NumbersPanel extends Component {
                 <PanelItem
                   color={phase}
                   key={selNum}
-                  pointer={lastAddedNumber}
+                  pointer
                   border={lastAddedNumber}
                   onClick={() => {
                     if (!lastAddedNumber) return;
@@ -96,11 +96,17 @@ class NumbersPanel extends Component {
                     <PanelItem
                       color={phase}
                       key={notSelNum}
-                      pointer={!this.state.playerAddedNumber}
+                      pointer
                       border={!this.state.playerAddedNumber}
                       onClick={() => {
-                        if (this.state.playerAddedNumber) return;
-                        this.props.addToSelectedNumbers(notSelNum);
+                        if (!this.state.playerAddedNumber) {
+                          this.props.addToSelectedNumbers(notSelNum);
+                        }
+
+                        if (this.state.playerAddedNumber) {
+                          this.props.removeLastSelectedNumber();
+                          this.props.addToSelectedNumbers(notSelNum);
+                        }
                         this.setState({ playerAddedNumber: true });
                       }}
                     >
