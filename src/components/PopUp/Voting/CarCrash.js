@@ -7,7 +7,7 @@ import Timer from 'components/Timer';
 import VictimSelector from 'components/common/VictimSelector';
 
 class CarCrash extends Component {
-  state = { notification: true, currentPlayer: 0, selectedNumber: 4 };
+  state = { notification: true, currentPlayer: 0, selectedNumber: null };
 
   closeNotification = () => this.setState({ notification: false });
 
