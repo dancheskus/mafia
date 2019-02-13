@@ -36,6 +36,18 @@ const PanelItem = styled.div`
   box-shadow: 0px 9px 35px -8px rgba(0, 0, 0, 0.49);
   cursor: ${props => (props.pointer ? 'pointer' : 'default')};
   ${props => props.border && `border: 2px solid ${colors.Day.addSecondFoulBackground};`}
+
+  @media (max-width: 404px) {
+    height: 25px;
+    width: 25px;
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 350px) {
+    height: 20px;
+    width: 20px;
+    font-size: 0.7rem;
+  }
 `;
 
 class NumbersPanel extends Component {

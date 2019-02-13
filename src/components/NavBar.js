@@ -21,6 +21,7 @@ const StyledNavigation = styled.div`
     color: ${props => colors[props.color].navBarText};
     display: flex;
     justify-content: center;
+    text-align: center;
     align-items: center;
 
     &:not(:last-child) {
@@ -38,6 +39,9 @@ const NavStateName = styled.h2`
 
   @media (max-width: 520px) {
     font-size: 1.5rem;
+  }
+  @media (max-width: 400px) {
+    font-size: 1.3rem;
   }
 `;
 

@@ -10,6 +10,7 @@ import { PopUpLabel, PopUpButton } from './styled-components';
 import VictimSelector from '../common/VictimSelector';
 
 const Sheriff = styled.div`
+  width: 70%;
   height: 50%;
   display: flex;
   justify-content: center;
@@ -20,11 +21,44 @@ const Sheriff = styled.div`
     color: white;
     font-size: 5rem;
     position: absolute;
+
+    @media (max-width: 430px) {
+      font-size: 3.7rem;
+    }
   }
 `;
 
 const DarkPlayers = styled.div`
   display: flex;
+  height: 50%;
+  width: 40%;
+
+  > div:first-child {
+    align-self: flex-start;
+  }
+  > div:last-child {
+    align-self: flex-end;
+  }
+  > div {
+    align-self: center;
+  }
+
+  @media (max-width: 1300px) {
+    width: 45%;
+  }
+  @media (max-width: 1200px) {
+    width: 50%;
+  }
+  @media (max-width: 1000px) {
+    width: 70%;
+  }
+  @media (max-width: 560px) {
+    width: 80%;
+  }
+
+  @media (min-height: 700px) {
+    height: 40%;
+  }
 `;
 
 const Target = styled.div`
@@ -65,7 +99,7 @@ class Night extends Component {
               .filter(x => x !== null)
               .map(plNum => (
                 <Target key={plNum}>
-                  <TargetIcon size="85%" />
+                  <TargetIcon size="100%" />
                   <span>{plNum + 1}</span>
                 </Target>
               ))}
