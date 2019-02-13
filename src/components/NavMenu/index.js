@@ -31,6 +31,7 @@ class NavMenu extends Component {
           <li className="navi_item">
             <div
               onClick={() => {
+                localStorage.clear();
                 this.props.resetGameReducer();
                 this.props.resetPlayersReducer();
                 this.setState({ checked: false });
