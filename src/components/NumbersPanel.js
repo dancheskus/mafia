@@ -28,6 +28,7 @@ const PanelItem = styled.div`
   background: ${props => (props.selected ? colors[props.color].numberSelected : colors[props.color].number)};
   border-radius: 50%;
   color: white;
+  ${props => props.color === 'EndOfGame' && !props.isAlive && 'filter: brightness(30%); color: grey'}
   display: flex;
   justify-content: center;
   align-items: center;
@@ -123,7 +124,12 @@ class NumbersPanel extends Component {
         {phase === 'EndOfGame' && (
           <Panel color={phase}>
             {this.props.players.map((player, i) => (
-              <PanelItem color={phase} key={i} selected={player.role === 'ДОН' || player.role === 'МАФИЯ'}>
+              <PanelItem
+                isAlive={player.isAlive}
+                color={phase}
+                key={i}
+                selected={player.role === 'ДОН' || player.role === 'МАФИЯ'}
+              >
                 {i + 1}
               </PanelItem>
             ))}
