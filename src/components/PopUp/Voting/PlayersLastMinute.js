@@ -16,8 +16,8 @@ class PlayersLastMinute extends Component {
 
   componentWillMount = () => {
     if (checkForEnd(this.props.players, this.state.listOfPlayers).status) {
-      this.props.changeGameState({ phase: 'EndOfGame' });
       this.state.listOfPlayers.map(plNum => this.props.killPlayer(plNum));
+      this.props.changeGameState({ phase: 'EndOfGame' });
     }
   };
 
