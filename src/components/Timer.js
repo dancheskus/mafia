@@ -11,15 +11,25 @@ const TimeAndPlayWrapper = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  line-height: 1;
 
   ${props =>
     props.mini
-      ? `width: 45px;
-      cursor: pointer;
-      background: ${colors.Day.deadPlayerCardNumber};
-      border-radius: 5px;`
-      : `font-size: 400%;
-      color: ${props.time > 10 ? 'white' : '#FB6F6F'};`}
+      ? `
+          width: 45px;
+          min-height: 45px;
+          cursor: pointer;
+          background: ${colors.Day.deadPlayerCardNumber};
+          border-radius: 5px; 
+        `
+      : `
+          font-size: 400%;
+          color: ${props.time > 10 ? 'white' : '#FB6F6F'};
+
+          @media (max-height: 630px) {
+            font-size: 300%;
+          }
+      `};
 `;
 
 const StartStopButton = styled.div`
@@ -28,13 +38,22 @@ const StartStopButton = styled.div`
   align-items: center;
 
   ${props =>
-    !props.mini &&
+    !props.mini
+      ? `
+      background: ${props => colors[props.color].popupButton};
+      /* border-radius: 50%; Вроде не используется */
+      height: 15%;
+      width: 15%;
+
+      @media (max-height: 630px) {
+        height: 12%;
+        width: 12%;
+      }
     `
-  background: ${props => colors[props.color].popupButton};
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-      `}
+      : `
+      height: 40%;
+      width: 40%;
+    `}
 `;
 
 const Muted = styled.div`
@@ -100,15 +119,9 @@ class Timer extends Component {
                     onClick={!isMini ? this.startPauseClicked : null}
                   >
                     {this.state.timerWorking ? (
-                      <PauseIcon
-                        fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'}
-                        size={isMini ? '35%' : '80%'}
-                      />
+                      <PauseIcon fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'} />
                     ) : (
-                      <PlayIcon
-                        fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'}
-                        size={isMini ? '35%' : '80%'}
-                      />
+                      <PlayIcon fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'} />
                     )}
                   </StartStopButton>
                 </>

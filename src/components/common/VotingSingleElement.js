@@ -63,4 +63,8 @@ export default styled.button`
   width: calc(20% - ${margin * 2}px);
   padding-top: calc(20% - ${margin * 2}px);
   height: 0;
+
+  @media (max-width: 400px) {
+    font-size: 1.6rem;
+  }
 `;

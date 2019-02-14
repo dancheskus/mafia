@@ -144,7 +144,7 @@ class Voting extends Component {
       <>
         {this.state.carCrashClosed && <PopUpLabel className="h2">Повторное голосование</PopUpLabel>}
 
-        <PopUpCircle>{selectedNumbers[currentPlayer] + 1}</PopUpCircle>
+        <PopUpCircle mini={this.state.carCrashClosed}>{selectedNumbers[currentPlayer] + 1}</PopUpCircle>
 
         <VictimSelector
           lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке
