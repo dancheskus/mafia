@@ -60,6 +60,24 @@ const Sherif = styled.div`
   border-radius: 0 0 10px 0;
 `;
 
+const Notification = styled.div`
+  animation: blinkingText 6s infinite;
+
+  @keyframes blinkingText {
+    0% {
+      color: transparent;
+    }
+
+    50% {
+      color: white;
+    }
+
+    100% {
+      color: transparent;
+    }
+  }
+`;
+
 class ManualMode extends Component {
   componentDidMount = () => {
     this.props.addToSelectedNumbers(0);
@@ -81,6 +99,7 @@ class ManualMode extends Component {
       : null;
 
     const { МАФИЯ, ШЕРИФ, ДОН } = countBy(this.props.players.map(player => player.role));
+    const disabled = МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1;
 
     return (
       <>
@@ -100,12 +119,9 @@ class ManualMode extends Component {
             </Sherif>
           </RoleSelection>
         </RoleSelectionWrapper>
+        {disabled && <Notification>Выбирите все функциональные роли (2 Мафии, Дон и Шериф)</Notification>}
         <div className="flex-grow-1 d-flex align-items-center">
-          <PopUpButton
-            onClick={this.startGameClicked}
-            color="RoleDealing"
-            disabled={МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1}
-          >
+          <PopUpButton onClick={this.startGameClicked} color="RoleDealing" disabled={disabled}>
             Играть
           </PopUpButton>
         </div>
