@@ -40,7 +40,9 @@ class Day extends Component {
         {killedPlayer ? (
           <>
             <PopUpLabel className="h1">Убит</PopUpLabel>
-            <PopUpCircle color="Night">{killedPlayer + 1}</PopUpCircle>
+            <PopUpCircle mini color="Night">
+              {killedPlayer + 1}
+            </PopUpCircle>
             <Timer killedOnLastMinute={!this.props.players[killedPlayer].isAlive} />
           </>
         ) : (

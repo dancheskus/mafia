@@ -37,6 +37,13 @@ const RoleSelection = styled.div`
     width: 50%;
     height: 50%;
   }
+
+  @media (max-width: 991px) {
+    width: 60%;
+  }
+  @media (max-width: 767px) {
+    width: 80%;
+  }
 `;
 
 const Mirnij = styled.div`
@@ -61,7 +68,11 @@ const Sherif = styled.div`
 `;
 
 const Notification = styled.div`
-  animation: blinkingText 6s infinite;
+  text-align: center;
+  line-height: 1;
+  margin: 20px;
+
+  ${props => (!props.disabled ? `color: transparent` : `animation: blinkingText 6s infinite`)};
 
   @keyframes blinkingText {
     0% {
@@ -119,7 +130,9 @@ class ManualMode extends Component {
             </Sherif>
           </RoleSelection>
         </RoleSelectionWrapper>
-        {disabled && <Notification>Выбирите все функциональные роли (2 Мафии, Дон и Шериф)</Notification>}
+
+        <Notification disabled={disabled}>Выбирите все функциональные роли (2 Мафии, Дон и Шериф)</Notification>
+
         <div className="flex-grow-1 d-flex align-items-center">
           <PopUpButton onClick={this.startGameClicked} color="RoleDealing" disabled={disabled}>
             Играть

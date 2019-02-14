@@ -31,6 +31,8 @@ const StyledPopUp = styled.div`
     transition: opacity 0.2s, transform 0.3s;
   }
 
+  padding: 20px 0 20px 0;
+
   ${props =>
     props.minimized &&
     `

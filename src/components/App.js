@@ -15,20 +15,6 @@ import Night from './PopUp/Night';
 import Day from './PopUp/Day';
 import EndOfGame from './PopUp/EndOfGame';
 
-// let appHeight = window.innerHeight;
-
-// const countHeight = () => {
-//   appHeight = window.innerHeight * 0.01;
-//   document.documentElement.style.setProperty('--vh', `${appHeight}px`);
-// };
-
-// countHeight();
-
-// window.addEventListener('resize', () => {
-//   alert(3);
-//   countHeight();
-// });
-
 const AppWrapper = styled.div`
   height: 100vh;
   height: ${props => props.appHeight}px;

@@ -23,6 +23,10 @@ class AudioPlayer extends Component {
       onend: () => this.nextAudio(),
     });
 
+    this.soundForBuffering = new Howl({
+      src: `${musicUrl}${this.state.audioList[(this.state.audioNumber + 1) % this.state.audioList.length]}`,
+    });
+
     const phase = this.props.game.gameState.phase;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
     if (musicAllowed) this.play();
@@ -78,9 +82,11 @@ class AudioPlayer extends Component {
   };
 
   nextAudio = () => {
+    const nextAudioLoaded = this.soundForBuffering && this.soundForBuffering.state() === 'loaded';
+
     this.setState(
       {
-        audioLoaded: false,
+        audioLoaded: nextAudioLoaded ? true : false,
         audioNumber: (this.state.audioNumber + 1) % this.state.audioList.length,
       },
       () => this.loadAudio()
