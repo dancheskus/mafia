@@ -75,7 +75,7 @@ class App extends Component {
       <AppWrapper appHeight={this.state.appHeight} className="d-flex flex-column">
         <NavBar />
         <MainApp className="d-flex">
-          {/* {window.innerHeight} {window.innerWidth} */}
+          {window.innerHeight} {window.innerWidth}
           <Container className="d-flex flex-column justify-content-between">
             {phase !== 'startScreen' && <NumbersPanel key={this.props.game.activePlayer} />}
 
