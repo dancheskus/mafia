@@ -7,6 +7,8 @@ const menuColors = {
 
 export default styled.div`
   position: relative;
+  transition: opacity 0.5s;
+
   .navi {
     &_check {
       display: none;
@@ -55,7 +57,7 @@ export default styled.div`
       justify-content: center;
       align-items: center;
       width: 100%;
-      transition: right 0.3s;
+      transition: right 0.3s, opacity 0.5s;
     }
 
     &_list {
@@ -93,6 +95,11 @@ export default styled.div`
     }
     &_check:checked ~ .navi_nav {
       right: 0;
+    }
+
+    &_check:checked ~ .menu-footer {
+      left: 50%;
+      transform: translateX(-50%);
     }
 
     &_check:checked + .navi_button .navi_icon {
@@ -141,8 +148,8 @@ export default styled.div`
     font-weight: 100;
     position: fixed;
     bottom: 4%;
-    left: 50%;
-    transform: translateX(-50%);
+    left: -2000px;
+    transition: left 0.3s;
 
     > a {
       color: white;
