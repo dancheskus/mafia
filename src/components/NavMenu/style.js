@@ -51,6 +51,7 @@ export default styled.div`
       z-index: 200;
 
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       width: 100%;
@@ -131,6 +132,35 @@ export default styled.div`
       &::after {
         top: 0.45rem;
       }
+    }
+  }
+
+  .menu-footer {
+    color: white;
+    opacity: 0.3;
+    font-weight: 100;
+    position: fixed;
+    bottom: 4%;
+    left: 50%;
+    transform: translateX(-50%);
+
+    > a {
+      color: white;
+      text-decoration: none;
+      border-bottom: 1px solid white;
+      top: 0;
+      padding-bottom: 0;
+      transition: top 0.5s, padding-bottom 0.5s;
+
+      &:hover {
+        position: relative;
+        padding-bottom: 2px;
+        top: -2px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      font-size: 0.8rem;
     }
   }
 `;

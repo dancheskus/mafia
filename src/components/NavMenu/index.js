@@ -13,8 +13,8 @@ class NavMenu extends Component {
       <input
         type="checkbox"
         onChange={() => this.setState({ checked: !this.state.checked })}
-        // checked
-        checked={this.state.checked}
+        checked
+        // checked={this.state.checked}
         className="navi_check"
         id="navi-toggle"
       />
@@ -42,6 +42,13 @@ class NavMenu extends Component {
             </div>
           </li>
         </ul>
+        <div className="menu-footer">
+          Проект{' '}
+          <a target="_blank" rel="noopener noreferrer" href="https://github.com/dancheskus">
+            Даниэля Шлейфмана
+          </a>
+          . 2018-2019г.
+        </div>
       </div>
     </StyledNavMenu>
   );
