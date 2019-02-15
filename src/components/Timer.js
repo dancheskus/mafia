@@ -81,7 +81,7 @@ class Timer extends Component {
       },
     });
 
-    this.countdownEnd = new Howl({ src: `${countdownEndFile}` });
+    this.countdownEndSound = new Howl({ src: `${countdownEndFile}` });
   };
 
   componentWillUnmount = () => this.stopTimer();
@@ -105,6 +105,8 @@ class Timer extends Component {
   stopTimer = () => {
     clearInterval(this.timer);
     this.setState({ timerWorking: false });
+
+    this.secondsSound && this.secondsSound.stop();
   };
 
   render = () => {
@@ -116,15 +118,15 @@ class Timer extends Component {
     const isMini = this.props.mini;
 
     if (timerSoundAllowed) {
-      const { secondsSound, countdownEnd } = this;
+      const { secondsSound, countdownEndSound } = this;
 
       if (secondsSound) {
-        (seconds === 15 || seconds === 10) && !secondsSound.playing() && secondsSound.play('oneSec');
+        seconds === 15 && !secondsSound.playing() && secondsSound.play('oneSec');
         seconds === 5 && !secondsSound.playing() && secondsSound.play('fiveSec');
       }
 
-      if (countdownEnd) {
-        seconds === 0 && !countdownEnd.playing() && countdownEnd.play();
+      if (countdownEndSound) {
+        seconds === 0 && !countdownEndSound.playing() && countdownEndSound.play();
       }
     }
 
