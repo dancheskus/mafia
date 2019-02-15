@@ -1,5 +1,10 @@
 import styled from 'styled-components';
 
+const menuColors = {
+  primary: '#759EFF',
+  secondary: '#435784',
+};
+
 export default styled.div`
   position: relative;
   .navi {
@@ -8,16 +13,16 @@ export default styled.div`
     }
 
     &-background {
-      background: green;
+      background: ${menuColors.primary};
       height: 2rem;
       width: 2rem;
       border-radius: 50%;
       position: absolute;
-      background-image: radial-gradient(green, blue);
+      background-image: radial-gradient(${menuColors.primary}, ${menuColors.secondary});
       transition: transform 0.3s;
     }
     &_button {
-      background: #fff;
+      background: grey;
       height: 2.5rem;
       width: 2.5rem;
       border-radius: 50%;
@@ -73,9 +78,13 @@ export default styled.div`
       &:hover,
       &:active {
         background-position: 100%;
-        color: green;
+        color: grey;
         transform: translateX(0.3rem);
       }
+    }
+
+    &_check:checked ~ .navi_button {
+      background: ${menuColors.primary};
     }
 
     &_check:checked ~ .navi-background {
