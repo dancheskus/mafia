@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import { Howl } from 'howler';
 
 import { PauseIcon, ResetIcon, PlayIcon, MutedIcon } from 'icons/svgIcons';
 import colors from 'colors.js';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
+import secondsSoundFile from '../audio/Countdown_10sec_effects.mp3';
+import countdownEndFile from '../audio/Countdown_end.mp3';
 
 const TimeAndPlayWrapper = styled.div`
   display: flex;
@@ -69,7 +72,18 @@ class Timer extends Component {
 
   componentDidMount = () => {
     this.props.autostart && this.startPauseClicked();
+
+    this.secondsSound = new Howl({
+      src: `${secondsSoundFile}`,
+      sprite: {
+        oneSec: [0, 1020],
+        fiveSec: [0, 5020],
+      },
+    });
+
+    this.countdownEnd = new Howl({ src: `${countdownEndFile}` });
   };
+
   componentWillUnmount = () => this.stopTimer();
 
   resetClicked = () => {
@@ -94,10 +108,25 @@ class Timer extends Component {
   };
 
   render = () => {
+    const { phase } = this.props.game.gameState;
+    const timerSoundAllowed = phase !== 'ZeroNight' && phase !== 'Night' && this.state.timerWorking;
     const time = this.state.secondsLeft;
     const minutes = Math.floor(time / 60);
     const seconds = time - minutes * 60;
     const isMini = this.props.mini;
+
+    if (timerSoundAllowed) {
+      const { secondsSound, countdownEnd } = this;
+
+      if (secondsSound) {
+        (seconds === 15 || seconds === 10) && !secondsSound.playing() && secondsSound.play('oneSec');
+        seconds === 5 && !secondsSound.playing() && secondsSound.play('fiveSec');
+      }
+
+      if (countdownEnd) {
+        seconds === 0 && !countdownEnd.playing() && countdownEnd.play();
+      }
+    }
 
     return (
       <>
@@ -113,11 +142,7 @@ class Timer extends Component {
               ) : (
                 <>
                   {`${minutes}:${seconds < 10 ? '0' + seconds : seconds}`}
-                  <StartStopButton
-                    mini={isMini}
-                    color={this.props.game.gameState.phase}
-                    onClick={!isMini ? this.startPauseClicked : null}
-                  >
+                  <StartStopButton mini={isMini} color={phase} onClick={!isMini ? this.startPauseClicked : null}>
                     {this.state.timerWorking ? (
                       <PauseIcon fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'} />
                     ) : (
