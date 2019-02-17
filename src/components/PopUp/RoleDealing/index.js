@@ -38,6 +38,8 @@ class RoleDealing extends Component {
     this.props.lightModeOff();
   };
 
+  resetMode = () => this.setState({ modeApproved: false });
+
   buttonClicked = () => this.setState({ modeApproved: true });
 
   render = () => {
@@ -67,9 +69,9 @@ class RoleDealing extends Component {
             </div>
           </>
         ) : this.state.randomModeSelected ? (
-          <RandomMode />
+          <RandomMode resetMode={this.resetMode} />
         ) : (
-          <ManualMode />
+          <ManualMode resetMode={this.resetMode} />
         )}
       </>
     );

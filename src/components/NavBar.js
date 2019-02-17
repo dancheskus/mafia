@@ -118,11 +118,13 @@ const Navigation = props => {
           </ButtonsWrapper>
         )}
 
-        <ButtonsWrapper
-          style={{ display: phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && 'none' }}
-        >
-          <AudioPlayer />
-        </ButtonsWrapper>
+        {props.settings.appMusic && (
+          <ButtonsWrapper
+            style={{ display: phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && 'none' }}
+          >
+            <AudioPlayer />
+          </ButtonsWrapper>
+        )}
 
         <NavMenu />
       </Container>
@@ -131,6 +133,6 @@ const Navigation = props => {
 };
 
 export default connect(
-  ({ game, players }) => ({ game, players }),
+  ({ game, players, settings }) => ({ game, players, settings }),
   { changeActivePlayer, changeGameState, unmutePlayer, skipVotingDec }
 )(Navigation);

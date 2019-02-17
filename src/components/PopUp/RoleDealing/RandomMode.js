@@ -40,6 +40,10 @@ class RandomMode extends Component {
 
   componentDidMount = () => this.props.addToSelectedNumbers(0);
   componentWillUnmount = () => clearTimeout(this.timeout);
+  componentDidUpdate = prevState => {
+    // Возвращаемся на пред. страницу при "Новой игре"
+    prevState.game.selectedNumbers.length > 0 && this.props.game.selectedNumbers.length === 0 && this.props.resetMode();
+  };
 
   cardClicked = () => {
     const playerNumber = this.props.game.selectedNumbers[0];

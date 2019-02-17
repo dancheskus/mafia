@@ -9,6 +9,10 @@ import VictimSelector from 'components/common/VictimSelector';
 class CarCrash extends Component {
   state = { notification: true, currentPlayer: 0, selectedNumber: null };
 
+  componentDidMount = () => {
+    if (this.props.secondTime && !this.props.settings.multiplePlayerRemove) this.stopVoting();
+  };
+
   closeNotification = () => this.setState({ notification: false });
 
   nextPlayer = () => this.setState({ currentPlayer: this.state.currentPlayer + 1 });
@@ -58,4 +62,4 @@ class CarCrash extends Component {
   };
 }
 
-export default connect(({ game, players }) => ({ game, players }))(CarCrash);
+export default connect(({ game, players, settings }) => ({ game, players, settings }))(CarCrash);

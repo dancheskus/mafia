@@ -45,17 +45,17 @@ const StartStopButton = styled.div`
       ? `
       background: ${props => colors[props.color].popupButton};
       /* border-radius: 50%; Вроде не используется */
-      height: 15%;
-      width: 15%;
+      height: 40px;
+      width: 40px;
 
       @media (max-height: 630px) {
-        height: 12%;
-        width: 12%;
+        height: 35px;
+        width: 35px;
       }
     `
       : `
-      height: 40%;
-      width: 40%;
+      height: 20px;
+      width: 20px;
     `}
 `;
 
@@ -111,7 +111,8 @@ class Timer extends Component {
 
   render = () => {
     const { phase } = this.props.game.gameState;
-    const timerSoundAllowed = phase !== 'ZeroNight' && phase !== 'Night' && this.state.timerWorking;
+    const timerSoundAllowed =
+      this.props.settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night' && this.state.timerWorking;
     const time = this.state.secondsLeft;
     const minutes = Math.floor(time / 60);
     const seconds = time - minutes * 60;
@@ -167,4 +168,4 @@ class Timer extends Component {
   };
 }
 
-export default connect(({ game }) => ({ game }))(Timer);
+export default connect(({ game, settings }) => ({ game, settings }))(Timer);

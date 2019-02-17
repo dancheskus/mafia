@@ -44,6 +44,11 @@ class AudioPlayer extends Component {
     });
   };
 
+  componentWillUnmount = () => {
+    this.sound.unload();
+    this.soundForBuffering.unload();
+  };
+
   componentDidUpdate = prevProps => {
     const prevPhase = prevProps.game.gameState.phase;
     const phase = this.props.game.gameState.phase;

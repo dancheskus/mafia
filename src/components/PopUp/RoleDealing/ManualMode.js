@@ -95,6 +95,11 @@ class ManualMode extends Component {
     this.props.numbersPanelClickable();
   };
 
+  componentDidUpdate = prevState => {
+    // Возвращаемся на пред. страницу при "Новой игре"
+    prevState.game.selectedNumbers.length > 0 && this.props.game.selectedNumbers.length === 0 && this.props.resetMode();
+  };
+
   changeSelection = role => {
     this.props.addRole({ playerNumber: this.props.game.selectedNumbers[0], role });
   };

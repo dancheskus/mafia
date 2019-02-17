@@ -82,6 +82,6 @@ export default (state = initialState, action, root) =>
         return;
 
       case 'RESET_GAME_REDUCER':
-        return initialState;
+        return { ...initialState, gameState: { phase: root.settings.seatAllocator ? 'SeatAllocator' : 'RoleDealing' } };
     }
   });

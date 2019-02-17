@@ -30,7 +30,6 @@ const Icon = styled.div`
 `;
 
 const TwoIcons = styled.div`
-  /* border: 1px solid white; */
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,16 +48,15 @@ class ZeroNight extends Component {
           <PopUpLabel color="ZeroNight" className="h1">
             Договорка
           </PopUpLabel>
-          <Timer />
+
+          {this.props.settings.mafiaTimer && <Timer />}
+
           <PopUpButton onClick={() => this.setState({ dogovorka: false })} color="ZeroNight">
             Далее
           </PopUpButton>
         </>
       ) : (
         <>
-          {/* <PopUpLabel color="ZeroNight" className="h2">
-            Знакомство
-          </PopUpLabel> */}
           <TwoIcons>
             <Icon>
               <SheriffStarIcon size="86%" />
@@ -81,6 +79,6 @@ class ZeroNight extends Component {
 }
 
 export default connect(
-  ({ game, players }) => ({ game, players }),
+  ({ game, players, settings }) => ({ game, players, settings }),
   { changeGameState }
 )(ZeroNight);
