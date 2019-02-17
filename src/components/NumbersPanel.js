@@ -54,21 +54,24 @@ class NumbersPanel extends Component {
   state = { playerAddedNumber: false };
 
   render = () => {
-    const phase = this.props.game.gameState.phase;
+    const {
+      gameState: { phase },
+      selectedNumbers,
+    } = this.props.game;
     const numbersPanelClickable = this.props.game.numbersPanelClickable;
 
     return (
       <>
         {(phase === 'SeatAllocator' || phase === 'ZeroNight') && (
           <Panel color={phase}>
-            {this.props.game.selectedNumbers.map(selNum => (
+            {selectedNumbers.map(selNum => (
               <PanelItem color={phase} key={selNum} selected>
                 {selNum + 1}
               </PanelItem>
             ))}
 
             {range(0, 10)
-              .filter(e => !this.props.game.selectedNumbers.includes(e))
+              .filter(e => !selectedNumbers.includes(e))
               .map(notSelNum => (
                 <PanelItem color={phase} key={notSelNum}>
                   {notSelNum + 1}
@@ -79,8 +82,8 @@ class NumbersPanel extends Component {
 
         {phase === 'Day' && (
           <Panel color={phase}>
-            {this.props.game.selectedNumbers.map(selNum => {
-              const lastAddedNumber = selNum === last(this.props.game.selectedNumbers) && this.state.playerAddedNumber;
+            {selectedNumbers.map(selNum => {
+              const lastAddedNumber = selNum === last(selectedNumbers) && this.state.playerAddedNumber;
 
               return (
                 <PanelItem
@@ -101,7 +104,7 @@ class NumbersPanel extends Component {
             })}
 
             {range(0, 10)
-              .filter(e => !this.props.game.selectedNumbers.includes(e))
+              .filter(e => !selectedNumbers.includes(e))
               .map(
                 notSelNum =>
                   this.props.players[notSelNum].isAlive && (
@@ -131,7 +134,7 @@ class NumbersPanel extends Component {
 
         {phase === 'Voting' && (
           <Panel color={phase} itemsCentered>
-            {this.props.game.selectedNumbers.map(selNum => (
+            {selectedNumbers.map(selNum => (
               <PanelItem color={phase} key={selNum} selected>
                 {selNum + 1}
               </PanelItem>
@@ -154,14 +157,14 @@ class NumbersPanel extends Component {
           </Panel>
         )}
 
-        {phase === 'RoleDealing' && (
+        {phase === 'RoleDealing' && selectedNumbers.length > 0 && (
           <Panel color={phase}>
             {range(0, 10).map(num => (
               <PanelItem
                 pointer={numbersPanelClickable}
                 color={phase}
                 key={num}
-                selected={num === this.props.game.selectedNumbers[0]}
+                selected={num === selectedNumbers[0]}
                 onClick={() => {
                   if (!numbersPanelClickable) return;
                   this.props.clearSelectedNumbers();
