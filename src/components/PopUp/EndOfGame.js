@@ -24,9 +24,11 @@ const GameResult = styled.div`
 
 class EndOfGame extends Component {
   startNewGame = () => {
+    const appSettings = localStorage.settings;
     localStorage.clear();
     this.props.resetGameReducer();
     this.props.resetPlayersReducer();
+    localStorage.setItem('settings', appSettings);
   };
 
   render = () => {

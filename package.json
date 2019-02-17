@@ -12,6 +12,7 @@
     "node-sass": "^4.10.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
+    "react-ios-switch": "^0.1.19",
     "react-redux": "^6.0.0",
     "react-scripts": "2.1.1",
     "react-spinners": "^0.5.1",
