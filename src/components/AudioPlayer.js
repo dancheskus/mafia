@@ -13,7 +13,7 @@ const musicUrl = 'https://mafia-city.ml/music/';
 const fadeDuration = 2000;
 
 class AudioPlayer extends Component {
-  state = { isPlayingVisualStatus: false, audioList: [], audioNumber: 0, audioLoaded: false };
+  state = { isPlayingVisualStatus: false, audioList: [], audioNumber: 0, audioLoaded: false, loadError: false };
 
   loadAudio = () => {
     if (this.sound) this.sound.unload();
@@ -37,16 +37,19 @@ class AudioPlayer extends Component {
   };
 
   componentDidMount = () => {
-    axios.get('https://mafia-city.ml/music/').then(res => {
-      this.setState({ audioList: shuffle(res.data.map(el => el.name)) }, () => {
-        this.loadAudio();
-      });
-    });
+    axios
+      .get('https://mafia-city.ml/music/')
+      .then(res => {
+        this.setState({ audioList: shuffle(res.data.map(el => el.name)), loadError: false }, () => {
+          this.loadAudio();
+        });
+      })
+      .catch(() => this.setState({ loadError: true }));
   };
 
   componentWillUnmount = () => {
-    this.sound.unload();
-    this.soundForBuffering.unload();
+    this.sound && this.sound.unload();
+    this.soundForBuffering && this.soundForBuffering.unload();
   };
 
   componentDidUpdate = prevProps => {
@@ -107,7 +110,8 @@ class AudioPlayer extends Component {
 
     return (
       <>
-        {this.state.audioList.length && (
+        {this.state.loadError && 'Музыка не доступна'}
+        {this.state.audioList.length > 0 && (
           <>
             {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
               <>
