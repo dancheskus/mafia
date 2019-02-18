@@ -5,7 +5,7 @@ const menuColors = {
   secondary: '#435784',
 };
 
-export default styled.div`
+export const StyledNavMenu = styled.div`
   position: relative;
   transition: opacity 0.5s;
 
@@ -150,6 +150,7 @@ export default styled.div`
     bottom: 4%;
     left: -2000px;
     transition: left 0.3s;
+    z-index: 210;
 
     > a {
       color: white;
@@ -170,4 +171,73 @@ export default styled.div`
       font-size: 0.8rem;
     }
   }
+`;
+
+export const AppSettings = styled.div`
+  ${props =>
+    props.hide
+      ? `
+      left: -2000px;
+      opacity: 0;
+      z-index: 180;
+    `
+      : `
+      left: 50%;
+      opacity: 1;
+      z-index: 400;
+    `}
+
+  transition: opacity 0.5s;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 50%;
+  height: 70%;
+  background: rgb(145, 178, 255);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  border-radius: 30px;
+  padding: 30px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  @media (max-width: 750px) {
+    width: 80%;
+  }
+`;
+
+export const SettingsLine = styled.div`
+  border-bottom: 1px solid rgb(122, 156, 236);
+  width: 100%;
+  padding: 15px 0 15px 0;
+  color: white;
+  font-weight: 100;
+  display: flex;
+  align-items: center;
+  text-align: left;
+
+  span {
+    width: 90%;
+  }
+`;
+
+export const BackButton = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgb(122, 156, 236);
+  display: flex;
+  flex-direction: center;
+  justify-content: center;
+  padding: 10px;
+  transform: rotate(180deg);
+  align-self: flex-start;
+`;
+
+export const MenuItems = styled.div`
+  opacity: ${props => (props.hide ? 0 : 1)};
 `;
