@@ -8,7 +8,7 @@ import { NextIcon } from './../../icons/svgIcons';
 import SettingsItem from './SettingsItem';
 
 class NavMenu extends Component {
-  state = { checked: false, settingsPage: true };
+  state = { checked: false, settingsPage: false };
 
   render = () => {
     return (
@@ -16,8 +16,8 @@ class NavMenu extends Component {
         <input
           type="checkbox"
           onChange={() => this.setState({ checked: !this.state.checked, settingsPage: false })}
-          checked
-          // checked={this.state.checked}
+          // checked
+          checked={this.state.checked}
           className="navi_check"
           id="navi-toggle"
         />
