@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
 import colors from 'colors.js';
 import { PopUpButton } from './styled-components';
+import TutorialAlert from '../common/TutorialAlert';
 
 const BigCircle = styled.div`
   width: 220px;
@@ -54,8 +55,14 @@ class SeatAllocator extends Component {
   };
 
   render = () => {
+    const { tutorialEnabled } = this.props.settings;
+
     return (
       <>
+        {tutorialEnabled && (
+          <TutorialAlert>В приложении будет загружаться музыка. Отключить эту функцию можно в настройках</TutorialAlert>
+        )}
+
         <BigCircle
           className="d-flex justify-content-center align-items-center"
           onClick={this.randomClicked}
@@ -72,6 +79,6 @@ class SeatAllocator extends Component {
 }
 
 export default connect(
-  ({ game }) => ({ game }),
+  ({ game, settings }) => ({ game, settings }),
   { addToSelectedNumbers, clearSelectedNumbers, changeGameState }
 )(SeatAllocator);
