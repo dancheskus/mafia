@@ -14,7 +14,8 @@ const store = configureStore();
 
 store.subscribe(
   throttle(() => {
-    saveState(store.getState());
+    const { settings, ...storeWithoutSettings } = store.getState();
+    saveState(storeWithoutSettings);
   }, 1000)
 );
 

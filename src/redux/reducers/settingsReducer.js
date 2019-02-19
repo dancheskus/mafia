@@ -2,16 +2,19 @@
 
 import produce from 'immer';
 
+const savedSettings = (localStorage.settings && JSON.parse(localStorage.settings)) || {};
+
 const initialState = {
   appMusic: true,
   timerSounds: true,
   mafiaTimer: true,
   multiplePlayerRemove: true,
   seatAllocator: true,
+  tutorialEnabled: true,
 };
 
-export default (state = initialState, action, root) =>
-  produce(state, draft => {
+export default (state = { ...initialState, ...savedSettings }, action, root) => {
+  const newState = produce(state, draft => {
     switch (action.type) {
       case 'SWITCH_APP_MUSIC':
         draft.appMusic = !draft.appMusic;
@@ -30,3 +33,6 @@ export default (state = initialState, action, root) =>
         return;
     }
   });
+  localStorage.setItem('settings', JSON.stringify(newState));
+  return newState;
+};

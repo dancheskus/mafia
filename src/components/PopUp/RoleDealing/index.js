@@ -7,7 +7,7 @@ import { PopUpButton } from '../styled-components';
 import RandomMode from './RandomMode';
 import ManualMode from './ManualMode';
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
-import { clearSelectedNumbers, lightModeOff } from 'redux/actions/gameActions';
+import { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable } from 'redux/actions/gameActions';
 
 const SvgWrapper = styled.div`
   display: flex;
@@ -36,6 +36,7 @@ class RoleDealing extends Component {
   componentDidMount = () => {
     this.props.clearSelectedNumbers();
     this.props.lightModeOff();
+    this.props.numbersPanelNotClickable();
   };
 
   resetMode = () => this.setState({ modeApproved: false });
@@ -80,5 +81,5 @@ class RoleDealing extends Component {
 
 export default connect(
   ({ game }) => ({ game }),
-  { clearSelectedNumbers, lightModeOff }
+  { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable }
 )(RoleDealing);

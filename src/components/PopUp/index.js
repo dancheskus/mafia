@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import colors from 'colors.js';
 import { MaximizeIcon, MinimizeIcon } from 'icons/svgIcons';
+import TutorialAlert from '../common/TutorialAlert';
 
 const StyledPopUp = styled.div`
   background: ${props =>
@@ -84,6 +85,11 @@ class PopUp extends Component {
       <StyledPopUp opened={this.props.opened} color={phase} light={lightMode} minimized={this.state.minimized}>
         {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
           <MinimizeButton className="minimize-button" color={phase} light={lightMode} onClick={this.minimizeClicked}>
+            {this.props.settings.tutorialEnabled && (
+              <TutorialAlert width="1000%" talign="left" top="25px">
+                Сверните для выставления фолов
+              </TutorialAlert>
+            )}
             {this.state.minimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
           </MinimizeButton>
         )}
@@ -94,5 +100,5 @@ class PopUp extends Component {
   };
 }
 
-const mapStateToProps = ({ game }) => ({ game });
+const mapStateToProps = ({ game, settings }) => ({ game, settings });
 export default connect(mapStateToProps)(PopUp);

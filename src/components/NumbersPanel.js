@@ -5,8 +5,10 @@ import styled from 'styled-components';
 
 import colors from 'colors.js';
 import { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber } from '../redux/actions/gameActions';
+import TutorialAlert from './common/TutorialAlert';
 
 const Panel = styled.div`
+  position: relative;
   background: ${props => colors[props.color].numbersPanel};
   padding: 10px;
   border-radius: 15px;
@@ -57,12 +59,14 @@ class NumbersPanel extends Component {
     const {
       gameState: { phase },
       selectedNumbers,
+      numbersPanelClickable,
     } = this.props.game;
-    const numbersPanelClickable = this.props.game.numbersPanelClickable;
+
+    const { tutorialEnabled } = this.props.settings;
 
     return (
       <>
-        {(phase === 'SeatAllocator' || phase === 'ZeroNight') && (
+        {phase === 'SeatAllocator' && (
           <Panel color={phase}>
             {selectedNumbers.map(selNum => (
               <PanelItem color={phase} key={selNum} selected>
@@ -77,6 +81,12 @@ class NumbersPanel extends Component {
                   {notSelNum + 1}
                 </PanelItem>
               ))}
+
+            {tutorialEnabled && phase === 'SeatAllocator' && (
+              <TutorialAlert width="50%" color="primary">
+                Здесь будут отображаться номера за столом
+              </TutorialAlert>
+            )}
           </Panel>
         )}
 
@@ -178,6 +188,13 @@ class NumbersPanel extends Component {
                 {!numbersPanelClickable && num + 1}
               </PanelItem>
             ))}
+
+            {numbersPanelClickable && (
+              <TutorialAlert width="50%" color="danger">
+                Нажимая на кружки сверху, можно назначать роли разным игрокам. Если роль функциональная, вместо цифры
+                появится буква.
+              </TutorialAlert>
+            )}
           </Panel>
         )}
       </>
@@ -186,6 +203,6 @@ class NumbersPanel extends Component {
 }
 
 export default connect(
-  ({ game, players }) => ({ game, players }),
+  ({ game, players, settings }) => ({ game, players, settings }),
   { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber }
 )(NumbersPanel);

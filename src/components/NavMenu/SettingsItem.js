@@ -14,7 +14,7 @@ import {
 
 const onColor = 'rgb(122, 156, 236)';
 
-export const SettingsItem = props => {
+const SettingsItem = props => {
   const {
     switchAppMusic,
     switchTimerSounds,
