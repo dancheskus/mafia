@@ -60,7 +60,9 @@ class SeatAllocator extends Component {
     return (
       <>
         {tutorialEnabled && (
-          <TutorialAlert>В приложении будет загружаться музыка. Отключить эту функцию можно в настройках</TutorialAlert>
+          <TutorialAlert>
+            В приложении будет загружаться музыка. Отключить эту функцию можно в настройках.
+          </TutorialAlert>
         )}
 
         <BigCircle
