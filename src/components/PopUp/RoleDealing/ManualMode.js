@@ -13,6 +13,7 @@ import {
 import { PopUpButton } from '../styled-components';
 import colors from 'colors.js';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
+import TutorialAlert from '../../common/TutorialAlert';
 
 const RoleSelectionWrapper = styled.div`
   height: 80%;
@@ -116,9 +117,12 @@ class ManualMode extends Component {
 
     const { МАФИЯ, ШЕРИФ, ДОН } = countBy(this.props.players.map(player => player.role));
     const disabled = МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1;
+    const { tutorialEnabled } = this.props.settings;
 
     return (
       <>
+        {tutorialEnabled && <TutorialAlert>Выберите игроков в панели сверху. Затем назначте им роли.</TutorialAlert>}
+
         <RoleSelectionWrapper>
           <RoleSelection>
             <Mirnij onClick={() => this.changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
@@ -149,6 +153,6 @@ class ManualMode extends Component {
 }
 
 export default connect(
-  ({ game, players }) => ({ game, players }),
+  ({ game, players, settings }) => ({ game, players, settings }),
   { addRole, changeGameState, numbersPanelClickable, addToSelectedNumbers, clearSelectedNumbers }
 )(ManualMode);

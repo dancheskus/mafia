@@ -2,18 +2,18 @@
 
 import produce from 'immer';
 
-const savedSettings = (localStorage.settings && JSON.parse(localStorage.settings)) || {};
+const savedSettings = localStorage.settings ? JSON.parse(localStorage.settings) : {};
 
 const initialState = {
-  appMusic: true,
-  timerSounds: true,
-  mafiaTimer: true,
-  multiplePlayerRemove: true,
-  seatAllocator: true,
-  tutorialEnabled: true,
+  appMusic: savedSettings.appMusic !== undefined ? savedSettings.appMusic : true,
+  timerSounds: savedSettings.timerSounds !== undefined ? savedSettings.timerSounds : true,
+  mafiaTimer: savedSettings.mafiaTimer !== undefined ? savedSettings.mafiaTimer : true,
+  multiplePlayerRemove: savedSettings.multiplePlayerRemove !== undefined ? savedSettings.multiplePlayerRemove : true,
+  seatAllocator: savedSettings.seatAllocator !== undefined ? savedSettings.seatAllocator : true,
+  tutorialEnabled: savedSettings.tutorialEnabled !== undefined ? savedSettings.tutorialEnabled : true,
 };
 
-export default (state = { ...initialState, ...savedSettings }, action, root) => {
+export default (state = initialState, action, root) => {
   const newState = produce(state, draft => {
     switch (action.type) {
       case 'SWITCH_APP_MUSIC':
@@ -30,6 +30,9 @@ export default (state = { ...initialState, ...savedSettings }, action, root) => 
         return;
       case 'SWITCH_SEAT_ALLOCATOR':
         draft.seatAllocator = !draft.seatAllocator;
+        return;
+      case 'DISABLE_TUTORIAL':
+        draft.tutorialEnabled = false;
         return;
     }
   });

@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { changeActivePlayer, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { unmutePlayer } from 'redux/actions/playersActions';
+import { disableTutorial } from '../redux/actions/settingsActions';
 import NavMenu from './NavMenu';
 import colors from '../colors';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
@@ -78,6 +79,8 @@ const Navigation = props => {
   };
 
   const toVotingClicked = () => {
+    props.disableTutorial();
+
     if (props.game.selectedNumbers.length) return props.changeGameState({ phase: 'Voting' });
 
     props.skipVotingDec();
@@ -134,5 +137,5 @@ const Navigation = props => {
 
 export default connect(
   ({ game, players, settings }) => ({ game, players, settings }),
-  { changeActivePlayer, changeGameState, unmutePlayer, skipVotingDec }
+  { changeActivePlayer, changeGameState, unmutePlayer, skipVotingDec, disableTutorial }
 )(Navigation);

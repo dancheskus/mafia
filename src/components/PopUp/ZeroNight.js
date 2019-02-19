@@ -6,6 +6,7 @@ import { PopUpButton, PopUpLabel } from './styled-components';
 import Timer from '../Timer';
 import { changeGameState } from 'redux/actions/gameActions';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
+import TutorialAlert from '../common/TutorialAlert';
 
 const Icon = styled.div`
   display: flex;
@@ -43,6 +44,12 @@ class ZeroNight extends Component {
 
   render = () => (
     <>
+      {this.props.settings.tutorialEnabled && (
+        <TutorialAlert>
+          За этим окном скрываются карточки игроков. Сверните его, если нужно поставить фол.
+        </TutorialAlert>
+      )}
+
       {this.state.dogovorka ? (
         <>
           <PopUpLabel color="ZeroNight" className="h1">
