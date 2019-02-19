@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import colors from 'colors.js';
 import { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber } from '../redux/actions/gameActions';
-import TutorialAlert from './common/TutorialAlert';
 
 const Panel = styled.div`
   position: relative;
@@ -62,8 +61,6 @@ class NumbersPanel extends Component {
       numbersPanelClickable,
     } = this.props.game;
 
-    const { tutorialEnabled } = this.props.settings;
-
     return (
       <>
         {phase === 'SeatAllocator' && (
@@ -81,12 +78,6 @@ class NumbersPanel extends Component {
                   {notSelNum + 1}
                 </PanelItem>
               ))}
-
-            {tutorialEnabled && phase === 'SeatAllocator' && (
-              <TutorialAlert width="50%" color="primary">
-                Здесь будут отображаться номера за столом
-              </TutorialAlert>
-            )}
           </Panel>
         )}
 
@@ -188,13 +179,6 @@ class NumbersPanel extends Component {
                 {!numbersPanelClickable && num + 1}
               </PanelItem>
             ))}
-
-            {numbersPanelClickable && (
-              <TutorialAlert width="50%" color="danger">
-                Нажимая на кружки сверху, можно назначать роли разным игрокам. Если роль функциональная, вместо цифры
-                появится буква.
-              </TutorialAlert>
-            )}
           </Panel>
         )}
       </>
