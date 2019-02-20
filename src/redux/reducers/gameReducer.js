@@ -2,7 +2,7 @@
 
 import produce from 'immer';
 
-const initialState = {
+export const initialState = {
   opensTable: 0,
   activePlayer: 0,
   gameState: { phase: 'SeatAllocator', dayNumber: 0 },
