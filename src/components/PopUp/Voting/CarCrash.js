@@ -36,7 +36,7 @@ class CarCrash extends Component {
     if (this.props.secondTime)
       return (
         <>
-          <PopUpLabel className="h2">Выгнать всех выставленных?</PopUpLabel>
+          <PopUpLabel className="h2 text-warning">Выгнать всех выставленных?</PopUpLabel>
 
           <VictimSelector onNumberSelected={this.onNumberSelected} votesLeft={9 - deadPlayers} />
 

@@ -18,6 +18,7 @@ class VictimSelector extends Component {
   state = { selectedNumber: null };
 
   selectNumber = num => {
+    if (this.props.lastPlayer) return; // Отключает возможность снять голос с последнего игрока
     this.props.onNumberSelected(num);
     this.setState({ selectedNumber: num === this.state.selectedNumber ? null : num });
   };

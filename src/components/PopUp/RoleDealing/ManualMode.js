@@ -47,25 +47,33 @@ const RoleSelection = styled.div`
   }
 `;
 
-const Mirnij = styled.div`
-  background: ${colors.RoleDealing.popupBackgroundLight};
+const RoleCard = styled.div`
   border: ${props => (props.selected ? '2px solid white' : null)} !important;
-  border-radius: 10px 0 0 0;
-`;
-const Don = styled.div`
-  background: ${colors.RoleDealing.popupButton};
-  border: ${props => (props.selected ? '2px solid white' : null)} !important;
-  border-radius: 0 10px 0 0;
-`;
-const Mafia = styled.div`
-  background: ${colors.RoleDealing.popupButton};
-  border: ${props => (props.selected ? '2px solid white' : null)} !important;
-  border-radius: 0 0 0 10px;
-`;
-const Sherif = styled.div`
-  background: ${colors.RoleDealing.popupBackgroundLight};
-  border: ${props => (props.selected ? '2px solid white' : null)} !important;
-  border-radius: 0 0 10px 0;
+
+  ${props => {
+    if (props.mafia)
+      return `
+      border-radius: 0 0 0 10px;
+      background: ${colors.RoleDealing.popupButton};
+    `;
+    if (props.don)
+      return `
+      border-radius: 0 10px 0 0;
+      background: ${colors.RoleDealing.popupButton};
+    `;
+    if (props.sherif)
+      return `
+      background: ${colors.RoleDealing.popupBackgroundLight};
+      border-radius: 0 0 10px 0;
+    `;
+    if (props.mirnij)
+      return `
+      background: ${colors.RoleDealing.popupBackgroundLight};
+      border-radius: 10px 0 0 0;
+    `;
+  }}
+
+  ${props => props.disabled && 'background: grey; filter: brightness(25%) grayscale(100%)'}
 `;
 
 const Notification = styled.div`
@@ -101,7 +109,8 @@ class ManualMode extends Component {
     prevState.game.selectedNumbers.length > 0 && this.props.game.selectedNumbers.length === 0 && this.props.resetMode();
   };
 
-  changeSelection = role => {
+  changeSelection = (role, disabled) => {
+    if (disabled) return;
     this.props.addRole({ playerNumber: this.props.game.selectedNumbers[0], role });
   };
 
@@ -116,7 +125,10 @@ class ManualMode extends Component {
       : null;
 
     const { МАФИЯ, ШЕРИФ, ДОН } = countBy(this.props.players.map(player => player.role));
-    const disabled = МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1;
+    const isButtonDisabled = МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1;
+    const isDonDisabled = ДОН === 1 && currentPlayerRole !== 'ДОН';
+    const isMafiaDisabled = МАФИЯ === 2 && currentPlayerRole !== 'МАФИЯ';
+    const isSherifDisabled = ШЕРИФ === 1 && currentPlayerRole !== 'ШЕРИФ';
     const { tutorialEnabled } = this.props.settings;
 
     return (
@@ -125,25 +137,43 @@ class ManualMode extends Component {
 
         <RoleSelectionWrapper>
           <RoleSelection>
-            <Mirnij onClick={() => this.changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
+            <RoleCard mirnij onClick={() => this.changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
               <ThumbUpIcon size={'60%'} fill={colors.RoleDealing.popupIconLight} />
-            </Mirnij>
-            <Don onClick={() => this.changeSelection('ДОН')} selected={currentPlayerRole === 'ДОН'}>
+            </RoleCard>
+            <RoleCard
+              disabled={isDonDisabled}
+              don
+              onClick={() => this.changeSelection('ДОН', isDonDisabled)}
+              selected={currentPlayerRole === 'ДОН'}
+            >
               <DonRingIcon size={'60%'} fill={colors.RoleDealing.popupIcon} />
-            </Don>
-            <Mafia onClick={() => this.changeSelection('МАФИЯ')} selected={currentPlayerRole === 'МАФИЯ'}>
+            </RoleCard>
+            <RoleCard
+              disabled={isMafiaDisabled}
+              mafia
+              onClick={() => this.changeSelection('МАФИЯ', isMafiaDisabled)}
+              selected={currentPlayerRole === 'МАФИЯ'}
+            >
               <ThumbDownIcon size={'60%'} fill={colors.RoleDealing.popupIcon} />
-            </Mafia>
-            <Sherif onClick={() => this.changeSelection('ШЕРИФ')} selected={currentPlayerRole === 'ШЕРИФ'}>
-              <SheriffOkIcon size={'60%'} fill={colors.RoleDealing.popupIconLight} />
-            </Sherif>
+            </RoleCard>
+            <RoleCard
+              disabled={isSherifDisabled}
+              sherif
+              onClick={() => this.changeSelection('ШЕРИФ', isSherifDisabled)}
+              selected={currentPlayerRole === 'ШЕРИФ'}
+            >
+              <SheriffOkIcon
+                size={'60%'}
+                fill={isSherifDisabled ? colors.RoleDealing.popupIcon : colors.RoleDealing.popupIconLight}
+              />
+            </RoleCard>
           </RoleSelection>
         </RoleSelectionWrapper>
 
-        <Notification disabled={disabled}>Выбирите все функциональные роли (2 Мафии, Дон и Шериф)</Notification>
+        <Notification disabled={isButtonDisabled}>Выберите все функциональные роли (2 Мафии, Дон и Шериф)</Notification>
 
         <div className="flex-grow-1 d-flex align-items-center">
-          <PopUpButton onClick={this.startGameClicked} color="RoleDealing" disabled={disabled}>
+          <PopUpButton onClick={this.startGameClicked} color="RoleDealing" disabled={isButtonDisabled}>
             Играть
           </PopUpButton>
         </div>
