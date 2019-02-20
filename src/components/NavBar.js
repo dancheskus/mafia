@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
@@ -12,6 +12,10 @@ import NavBarCircleButton from './styled-components/NavBarCircleButton';
 import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 import Timer from './Timer';
 import AudioPlayer from './AudioPlayer';
+
+const BackIcon = styled(NextIcon)`
+  transform: rotate(180deg);
+`;
 
 const StyledNavigation = styled.div`
   background: #46494e;
@@ -52,88 +56,125 @@ const ButtonsWrapper = styled.div`
     justify-content: center;
     align-items: center;
   }
+
+  > div:not(:first-child) {
+    margin-left: 15px;
+  }
 `;
 
 const mod = (n, m) => ((n % m) + m) % m;
 
-const Navigation = props => {
-  const phase = props.game.gameState.phase;
-  const dayNumber = props.game.gameState.dayNumber;
-  let title = '';
-  if (phase === 'SeatAllocator') title = 'раздача номеров';
-  if (phase === 'RoleDealing') title = 'раздача ролей';
-  if (phase === 'ZeroNight') title = '0 ночь';
-  if (phase === 'Day') title = `${dayNumber} день`;
-  if (phase === 'Voting') title = 'Голосование';
-  if (phase === 'Night') title = `${dayNumber} Ночь`;
-  if (phase === 'EndOfGame') title = `Конец игры`;
+class Navigation extends Component {
+  state = { stepBackAvaliable: false };
 
-  const findLastSpeaker = (i = props.game.opensTable - 1) =>
-    props.players[mod(i, 10)].isAlive ? mod(i, 10) : findLastSpeaker(i - 1);
-
-  const lastSpeaker = props.game.activePlayer === findLastSpeaker();
-
-  const goToNextAlivePlayer = (i = props.game.activePlayer + 1) => {
-    props.unmutePlayer(mod(i - 1, 10));
-    props.players[mod(i, 10)].isAlive ? props.changeActivePlayer(mod(i, 10)) : goToNextAlivePlayer(i + 1);
+  componentDidUpdate = prevState => {
+    if (prevState.game.gameState.phase !== 'Day' && this.state.stepBackAvaliable)
+      this.setState({ stepBackAvaliable: false });
   };
 
-  const toVotingClicked = () => {
-    props.disableTutorial();
+  goToNextAlivePlayer = (i = this.props.game.activePlayer + 1) => {
+    this.props.unmutePlayer(mod(i - 1, 10));
 
-    if (props.game.selectedNumbers.length) return props.changeGameState({ phase: 'Voting' });
+    this.props.players[mod(i, 10)].isAlive
+      ? this.props.changeActivePlayer(mod(i, 10))
+      : this.goToNextAlivePlayer(i + 1);
 
-    props.skipVotingDec();
-    props.changeGameState({ phase: 'Night' });
+    this.setState({ stepBackAvaliable: true });
   };
-  const alivePlayers = props.players.filter(x => x.isAlive).length;
 
-  return (
-    <StyledNavigation color={phase}>
-      <Container className="d-flex justify-content-between p-0">
-        <NavStateName>{title}</NavStateName>
+  findLastSpeaker = (i = this.props.game.opensTable - 1) =>
+    this.props.players[mod(i, 10)].isAlive ? mod(i, 10) : this.findLastSpeaker(i - 1);
 
-        {phase === 'Day' && (
-          <ButtonsWrapper>
-            <Timer
-              time={
-                props.players[props.game.activePlayer].fouls.muted
-                  ? alivePlayers === 3 || alivePlayers === 4
-                    ? 30
-                    : 0
-                  : 60
-              }
-              autostart={props.game.activePlayer !== props.game.opensTable}
-              mini
-              key={props.game.activePlayer}
-            />
-            <NavBarCircleButton onClick={lastSpeaker ? toVotingClicked : () => goToNextAlivePlayer()}>
-              {lastSpeaker ? (
-                props.game.selectedNumbers.length === 0 ? (
-                  <EyeIcon size="50%" />
+  goToPreviousAlivePlayer = (i = this.props.game.activePlayer - 1) => {
+    this.props.players[mod(i, 10)].isAlive
+      ? this.props.changeActivePlayer(mod(i, 10))
+      : this.goToPreviousAlivePlayer(i - 1);
+
+    this.setState({ stepBackAvaliable: false });
+  };
+
+  toVotingClicked = () => {
+    this.props.disableTutorial();
+
+    if (this.props.game.selectedNumbers.length) return this.props.changeGameState({ phase: 'Voting' });
+
+    this.props.skipVotingDec();
+    this.props.changeGameState({ phase: 'Night' });
+  };
+
+  render = () => {
+    const { phase } = this.props.game.gameState;
+    const { dayNumber } = this.props.game.gameState;
+    let title = '';
+    if (phase === 'SeatAllocator') title = 'раздача номеров';
+    if (phase === 'RoleDealing') title = 'раздача ролей';
+    if (phase === 'ZeroNight') title = '0 ночь';
+    if (phase === 'Day') title = `${dayNumber} день`;
+    if (phase === 'Voting') title = 'Голосование';
+    if (phase === 'Night') title = `${dayNumber} Ночь`;
+    if (phase === 'EndOfGame') title = `Конец игры`;
+
+    const lastSpeaker = this.props.game.activePlayer === this.findLastSpeaker();
+
+    const alivePlayers = this.props.players.filter(x => x.isAlive).length;
+
+    const { stepBackAvaliable } = this.state;
+
+    return (
+      <StyledNavigation color={phase}>
+        <Container className="d-flex justify-content-between p-0">
+          <NavStateName>{title}</NavStateName>
+
+          {phase === 'Day' && (
+            <ButtonsWrapper className="test">
+              <NavBarCircleButton
+                disabled={!stepBackAvaliable}
+                onClick={() => (stepBackAvaliable ? this.goToPreviousAlivePlayer() : null)}
+              >
+                <BackIcon size="50%" />
+              </NavBarCircleButton>
+
+              <Timer
+                time={
+                  this.props.players[this.props.game.activePlayer].fouls.muted
+                    ? alivePlayers === 3 || alivePlayers === 4
+                      ? 30
+                      : 0
+                    : 60
+                }
+                autostart={this.props.game.activePlayer !== this.props.game.opensTable}
+                mini
+                key={this.props.game.activePlayer}
+              />
+
+              <NavBarCircleButton onClick={lastSpeaker ? this.toVotingClicked : () => this.goToNextAlivePlayer()}>
+                {lastSpeaker ? (
+                  this.props.game.selectedNumbers.length === 0 ? (
+                    <EyeIcon size="50%" />
+                  ) : (
+                    <ThumbUpIcon size="50%" />
+                  )
                 ) : (
-                  <ThumbUpIcon size="50%" />
-                )
-              ) : (
-                <NextIcon size="50%" />
-              )}
-            </NavBarCircleButton>
-          </ButtonsWrapper>
-        )}
+                  <NextIcon size="50%" />
+                )}
+              </NavBarCircleButton>
+            </ButtonsWrapper>
+          )}
 
-        {props.settings.appMusic && (
-          <ButtonsWrapper
-            style={{ display: phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && 'none' }}
-          >
-            <AudioPlayer />
-          </ButtonsWrapper>
-        )}
+          {this.props.settings.appMusic && (
+            <ButtonsWrapper
+              style={{ display: phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && 'none' }}
+            >
+              <AudioPlayer />
+            </ButtonsWrapper>
+          )}
 
-        <NavMenu />
-      </Container>
-    </StyledNavigation>
-  );
-};
+          <NavMenu />
+        </Container>
+      </StyledNavigation>
+    );
+  };
+}
 
 export default connect(
   ({ game, players, settings }) => ({ game, players, settings }),

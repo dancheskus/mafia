@@ -12,6 +12,7 @@ const initialState = {
   numbersPanelClickable: false,
   popupOpened: true,
   skipVoting: 0,
+  playerAddedToVotingList: [],
 };
 
 export default (state = initialState, action, root) =>
@@ -26,6 +27,9 @@ export default (state = initialState, action, root) =>
           phase: action.payload.phase,
           dayNumber: action.payload.dayNumber || state.gameState.dayNumber,
         };
+
+        if (action.payload.phase === 'Day') draft.playerAddedToVotingList = [];
+
         if (action.payload.phase === 'Day' && draft.gameState.dayNumber > 1) {
           const goToNextAlivePlayer = (i = state.opensTable + 1) => {
             root.players[i % 10].isAlive
@@ -47,9 +51,11 @@ export default (state = initialState, action, root) =>
 
       case 'ADD_TO_SELECTED_NUMBERS':
         draft.selectedNumbers.push(action.playerNumber);
+        draft.playerAddedToVotingList = [draft.activePlayer, action.playerNumber];
         return;
 
       case 'REMOVE_LAST_SELECTED_NUMBER':
+        draft.playerAddedToVotingList = [];
         draft.selectedNumbers.pop();
         return;
 

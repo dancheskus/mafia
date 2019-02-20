@@ -9,5 +9,5 @@ export default styled.div`
   height: 30px;
   border-radius: 50%;
   background: ${colors.Day.deadPlayerCardNumber};
-  margin-left: 15px;
+  ${props => (props.disabled ? 'filter: brightness(45%)' : 'cursor: pointer')}
 `;

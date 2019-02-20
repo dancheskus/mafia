@@ -54,6 +54,15 @@ const PanelItem = styled.div`
 class NumbersPanel extends Component {
   state = { playerAddedNumber: false };
 
+  componentDidMount = () => {
+    const { playerAddedToVotingList } = this.props.game;
+    const { activePlayer } = this.props.game;
+
+    const playerMadeStepBack = playerAddedToVotingList[0] === activePlayer;
+
+    if (!this.playerAddedNumber && playerMadeStepBack) this.setState({ playerAddedNumber: true });
+  };
+
   render = () => {
     const {
       gameState: { phase },
