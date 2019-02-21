@@ -86,6 +86,10 @@ const GuideStepWrapperStyle = styled.div`
           left: 8px;
           transform: translateY(-50%);
           width: 30%;
+
+          @media (max-width: 991px) {
+            width: 40%;
+          }
         `;
 
       case 'top':
@@ -94,6 +98,10 @@ const GuideStepWrapperStyle = styled.div`
           left: 50%;
           transform: translateX(-50%);
           width: 50%;
+
+          @media (max-width: 991px) {
+            width: 90%;
+          }
         `;
 
       default:
@@ -102,6 +110,10 @@ const GuideStepWrapperStyle = styled.div`
           left: 50%;
           transform: translate(-50%, -50%);
           width: 50%;
+
+          @media (max-width: 991px) {
+            width: 90%;
+          }
         `;
     }
   }}
@@ -113,6 +125,10 @@ const GuideStepTitleStyle = styled.div`
   text-transform: uppercase;
   margin-bottom: 15px;
   border-bottom: 1px solid black;
+
+  @media (max-width: 991px) {
+    font-size: 1rem;
+  }
 `;
 
 const GuideStepContentStyle = styled.div`
@@ -120,6 +136,11 @@ const GuideStepContentStyle = styled.div`
 
   p:last-child {
     margin-bottom: 0;
+  }
+
+  @media (max-width: 991px) {
+    font-size: 0.9rem;
+    font-weight: 400;
   }
 `;
 
@@ -143,7 +164,7 @@ const steps = [
   {
     title: 'Раздача ролей',
     content:
-      'В игре есть 2 способа назначить роли. Автоматически и вручную, если вы раздаете настоящие карты. \n Выбирите в верхней панели номер игрока и присвойте ему роль. \n Если роль функциональная, то вместо цифр вы увидите соответствующую букву',
+      'Во время ручной раздачи ролей, выбирите номер игрока и присвойте ему роль. \n В приложении присутствует и автоматическая раздача ролей.',
     position: 'left',
   },
   {
@@ -189,14 +210,21 @@ class UsersGuide extends Component {
     if (phase === 'Day') this.setState({ currentStep: 7 });
   };
 
-  componentDidUpdate = (prevReduxStore, prevState) => {
+  componentDidUpdate = (_, prevState) => {
     if (!this.props.settings.tutorialEnabled) return;
 
     const { currentStep } = this.state;
     const { changeGameState } = this.props;
-    const { popupMinimized, activePlayer } = this.props.game;
+    const {
+      popupMinimized,
+      activePlayer,
+      gameState: { phase },
+    } = this.props.game;
     const { appMusic } = this.props.settings;
     const stepChanged = prevState.currentStep !== currentStep;
+
+    if ((phase === 'RoleDealing' || !this.props.settings.seatAllocator) && currentStep === 0)
+      this.setState({ currentStep: 3 });
 
     if (stepChanged) {
       if (currentStep === 3) changeGameState({ phase: 'RoleDealing' });

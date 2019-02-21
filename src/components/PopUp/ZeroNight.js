@@ -83,6 +83,6 @@ class ZeroNight extends Component {
 }
 
 export default connect(
-  ({ game, players }) => ({ game, players }),
+  ({ game, players, settings }) => ({ game, players, settings }),
   { changeGameState }
 )(ZeroNight);

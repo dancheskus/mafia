@@ -196,19 +196,21 @@ export const AppSettings = styled.div`
   width: 50%;
   height: 70%;
   background: rgb(145, 178, 255);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+
   color: black;
   border-radius: 30px;
   padding: 30px;
 
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-evenly;
 
   @media (max-width: 750px) {
     width: 80%;
+  }
+  @media (max-height: 570px) {
+    font-size: 0.9rem;
   }
 `;
 
@@ -224,6 +226,10 @@ export const SettingsLine = styled.div`
 
   span {
     width: 90%;
+  }
+
+  @media (max-height: 860px) {
+    padding: 5px 0 5px 0;
   }
 `;
 
@@ -244,6 +250,11 @@ export const BackButton = styled.div`
   :hover {
     background: rgb(106, 150, 252);
   }
+
+  @media (max-height: 860px) {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 export const MenuItems = styled.div`
@@ -257,8 +268,13 @@ export const RepeatGuideButton = styled.div`
   border-radius: 10px;
   transition: background 0.3s;
   cursor: pointer;
+  margin-top: 10px;
 
   :hover {
     background: rgb(106, 150, 252);
+  }
+
+  @media (max-height: 860px) {
+    padding: 5px 10px;
   }
 `;
