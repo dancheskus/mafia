@@ -34,7 +34,11 @@ const TwoIcons = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 80%;
+  width: 60%;
+
+  @media (max-width: 767px) {
+    width: 80%;
+  }
 `;
 
 class ZeroNight extends Component {
