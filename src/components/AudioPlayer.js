@@ -115,7 +115,7 @@ class AudioPlayer extends Component {
           <>
             {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
               <>
-                <NavBarCircleButton onClick={this.playPause}>
+                <NavBarCircleButton onClick={this.playPause} className="audio-player-pause-play">
                   {this.state.audioLoaded ? (
                     this.state.isPlayingVisualStatus ? (
                       <PauseIcon />
@@ -127,7 +127,7 @@ class AudioPlayer extends Component {
                   )}
                 </NavBarCircleButton>
 
-                <NavBarCircleButton onClick={this.nextAudio}>
+                <NavBarCircleButton onClick={this.nextAudio} className="audio-player-next">
                   <NextIcon size="60%" />
                 </NavBarCircleButton>
               </>

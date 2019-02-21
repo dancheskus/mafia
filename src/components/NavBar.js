@@ -19,7 +19,7 @@ const BackIcon = styled(NextIcon)`
 
 const StyledNavigation = styled.div`
   background: #46494e;
-  z-index: 300;
+  ${({ tutorialEnabled }) => !tutorialEnabled && 'z-index: 300'}
 
   .container > * {
     padding: 10px;
@@ -120,13 +120,15 @@ class Navigation extends Component {
 
     const { stepBackAvaliable } = this.state;
 
+    const { tutorialEnabled } = this.props.settings;
+
     return (
-      <StyledNavigation color={phase}>
+      <StyledNavigation color={phase} tutorialEnabled={tutorialEnabled}>
         <Container className="d-flex justify-content-between p-0">
           <NavStateName>{title}</NavStateName>
 
           {phase === 'Day' && (
-            <ButtonsWrapper className="test">
+            <ButtonsWrapper className="day-user-navigation">
               <NavBarCircleButton
                 disabled={!stepBackAvaliable}
                 onClick={() => (stepBackAvaliable ? this.goToPreviousAlivePlayer() : null)}

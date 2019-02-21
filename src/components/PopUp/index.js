@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import colors from 'colors.js';
 import { MaximizeIcon, MinimizeIcon } from 'icons/svgIcons';
+import { minimizeMaximaizePopup } from '../../redux/actions/gameActions';
 
 const StyledPopUp = styled.div`
   background: ${props =>
@@ -16,7 +17,7 @@ const StyledPopUp = styled.div`
   width: calc(100% - 40px);
   bottom: 20px;
   left: 20px;
-  z-index: 111;
+  ${props => !props.tutorialEnabled && 'z-index: 111'}
   transition: height 0.3s, width 0.3s;
 
   display: flex;
@@ -63,7 +64,7 @@ const MinimizeButton = styled.div`
   right: 15px;
   cursor: pointer;
   transition: filter 0.3s;
-  z-index: 222;
+  ${props => !props.tutorialEnabled && 'z-index: 222'}
 
   :hover {
     filter: brightness(110%);
@@ -71,20 +72,33 @@ const MinimizeButton = styled.div`
 `;
 
 class PopUp extends Component {
-  state = { minimized: false };
-
   minimizeClicked = () => {
-    this.setState({ minimized: !this.state.minimized });
+    this.props.minimizeMaximaizePopup();
   };
 
   render = () => {
     const phase = this.props.game.gameState.phase;
     const lightMode = this.props.game.lightMode;
+    const { tutorialEnabled } = this.props.settings;
+
     return (
-      <StyledPopUp opened={this.props.opened} color={phase} light={lightMode} minimized={this.state.minimized}>
+      <StyledPopUp
+        className="styled-popup"
+        tutorialEnabled={tutorialEnabled}
+        opened={this.props.opened}
+        color={phase}
+        light={lightMode}
+        minimized={this.props.game.popupMinimized}
+      >
         {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
-          <MinimizeButton className="minimize-button" color={phase} light={lightMode} onClick={this.minimizeClicked}>
-            {this.state.minimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
+          <MinimizeButton
+            tutorialEnabled={tutorialEnabled}
+            className="minimize-button"
+            color={phase}
+            light={lightMode}
+            onClick={this.minimizeClicked}
+          >
+            {this.props.game.popupMinimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
           </MinimizeButton>
         )}
 
@@ -94,5 +108,7 @@ class PopUp extends Component {
   };
 }
 
-const mapStateToProps = ({ game, settings }) => ({ game, settings });
-export default connect(mapStateToProps)(PopUp);
+export default connect(
+  ({ game, settings }) => ({ game, settings }),
+  { minimizeMaximaizePopup }
+)(PopUp);

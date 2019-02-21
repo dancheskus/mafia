@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
 import colors from 'colors.js';
 import { PopUpButton } from './styled-components';
-import TutorialAlert from '../common/TutorialAlert';
 
 const BigCircle = styled.div`
   width: 220px;
@@ -55,24 +54,20 @@ class SeatAllocator extends Component {
   };
 
   render = () => {
-    const { tutorialEnabled } = this.props.settings;
-
     return (
       <>
-        {tutorialEnabled && (
-          <TutorialAlert>
-            В приложении будет загружаться музыка. Отключить эту функцию можно в настройках.
-          </TutorialAlert>
-        )}
-
         <BigCircle
-          className="d-flex justify-content-center align-items-center"
+          className="d-flex justify-content-center align-items-center seat-allocator-big-circle"
           onClick={this.randomClicked}
           number={this.state.randomNumber}
         >
           {this.state.randomNumber ? this.state.randomNumber : 'нажми'}
         </BigCircle>
-        <PopUpButton color={this.props.game.gameState.phase} onClick={this.buttonClicked}>
+        <PopUpButton
+          color={this.props.game.gameState.phase}
+          onClick={this.buttonClicked}
+          className="seat-allocator-popup-button"
+        >
           {this.seats.length ? 'пропустить' : 'играть'}
         </PopUpButton>
       </>
@@ -81,6 +76,6 @@ class SeatAllocator extends Component {
 }
 
 export default connect(
-  ({ game, settings }) => ({ game, settings }),
+  ({ game }) => ({ game }),
   { addToSelectedNumbers, clearSelectedNumbers, changeGameState }
 )(SeatAllocator);

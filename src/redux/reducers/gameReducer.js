@@ -13,6 +13,7 @@ export const initialState = {
   popupOpened: true,
   skipVoting: 0,
   playerAddedToVotingList: [],
+  popupMinimized: false,
 };
 
 export default (state = initialState, action, root) =>
@@ -77,6 +78,10 @@ export default (state = initialState, action, root) =>
 
       case 'OPEN_POPUP':
         draft.popupOpened = true;
+        return;
+
+      case 'MINIMIZE_MAXIMAIZE_POPUP':
+        draft.popupMinimized = !draft.popupMinimized;
         return;
 
       case 'SKIP_VOTING_INC':

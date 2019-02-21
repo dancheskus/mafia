@@ -14,6 +14,7 @@ import Voting from './PopUp/Voting';
 import Night from './PopUp/Night';
 import Day from './PopUp/Day';
 import EndOfGame from './PopUp/EndOfGame';
+import GuideWrapper, { GuideOverlay } from './UsersGuide';
 
 const AppWrapper = styled.div`
   height: 100vh;
@@ -56,29 +57,36 @@ class App extends Component {
   render() {
     const phase = this.props.game.gameState.phase;
     const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
+    const { tutorialEnabled } = this.props.settings;
 
     return (
-      <AppWrapper appHeight={this.state.appHeight} className="d-flex flex-column">
-        <NavBar />
+      <>
+        {tutorialEnabled && <GuideOverlay />}
 
-        <MainApp className="d-flex">
-          {/* {window.innerHeight} {window.innerWidth} */}
-          <Container className="d-flex flex-column justify-content-between">
-            {phase !== 'startScreen' && <NumbersPanel key={this.props.game.activePlayer} />}
+        <GuideWrapper>
+          <AppWrapper appHeight={this.state.appHeight} className="d-flex flex-column">
+            <NavBar />
 
-            <MainContentWrapper>
-              {<PopUp key={phase + 1} opened={this.props.game.popupOpened} popupChild={PopUpChildComponent} />}
+            <MainApp className="d-flex">
+              {/* {window.innerHeight} {window.innerWidth} */}
+              <Container className="d-flex flex-column justify-content-between">
+                {phase !== 'startScreen' && <NumbersPanel key={this.props.game.activePlayer} />}
 
-              {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
-                <PlayerCards key={phase} />
-              )}
-            </MainContentWrapper>
-          </Container>
-        </MainApp>
-      </AppWrapper>
+                <MainContentWrapper>
+                  {<PopUp key={phase + 1} opened={this.props.game.popupOpened} popupChild={PopUpChildComponent} />}
+
+                  {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
+                    <PlayerCards key={phase} />
+                  )}
+                </MainContentWrapper>
+              </Container>
+            </MainApp>
+          </AppWrapper>
+        </GuideWrapper>
+      </>
     );
   }
 }
 
-const mapStateToProps = ({ game }) => ({ game });
+const mapStateToProps = ({ game, settings }) => ({ game, settings });
 export default connect(mapStateToProps)(App);

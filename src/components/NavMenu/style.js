@@ -23,6 +23,7 @@ export const StyledNavMenu = styled.div`
       background-image: radial-gradient(${menuColors.primary}, ${menuColors.secondary});
       transition: transform 0.3s;
     }
+
     &_button {
       background: grey;
       height: 2.5rem;
@@ -50,7 +51,7 @@ export const StyledNavMenu = styled.div`
       position: fixed;
       top: 0;
       right: -2000px;
-      z-index: 200;
+      z-index: ${({ tutorialEnabled }) => (tutorialEnabled ? 3610 : 200)};
 
       display: flex;
       flex-direction: column;
@@ -92,6 +93,7 @@ export const StyledNavMenu = styled.div`
 
     &_check:checked ~ .navi-background {
       transform: scale(200);
+      ${({ tutorialEnabled }) => tutorialEnabled && 'z-index: 3600'}
     }
     &_check:checked ~ .navi_nav {
       right: 0;
@@ -174,8 +176,8 @@ export const StyledNavMenu = styled.div`
 `;
 
 export const AppSettings = styled.div`
-  ${props =>
-    props.hide
+  ${({ hide, tutorialEnabled }) =>
+    hide
       ? `
       left: -2000px;
       opacity: 0;
@@ -184,7 +186,7 @@ export const AppSettings = styled.div`
       : `
       left: 50%;
       opacity: 1;
-      z-index: 400;
+      z-index: ${tutorialEnabled ? 3700 : 400};
     `}
 
   transition: opacity 0.5s;
@@ -236,8 +238,27 @@ export const BackButton = styled.div`
   padding: 10px;
   transform: rotate(180deg);
   align-self: flex-start;
+  cursor: pointer;
+  transition: background 0.3s;
+
+  :hover {
+    background: rgb(106, 150, 252);
+  }
 `;
 
 export const MenuItems = styled.div`
   opacity: ${props => (props.hide ? 0 : 1)};
+`;
+
+export const RepeatGuideButton = styled.div`
+  background: rgb(122, 156, 236);
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  transition: background 0.3s;
+  cursor: pointer;
+
+  :hover {
+    background: rgb(106, 150, 252);
+  }
 `;

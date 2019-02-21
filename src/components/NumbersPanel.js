@@ -73,7 +73,7 @@ class NumbersPanel extends Component {
     return (
       <>
         {phase === 'SeatAllocator' && (
-          <Panel color={phase}>
+          <Panel color={phase} className="seat-allocator-panel">
             {selectedNumbers.map(selNum => (
               <PanelItem color={phase} key={selNum} selected>
                 {selNum + 1}
@@ -91,7 +91,7 @@ class NumbersPanel extends Component {
         )}
 
         {phase === 'Day' && (
-          <Panel color={phase}>
+          <Panel color={phase} className="day-panel">
             {selectedNumbers.map(selNum => {
               const lastAddedNumber = selNum === last(selectedNumbers) && this.state.playerAddedNumber;
 
@@ -168,7 +168,7 @@ class NumbersPanel extends Component {
         )}
 
         {phase === 'RoleDealing' && selectedNumbers.length > 0 && (
-          <Panel color={phase}>
+          <Panel color={phase} className="role-dealing-panel">
             {range(0, 10).map(num => (
               <PanelItem
                 pointer={numbersPanelClickable}

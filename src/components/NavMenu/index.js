@@ -10,8 +10,10 @@ class NavMenu extends Component {
   state = { checked: false, settingsPage: false };
 
   render = () => {
+    const { tutorialEnabled } = this.props.settings;
+
     return (
-      <StyledNavMenu>
+      <StyledNavMenu tutorialEnabled={tutorialEnabled}>
         <input
           type="checkbox"
           onChange={() => this.setState({ checked: !this.state.checked, settingsPage: false })}

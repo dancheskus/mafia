@@ -100,13 +100,17 @@ class SingleCard extends Component {
           </PlayerNumber>
 
           <FoulContainer isAlive={isAlive}>
-            <RemoveFoul onClick={this.removeFoul}>
+            <RemoveFoul onClick={this.removeFoul} className={this.props.number === 7 && 'remove-foul'}>
               <FoulIcon remove>
                 <MinimizeIcon size={'50%'} />
               </FoulIcon>
             </RemoveFoul>
 
-            <AddFoul amount={this.state.foulsAmount} onClick={this.addFoul}>
+            <AddFoul
+              amount={this.state.foulsAmount}
+              onClick={this.addFoul}
+              className={this.props.number === 7 && 'add-foul'}
+            >
               {this.state.foulsAmount ? (
                 '!'.repeat(this.state.foulsAmount)
               ) : (

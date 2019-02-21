@@ -37,6 +37,9 @@ class RoleDealing extends Component {
     this.props.clearSelectedNumbers();
     this.props.lightModeOff();
     this.props.numbersPanelNotClickable();
+
+    if (this.props.settings.tutorialEnabled && this.state.modeApproved === false)
+      this.setState({ randomModeSelected: false, manualModeSelected: true, modeApproved: true });
   };
 
   resetMode = () => this.setState({ modeApproved: false });
@@ -80,6 +83,6 @@ class RoleDealing extends Component {
 }
 
 export default connect(
-  ({ game }) => ({ game }),
+  ({ game, settings }) => ({ game, settings }),
   { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable }
 )(RoleDealing);

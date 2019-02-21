@@ -34,6 +34,9 @@ export default (state = initialState, action, root) => {
       case 'DISABLE_TUTORIAL':
         draft.tutorialEnabled = false;
         return;
+      case 'ENABLE_TUTORIAL':
+        draft.tutorialEnabled = true;
+        return;
     }
   });
   localStorage.setItem('settings', JSON.stringify(newState));
