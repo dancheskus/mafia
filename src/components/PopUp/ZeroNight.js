@@ -45,41 +45,45 @@ class ZeroNight extends Component {
 
   startGame = () => this.props.changeGameState({ phase: 'Day', dayNumber: 1 });
 
-  render = () => (
-    <>
-      {this.state.dogovorka ? (
-        <>
-          <PopUpLabel color="ZeroNight" className="h1">
-            Договорка
-          </PopUpLabel>
+  render = () => {
+    const { mafiaTimer, tutorialEnabled } = this.props.settings;
 
-          {this.props.settings.mafiaTimer && <Timer />}
+    return (
+      <>
+        {this.state.dogovorka ? (
+          <>
+            <PopUpLabel color="ZeroNight" className="h1">
+              Договорка
+            </PopUpLabel>
 
-          <PopUpButton onClick={() => this.setState({ dogovorka: false })} color="ZeroNight">
-            Далее
-          </PopUpButton>
-        </>
-      ) : (
-        <>
-          <TwoIcons>
-            <Icon>
-              <SheriffStarIcon size="86%" />
-              <span>{this.props.players.findIndex(player => player.role === 'ШЕРИФ') + 1}</span>
-              <div className="label">ШЕРИФ</div>
-            </Icon>
-            <Icon>
-              <TargetIcon />
-              <span>{this.props.players.findIndex(player => player.role === 'ДОН') + 1}</span>
-              <div className="label">ДОН</div>
-            </Icon>
-          </TwoIcons>
-          <PopUpButton onClick={this.startGame} color="ZeroNight">
-            День
-          </PopUpButton>
-        </>
-      )}
-    </>
-  );
+            {mafiaTimer && <Timer />}
+
+            <PopUpButton onClick={() => !tutorialEnabled && this.setState({ dogovorka: false })} color="ZeroNight">
+              Далее
+            </PopUpButton>
+          </>
+        ) : (
+          <>
+            <TwoIcons>
+              <Icon>
+                <SheriffStarIcon size="86%" />
+                <span>{this.props.players.findIndex(player => player.role === 'ШЕРИФ') + 1}</span>
+                <div className="label">ШЕРИФ</div>
+              </Icon>
+              <Icon>
+                <TargetIcon />
+                <span>{this.props.players.findIndex(player => player.role === 'ДОН') + 1}</span>
+                <div className="label">ДОН</div>
+              </Icon>
+            </TwoIcons>
+            <PopUpButton onClick={this.startGame} color="ZeroNight">
+              День
+            </PopUpButton>
+          </>
+        )}
+      </>
+    );
+  };
 }
 
 export default connect(

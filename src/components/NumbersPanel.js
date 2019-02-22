@@ -83,9 +83,7 @@ class NumbersPanel extends Component {
             {range(0, 10)
               .filter(e => !selectedNumbers.includes(e))
               .map(notSelNum => (
-                <PanelItem color={phase} key={notSelNum}>
-                  {notSelNum + 1}
-                </PanelItem>
+                <PanelItem color={phase} key={notSelNum} />
               ))}
           </Panel>
         )}
