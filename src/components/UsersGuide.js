@@ -262,6 +262,10 @@ class UsersGuide extends Component {
         this.props.addRole({ playerNumber: 2, role: 'МАФИЯ' });
         this.props.addRole({ playerNumber: 3, role: 'ДОН' });
         this.props.addRole({ playerNumber: 4, role: 'ШЕРИФ' });
+
+        for (let i = 5; i <= 9; i++) {
+          this.props.addRole({ playerNumber: i, role: 'МИРНЫЙ' });
+        }
       }
       if (currentStep === 7) {
         changeGameState({ phase: 'Day', dayNumber: 1 });
