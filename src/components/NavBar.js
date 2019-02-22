@@ -43,7 +43,7 @@ const NavStateName = styled.h2`
   text-transform: uppercase;
 
   span {
-    animation: zoom 1s alternate ease-in 2;
+    ${({ tutorialEnabled }) => tutorialEnabled && 'animation: zoom 1s alternate ease-in 2;'}
   }
 
   @keyframes zoom {
@@ -141,7 +141,7 @@ class Navigation extends Component {
     return (
       <StyledNavigation color={phase} tutorialEnabled={tutorialEnabled}>
         <Container className="d-flex justify-content-between p-0">
-          <NavStateName key={title}>
+          <NavStateName tutorialEnabled={tutorialEnabled} key={title}>
             <span>{title}</span>
           </NavStateName>
 
