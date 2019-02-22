@@ -25,7 +25,7 @@ export const StyledNavMenu = styled.div`
     }
 
     &_button {
-      background: grey;
+      background: #46494e;
       height: 2.5rem;
       width: 2.5rem;
       border-radius: 50%;
@@ -125,7 +125,7 @@ export const StyledNavMenu = styled.div`
         transition: all 0.3s;
         width: 1.5rem;
         height: 2px;
-        background: black;
+        background: white;
         display: inline-block;
       }
 
