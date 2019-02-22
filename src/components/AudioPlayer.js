@@ -10,7 +10,7 @@ import { NextIcon } from './../icons/svgIcons';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 
 const musicUrl = 'https://mafia-city.ml/music/';
-const fadeDuration = 1000;
+const fadeDuration = 20;
 
 class AudioPlayer extends Component {
   state = { isPlayingVisualStatus: false, audioList: [], audioNumber: 0, audioLoaded: false, loadError: false };

@@ -14,6 +14,7 @@ const Panel = styled.div`
   margin-bottom: 15px;
   display: flex;
   justify-content: ${props => (props.itemsCentered ? 'center' : 'space-evenly')};
+  align-items: center;
   ${props =>
     props.itemsCentered &&
     `
