@@ -46,6 +46,8 @@ class SeatAllocator extends Component {
 
   randomClicked = () => {
     if (!this.seats.length || this.interval) return;
+    clearTimeout(this.timeout);
+
     let i = 0;
     this.interval = setInterval(() => {
       this.setState({ randomNumber: random(1, 10) });
@@ -53,26 +55,24 @@ class SeatAllocator extends Component {
     }, 40);
   };
 
-  render = () => {
-    return (
-      <>
-        <BigCircle
-          className="d-flex justify-content-center align-items-center seat-allocator-big-circle"
-          onClick={this.randomClicked}
-          number={this.state.randomNumber}
-        >
-          {this.state.randomNumber ? this.state.randomNumber : 'нажми'}
-        </BigCircle>
-        <PopUpButton
-          color={this.props.game.gameState.phase}
-          onClick={this.buttonClicked}
-          className="seat-allocator-popup-button"
-        >
-          {this.seats.length ? 'пропустить' : 'играть'}
-        </PopUpButton>
-      </>
-    );
-  };
+  render = () => (
+    <>
+      <BigCircle
+        className="d-flex justify-content-center align-items-center seat-allocator-big-circle"
+        onClick={this.randomClicked}
+        number={this.state.randomNumber}
+      >
+        {this.state.randomNumber ? this.state.randomNumber : 'нажми'}
+      </BigCircle>
+      <PopUpButton
+        color={this.props.game.gameState.phase}
+        onClick={this.buttonClicked}
+        className="seat-allocator-popup-button"
+      >
+        {this.seats.length ? 'пропустить' : 'играть'}
+      </PopUpButton>
+    </>
+  );
 }
 
 export default connect(
