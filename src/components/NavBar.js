@@ -42,6 +42,22 @@ const NavStateName = styled.h2`
   font-size: 2rem;
   text-transform: uppercase;
 
+  span {
+    animation: zoom 1s alternate ease-in 2;
+  }
+
+  @keyframes zoom {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
   @media (max-width: 520px) {
     font-size: 1.5rem;
   }
@@ -125,7 +141,9 @@ class Navigation extends Component {
     return (
       <StyledNavigation color={phase} tutorialEnabled={tutorialEnabled}>
         <Container className="d-flex justify-content-between p-0">
-          <NavStateName>{title}</NavStateName>
+          <NavStateName key={title}>
+            <span>{title}</span>
+          </NavStateName>
 
           {phase === 'Day' && (
             <ButtonsWrapper className="day-user-navigation">
