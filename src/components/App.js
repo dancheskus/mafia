@@ -40,6 +40,29 @@ const MainContentWrapper = styled.div`
   min-height: 0;
 `;
 
+const UnsupportedRes = styled.div`
+  z-index: 5000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  > h3 {
+    width: 50%;
+    text-align: center;
+    background: white;
+    color: black;
+    padding: 30px 10px;
+    border-radius: 20px;
+    opacity: 0.8;
+  }
+`;
+
 class App extends Component {
   state = { appHeight: window.innerHeight };
 
@@ -58,13 +81,20 @@ class App extends Component {
     const phase = this.props.game.gameState.phase;
     const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
     const { tutorialEnabled } = this.props.settings;
+    const { appHeight } = this.state;
 
     return (
       <>
+        {appHeight < 535 && (
+          <UnsupportedRes>
+            <h3>Это разрешение не поддерживается</h3>
+          </UnsupportedRes>
+        )}
+
         {tutorialEnabled && <GuideOverlay />}
 
         <GuideWrapper>
-          <AppWrapper appHeight={this.state.appHeight} className="d-flex flex-column">
+          <AppWrapper appHeight={appHeight} className="d-flex flex-column">
             <NavBar />
 
             <MainApp className="d-flex">
