@@ -185,7 +185,7 @@ class Navigation extends Component {
             <ButtonsWrapper
               style={{ display: phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && 'none' }}
             >
-              <AudioPlayer />
+              {phase !== 'SeatAllocator' && <AudioPlayer />}
             </ButtonsWrapper>
           )}
 
