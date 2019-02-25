@@ -9,7 +9,7 @@ export const PopUpButton = styled.button`
   border-radius: 30px;
   font-size: 1.1rem;
   text-transform: uppercase;
-  transition: filter 0.2s;
+  transition: filter 0.2s !important;
 
   ${props =>
     props.disabled

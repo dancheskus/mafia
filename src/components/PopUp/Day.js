@@ -9,7 +9,10 @@ import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'colors.js';
 
 class Day extends Component {
-  state = { killedPlayer: this.props.game.selectedNumbers[0] || Number(localStorage.killedPlayer) };
+  state = {
+    killedPlayer:
+      this.props.game.selectedNumbers[0] >= 0 ? this.props.game.selectedNumbers[0] : Number(localStorage.killedPlayer),
+  };
 
   componentWillUnmount = () => {
     localStorage.removeItem('killedPlayer');
@@ -33,11 +36,11 @@ class Day extends Component {
   };
 
   render = () => {
-    const killedPlayer = this.state.killedPlayer >= 0 && this.state.killedPlayer;
+    const { killedPlayer } = this.state;
 
     return (
       <>
-        {killedPlayer ? (
+        {killedPlayer >= 0 ? (
           <>
             <PopUpLabel className="h1">Убит</PopUpLabel>
             <PopUpCircle mini color="Night">

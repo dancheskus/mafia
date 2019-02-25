@@ -8,6 +8,8 @@ import checkForEnd from 'helpers/checkForEnd';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
 import { PopUpLabel, PopUpButton } from './styled-components';
 import VictimSelector from '../common/VictimSelector';
+import { NextIcon } from './../../icons/svgIcons';
+import colors from './../../colors';
 
 const Sheriff = styled.div`
   width: 70%;
@@ -74,6 +76,32 @@ const Target = styled.div`
   }
 `;
 
+const BackButton = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: ${colors.Night.popupButton};
+  display: flex;
+  flex-direction: center;
+  justify-content: center;
+  padding: 10px;
+  transform: rotate(180deg);
+  cursor: pointer;
+  transition: filter 0.2s !important;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+  :hover {
+    filter: brightness(110%);
+  }
+
+  @media (max-height: 860px) {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
 class Night extends Component {
   state = { playerToKill: undefined, donTime: false, sheriffTime: false };
 
@@ -90,9 +118,14 @@ class Night extends Component {
     if (this.state.sheriffTime)
       return (
         <>
+          <BackButton onClick={() => this.setState({ sheriffTime: false })}>
+            <NextIcon />
+          </BackButton>
+
           <PopUpLabel color="Night" className="h2">
             Шериф ищет черных игроков
           </PopUpLabel>
+
           <DarkPlayers>
             {this.props.players
               .map((player, i) => (player.role === 'МАФИЯ' || player.role === 'ДОН' ? i : null))
@@ -120,6 +153,10 @@ class Night extends Component {
     if (this.state.donTime)
       return (
         <>
+          <BackButton onClick={() => this.setState({ donTime: false, playerToKill: undefined })}>
+            <NextIcon />
+          </BackButton>
+
           <PopUpLabel color="Night" className="h2">
             Дон ищет шерифа
           </PopUpLabel>

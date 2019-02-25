@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { NextIcon } from './../../icons/svgIcons';
 import SettingsItem from './SettingsItem';
-import { AppSettings, BackButton, RepeatGuideButton } from './style';
+import { AppSettings, RepeatGuideButton, BackButton } from './style';
 import { connect } from 'react-redux';
 import { enableTutorial } from 'redux/actions/settingsActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
