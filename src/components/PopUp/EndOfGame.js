@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import checkForEnd from 'helpers/checkForEnd';
 import { PopUpButton } from './styled-components/PopUpButton';
-import { resetGameReducer } from 'redux/actions/gameActions';
+import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 
 const GameResult = styled.div`
@@ -23,6 +23,8 @@ const GameResult = styled.div`
 `;
 
 class EndOfGame extends Component {
+  componentDidMount = () => this.props.game.popupMinimized && this.props.minimizeMaximaizePopup();
+
   startNewGame = () => {
     this.props.resetGameReducer();
     this.props.resetPlayersReducer();
@@ -32,7 +34,7 @@ class EndOfGame extends Component {
     const { black, red } = checkForEnd(this.props.players).allAlivePlayers;
     return (
       <GameResult>
-        {black >= red ? 'Победа черных' : 'Победа красных'}
+        Победа {black >= red ? ' черных' : ' красных'}
         <PopUpButton onClick={this.startNewGame} color={this.props.game.gameState.phase}>
           Новая игра
         </PopUpButton>
@@ -43,5 +45,5 @@ class EndOfGame extends Component {
 
 export default connect(
   ({ game, players }) => ({ game, players }),
-  { resetGameReducer, resetPlayersReducer }
+  { resetGameReducer, resetPlayersReducer, minimizeMaximaizePopup }
 )(EndOfGame);
