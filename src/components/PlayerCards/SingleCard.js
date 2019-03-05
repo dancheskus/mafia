@@ -9,6 +9,7 @@ import { changeGameState, skipVotingInc } from 'redux/actions/gameActions';
 import PlayerNumber from './styled-components/PlayerNumber';
 import FoulContainer from './styled-components/FoulContainer';
 import checkForEnd from 'helpers/checkForEnd';
+import { Zombie } from '../../icons/svgIcons';
 
 const CardContainer = styled.div`
   width: 50%;
@@ -48,6 +49,30 @@ const FoulIcon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ZombieIconWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  > svg {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+
+    @media (max-height: 670px) {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (max-width: 340px) {
+      width: 20px;
+      height: 20px;
+    }
+  }
 `;
 
 class SingleCard extends Component {
@@ -96,6 +121,12 @@ class SingleCard extends Component {
             isAlive={isAlive}
             opensTable={phase === 'Day' && this.props.game.opensTable === this.props.number}
           >
+            {!isAlive && (
+              <ZombieIconWrapper>
+                <Zombie />
+              </ZombieIconWrapper>
+            )}
+
             <div className="number">{this.props.number + 1}</div>
           </PlayerNumber>
 
