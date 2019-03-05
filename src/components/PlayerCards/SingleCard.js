@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 
 import colors from 'colors.js';
 import { MinimizeIcon, MaximizeIcon } from 'icons/svgIcons';
-import { addFoul, removeFoul } from 'redux/actions/playersActions';
-import { changeGameState, skipVotingInc } from 'redux/actions/gameActions';
+import { addFoul, removeFoul, returnPlayerToGame } from 'redux/actions/playersActions';
+import { changeGameState, skipVotingInc, skipVotingDec } from 'redux/actions/gameActions';
 import PlayerNumber from './styled-components/PlayerNumber';
 import FoulContainer from './styled-components/FoulContainer';
 import checkForEnd from 'helpers/checkForEnd';
@@ -53,13 +53,15 @@ const FoulIcon = styled.div`
 
 const ZombieIconWrapper = styled.div`
   position: absolute;
-  width: 100%;
-  height: 100%;
+  bottom: 0px;
+  left: 0px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   > svg {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
     width: 30px;
     height: 30px;
 
@@ -76,9 +78,15 @@ const ZombieIconWrapper = styled.div`
 `;
 
 class SingleCard extends Component {
-  state = { foulsAmount: this.props.players[this.props.number].fouls.amount };
+  state = { foulsAmount: this.props.players[this.props.number].fouls.amount, lastFoulDeath: false };
 
   timer;
+  returnToLifeTimer;
+
+  componentWillUnmount = () => {
+    clearTimeout(this.timer);
+    clearTimeout(this.returnToLifeTimer);
+  };
 
   addFoul = () => {
     if (this.state.foulsAmount === 4) return;
@@ -89,7 +97,14 @@ class SingleCard extends Component {
 
     this.timer = setTimeout(() => {
       this.props.addFoul(this.props.number);
-      checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
+
+      if (checkForEnd(this.props.players).status) return this.props.changeGameState({ phase: 'EndOfGame' });
+
+      this.setState({ lastFoulDeath: true });
+
+      this.returnToLifeTimer = setTimeout(() => {
+        this.setState({ lastFoulDeath: false });
+      }, 5000);
 
       this.props.skipVotingInc();
     }, 2000);
@@ -103,6 +118,13 @@ class SingleCard extends Component {
     } else {
       this.props.removeFoul(this.props.number);
     }
+  };
+
+  backToLife = () => {
+    clearTimeout(this.returnToLifeTimer);
+    this.props.returnPlayerToGame(this.props.number);
+    this.props.skipVotingDec();
+    this.setState({ foulsAmount: 3, lastFoulDeath: false });
   };
 
   render = () => {
@@ -121,8 +143,8 @@ class SingleCard extends Component {
             isAlive={isAlive}
             opensTable={phase === 'Day' && this.props.game.opensTable === this.props.number}
           >
-            {!isAlive && (
-              <ZombieIconWrapper>
+            {this.state.lastFoulDeath && phase === 'Day' && (
+              <ZombieIconWrapper onClick={this.backToLife}>
                 <Zombie />
               </ZombieIconWrapper>
             )}
@@ -159,5 +181,5 @@ class SingleCard extends Component {
 
 export default connect(
   ({ game, players }) => ({ game, players }),
-  { addFoul, removeFoul, changeGameState, skipVotingInc }
+  { addFoul, removeFoul, changeGameState, skipVotingInc, skipVotingDec, returnPlayerToGame }
 )(SingleCard);

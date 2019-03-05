@@ -27,6 +27,11 @@ export default (state = initialState, action) =>
         draft[action.playerNumber].isAlive = false;
         return;
 
+      case 'RETURN_PLAYER_TO_GAME':
+        draft[action.playerNumber].isAlive = true;
+        draft[action.playerNumber].fouls.amount = 3;
+        return;
+
       case 'ADD_FOUL': {
         const playerFouls = draft[action.playerNumber].fouls;
         playerFouls.amount === 2 && (playerFouls.muted = true);
