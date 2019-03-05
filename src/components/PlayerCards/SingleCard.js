@@ -100,11 +100,13 @@ class SingleCard extends Component {
 
       if (checkForEnd(this.props.players).status) return this.props.changeGameState({ phase: 'EndOfGame' });
 
-      this.setState({ lastFoulDeath: true });
+      if (this.props.game.gameState.phase === 'Day') {
+        this.setState({ lastFoulDeath: true });
 
-      this.returnToLifeTimer = setTimeout(() => {
-        this.setState({ lastFoulDeath: false });
-      }, 5000);
+        this.returnToLifeTimer = setTimeout(() => {
+          this.setState({ lastFoulDeath: false });
+        }, 5000);
+      }
 
       this.props.skipVotingInc();
     }, 2000);
@@ -143,7 +145,7 @@ class SingleCard extends Component {
             isAlive={isAlive}
             opensTable={phase === 'Day' && this.props.game.opensTable === this.props.number}
           >
-            {this.state.lastFoulDeath && phase === 'Day' && (
+            {this.state.lastFoulDeath && (
               <ZombieIconWrapper onClick={this.backToLife}>
                 <Zombie />
               </ZombieIconWrapper>
