@@ -105,7 +105,7 @@ const BackButton = styled.div`
 class Night extends Component {
   state = { playerToKill: undefined, donTime: false, sheriffTime: false };
 
-  onNumberSelected = num => this.setState({ playerToKill: num === this.state.playerToKill ? null : num });
+  onNumberSelected = num => this.setState({ playerToKill: num === this.state.playerToKill ? undefined : num });
 
   componentWillUnmount = () => {
     if (checkForEnd(this.props.players, [this.state.playerToKill]).status) {
