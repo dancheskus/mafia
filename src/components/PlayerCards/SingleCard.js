@@ -9,7 +9,7 @@ import { changeGameState, skipVotingInc, skipVotingDec } from 'redux/actions/gam
 import PlayerNumber from './styled-components/PlayerNumber';
 import FoulContainer from './styled-components/FoulContainer';
 import checkForEnd from 'helpers/checkForEnd';
-import { Zombie } from '../../icons/svgIcons';
+import { NextIcon } from './../../icons/svgIcons';
 
 const CardContainer = styled.div`
   width: 50%;
@@ -51,29 +51,32 @@ const FoulIcon = styled.div`
   align-items: center;
 `;
 
-const ZombieIconWrapper = styled.div`
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  width: 40px;
-  height: 40px;
+const BackButton = styled.div`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: ${colors.Night.popupButton};
   display: flex;
-  align-items: center;
+  flex-direction: center;
   justify-content: center;
+  padding: 7px;
+  transform: rotate(180deg);
+  cursor: pointer;
+  transition: filter 0.2s !important;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
 
-  > svg {
-    width: 30px;
-    height: 30px;
+  :hover {
+    filter: brightness(120%);
+  }
 
-    @media (max-height: 670px) {
-      width: 20px;
-      height: 20px;
-    }
-
-    @media (max-width: 340px) {
-      width: 20px;
-      height: 20px;
-    }
+  @media (max-height: 860px) {
+    width: 25px;
+    height: 25px;
+    bottom: 5px;
+    left: 5px;
+    padding: 5px;
   }
 `;
 
@@ -146,9 +149,9 @@ class SingleCard extends Component {
             opensTable={phase === 'Day' && this.props.game.opensTable === this.props.number}
           >
             {this.state.lastFoulDeath && (
-              <ZombieIconWrapper onClick={this.backToLife}>
-                <Zombie />
-              </ZombieIconWrapper>
+              <BackButton onClick={this.backToLife}>
+                <NextIcon fill="lightgrey" />
+              </BackButton>
             )}
 
             <div className="number">{this.props.number + 1}</div>
