@@ -13,6 +13,8 @@ const BigCircle = styled.div`
   border-radius: 50%;
   font-weight: 600;
   text-transform: uppercase;
+  ${({ enabled }) => enabled && 'cursor: pointer'};
+
   ${props =>
     props.number
       ? ` font-size: 9rem; color: ${colors.SeatAllocator.popupText}; background: white; `
@@ -61,6 +63,7 @@ class SeatAllocator extends Component {
         className="d-flex justify-content-center align-items-center seat-allocator-big-circle"
         onClick={this.randomClicked}
         number={this.state.randomNumber}
+        enabled={this.seats.length}
       >
         {this.state.randomNumber ? this.state.randomNumber : 'нажми'}
       </BigCircle>
