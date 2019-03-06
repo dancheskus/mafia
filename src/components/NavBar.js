@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
+import { countBy } from 'lodash';
 
 import { changeActivePlayer, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { unmutePlayer } from 'redux/actions/playersActions';
@@ -86,6 +87,11 @@ class Navigation extends Component {
   componentDidUpdate = prevState => {
     if (prevState.game.gameState.phase !== 'Day' && this.state.stepBackAvaliable)
       this.setState({ stepBackAvaliable: false });
+
+    // Если стало меньше живых игроков, выключить кнопку "назад"
+    const prevAllAlivePlayers = countBy(prevState.players.map(player => player.isAlive)).true;
+    const allAlivePlayers = countBy(this.props.players.map(player => player.isAlive)).true;
+    if (prevAllAlivePlayers !== allAlivePlayers) this.setState({ stepBackAvaliable: false });
   };
 
   goToNextAlivePlayer = (i = this.props.game.activePlayer + 1) => {
