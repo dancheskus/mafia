@@ -7,6 +7,8 @@ export const PopUpLabel = styled.div`
   color: ${props => (props.color ? colors[props.color].popupLabel : '#fff')};
   width: 80%;
 
+  ${({ light }) => light && 'font-weight: 300'};
+
   @media (max-width: 450px) {
     font-size: 1.8rem;
   }

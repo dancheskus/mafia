@@ -39,7 +39,11 @@ class EndOfVoting extends Component {
       return (
         <>
           <PopUpLabel className="h2">Голосование не проводится</PopUpLabel>
-          {skipVoting > 0 && <PopUpLabel className="h3">Игрок получил 4-й фол</PopUpLabel>}
+          {skipVoting > 0 && (
+            <PopUpLabel light className="h3">
+              Игрок получил 4-й фол
+            </PopUpLabel>
+          )}
 
           <PopUpButton color="Voting" onClick={this.goToNight}>
             Ночь
