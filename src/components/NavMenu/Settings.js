@@ -27,7 +27,7 @@ class Settings extends Component {
         <SettingsItem title="Музыка" type="appMusic" />
         <SettingsItem title="Звуки таймера (на 15/5 сек)" type="timerSounds" />
         <SettingsItem title="Таймер на договорку (1 мин)" type="mafiaTimer" />
-        <SettingsItem title="Предлагать выгнать всех после повторной переголосовки" type="multiplePlayerRemove" />
+        <SettingsItem title="Предлагать вывести всех после повторной переголосовки" type="multiplePlayerRemove" />
 
         <RepeatGuideButton onClick={this.enableTutorial}>Включить обучение</RepeatGuideButton>
       </AppSettings>
