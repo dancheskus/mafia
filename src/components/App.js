@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
@@ -63,60 +63,57 @@ const UnsupportedRes = styled.div`
   }
 `;
 
-class App extends Component {
-  state = { appHeight: window.innerHeight };
+const App = props => {
+  const [appHeight, setAppHeight] = useState(window.innerHeight);
 
-  componentDidMount = () => window.addEventListener('resize', this.updateHeight);
+  useEffect(() => window.addEventListener('resize', updateHeight), []);
 
-  updateHeight = () => {
-    this.setState({ appHeight: window.innerHeight });
+  const updateHeight = () => {
+    setAppHeight(window.innerHeight);
 
     // Фикс для Chrome на iOS, который не успевает пересчитать размер, в отличае от Safari.
     setTimeout(() => {
-      this.setState({ appHeight: window.innerHeight });
+      setAppHeight(window.innerHeight);
     }, 200);
   };
 
-  render() {
-    const phase = this.props.game.gameState.phase;
-    const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
-    const { tutorialEnabled } = this.props.settings;
-    const { appHeight } = this.state;
+  const phase = props.game.gameState.phase;
+  const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
+  const { tutorialEnabled } = props.settings;
 
-    return (
-      <>
-        {appHeight < 535 && (
-          <UnsupportedRes>
-            <h3>Это разрешение не поддерживается</h3>
-          </UnsupportedRes>
-        )}
+  return (
+    <>
+      {appHeight < 535 && (
+        <UnsupportedRes>
+          <h3>Это разрешение не поддерживается</h3>
+        </UnsupportedRes>
+      )}
 
-        {tutorialEnabled && <GuideOverlay />}
+      {tutorialEnabled && <GuideOverlay />}
 
-        <GuideWrapper>
-          <AppWrapper appHeight={appHeight} className="d-flex flex-column">
-            <NavBar />
+      <GuideWrapper>
+        <AppWrapper appHeight={appHeight} className="d-flex flex-column">
+          <NavBar />
 
-            <MainApp className="d-flex">
-              {/* {window.innerHeight} {window.innerWidth} */}
-              <Container className="d-flex flex-column justify-content-between">
-                {phase !== 'startScreen' && <NumbersPanel key={this.props.game.activePlayer} />}
+          <MainApp className="d-flex">
+            {/* {window.innerHeight} {window.innerWidth} */}
+            <Container className="d-flex flex-column justify-content-between">
+              {phase !== 'startScreen' && <NumbersPanel key={props.game.activePlayer} />}
 
-                <MainContentWrapper>
-                  {<PopUp key={phase + 1} opened={this.props.game.popupOpened} popupChild={PopUpChildComponent} />}
+              <MainContentWrapper>
+                {<PopUp key={phase + 1} opened={props.game.popupOpened} popupChild={PopUpChildComponent} />}
 
-                  {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
-                    <PlayerCards key={phase} />
-                  )}
-                </MainContentWrapper>
-              </Container>
-            </MainApp>
-          </AppWrapper>
-        </GuideWrapper>
-      </>
-    );
-  }
-}
+                {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
+                  <PlayerCards key={phase} />
+                )}
+              </MainContentWrapper>
+            </Container>
+          </MainApp>
+        </AppWrapper>
+      </GuideWrapper>
+    </>
+  );
+};
 
 const mapStateToProps = ({ game, settings }) => ({ game, settings });
 export default connect(mapStateToProps)(App);
