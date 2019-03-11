@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NextIcon } from './../../icons/svgIcons';
 import SettingsItem from './SettingsItem';
 import { AppSettings, RepeatGuideButton, BackButton } from './style';

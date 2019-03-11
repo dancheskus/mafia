@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
@@ -12,21 +12,18 @@ const CardsWrapper = styled.div`
   flex-direction: column-reverse;
 `;
 
-class PlayerCards extends Component {
-  render = () => (
-    <CardsWrapper>
-      {this.props.players.map((_, i) => {
-        const plNum = i;
-        return (
-          <SingleCard
-            key={i}
-            number={plNum}
-            order={plNum === 9 ? 5 : plNum === 8 ? 6 : plNum === 6 ? 8 : plNum === 5 ? 9 : plNum}
-          />
-        );
-      })}
-    </CardsWrapper>
-  );
-}
-
-export default connect(({ game, players }) => ({ game, players }))(PlayerCards);
+const PlayerCards = ({ players }) => (
+  <CardsWrapper>
+    {players.map((_, i) => {
+      const plNum = i;
+      return (
+        <SingleCard
+          key={i}
+          number={plNum}
+          order={plNum === 9 ? 5 : plNum === 8 ? 6 : plNum === 6 ? 8 : plNum === 5 ? 9 : plNum}
+        />
+      );
+    })}
+  </CardsWrapper>
+);
+export default connect(({ players }) => ({ players }))(PlayerCards);
