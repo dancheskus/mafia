@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
@@ -30,57 +30,67 @@ const SvgWrapper = styled.div`
   }
 `;
 
-class RoleDealing extends Component {
-  state = { randomModeSelected: true, manualModeSelected: false, modeApproved: false };
+const RoleDealing = props => {
+  const [randomModeSelected, setRandomModeSelected] = useState(true);
+  const [manualModeSelected, setManualModeSelected] = useState(false);
+  const [modeApproved, setModeApproved] = useState(false);
 
-  componentDidMount = () => {
-    this.props.clearSelectedNumbers();
-    this.props.lightModeOff();
-    this.props.numbersPanelNotClickable();
+  useEffect(() => {
+    props.clearSelectedNumbers();
+    props.lightModeOff();
+    props.numbersPanelNotClickable();
 
-    if (this.props.settings.tutorialEnabled && this.state.modeApproved === false)
-      this.setState({ randomModeSelected: false, manualModeSelected: true, modeApproved: true });
-  };
+    if (props.settings.tutorialEnabled && modeApproved === false) {
+      setRandomModeSelected(false);
+      setManualModeSelected(true);
+      setModeApproved(true);
+    }
+  }, []);
 
-  resetMode = () => this.setState({ modeApproved: false });
+  const resetMode = () => setModeApproved(false);
 
-  buttonClicked = () => this.setState({ modeApproved: true });
+  const buttonClicked = () => setModeApproved(true);
 
-  render = () => {
-    const lightMode = this.props.game.lightMode;
-    return (
-      <>
-        {!this.state.modeApproved ? (
-          <>
-            <SvgWrapper>
-              <div
-                className="flex-grow-1 d-flex align-items-center justify-content-center"
-                onClick={() => this.setState({ randomModeSelected: true, manualModeSelected: false })}
-              >
-                <RandomCubeIcon className={this.state.randomModeSelected ? 'selected' : null} size={'100px'} />
-              </div>
-              <div
-                className="flex-grow-1 d-flex align-items-center justify-content-center"
-                onClick={() => this.setState({ manualModeSelected: true, randomModeSelected: false })}
-              >
-                <ListIcon className={this.state.manualModeSelected ? 'selected' : null} size={'100px'} />
-              </div>
-            </SvgWrapper>
-            <div className="flex-grow-1 d-flex align-items-center">
-              <PopUpButton color={this.props.game.gameState.phase} light={lightMode} onClick={this.buttonClicked}>
-                {this.state.randomModeSelected ? 'автоматически' : 'вручную'}
-              </PopUpButton>
+  const lightMode = props.game.lightMode;
+
+  return (
+    <>
+      {!modeApproved ? (
+        <>
+          <SvgWrapper>
+            <div
+              className="flex-grow-1 d-flex align-items-center justify-content-center"
+              onClick={() => {
+                setRandomModeSelected(true);
+                setManualModeSelected(false);
+              }}
+            >
+              <RandomCubeIcon className={randomModeSelected ? 'selected' : null} size={'100px'} />
             </div>
-          </>
-        ) : this.state.randomModeSelected ? (
-          <RandomMode resetMode={this.resetMode} />
-        ) : (
-          <ManualMode resetMode={this.resetMode} />
-        )}
-      </>
-    );
-  };
-}
+            <div
+              className="flex-grow-1 d-flex align-items-center justify-content-center"
+              onClick={() => {
+                setManualModeSelected(true);
+                setRandomModeSelected(false);
+              }}
+            >
+              <ListIcon className={manualModeSelected ? 'selected' : null} size={'100px'} />
+            </div>
+          </SvgWrapper>
+          <div className="flex-grow-1 d-flex align-items-center">
+            <PopUpButton color={props.game.gameState.phase} light={lightMode} onClick={buttonClicked}>
+              {randomModeSelected ? 'автоматически' : 'вручную'}
+            </PopUpButton>
+          </div>
+        </>
+      ) : randomModeSelected ? (
+        <RandomMode resetMode={resetMode} />
+      ) : (
+        <ManualMode resetMode={resetMode} />
+      )}
+    </>
+  );
+};
 
 export default connect(
   ({ game, settings }) => ({ game, settings }),
