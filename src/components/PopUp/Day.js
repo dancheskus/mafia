@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 'redux/actions/gameActions';
@@ -8,57 +8,61 @@ import Timer from '../Timer';
 import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'colors.js';
 
-const Day = props => {
-  const killedPlayer =
-    props.game.selectedNumbers[0] >= 0 ? props.game.selectedNumbers[0] : Number(localStorage.killedPlayer);
+class Day extends Component {
+  state = {
+    killedPlayer:
+      this.props.game.selectedNumbers[0] >= 0 ? this.props.game.selectedNumbers[0] : Number(localStorage.killedPlayer),
+  };
 
-  useEffect(() => {
-    props.clearSelectedNumbers();
+  componentWillUnmount = () => {
+    localStorage.removeItem('killedPlayer');
+    this.props.openPopup();
+  };
 
-    props.game.popupOpened && localStorage.setItem('killedPlayer', killedPlayer);
+  componentDidMount = () => {
+    this.props.clearSelectedNumbers();
 
-    props.game.gameState.dayNumber === 1 && props.closePopup();
-  }, []);
+    this.props.game.popupOpened && localStorage.setItem('killedPlayer', this.state.killedPlayer);
 
-  useEffect(() => {
-    return () => {
-      localStorage.removeItem('killedPlayer');
-      props.openPopup();
-    };
-  }, []);
+    this.props.game.gameState.dayNumber === 1 && this.props.closePopup();
+  };
 
-  const closePopup = () => {
-    props.closePopup();
-    killedPlayer >= 0 && props.killPlayer(killedPlayer);
-    if (killedPlayer === props.game.activePlayer)
-      props.changeGameState({ phase: 'Day', dayNumber: props.game.gameState.dayNumber });
+  closePopup = () => {
+    this.props.closePopup();
+    this.state.killedPlayer >= 0 && this.props.killPlayer(this.state.killedPlayer);
+    if (this.state.killedPlayer === this.props.game.activePlayer)
+      this.props.changeGameState({ phase: 'Day', dayNumber: this.props.game.gameState.dayNumber });
     // В данном случае changeGameState используется только для вызова смены активного и открывающего игроков на +1.
   };
 
-  return (
-    <>
-      {killedPlayer >= 0 ? (
-        <>
-          <PopUpLabel className="h1">Убит</PopUpLabel>
-          <PopUpCircle mini color="Night">
-            {killedPlayer + 1}
-          </PopUpCircle>
-          <Timer killedOnLastMinute={!props.players[killedPlayer].isAlive} />
-        </>
-      ) : (
-        <>
-          <PopUpLabel className="h1">Несострел</PopUpLabel>
-          <PopUpCircle>
-            <CylinderIcon fill={colors.Day.popupNightResult} size="80%" />
-          </PopUpCircle>
-        </>
-      )}
-      <PopUpButton color="Day" onClick={closePopup}>
-        Закрыть
-      </PopUpButton>
-    </>
-  );
-};
+  render = () => {
+    const { killedPlayer } = this.state;
+
+    return (
+      <>
+        {killedPlayer >= 0 ? (
+          <>
+            <PopUpLabel className="h1">Убит</PopUpLabel>
+            <PopUpCircle mini color="Night">
+              {killedPlayer + 1}
+            </PopUpCircle>
+            <Timer killedOnLastMinute={!this.props.players[killedPlayer].isAlive} />
+          </>
+        ) : (
+          <>
+            <PopUpLabel className="h1">Несострел</PopUpLabel>
+            <PopUpCircle>
+              <CylinderIcon fill={colors.Day.popupNightResult} size="80%" />
+            </PopUpCircle>
+          </>
+        )}
+        <PopUpButton color="Day" onClick={this.closePopup}>
+          Закрыть
+        </PopUpButton>
+      </>
+    );
+  };
+}
 
 export default connect(
   ({ game, players }) => ({ game, players }),
