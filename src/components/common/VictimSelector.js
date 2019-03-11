@@ -7,41 +7,39 @@
 КОМПОНЕНТ ВОЗВРАЩАЕТ: значение нажатой кнопки
 */
 
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { range } from 'lodash';
 
 import VotingSingleElement from './VotingSingleElement';
 import VotingBlock from './VotingBlock';
 
-class VictimSelector extends Component {
-  state = { selectedNumber: null };
+const VictimSelector = props => {
+  const [selectedNumber, setSelectedNumber] = useState(null);
 
-  selectNumber = num => {
-    if (this.props.lastPlayer) return; // Отключает возможность снять голос с последнего игрока
-    this.props.onNumberSelected(num);
-    this.setState({ selectedNumber: num === this.state.selectedNumber ? null : num });
+  const { lastPlayer, votesLeft, shooting, players } = props;
+
+  const selectNumber = num => {
+    if (lastPlayer) return; // Отключает возможность снять голос с последнего игрока
+    props.onNumberSelected(num);
+    setSelectedNumber(num === selectedNumber ? null : num);
   };
 
-  render = () => {
-    const { lastPlayer, votesLeft, shooting } = this.props;
-
-    return (
-      <VotingBlock className="col-10 col-md-8 col-lg-6">
-        {range(0, 10).map(num => (
-          <VotingSingleElement
-            shooting={shooting}
-            selected={lastPlayer ? num === votesLeft : this.state.selectedNumber === num}
-            disabled={shooting ? !this.props.players[num].isAlive : lastPlayer ? num !== votesLeft : num > votesLeft}
-            onClick={() => this.selectNumber(num)}
-            key={num}
-          >
-            <div className="number">{num + 1}</div>
-          </VotingSingleElement>
-        ))}
-      </VotingBlock>
-    );
-  };
-}
+  return (
+    <VotingBlock className="col-10 col-md-8 col-lg-6">
+      {range(0, 10).map(num => (
+        <VotingSingleElement
+          shooting={shooting}
+          selected={lastPlayer ? num === votesLeft : selectedNumber === num}
+          disabled={shooting ? !players[num].isAlive : lastPlayer ? num !== votesLeft : num > votesLeft}
+          onClick={() => selectNumber(num)}
+          key={num}
+        >
+          <div className="number">{num + 1}</div>
+        </VotingSingleElement>
+      ))}
+    </VotingBlock>
+  );
+};
 
 export default connect(({ game, players }) => ({ game, players }))(VictimSelector);
