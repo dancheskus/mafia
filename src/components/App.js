@@ -68,14 +68,7 @@ const App = props => {
 
   useEffect(() => window.addEventListener('resize', updateHeight), []);
 
-  const updateHeight = () => {
-    setAppHeight(window.innerHeight);
-
-    // Фикс для Chrome на iOS, который не успевает пересчитать размер, в отличае от Safari.
-    setTimeout(() => {
-      setAppHeight(window.innerHeight);
-    }, 200);
-  };
+  const updateHeight = () => setAppHeight(document.documentElement.clientHeight);
 
   const phase = props.game.gameState.phase;
   const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
