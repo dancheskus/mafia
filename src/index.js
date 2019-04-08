@@ -10,6 +10,29 @@ import throttle from 'lodash/throttle';
 import configureStore from './redux/configureStore';
 import { saveState } from 'redux/localStorage';
 
+// ----------- Отключение pullToRefresh и scroll в моб. браузерах --------------------
+
+const element = document.querySelector('#root');
+
+let prevent = false;
+
+element.addEventListener('touchstart', e => {
+  if (e.touches.length !== 1) return;
+
+  const scrollY = window.pageYOffset || document.body.scrollTop || document.documentElement.scrollTop;
+
+  prevent = scrollY === 0;
+});
+
+element.addEventListener('touchmove', e => {
+  if (prevent) {
+    prevent = false;
+    e.preventDefault();
+  }
+});
+
+// ------------------------------------------------------------------------------------
+
 const store = configureStore();
 
 store.subscribe(
