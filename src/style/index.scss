@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Exo+2:300,400,500,600,700,800&subset=cyrillic');
 
 body {
+  position: fixed;
+  width: 100%;
   font-family: 'Exo 2', sans-serif;
   user-select: none;
   // color: #858585;
