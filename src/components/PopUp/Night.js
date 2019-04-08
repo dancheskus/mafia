@@ -116,7 +116,7 @@ class Night extends Component {
 
     if (gameEnded) {
       // Если мы сейчас перейдем на окончание игры, то убиваем игрока перед последним экраном
-      playerToKill && this.props.killPlayer(playerToKill);
+      playerToKill >= 0 && this.props.killPlayer(playerToKill);
 
       this.props.changeGameState({ phase: 'EndOfGame' });
     } else {
