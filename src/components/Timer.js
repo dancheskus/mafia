@@ -73,15 +73,18 @@ class Timer extends Component {
   componentDidMount = () => {
     this.props.autostart && this.startPauseClicked();
 
+    const volume = 0.2;
+
     this.secondsSound = new Howl({
       src: `${secondsSoundFile}`,
+      volume,
       sprite: {
         oneSec: [0, 1020],
         fiveSec: [0, 5020],
       },
     });
 
-    this.countdownEndSound = new Howl({ src: `${countdownEndFile}` });
+    this.countdownEndSound = new Howl({ src: `${countdownEndFile}`, volume });
   };
 
   componentWillUnmount = () => this.stopTimer();
