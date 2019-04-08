@@ -46,7 +46,7 @@ class Day extends Component {
             <PopUpCircle mini color="Night">
               {killedPlayer + 1}
             </PopUpCircle>
-            <Timer killedOnLastMinute={!this.props.players[killedPlayer].isAlive} />
+            <Timer killedOnLastMinute={!this.props.players[killedPlayer].isAlive} key={this.props.game.popupOpened} />
           </>
         ) : (
           <>
