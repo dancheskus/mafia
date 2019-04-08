@@ -107,10 +107,20 @@ class Night extends Component {
 
   onNumberSelected = num => this.setState({ playerToKill: num === this.state.playerToKill ? undefined : num });
 
-  componentWillUnmount = () => {
-    if (checkForEnd(this.props.players, [this.state.playerToKill]).status) {
-      this.state.playerToKill && this.props.killPlayer(this.state.playerToKill);
+  goToDayPressed = () => {
+    const { playerToKill } = this.state;
+    const gameEnded = checkForEnd(this.props.players, [playerToKill]).status;
+
+    playerToKill >= 0 && this.props.addToSelectedNumbers(playerToKill);
+
+    if (gameEnded) {
+      // Если мы сейчас перейдем на окончание игры, то убиваем игрока перед последним экраном
+      playerToKill && this.props.killPlayer(playerToKill);
+
       this.props.changeGameState({ phase: 'EndOfGame' });
+    } else {
+      // Если переходим в день то убъем игрока после его последней минуты в дневном экране
+      this.props.changeGameState({ phase: 'Day', dayNumber: this.props.game.gameState.dayNumber + 1 });
     }
   };
 
@@ -138,13 +148,7 @@ class Night extends Component {
               ))}
           </DarkPlayers>
 
-          <PopUpButton
-            onClick={() => {
-              this.state.playerToKill >= 0 && this.props.addToSelectedNumbers(this.state.playerToKill);
-              this.props.changeGameState({ phase: 'Day', dayNumber: this.props.game.gameState.dayNumber + 1 });
-            }}
-            color="Night"
-          >
+          <PopUpButton onClick={this.goToDayPressed} color="Night">
             День
           </PopUpButton>
         </>

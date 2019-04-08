@@ -22,8 +22,15 @@ const GameResult = styled.div`
   text-align: center;
 `;
 
+const KilledPlayer = styled.div`
+  font-size: 1.3rem;
+  color: red;
+`;
+
 class EndOfGame extends Component {
-  componentDidMount = () => this.props.game.popupMinimized && this.props.minimizeMaximaizePopup();
+  componentDidMount = () => {
+    this.props.game.popupMinimized && this.props.minimizeMaximaizePopup();
+  };
 
   startNewGame = () => {
     this.props.resetGameReducer();
@@ -32,9 +39,12 @@ class EndOfGame extends Component {
 
   render = () => {
     const { black, red } = checkForEnd(this.props.players).allAlivePlayers;
+    const justKilledPlayer = this.props.game.selectedNumbers[0];
+
     return (
       <GameResult>
         Победа {black >= red ? ' черных' : ' красных'}
+        {justKilledPlayer >= 0 && <KilledPlayer>Ночью был убит {justKilledPlayer + 1} игрок.</KilledPlayer>}
         <PopUpButton onClick={this.startNewGame} color={this.props.game.gameState.phase}>
           Новая игра
         </PopUpButton>
