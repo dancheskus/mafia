@@ -30,7 +30,7 @@ const PanelItem = styled.div`
   background: ${props => (props.selected ? colors[props.color].numberSelected : colors[props.color].number)};
   border-radius: 50%;
   color: white;
-  ${props => props.color === 'EndOfGame' && !props.isAlive && 'filter: brightness(30%); color: grey'}
+  ${props => props.color === 'EndOfGame' && !props.isAlive && 'filter: brightness(60%); color: grey'}
   display: flex;
   justify-content: center;
   align-items: center;
@@ -160,7 +160,7 @@ class NumbersPanel extends Component {
                 key={i}
                 selected={player.role === 'ДОН' || player.role === 'МАФИЯ'}
               >
-                {i + 1}
+                {player.role === 'ШЕРИФ' ? 'Ш' : player.role === 'ДОН' ? 'Д' : i + 1}
               </PanelItem>
             ))}
           </Panel>
