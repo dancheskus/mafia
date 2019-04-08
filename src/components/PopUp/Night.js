@@ -99,6 +99,7 @@ const BackButton = styled.div`
   @media (max-height: 860px) {
     width: 30px;
     height: 30px;
+    padding: 7px;
   }
 `;
 
@@ -157,7 +158,7 @@ class Night extends Component {
     if (this.state.donTime)
       return (
         <>
-          <BackButton onClick={() => this.setState({ donTime: false, playerToKill: undefined })}>
+          <BackButton className="test" onClick={() => this.setState({ donTime: false, playerToKill: undefined })}>
             <NextIcon />
           </BackButton>
 
