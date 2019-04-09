@@ -45,7 +45,7 @@ const PressText = styled.div`
 `;
 
 class RandomMode extends Component {
-  state = { role: null, cardDisabled: false };
+  state = { role: null };
   allRoles = shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН'));
 
   componentDidMount = () => this.props.replaceSelectedNumbersWith(0);
@@ -82,7 +82,7 @@ class RandomMode extends Component {
   };
 
   render = () => (
-    <Card onClick={!this.state.cardDisabled ? this.cardClicked : undefined}>
+    <Card onClick={this.cardClicked}>
       {!this.state.role && !!this.allRoles.length && (
         <>
           <EyeIcon size={'40%'} fill={popupIcon} />
