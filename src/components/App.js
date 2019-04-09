@@ -64,11 +64,18 @@ const UnsupportedRes = styled.div`
 `;
 
 const App = props => {
-  const [appHeight, setAppHeight] = useState(window.innerHeight);
+  const [appHeight, setAppHeight] = useState(document.documentElement.clientHeight);
 
   useEffect(() => window.addEventListener('resize', updateHeight), []);
 
-  const updateHeight = () => setAppHeight(document.documentElement.clientHeight);
+  const updateHeight = () => {
+    setAppHeight(document.documentElement.clientHeight);
+
+    // Фикс для Chrome на iOS, который не успевает пересчитать размер, в отличае от Safari.
+    setTimeout(() => {
+      setAppHeight(document.documentElement.clientHeight);
+    }, 200);
+  };
 
   const phase = props.game.gameState.phase;
   const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
