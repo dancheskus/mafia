@@ -55,6 +55,10 @@ export default (state = initialState, action, root) =>
         draft.playerAddedToVotingList = [draft.activePlayer, action.playerNumber];
         return;
 
+      case 'REPLACE_SELECTED_NUMBERS_WITH':
+        draft.selectedNumbers = [action.playerNumber];
+        return;
+
       case 'REMOVE_LAST_SELECTED_NUMBER':
         draft.playerAddedToVotingList = [];
         draft.selectedNumbers.pop();

@@ -1,6 +1,7 @@
 export const changeActivePlayer = playerNumber => ({ type: 'CHANGE_ACTIVE_PLAYER', playerNumber });
 export const changeGameState = payload => ({ type: 'CHANGE_GAME_STATE', payload });
 export const addToSelectedNumbers = playerNumber => ({ type: 'ADD_TO_SELECTED_NUMBERS', playerNumber });
+export const replaceSelectedNumbersWith = playerNumber => ({ type: 'REPLACE_SELECTED_NUMBERS_WITH', playerNumber });
 export const removeLastSelectedNumber = () => ({ type: 'REMOVE_LAST_SELECTED_NUMBER' });
 export const clearSelectedNumbers = () => ({ type: 'CLEAR_SELECTED_NUMBERS' });
 export const lightModeOn = () => ({ type: 'LIGHT_MODE_ON' });
