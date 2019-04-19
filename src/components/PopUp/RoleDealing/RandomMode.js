@@ -66,7 +66,7 @@ class RandomMode extends Component {
       this.setState({ role: null });
       this.props.lightModeOff();
       this.props.replaceSelectedNumbersWith(playerNumber + 1);
-    }, 3000);
+    }, 1800);
 
     if (!this.allRoles.length) return;
 
@@ -91,7 +91,7 @@ class RandomMode extends Component {
       )}
 
       {!this.state.role && !this.allRoles.length && (
-        <ScaledPopUpButton onClick={this.startGameClicked} color="RoleDealing">
+        <ScaledPopUpButton onClick={this.startGameClicked} color='RoleDealing'>
           Играть
         </ScaledPopUpButton>
       )}
