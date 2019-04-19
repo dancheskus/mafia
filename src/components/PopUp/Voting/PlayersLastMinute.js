@@ -31,9 +31,13 @@ class PlayersLastMinute extends Component {
       <>
         <PopUpCircle>{listOfPlayers[currentPlayer] + 1}</PopUpCircle>
 
-        <Timer key={currentPlayer} killedOnLastMinute={this.props.killedOnLastMinute[currentPlayer]} />
+        <Timer
+          key={currentPlayer}
+          killedOnLastMinute={this.props.killedOnLastMinute[currentPlayer]}
+          time={listOfPlayers.length > 1 && 30}
+        />
 
-        <PopUpButton color="Voting" onClick={lastPlayer ? this.props.goToNight : this.nextPlayer}>
+        <PopUpButton color='Voting' onClick={lastPlayer ? this.props.goToNight : this.nextPlayer}>
           {lastPlayer ? 'Ночь' : 'Далее'}
         </PopUpButton>
       </>
