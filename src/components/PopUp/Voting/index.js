@@ -34,6 +34,15 @@ class Voting extends Component {
     if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || skipVoting) this.setState({ endOfVoting: true });
   };
 
+  componentWillUnmount = () => {
+    const numberOfVotedOutPlayersWithFourthFoul = this.state.lastMinuteFor.filter(
+      plNum => !this.props.players[plNum].isAlive
+    ).length;
+    if (this.props.game.skipVoting && this.state.lastMinuteFor.length !== 0) {
+      for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) this.props.skipVotingDec();
+    }
+  };
+
   onNumberSelected = num => {
     const { currentPlayer, votesPerPlayer } = this.state;
 
@@ -117,19 +126,12 @@ class Voting extends Component {
   };
 
   render = () => {
-    const { currentPlayer } = this.state;
+    const { currentPlayer, lastMinuteFor } = this.state;
     const { selectedNumbers, skipVoting } = this.props.game;
     const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 
     if (this.state.endOfVoting || skipVoting)
-      return (
-        <EndOfVoting
-          votingSkipped={
-            this.state.avaliableVoters === this.initialState.avaliableVoters && this.state.lastMinuteFor.length === 0
-          }
-          lastMinuteFor={this.state.lastMinuteFor}
-        />
-      );
+      return <EndOfVoting votingSkipped={skipVoting && lastMinuteFor.length === 0} lastMinuteFor={lastMinuteFor} />;
 
     if (this.state.carCrash)
       return (
