@@ -142,7 +142,7 @@ class Voting extends Component {
 
     return (
       <>
-        {this.state.carCrashClosed && <PopUpLabel className="h2">Повторное голосование</PopUpLabel>}
+        {this.state.carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 
         <PopUpCircle mini={this.state.carCrashClosed}>{selectedNumbers[currentPlayer] + 1}</PopUpCircle>
 
@@ -153,7 +153,7 @@ class Voting extends Component {
           onNumberSelected={this.onNumberSelected} // callback
         />
 
-        <PopUpButton color="Voting" onClick={lastPlayer ? this.votingFinishedClicked : this.nextButtonClicked}>
+        <PopUpButton color='Voting' onClick={lastPlayer ? this.votingFinishedClicked : this.nextButtonClicked}>
           {lastPlayer ? 'Завершить' : 'Далее'}
         </PopUpButton>
       </>

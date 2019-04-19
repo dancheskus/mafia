@@ -16,6 +16,8 @@ class EndOfVoting extends Component {
     this.killedOnLastMinute = this.props.lastMinuteFor.map(plNum => !this.props.players[plNum].isAlive);
   };
 
+  componentWillUnmount = () => this.props.clearSelectedNumbers();
+
   closeNotification = () => this.setState({ notification: false });
 
   goToNight = () => {
@@ -38,14 +40,14 @@ class EndOfVoting extends Component {
     if (this.props.votingSkipped)
       return (
         <>
-          <PopUpLabel className="h2">Голосование не проводится</PopUpLabel>
+          <PopUpLabel className='h2'>Голосование не проводится</PopUpLabel>
           {skipVoting > 0 && (
-            <PopUpLabel light className="h3">
+            <PopUpLabel light className='h3'>
               Игрок получил 4-й фол
             </PopUpLabel>
           )}
 
-          <PopUpButton color="Voting" onClick={this.goToNight}>
+          <PopUpButton color='Voting' onClick={this.goToNight}>
             Ночь
           </PopUpButton>
         </>
@@ -56,21 +58,21 @@ class EndOfVoting extends Component {
         <>
           {lastMinuteFor.length > 0 ? (
             <>
-              <PopUpLabel className="h1">Игру покидает</PopUpLabel>
+              <PopUpLabel className='h1'>Игру покидает</PopUpLabel>
               <ResultsNumbers>
                 {lastMinuteFor.map(num => (
                   <div key={num}>{num + 1}</div>
                 ))}
               </ResultsNumbers>
 
-              <PopUpButton color="Voting" onClick={this.closeNotification}>
+              <PopUpButton color='Voting' onClick={this.closeNotification}>
                 ОК
               </PopUpButton>
             </>
           ) : (
             <>
-              <PopUpLabel className="h1">Никто не уходит</PopUpLabel>
-              <PopUpButton color="Voting" onClick={this.goToNight}>
+              <PopUpLabel className='h1'>Никто не уходит</PopUpLabel>
+              <PopUpButton color='Voting' onClick={this.goToNight}>
                 Ночь
               </PopUpButton>
             </>
