@@ -16,7 +16,7 @@ const BottomButtonGroup = styled.div`
 
   > :first-child {
     margin-right: 20px;
-    background: ${({ timerStopped }) => timerStopped && 'darkred'};
+    background: ${({ buttonOncePressed }) => buttonOncePressed && 'darkred'};
   }
 `;
 
@@ -186,7 +186,7 @@ class Voting extends Component {
           onNumberSelected={this.onNumberSelected} // callback
         />
 
-        <BottomButtonGroup timerStopped={this.state.timerStopped}>
+        <BottomButtonGroup buttonOncePressed={this.state.timerStopped || this.state.timerStarted}>
           <PopUpButton color='Voting' onClick={this.timerClicked}>
             2 сек
           </PopUpButton>
