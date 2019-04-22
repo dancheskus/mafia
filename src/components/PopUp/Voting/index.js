@@ -10,13 +10,35 @@ import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/common/VictimSelector';
 import CarCrash from './CarCrash';
 import secondsSoundFile from '../../../audio/Countdown_10sec_effects.mp3';
+import colors from '../../../colors';
+import { ResetIcon } from 'icons/svgIcons';
 
 const BottomButtonGroup = styled.div`
   flex-direction: row;
 
-  > :first-child {
+  > :not(:last-child) {
     margin-right: 20px;
     background: ${({ buttonOncePressed }) => buttonOncePressed && 'darkred'};
+  }
+`;
+
+const ResetButton = styled.div`
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  background: ${colors.Voting.popupButton};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+  cursor: pointer;
+  transition: filter 0.2s !important;
+
+  :hover {
+    filter: brightness(110%);
   }
 `;
 
@@ -32,6 +54,8 @@ class Voting extends Component {
     timerStarted: false,
     timerStopped: false,
   };
+
+  initialSelectedNumbers = this.props.game.selectedNumbers;
 
   state = { ...this.initialState };
 
@@ -156,28 +180,56 @@ class Voting extends Component {
     }, 2000);
   };
 
+  resetVoting = () => {
+    this.setState({ ...this.initialState });
+    // this.props.clearSelectedNumbers();
+    // this.initialSelectedNumbers.map(num => {
+    //   this.props.addToSelectedNumbers(num);
+    // });
+  };
+
   render = () => {
     const { currentPlayer, lastMinuteFor } = this.state;
     const { selectedNumbers, skipVoting } = this.props.game;
     const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 
     if (this.state.endOfVoting || skipVoting)
-      return <EndOfVoting votingSkipped={skipVoting && lastMinuteFor.length === 0} lastMinuteFor={lastMinuteFor} />;
+      return (
+        <>
+          {/* <ResetButton onClick={this.resetVoting}>
+            <ResetIcon size='75%' />
+          </ResetButton> */}
+
+          <EndOfVoting votingSkipped={skipVoting && lastMinuteFor.length === 0} lastMinuteFor={lastMinuteFor} />
+        </>
+      );
 
     if (this.state.carCrash)
       return (
-        <CarCrash
-          closeCarCrash={this.closeCarCrash}
-          secondTime={this.state.carCrashClosed}
-          votingFinishedClicked={this.votingFinishedClicked}
-        />
+        <>
+          {/* <ResetButton onClick={this.resetVoting}>
+            <ResetIcon size='75%' />
+          </ResetButton> */}
+
+          <CarCrash
+            closeCarCrash={this.closeCarCrash}
+            secondTime={this.state.carCrashClosed}
+            votingFinishedClicked={this.votingFinishedClicked}
+          />
+        </>
       );
 
     return (
       <>
+        <ResetButton onClick={this.resetVoting}>
+          <ResetIcon size='75%' />
+        </ResetButton>
+
         {this.state.carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 
-        <PopUpCircle mini={this.state.carCrashClosed}>{selectedNumbers[currentPlayer] + 1}</PopUpCircle>
+        {console.log(selectedNumbers)}
+
+        <PopUpCircle mini={this.state.carCrashClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
 
         <VictimSelector
           lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке
