@@ -22,11 +22,11 @@ const Settings = props => {
         <NextIcon />
       </BackButton>
 
-      <SettingsItem title="Раздача номеров в начале игры" type="seatAllocator" />
-      <SettingsItem title="Музыка" type="appMusic" />
-      <SettingsItem title="Звуки таймера (на 15/5 сек)" type="timerSounds" />
-      <SettingsItem title="Таймер на договорку (1 мин)" type="mafiaTimer" />
-      <SettingsItem title="Предлагать вывести всех после повторной переголосовки" type="multiplePlayerRemove" />
+      <SettingsItem title='Раздача номеров в начале игры' type='seatAllocator' />
+      <SettingsItem title='Музыка' type='appMusic' />
+      <SettingsItem title='Звуки таймера (на 10/0 сек)' type='timerSounds' />
+      <SettingsItem title='Таймер на договорку (1 мин)' type='mafiaTimer' />
+      <SettingsItem title='Предлагать вывести всех после повторной переголосовки' type='multiplePlayerRemove' />
 
       <RepeatGuideButton onClick={enableTutorial}>Включить обучение</RepeatGuideButton>
     </AppSettings>
