@@ -52,6 +52,10 @@ const PanelItem = styled.div`
   }
 `;
 
+const PanelText = styled.div`
+  color: white;
+`;
+
 class NumbersPanel extends Component {
   state = { playerAddedNumber: false };
 
@@ -71,10 +75,14 @@ class NumbersPanel extends Component {
       numbersPanelClickable,
     } = this.props.game;
 
+    const aliveMafiaAmount = this.props.players.filter(
+      player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ')
+    ).length;
+
     return (
       <>
         {phase === 'SeatAllocator' && (
-          <Panel color={phase} className="seat-allocator-panel">
+          <Panel color={phase} className='seat-allocator-panel'>
             {selectedNumbers.map(selNum => (
               <PanelItem color={phase} key={selNum} selected>
                 {selNum + 1}
@@ -90,7 +98,7 @@ class NumbersPanel extends Component {
         )}
 
         {phase === 'Day' && (
-          <Panel color={phase} className="day-panel">
+          <Panel color={phase} className='day-panel'>
             {selectedNumbers.map(selNum => {
               const lastAddedNumber = selNum === last(selectedNumbers) && this.state.playerAddedNumber;
 
@@ -151,6 +159,12 @@ class NumbersPanel extends Component {
           </Panel>
         )}
 
+        {phase === 'Night' && (
+          <Panel color={phase}>
+            <PanelText>Живых мафов: {aliveMafiaAmount}</PanelText>
+          </Panel>
+        )}
+
         {phase === 'EndOfGame' && (
           <Panel color={phase}>
             {this.props.players.map((player, i) => (
@@ -167,7 +181,7 @@ class NumbersPanel extends Component {
         )}
 
         {phase === 'RoleDealing' && selectedNumbers.length > 0 && (
-          <Panel color={phase} className="role-dealing-panel">
+          <Panel color={phase} className='role-dealing-panel'>
             {range(0, 10).map(num => (
               <PanelItem
                 pointer={numbersPanelClickable}
