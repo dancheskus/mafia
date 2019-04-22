@@ -146,18 +146,18 @@ class Navigation extends Component {
 
     return (
       <StyledNavigation color={phase} tutorialEnabled={tutorialEnabled}>
-        <Container className="d-flex justify-content-between p-0">
+        <Container className='d-flex justify-content-between p-0'>
           <NavStateName tutorialEnabled={tutorialEnabled} key={title}>
             <span>{title}</span>
           </NavStateName>
 
           {phase === 'Day' && (
-            <ButtonsWrapper className="day-user-navigation">
+            <ButtonsWrapper className='day-user-navigation'>
               <NavBarCircleButton
                 disabled={!stepBackAvaliable}
                 onClick={() => (stepBackAvaliable ? this.goToPreviousAlivePlayer() : null)}
               >
-                <BackIcon size="50%" />
+                <BackIcon size='50%' />
               </NavBarCircleButton>
 
               <Timer
@@ -176,12 +176,12 @@ class Navigation extends Component {
               <NavBarCircleButton onClick={lastSpeaker ? this.toVotingClicked : () => this.goToNextAlivePlayer()}>
                 {lastSpeaker ? (
                   this.props.game.selectedNumbers.length === 0 ? (
-                    <EyeIcon size="50%" />
+                    <EyeIcon size='50%' />
                   ) : (
-                    <ThumbUpIcon size="50%" />
+                    <ThumbUpIcon size='50%' />
                   )
                 ) : (
-                  <NextIcon size="50%" />
+                  <NextIcon size='50%' />
                 )}
               </NavBarCircleButton>
             </ButtonsWrapper>

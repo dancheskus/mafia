@@ -51,13 +51,13 @@ const ZeroNight = props => {
     <>
       {dogovorka ? (
         <>
-          <PopUpLabel color="ZeroNight" className="h1">
+          <PopUpLabel color='ZeroNight' className='h1'>
             Договорка
           </PopUpLabel>
 
           {mafiaTimer && <Timer />}
 
-          <PopUpButton onClick={() => !tutorialEnabled && setDogovorka(false)} color="ZeroNight">
+          <PopUpButton onClick={() => !tutorialEnabled && setDogovorka(false)} color='ZeroNight'>
             Далее
           </PopUpButton>
         </>
@@ -65,17 +65,17 @@ const ZeroNight = props => {
         <>
           <TwoIcons>
             <Icon>
-              <SheriffStarIcon size="86%" />
+              <SheriffStarIcon size='86%' />
               <span>{props.players.findIndex(player => player.role === 'ШЕРИФ') + 1}</span>
-              <div className="label">ШЕРИФ</div>
+              <div className='label'>ШЕРИФ</div>
             </Icon>
             <Icon>
               <TargetIcon />
               <span>{props.players.findIndex(player => player.role === 'ДОН') + 1}</span>
-              <div className="label">ДОН</div>
+              <div className='label'>ДОН</div>
             </Icon>
           </TwoIcons>
-          <PopUpButton onClick={startGame} color="ZeroNight">
+          <PopUpButton onClick={startGame} color='ZeroNight'>
             День
           </PopUpButton>
         </>

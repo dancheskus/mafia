@@ -67,21 +67,22 @@ const Muted = styled.div`
 `;
 
 class Timer extends Component {
-  initialState = { timerWorking: false, secondsLeft: this.props.time || 60 };
+  initialState = {
+    timerWorking: false,
+    secondsLeft: this.props.time || 60,
+    playerMuted: this.props.players[this.props.game.activePlayer].fouls.muted,
+  };
   state = this.initialState;
 
   componentDidMount = () => {
-    this.props.autostart && this.startPauseClicked();
+    this.props.autostart && !this.state.playerMuted && this.startPauseClicked();
 
-    const volume = 0.2;
+    const volume = 1;
 
     this.secondsSound = new Howl({
       src: `${secondsSoundFile}`,
       volume,
-      sprite: {
-        oneSec: [0, 1020],
-        fiveSec: [0, 5020],
-      },
+      sprite: { oneSec: [0, 1020] },
     });
 
     this.countdownEndSound = new Howl({ src: `${countdownEndFile}`, volume });
@@ -124,22 +125,21 @@ class Timer extends Component {
     if (timerSoundAllowed) {
       const { secondsSound, countdownEndSound } = this;
 
-      if (secondsSound) {
-        seconds === 15 && !secondsSound.playing() && secondsSound.play('oneSec');
-        seconds === 5 && !secondsSound.playing() && secondsSound.play('fiveSec');
-      }
+      if (secondsSound) seconds === 10 && !secondsSound.playing() && secondsSound.play('oneSec');
 
-      if (countdownEndSound) {
-        seconds === 0 && !countdownEndSound.playing() && countdownEndSound.play();
-      }
+      if (countdownEndSound) seconds === 0 && !countdownEndSound.playing() && countdownEndSound.play();
     }
 
     return (
       <>
-        <TimeAndPlayWrapper mini={isMini} time={time} onClick={isMini ? this.startPauseClicked : null}>
+        <TimeAndPlayWrapper
+          mini={isMini}
+          time={time}
+          onClick={isMini && !this.state.playerMuted ? this.startPauseClicked : null}
+        >
           {this.props.time === 0 ? (
             <Muted>
-              <MutedIcon size="70%" fill={colors.Day.navBarText} />
+              <MutedIcon size='70%' fill={colors.Day.navBarText} />
             </Muted>
           ) : (
             <>
@@ -171,4 +171,4 @@ class Timer extends Component {
   };
 }
 
-export default connect(({ game, settings }) => ({ game, settings }))(Timer);
+export default connect(({ game, settings, players }) => ({ game, settings, players }))(Timer);
