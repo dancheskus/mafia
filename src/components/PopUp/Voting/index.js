@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
+import { Howl } from 'howler';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
@@ -7,6 +9,16 @@ import EndOfVoting from './EndOfVoting';
 import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/common/VictimSelector';
 import CarCrash from './CarCrash';
+import secondsSoundFile from '../../../audio/Countdown_10sec_effects.mp3';
+
+const BottomButtonGroup = styled.div`
+  flex-direction: row;
+
+  > :first-child {
+    margin-right: 20px;
+    background: ${({ timerStopped }) => timerStopped && 'darkred'};
+  }
+`;
 
 class Voting extends Component {
   initialState = {
@@ -17,6 +29,8 @@ class Voting extends Component {
     carCrashClosed: false, // true, после первой автокатастрофы
     endOfVoting: false,
     lastMinuteFor: [], // Игрок(и), которых выводят из города
+    timerStarted: false,
+    timerStopped: false,
   };
 
   state = { ...this.initialState };
@@ -32,6 +46,11 @@ class Voting extends Component {
     if (gameState.dayNumber > 1 && selectedNumbers.length === 1 && !skipVoting) this.votingFinishedClicked();
 
     if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || skipVoting) this.setState({ endOfVoting: true });
+
+    this.stopVotingSound = new Howl({
+      src: `${secondsSoundFile}`,
+      sprite: { oneSec: [0, 1020] },
+    });
   };
 
   componentWillUnmount = () => {
@@ -41,6 +60,7 @@ class Voting extends Component {
     if (this.props.game.skipVoting && this.state.lastMinuteFor.length !== 0) {
       for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) this.props.skipVotingDec();
     }
+    clearInterval(this.timer);
   };
 
   onNumberSelected = num => {
@@ -110,6 +130,7 @@ class Voting extends Component {
     const votersLeft = avaliableVoters - this.state.votesPerPlayer[currentPlayer] + 1;
 
     this.countAvaliableVoters();
+    this.setState({ timerStopped: false });
 
     if (currentPlayer < votingPlayersAmount - 1) {
       // Если НЕ последний игрок, увеличиваем игрока на 1 и вычисляем оставшееся кол-во рук. Если руки закончились, завершаем голосование.
@@ -123,6 +144,16 @@ class Voting extends Component {
       arr[currentPlayer + 1] = votersLeft;
       this.setState({ votesPerPlayer: arr });
     }
+  };
+
+  timerClicked = () => {
+    if (this.state.timerStarted) return;
+    this.setState({ timerStarted: true });
+
+    this.timer = setTimeout(() => {
+      this.stopVotingSound.play('oneSec');
+      this.setState({ timerStopped: true, timerStarted: false });
+    }, 2000);
   };
 
   render = () => {
@@ -151,13 +182,19 @@ class Voting extends Component {
         <VictimSelector
           lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке
           votesLeft={this.state.avaliableVoters} // для disabled кнопки
-          key={this.state.currentPlayer} // чтобы перерендеривался каждый раз
+          key={currentPlayer} // чтобы перерендеривался каждый раз
           onNumberSelected={this.onNumberSelected} // callback
         />
 
-        <PopUpButton color='Voting' onClick={lastPlayer ? this.votingFinishedClicked : this.nextButtonClicked}>
-          {lastPlayer ? 'Завершить' : 'Далее'}
-        </PopUpButton>
+        <BottomButtonGroup timerStopped={this.state.timerStopped}>
+          <PopUpButton color='Voting' onClick={this.timerClicked}>
+            2 сек
+          </PopUpButton>
+
+          <PopUpButton color='Voting' onClick={lastPlayer ? this.votingFinishedClicked : this.nextButtonClicked}>
+            {lastPlayer ? 'Завершить' : 'Далее'}
+          </PopUpButton>
+        </BottomButtonGroup>
       </>
     );
   };

@@ -44,7 +44,6 @@ const StartStopButton = styled.div`
     !props.mini
       ? `
       background: ${props => colors[props.color].popupButton};
-      /* border-radius: 50%; Вроде не используется */
       height: 40px;
       width: 40px;
 
