@@ -261,7 +261,16 @@ export const MenuItems = styled.div`
   opacity: ${props => (props.hide ? 0 : 1)};
 `;
 
-export const RepeatGuideButton = styled.div`
+export const BottomButtonsGroup = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  > :first-child {
+    margin-right: 20px;
+  }
+`;
+
+export const BottomButton = styled.div`
   background: rgb(122, 156, 236);
   color: white;
   padding: 10px 15px;
