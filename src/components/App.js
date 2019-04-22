@@ -66,7 +66,10 @@ const UnsupportedRes = styled.div`
 const App = props => {
   const [appHeight, setAppHeight] = useState(document.documentElement.clientHeight);
 
-  useEffect(() => window.addEventListener('resize', updateHeight), []);
+  useEffect(() => {
+    window.addEventListener('load', updateHeight);
+    window.addEventListener('resize', updateHeight);
+  }, []);
 
   const updateHeight = () => {
     setAppHeight(document.documentElement.clientHeight);
@@ -92,12 +95,12 @@ const App = props => {
       {tutorialEnabled && <GuideOverlay />}
 
       <GuideWrapper>
-        <AppWrapper appHeight={appHeight} className="d-flex flex-column">
+        <AppWrapper appHeight={appHeight} className='d-flex flex-column'>
           <NavBar />
 
-          <MainApp className="d-flex">
+          <MainApp className='d-flex'>
             {/* {window.innerHeight} {window.innerWidth} */}
-            <Container className="d-flex flex-column justify-content-between">
+            <Container className='d-flex flex-column justify-content-between'>
               {phase !== 'startScreen' && <NumbersPanel key={props.game.activePlayer} />}
 
               <MainContentWrapper>
