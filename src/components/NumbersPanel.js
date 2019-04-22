@@ -22,6 +22,21 @@ const Panel = styled.div`
       margin-left: 10px
     }
   `}
+
+  ${({ flash }) => flash && 'animation: flash 1.5s ease-in-out'}
+  
+
+  @keyframes flash {
+    0% {
+      transform: scale(1);
+    }
+    25% {
+      transform: scale(1.05);
+    }
+    50% {
+      transform: scale(1);
+    }
+  }
 `;
 
 const PanelItem = styled.div`
@@ -79,6 +94,8 @@ class NumbersPanel extends Component {
       player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ')
     ).length;
 
+    const isCurrentPlayerMuted = this.props.players[this.props.game.activePlayer].fouls.muted;
+
     return (
       <>
         {phase === 'SeatAllocator' && (
@@ -98,7 +115,7 @@ class NumbersPanel extends Component {
         )}
 
         {phase === 'Day' && (
-          <Panel color={phase} className='day-panel'>
+          <Panel color={phase} className='day-panel' flash={isCurrentPlayerMuted}>
             {selectedNumbers.map(selNum => {
               const lastAddedNumber = selNum === last(selectedNumbers) && this.state.playerAddedNumber;
 

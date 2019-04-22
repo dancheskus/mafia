@@ -26,6 +26,7 @@ const Card = styled.div`
   border: 4px solid ${props => (props.activePlayer ? colors.Day.activePlayer : 'transparent')};
   display: flex;
   position: relative;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
 `;
 
 const RemoveFoul = styled.div`
@@ -150,11 +151,11 @@ class SingleCard extends Component {
           >
             {this.state.lastFoulDeath && (
               <BackButton onClick={this.backToLife}>
-                <NextIcon fill="lightgrey" />
+                <NextIcon fill='lightgrey' />
               </BackButton>
             )}
 
-            <div className="number">{this.props.number + 1}</div>
+            <div className='number'>{this.props.number + 1}</div>
           </PlayerNumber>
 
           <FoulContainer isAlive={isAlive}>
