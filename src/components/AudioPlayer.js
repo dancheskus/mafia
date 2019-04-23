@@ -10,7 +10,6 @@ import { NextIcon } from './../icons/svgIcons';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 
 const musicUrl = 'https://mafia-city.ml/music/';
-const fadeDuration = 20;
 
 class AudioPlayer extends Component {
   state = { isPlayingVisualStatus: false, audioList: [], audioNumber: 0, audioLoaded: false, loadError: false };
@@ -69,15 +68,13 @@ class AudioPlayer extends Component {
   pause = () => {
     // Ставим на пузу
     this.setState({ isPlayingVisualStatus: false });
-    this.sound.once('fade', () => this.sound.pause());
-    this.sound.fade(this.sound.volume(), 0, fadeDuration);
+    this.sound.pause();
   };
 
   play = () => {
     // Воспроизводим
     const startPlaying = () => {
       this.setState({ isPlayingVisualStatus: true });
-      this.sound.fade(0, 1, fadeDuration);
       this.sound.play();
     };
 
