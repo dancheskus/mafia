@@ -115,6 +115,7 @@ class ManualMode extends Component {
 
   startGameClicked = () => {
     this.props.clearSelectedNumbers();
+
     this.props.changeGameState({ phase: 'ZeroNight' });
   };
 
@@ -131,7 +132,7 @@ class ManualMode extends Component {
 
     return (
       <>
-        <RoleSelectionWrapper className="role-selection-wrapper">
+        <RoleSelectionWrapper className='role-selection-wrapper'>
           <RoleSelection>
             <RoleCard mirnij onClick={() => this.changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
               <ThumbUpIcon size={'60%'} fill={colors.RoleDealing.popupIconLight} />
@@ -168,8 +169,8 @@ class ManualMode extends Component {
 
         <Notification disabled={isButtonDisabled}>Выберите все функциональные роли (2 Мафии, Дон и Шериф)</Notification>
 
-        <div className="flex-grow-1 d-flex align-items-center">
-          <PopUpButton onClick={this.startGameClicked} color="RoleDealing" disabled={isButtonDisabled}>
+        <div className='flex-grow-1 d-flex align-items-center'>
+          <PopUpButton onClick={this.startGameClicked} color='RoleDealing' disabled={isButtonDisabled}>
             Играть
           </PopUpButton>
         </div>

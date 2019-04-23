@@ -59,7 +59,7 @@ const RoleDealing = props => {
         <>
           <SvgWrapper>
             <div
-              className="flex-grow-1 d-flex align-items-center justify-content-center"
+              className='flex-grow-1 d-flex align-items-center justify-content-center'
               onClick={() => {
                 setRandomModeSelected(true);
                 setManualModeSelected(false);
@@ -68,7 +68,7 @@ const RoleDealing = props => {
               <RandomCubeIcon className={randomModeSelected ? 'selected' : null} size={'100px'} />
             </div>
             <div
-              className="flex-grow-1 d-flex align-items-center justify-content-center"
+              className='flex-grow-1 d-flex align-items-center justify-content-center'
               onClick={() => {
                 setManualModeSelected(true);
                 setRandomModeSelected(false);
@@ -77,7 +77,7 @@ const RoleDealing = props => {
               <ListIcon className={manualModeSelected ? 'selected' : null} size={'100px'} />
             </div>
           </SvgWrapper>
-          <div className="flex-grow-1 d-flex align-items-center">
+          <div className='flex-grow-1 d-flex align-items-center'>
             <PopUpButton color={props.game.gameState.phase} light={lightMode} onClick={buttonClicked}>
               {randomModeSelected ? 'автоматически' : 'вручную'}
             </PopUpButton>

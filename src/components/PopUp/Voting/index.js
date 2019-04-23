@@ -12,6 +12,7 @@ import CarCrash from './CarCrash';
 import secondsSoundFile from '../../../audio/Countdown_10sec_effects.mp3';
 import colors from '../../../colors';
 import { ResetIcon } from 'icons/svgIcons';
+import ResetButton from './styled-components/ResetButton';
 
 const BottomButtonGroup = styled.div`
   flex-direction: row;
@@ -19,26 +20,6 @@ const BottomButtonGroup = styled.div`
   > :not(:last-child) {
     margin-right: 20px;
     background: ${({ buttonOncePressed }) => buttonOncePressed && 'darkred'};
-  }
-`;
-
-const ResetButton = styled.div`
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  background: ${colors.Voting.popupButton};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
-  cursor: pointer;
-  transition: filter 0.2s !important;
-
-  :hover {
-    filter: brightness(110%);
   }
 `;
 
@@ -181,11 +162,13 @@ class Voting extends Component {
   };
 
   resetVoting = () => {
-    this.setState({ ...this.initialState });
-    // this.props.clearSelectedNumbers();
-    // this.initialSelectedNumbers.map(num => {
-    //   this.props.addToSelectedNumbers(num);
-    // });
+    if (window.confirm('Сбросить голосование?')) {
+      this.setState({ ...this.initialState });
+      this.props.clearSelectedNumbers();
+      this.initialSelectedNumbers.map(num => {
+        this.props.addToSelectedNumbers(num);
+      });
+    }
   };
 
   render = () => {
@@ -195,21 +178,19 @@ class Voting extends Component {
 
     if (this.state.endOfVoting || skipVoting)
       return (
-        <>
-          {/* <ResetButton onClick={this.resetVoting}>
-            <ResetIcon size='75%' />
-          </ResetButton> */}
-
-          <EndOfVoting votingSkipped={skipVoting && lastMinuteFor.length === 0} lastMinuteFor={lastMinuteFor} />
-        </>
+        <EndOfVoting
+          resetFn={this.resetVoting}
+          votingSkipped={skipVoting && lastMinuteFor.length === 0}
+          lastMinuteFor={lastMinuteFor}
+        />
       );
 
     if (this.state.carCrash)
       return (
         <>
-          {/* <ResetButton onClick={this.resetVoting}>
+          <ResetButton onClick={this.resetVoting}>
             <ResetIcon size='75%' />
-          </ResetButton> */}
+          </ResetButton>
 
           <CarCrash
             closeCarCrash={this.closeCarCrash}
@@ -226,8 +207,6 @@ class Voting extends Component {
         </ResetButton>
 
         {this.state.carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
-
-        {console.log(selectedNumbers)}
 
         <PopUpCircle mini={this.state.carCrashClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
 

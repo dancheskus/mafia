@@ -24,7 +24,9 @@ const BigCircle = styled.div`
 class SeatAllocator extends Component {
   state = { randomNumber: null };
 
-  componentDidMount = () => this.props.clearSelectedNumbers();
+  componentDidMount = () => {
+    this.props.clearSelectedNumbers();
+  };
 
   seats = shuffle(range(0, 10));
 
@@ -44,7 +46,9 @@ class SeatAllocator extends Component {
     }, 1000);
   };
 
-  buttonClicked = () => this.props.changeGameState({ phase: 'RoleDealing' }) && this.props.clearSelectedNumbers();
+  buttonClicked = () => {
+    this.props.changeGameState({ phase: 'RoleDealing' }) && this.props.clearSelectedNumbers();
+  };
 
   randomClicked = () => {
     if (!this.seats.length || this.interval) return;
@@ -60,7 +64,7 @@ class SeatAllocator extends Component {
   render = () => (
     <>
       <BigCircle
-        className="d-flex justify-content-center align-items-center seat-allocator-big-circle"
+        className='d-flex justify-content-center align-items-center seat-allocator-big-circle'
         onClick={this.randomClicked}
         number={this.state.randomNumber}
         enabled={this.seats.length}
@@ -70,7 +74,7 @@ class SeatAllocator extends Component {
       <PopUpButton
         color={this.props.game.gameState.phase}
         onClick={this.buttonClicked}
-        className="seat-allocator-popup-button"
+        className='seat-allocator-popup-button'
       >
         {this.seats.length ? 'пропустить' : 'играть'}
       </PopUpButton>

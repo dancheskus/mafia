@@ -6,6 +6,8 @@ import { clearSelectedNumbers, changeGameState, skipVotingDec } from './../../..
 import { ResultsNumbers } from './styled-components/Results';
 import { PopUpLabel, PopUpButton } from '../styled-components';
 import PlayersLastMinute from './PlayersLastMinute';
+import { ResetIcon } from 'icons/svgIcons';
+import ResetButton from './styled-components/ResetButton';
 
 class EndOfVoting extends Component {
   state = { notification: true };
@@ -15,8 +17,6 @@ class EndOfVoting extends Component {
   componentDidUpdate = () => {
     this.killedOnLastMinute = this.props.lastMinuteFor.map(plNum => !this.props.players[plNum].isAlive);
   };
-
-  componentWillUnmount = () => this.props.clearSelectedNumbers();
 
   closeNotification = () => this.setState({ notification: false });
 
@@ -56,6 +56,10 @@ class EndOfVoting extends Component {
     if (this.state.notification)
       return (
         <>
+          <ResetButton onClick={this.props.resetFn}>
+            <ResetIcon size='75%' />
+          </ResetButton>
+
           {lastMinuteFor.length > 0 ? (
             <>
               <PopUpLabel className='h1'>Игру покидает</PopUpLabel>
@@ -81,11 +85,17 @@ class EndOfVoting extends Component {
       );
 
     return (
-      <PlayersLastMinute
-        listOfPlayers={lastMinuteFor}
-        killedOnLastMinute={this.killedOnLastMinute}
-        goToNight={this.goToNight}
-      />
+      <>
+        <ResetButton onClick={this.props.resetFn}>
+          <ResetIcon size='75%' />
+        </ResetButton>
+
+        <PlayersLastMinute
+          listOfPlayers={lastMinuteFor}
+          killedOnLastMinute={this.killedOnLastMinute}
+          goToNight={this.goToNight}
+        />
+      </>
     );
   };
 }
