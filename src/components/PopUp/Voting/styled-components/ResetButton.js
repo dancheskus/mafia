@@ -11,7 +11,7 @@ export default styled.div`
   justify-content: center;
   color: white;
   position: absolute;
-  bottom: 15px;
+  top: 15px;
   left: 15px;
   cursor: pointer;
   transition: filter 0.2s !important;
