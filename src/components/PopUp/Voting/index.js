@@ -10,7 +10,6 @@ import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/common/VictimSelector';
 import CarCrash from './CarCrash';
 import secondsSoundFile from '../../../audio/Countdown_10sec_effects.mp3';
-import colors from '../../../colors';
 import { ResetIcon } from 'icons/svgIcons';
 import ResetButton from './styled-components/ResetButton';
 
@@ -165,7 +164,7 @@ class Voting extends Component {
     if (window.confirm('Сбросить голосование?')) {
       this.setState({ ...this.initialState });
       this.props.clearSelectedNumbers();
-      this.initialSelectedNumbers.map(num => {
+      this.initialSelectedNumbers.forEach(num => {
         this.props.addToSelectedNumbers(num);
       });
     }
@@ -180,7 +179,10 @@ class Voting extends Component {
       return (
         <EndOfVoting
           resetFn={this.resetVoting}
-          votingSkipped={skipVoting && lastMinuteFor.length === 0}
+          votingSkipped={
+            (skipVoting && lastMinuteFor.length === 0) ||
+            (this.props.game.gameState.dayNumber === 1 && this.props.game.selectedNumbers.length === 1)
+          }
           lastMinuteFor={lastMinuteFor}
         />
       );

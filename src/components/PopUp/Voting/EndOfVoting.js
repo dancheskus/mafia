@@ -33,18 +33,29 @@ class EndOfVoting extends Component {
 
   render = () => {
     const {
+      votingSkipped,
       lastMinuteFor,
-      game: { skipVoting },
+      game: {
+        skipVoting,
+        selectedNumbers,
+        gameState: { dayNumber },
+      },
     } = this.props;
 
-    if (this.props.votingSkipped)
+    if (votingSkipped)
       return (
         <>
           <PopUpLabel className='h2'>Голосование не проводится</PopUpLabel>
-          {skipVoting > 0 && (
+          {selectedNumbers.length === 1 && dayNumber === 1 ? (
             <PopUpLabel light className='h3'>
-              Игрок получил 4-й фол
+              Один игрок в первый день не голосуется
             </PopUpLabel>
+          ) : (
+            skipVoting > 0 && (
+              <PopUpLabel light className='h3'>
+                Игрок получил 4-й фол
+              </PopUpLabel>
+            )
           )}
 
           <PopUpButton color='Voting' onClick={this.goToNight}>
