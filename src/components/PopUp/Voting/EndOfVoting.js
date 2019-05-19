@@ -14,6 +14,8 @@ class EndOfVoting extends Component {
 
   killedOnLastMinute = Array(this.props.lastMinuteFor.length).fill(false);
 
+  componentWillUnmount = () => this.props.clearSelectedNumbers();
+
   componentDidUpdate = () => {
     this.killedOnLastMinute = this.props.lastMinuteFor.map(plNum => !this.props.players[plNum].isAlive);
   };
