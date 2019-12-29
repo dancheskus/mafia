@@ -9,7 +9,7 @@
     "browserslist": "^4.5.5",
     "howler": "^2.1.1",
     "immer": "^1.8.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "node-sass": "^4.10.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
