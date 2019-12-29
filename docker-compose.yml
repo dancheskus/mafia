@@ -6,10 +6,15 @@ services:
     build: .
     restart: unless-stopped
     networks:
-      nginx_net:
+      - traefik_proxy
     environment:
       - NODE_ENV=production
+    labels:
+      - 'traefik.docker.network=traefik_proxy'
+      - 'traefik.enable=true'
+      - 'traefik.port=5000'
+      - 'traefik.frontend.rule=Host:${DOMAIN},www.${DOMAIN}'
 
 networks:
-  nginx_net:
+  traefik_proxy:
     external: true
