@@ -10,7 +10,6 @@ import { NextIcon } from './../icons/svgIcons';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 
 const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
-console.log(musicUrl)
 
 class AudioPlayer extends Component {
   state = { isPlayingVisualStatus: false, audioList: [], audioNumber: 0, audioLoaded: false, loadError: false };
@@ -39,8 +38,8 @@ class AudioPlayer extends Component {
   componentDidMount = () => {
     axios
       .get(musicUrl)
-      .then(res => {
-        this.setState({ audioList: shuffle(res.data.map(el => el.name)), loadError: false }, () => {
+      .then((res) => {
+        this.setState({ audioList: shuffle(res.data.map((el) => el.name)), loadError: false }, () => {
           this.loadAudio();
         });
       })
@@ -52,7 +51,9 @@ class AudioPlayer extends Component {
     this.soundForBuffering && this.soundForBuffering.unload();
   };
 
-  componentDidUpdate = prevProps => {
+  componentDidUpdate = (prevProps) => {
+    if (this.state.loadError) return;
+
     const prevPhase = prevProps.game.gameState.phase;
     const phase = this.props.game.gameState.phase;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
