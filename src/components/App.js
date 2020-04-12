@@ -14,7 +14,8 @@ import Voting from './PopUp/Voting';
 import Night from './PopUp/Night';
 import Day from './PopUp/Day';
 import EndOfGame from './PopUp/EndOfGame';
-import GuideWrapper, { GuideOverlay } from './UsersGuide';
+import GuideWrapper from './UserGuide';
+import { GuideOverlay } from './UserGuide/style';
 
 const AppWrapper = styled.div`
   height: 100vh;
