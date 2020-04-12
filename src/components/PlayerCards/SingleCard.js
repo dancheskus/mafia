@@ -26,7 +26,6 @@ const Card = styled.div`
   border: 4px solid ${props => (props.activePlayer ? colors.Day.activePlayer : 'transparent')};
   display: flex;
   position: relative;
-  -webkit-mask-image: -webkit-radial-gradient(white, black);
 `;
 
 const RemoveFoul = styled.div`
