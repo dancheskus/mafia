@@ -49,7 +49,7 @@ export const GuideWrapperStyle = styled.div`
       case 5:
         return `.styled-popup { z-index: 3001 }`;
       case 6:
-        return `.add-foul, .remove-foul { z-index: 3001; }; .styled-popup { z-index: 1 };`;
+        return `.add-foul, .remove-foul { z-index: 3001;  }; .add-foul {border-bottom-right-radius: 10px }; .remove-foul { border-top-right-radius: 10px }; .styled-popup { z-index: 1 };`;
       case 7:
         return `.day-user-navigation { z-index: 3001; };`;
       case 8:
