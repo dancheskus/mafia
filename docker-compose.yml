@@ -7,10 +7,10 @@ services:
     restart: unless-stopped
     environment:
       - NODE_ENV=production
-    ports:
-      - 3000
+    ports: 
+      - 5000
     labels:
-      traefik.http.routers.mafia.rule: 'Host(`${REACT_APP_DOMAIN}`)'
+      traefik.http.routers.mafia.rule: Host(`${REACT_APP_DOMAIN}`)
       traefik.http.routers.mafia.entrypoints: websecure
       traefik.http.routers.mafia.tls.certresolver: cfdnsresolver
       traefik.http.routers.mafia.tls.domains[0].main: ${REACT_APP_DOMAIN}
