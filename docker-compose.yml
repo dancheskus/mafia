@@ -5,16 +5,18 @@ services:
     container_name: mafia
     build: .
     restart: unless-stopped
-    networks:
-      - traefik_proxy
     environment:
       - NODE_ENV=production
+    ports:
+      - 3000
     labels:
-      - 'traefik.docker.network=traefik_proxy'
-      - 'traefik.enable=true'
-      - 'traefik.port=5000'
-      - 'traefik.frontend.rule=Host:${DOMAIN},www.${DOMAIN}'
+      traefik.http.routers.mafia.rule: 'Host(`${REACT_APP_DOMAIN}`)'
+      traefik.http.routers.mafia.entrypoints: websecure
+      traefik.http.routers.mafia.tls.certresolver: cfdnsresolver
+      traefik.http.routers.mafia.tls.domains[0].main: ${REACT_APP_DOMAIN}
+      traefik.http.routers.mafia.tls.domains[0].sans: www.${REACT_APP_DOMAIN}
 
 networks:
-  traefik_proxy:
-    external: true
+  default:
+    external: 
+      name: traefik
