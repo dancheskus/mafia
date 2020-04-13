@@ -50,7 +50,7 @@ export const StyledNavMenu = styled.div`
       height: 100vh;
       position: fixed;
       top: 0;
-      right: -2000px;
+      right: -3000px;
       z-index: ${({ tutorialEnabled }) => (tutorialEnabled ? 3610 : 200)};
 
       display: flex;
@@ -150,7 +150,7 @@ export const StyledNavMenu = styled.div`
     font-weight: 100;
     position: fixed;
     bottom: 4%;
-    left: -2000px;
+    left: -3000px;
     transition: left 0.3s;
     z-index: 210;
 
@@ -179,7 +179,7 @@ export const AppSettings = styled.div`
   ${({ hide, tutorialEnabled }) =>
     hide
       ? `
-      left: -2000px;
+      left: -3000px;
       opacity: 0;
       z-index: 180;
     `
