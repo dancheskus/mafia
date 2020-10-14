@@ -42,12 +42,16 @@ const TwoIcons = styled.div`
 
 export default () => {
   const dispatch = useDispatch();
+  const {
+    players,
+    settings: { mafiaTimer, tutorialEnabled },
+  } = useSelector(store => store);
+
   const [dogovorka, setDogovorka] = useState(true);
 
-  const { mafiaTimer, tutorialEnabled } = useSelector(({ settings }) => settings);
-  const players = useSelector(({ players }) => players);
-
   const startGame = () => dispatch(changeGameState({ phase: 'Day', dayNumber: 1 }));
+
+  const findPlayerNumber = role => players.findIndex(player => player.role === role) + 1;
 
   return dogovorka ? (
     <>
@@ -66,13 +70,17 @@ export default () => {
       <TwoIcons>
         <Icon>
           <SheriffStarIcon size='86%' />
-          <span>{players.findIndex(player => player.role === 'ШЕРИФ') + 1}</span>
+
+          <span>{findPlayerNumber('ШЕРИФ')}</span>
+
           <div className='label'>ШЕРИФ</div>
         </Icon>
 
         <Icon>
           <TargetIcon />
-          <span>{players.findIndex(player => player.role === 'ДОН') + 1}</span>
+
+          <span>{findPlayerNumber('ДОН')}</span>
+
           <div className='label'>ДОН</div>
         </Icon>
       </TwoIcons>
@@ -83,5 +91,3 @@ export default () => {
     </>
   );
 };
-
-// export default connect(({ game, players, settings }) => ({ game, players, settings }), { changeGameState })(ZeroNight);
