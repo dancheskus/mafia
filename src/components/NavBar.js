@@ -85,21 +85,22 @@ class Navigation extends Component {
   state = { stepBackAvaliable: false };
 
   componentDidUpdate = prevState => {
-    if (prevState.game.gameState.phase !== 'Day' && this.state.stepBackAvaliable)
-      this.setState({ stepBackAvaliable: false });
+    const { stepBackAvaliable } = this.state;
+    const { players } = this.props;
+
+    if (prevState.game.gameState.phase !== 'Day' && stepBackAvaliable) this.setState({ stepBackAvaliable: false });
 
     // Если стало меньше живых игроков, выключить кнопку "назад"
     const prevAllAlivePlayers = countBy(prevState.players.map(player => player.isAlive)).true;
-    const allAlivePlayers = countBy(this.props.players.map(player => player.isAlive)).true;
+    const allAlivePlayers = countBy(players.map(player => player.isAlive)).true;
     if (prevAllAlivePlayers !== allAlivePlayers) this.setState({ stepBackAvaliable: false });
   };
 
   goToNextAlivePlayer = (i = this.props.game.activePlayer + 1) => {
-    this.props.unmutePlayer(mod(i - 1, 10));
+    const { unmutePlayer, players, changeActivePlayer } = this.props;
+    unmutePlayer(mod(i - 1, 10));
 
-    this.props.players[mod(i, 10)].isAlive
-      ? this.props.changeActivePlayer(mod(i, 10))
-      : this.goToNextAlivePlayer(i + 1);
+    players[mod(i, 10)].isAlive ? changeActivePlayer(mod(i, 10)) : this.goToNextAlivePlayer(i + 1);
 
     this.setState({ stepBackAvaliable: true });
   };
@@ -108,25 +109,36 @@ class Navigation extends Component {
     this.props.players[mod(i, 10)].isAlive ? mod(i, 10) : this.findLastSpeaker(i - 1);
 
   goToPreviousAlivePlayer = (i = this.props.game.activePlayer - 1) => {
-    this.props.players[mod(i, 10)].isAlive
-      ? this.props.changeActivePlayer(mod(i, 10))
-      : this.goToPreviousAlivePlayer(i - 1);
+    const { players, changeActivePlayer } = this.props;
+
+    players[mod(i, 10)].isAlive ? changeActivePlayer(mod(i, 10)) : this.goToPreviousAlivePlayer(i - 1);
 
     this.setState({ stepBackAvaliable: false });
   };
 
   toVotingClicked = () => {
-    this.props.disableTutorial();
+    const { disableTutorial, changeGameState, skipVotingDec, game } = this.props;
 
-    if (this.props.game.selectedNumbers.length) return this.props.changeGameState({ phase: 'Voting' });
+    disableTutorial();
 
-    this.props.skipVotingDec();
-    this.props.changeGameState({ phase: 'Night' });
+    if (game.selectedNumbers.length) return changeGameState({ phase: 'Voting' });
+
+    skipVotingDec();
+    changeGameState({ phase: 'Night' });
   };
 
   render = () => {
-    const { phase } = this.props.game.gameState;
-    const { dayNumber } = this.props.game.gameState;
+    const {
+      players,
+      game: {
+        gameState: { phase, dayNumber },
+        activePlayer,
+        opensTable,
+        selectedNumbers,
+      },
+      settings: { tutorialEnabled, appMusic },
+    } = this.props;
+
     let title = '';
     if (phase === 'SeatAllocator') title = 'раздача номеров';
     if (phase === 'RoleDealing') title = 'раздача ролей';
@@ -136,13 +148,11 @@ class Navigation extends Component {
     if (phase === 'Night') title = `${dayNumber} Ночь`;
     if (phase === 'EndOfGame') title = `Конец игры`;
 
-    const lastSpeaker = this.props.game.activePlayer === this.findLastSpeaker();
+    const lastSpeaker = activePlayer === this.findLastSpeaker();
 
-    const alivePlayers = this.props.players.filter(x => x.isAlive).length;
+    const alivePlayers = players.filter(x => x.isAlive).length;
 
     const { stepBackAvaliable } = this.state;
-
-    const { tutorialEnabled } = this.props.settings;
 
     return (
       <StyledNavigation color={phase} tutorialEnabled={tutorialEnabled}>
@@ -161,21 +171,15 @@ class Navigation extends Component {
               </NavBarCircleButton>
 
               <Timer
-                time={
-                  this.props.players[this.props.game.activePlayer].fouls.muted
-                    ? alivePlayers === 3 || alivePlayers === 4
-                      ? 30
-                      : 0
-                    : 60
-                }
-                autostart={this.props.game.activePlayer !== this.props.game.opensTable}
+                time={players[activePlayer].fouls.muted ? (alivePlayers === 3 || alivePlayers === 4 ? 30 : 0) : 60}
+                autostart={activePlayer !== opensTable}
                 mini
-                key={this.props.game.activePlayer}
+                key={activePlayer}
               />
 
               <NavBarCircleButton onClick={lastSpeaker ? this.toVotingClicked : () => this.goToNextAlivePlayer()}>
                 {lastSpeaker ? (
-                  this.props.game.selectedNumbers.length === 0 ? (
+                  selectedNumbers.length === 0 ? (
                     <EyeIcon size='50%' />
                   ) : (
                     <ThumbUpIcon size='50%' />
@@ -187,7 +191,7 @@ class Navigation extends Component {
             </ButtonsWrapper>
           )}
 
-          {this.props.settings.appMusic && (
+          {appMusic && (
             <ButtonsWrapper
               style={{ display: phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && 'none' }}
             >

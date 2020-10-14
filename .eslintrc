@@ -27,6 +27,12 @@
         "ignoreRestSiblings": true
       }
     ],
+    "no-unused-expressions": [
+      "error",
+      {
+        "allowTernary": true
+      }
+    ],
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-filename-extension": 0,
     "react/prop-types": 0,
