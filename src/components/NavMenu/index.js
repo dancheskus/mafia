@@ -1,24 +1,30 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
 import { StyledNavMenu, MenuItems } from './style';
 import Settings from './Settings';
 
-const NavMenu = props => {
+export default () => {
+  const dispatch = useDispatch();
+  const {
+    game: {
+      gameState: { phase },
+    },
+    settings: { tutorialEnabled },
+  } = useSelector(store => store);
+
   const [isChecked, setIsChecked] = useState(false);
   const [isSettingsPage, setIsSettingsPage] = useState(false);
 
-  const { tutorialEnabled } = props.settings;
-  const { phase } = props.game.gameState;
   const askNewGameConfirmation = phase !== 'SeatAllocator' && phase !== 'EndOfGame';
 
   const newGameClicked = () => {
     const startNewGame = () => {
       localStorage.clear();
-      props.resetGameReducer();
-      props.resetPlayersReducer();
+      dispatch(resetGameReducer());
+      dispatch(resetPlayersReducer());
       setIsChecked(false);
     };
 
@@ -66,12 +72,8 @@ const NavMenu = props => {
         <a target='_blank' rel='noopener noreferrer' href='https://github.com/dancheskus'>
           Даниэля Шлейфмана
         </a>
-        . 2018-2019г.
+        . 2018-2020г.
       </div>
     </StyledNavMenu>
   );
 };
-
-export default connect(({ game, settings }) => ({ game, settings }), { resetPlayersReducer, resetGameReducer })(
-  NavMenu
-);
