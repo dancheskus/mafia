@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import { changeGameState } from 'redux/actions/gameActions';
@@ -40,48 +40,48 @@ const TwoIcons = styled.div`
   }
 `;
 
-const ZeroNight = props => {
+export default () => {
+  const dispatch = useDispatch();
   const [dogovorka, setDogovorka] = useState(true);
 
-  const { mafiaTimer, tutorialEnabled } = props.settings;
+  const { mafiaTimer, tutorialEnabled } = useSelector(({ settings }) => settings);
+  const players = useSelector(({ players }) => players);
 
-  const startGame = () => props.changeGameState({ phase: 'Day', dayNumber: 1 });
+  const startGame = () => dispatch(changeGameState({ phase: 'Day', dayNumber: 1 }));
 
-  return (
+  return dogovorka ? (
     <>
-      {dogovorka ? (
-        <>
-          <PopUpLabel color='ZeroNight' className='h1'>
-            Договорка
-          </PopUpLabel>
+      <PopUpLabel color='ZeroNight' className='h1'>
+        Договорка
+      </PopUpLabel>
 
-          {mafiaTimer && <Timer />}
+      {mafiaTimer && <Timer />}
 
-          <PopUpButton onClick={() => !tutorialEnabled && setDogovorka(false)} color='ZeroNight'>
-            Далее
-          </PopUpButton>
-        </>
-      ) : (
-        <>
-          <TwoIcons>
-            <Icon>
-              <SheriffStarIcon size='86%' />
-              <span>{props.players.findIndex(player => player.role === 'ШЕРИФ') + 1}</span>
-              <div className='label'>ШЕРИФ</div>
-            </Icon>
-            <Icon>
-              <TargetIcon />
-              <span>{props.players.findIndex(player => player.role === 'ДОН') + 1}</span>
-              <div className='label'>ДОН</div>
-            </Icon>
-          </TwoIcons>
-          <PopUpButton onClick={startGame} color='ZeroNight'>
-            День
-          </PopUpButton>
-        </>
-      )}
+      <PopUpButton onClick={() => !tutorialEnabled && setDogovorka(false)} color='ZeroNight'>
+        Далее
+      </PopUpButton>
+    </>
+  ) : (
+    <>
+      <TwoIcons>
+        <Icon>
+          <SheriffStarIcon size='86%' />
+          <span>{players.findIndex(player => player.role === 'ШЕРИФ') + 1}</span>
+          <div className='label'>ШЕРИФ</div>
+        </Icon>
+
+        <Icon>
+          <TargetIcon />
+          <span>{players.findIndex(player => player.role === 'ДОН') + 1}</span>
+          <div className='label'>ДОН</div>
+        </Icon>
+      </TwoIcons>
+
+      <PopUpButton onClick={startGame} color='ZeroNight'>
+        День
+      </PopUpButton>
     </>
   );
 };
 
-export default connect(({ game, players, settings }) => ({ game, players, settings }), { changeGameState })(ZeroNight);
+// export default connect(({ game, players, settings }) => ({ game, players, settings }), { changeGameState })(ZeroNight);
