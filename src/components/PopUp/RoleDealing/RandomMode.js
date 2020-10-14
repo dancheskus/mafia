@@ -27,7 +27,7 @@ const Card = styled.div`
 
 const RoleName = styled.h1`
   font-size: 400%;
-  color: ${props => (props.light ? colors.RoleDealing.popupTextLight : colors.RoleDealing.popupText)};
+  color: ${({ light }) => (light ? colors.RoleDealing.popupTextLight : colors.RoleDealing.popupText)};
 `;
 
 const ScaledPopUpButton = styled(PopUpButton)`
