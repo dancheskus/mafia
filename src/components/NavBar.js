@@ -138,27 +138,28 @@ class Navigation extends Component {
       },
       settings: { tutorialEnabled, appMusic },
     } = this.props;
+    const { stepBackAvaliable } = this.state;
 
-    let title = '';
-    if (phase === 'SeatAllocator') title = 'раздача номеров';
-    if (phase === 'RoleDealing') title = 'раздача ролей';
-    if (phase === 'ZeroNight') title = '0 ночь';
-    if (phase === 'Day') title = `${dayNumber} день`;
-    if (phase === 'Voting') title = 'Голосование';
-    if (phase === 'Night') title = `${dayNumber} Ночь`;
-    if (phase === 'EndOfGame') title = `Конец игры`;
+    const phaseTitles = {
+      SeatAllocator: 'раздача номеров',
+      RoleDealing: 'раздача ролей',
+      ZeroNight: '0 ночь',
+      Day: `${dayNumber} день`,
+      Voting: 'Голосование',
+      Night: `${dayNumber} Ночь`,
+      EndOfGame: `Конец игры`,
+    };
+    const currentPhaseTitle = phaseTitles[phase];
 
     const lastSpeaker = activePlayer === this.findLastSpeaker();
 
     const alivePlayers = players.filter(x => x.isAlive).length;
 
-    const { stepBackAvaliable } = this.state;
-
     return (
       <StyledNavigation color={phase} tutorialEnabled={tutorialEnabled}>
         <Container className='d-flex justify-content-between p-0'>
-          <NavStateName tutorialEnabled={tutorialEnabled} key={title}>
-            <span>{title}</span>
+          <NavStateName tutorialEnabled={tutorialEnabled} key={currentPhaseTitle}>
+            <span>{currentPhaseTitle}</span>
           </NavStateName>
 
           {phase === 'Day' && (
@@ -193,7 +194,9 @@ class Navigation extends Component {
 
           {appMusic && (
             <ButtonsWrapper
-              style={{ display: phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && 'none' }}
+              style={{
+                ...(phase !== 'Night' && phase !== 'ZeroNight' && phase !== 'RoleDealing' && { display: 'none' }),
+              }}
             >
               {phase !== 'SeatAllocator' && <AudioPlayer />}
             </ButtonsWrapper>
