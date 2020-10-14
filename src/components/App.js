@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import NavBar from './NavBar';
 import NumbersPanel from './NumbersPanel';
@@ -64,13 +64,17 @@ const UnsupportedRes = styled.div`
   }
 `;
 
-const App = props => {
-  const [appHeight, setAppHeight] = useState(document.documentElement.clientHeight);
+export default () => {
+  const {
+    settings: { tutorialEnabled },
+    game: {
+      gameState: { phase },
+      activePlayer,
+      popupOpened,
+    },
+  } = useSelector(store => store);
 
-  useEffect(() => {
-    window.addEventListener('load', updateHeight);
-    window.addEventListener('resize', updateHeight);
-  }, []);
+  const [appHeight, setAppHeight] = useState(document.documentElement.clientHeight);
 
   const updateHeight = () => {
     setAppHeight(document.documentElement.clientHeight);
@@ -81,9 +85,12 @@ const App = props => {
     }, 200);
   };
 
-  const { phase } = props.game.gameState;
+  useEffect(() => {
+    window.addEventListener('load', updateHeight);
+    window.addEventListener('resize', updateHeight);
+  }, []);
+
   const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
-  const { tutorialEnabled } = props.settings;
 
   return (
     <>
@@ -102,10 +109,10 @@ const App = props => {
           <MainApp className='d-flex'>
             {/* {window.innerHeight} {window.innerWidth} */}
             <Container className='d-flex flex-column justify-content-between'>
-              {phase !== 'startScreen' && <NumbersPanel key={props.game.activePlayer} />}
+              {phase !== 'startScreen' && <NumbersPanel key={activePlayer} />}
 
               <MainContentWrapper>
-                {<PopUp key={phase + 1} opened={props.game.popupOpened} popupChild={PopUpChildComponent} />}
+                {<PopUp key={phase + 1} opened={popupOpened} popupChild={PopUpChildComponent} />}
 
                 {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
                   <PlayerCards key={phase} />
@@ -118,6 +125,3 @@ const App = props => {
     </>
   );
 };
-
-const mapStateToProps = ({ game, settings }) => ({ game, settings });
-export default connect(mapStateToProps)(App);
