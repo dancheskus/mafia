@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style/index.scss';
-import App from './components/App';
-import * as serviceWorker from './serviceWorker';
 import { Provider } from 'react-redux';
 import throttle from 'lodash/throttle';
+import { saveState } from 'redux/localStorage';
+import App from './components/App';
+import * as serviceWorker from './serviceWorker';
 
 import configureStore from './redux/configureStore';
-import { saveState } from 'redux/localStorage';
 
 // ----------- Отключение pullToRefresh и scroll в моб. браузерах --------------------
 

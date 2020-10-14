@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 
-import CarCrashNotification from './CarCrashNotification';
-import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components/';
 import Timer from 'components/Timer';
 import VictimSelector from 'components/common/VictimSelector';
+import CarCrashNotification from './CarCrashNotification';
+import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 
 const CarCrash = props => {
   const [notification, setNotification] = useState(true);
@@ -34,11 +34,11 @@ const CarCrash = props => {
   if (props.secondTime)
     return (
       <>
-        <PopUpLabel className="h2 text-warning">Вывести всех выставленных?</PopUpLabel>
+        <PopUpLabel className='h2 text-warning'>Вывести всех выставленных?</PopUpLabel>
 
         <VictimSelector onNumberSelected={onNumberSelected} votesLeft={9 - deadPlayers} />
 
-        <PopUpButton color="Voting" onClick={stopVoting}>
+        <PopUpButton color='Voting' onClick={stopVoting}>
           Завершить
         </PopUpButton>
       </>
@@ -52,7 +52,7 @@ const CarCrash = props => {
 
       <Timer time={30} key={currentPlayer} />
 
-      <PopUpButton color="Voting" onClick={lastPlayer ? props.closeCarCrash : nextPlayer}>
+      <PopUpButton color='Voting' onClick={lastPlayer ? props.closeCarCrash : nextPlayer}>
         {lastPlayer ? 'Завершить' : 'Далее'}
       </PopUpButton>
     </>

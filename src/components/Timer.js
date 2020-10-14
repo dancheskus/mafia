@@ -71,6 +71,7 @@ class Timer extends Component {
     secondsLeft: this.props.time || 60,
     playerMuted: this.props.players[this.props.game.activePlayer].fouls.muted,
   };
+
   state = this.initialState;
 
   componentDidMount = () => {
@@ -146,7 +147,7 @@ class Timer extends Component {
                 '4 фол'
               ) : (
                 <>
-                  {`${minutes}:${seconds < 10 ? '0' + seconds : seconds}`}
+                  {`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}
                   <StartStopButton mini={isMini} color={phase} onClick={!isMini ? this.startPauseClicked : null}>
                     {this.state.timerWorking ? (
                       <PauseIcon fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'} />
@@ -162,7 +163,7 @@ class Timer extends Component {
 
         {isMini && (
           <NavBarCircleButton onClick={this.resetClicked}>
-            <ResetIcon size={'70%'} />
+            <ResetIcon size='70%' />
           </NavBarCircleButton>
         )}
       </>

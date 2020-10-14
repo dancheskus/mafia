@@ -5,11 +5,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { PopUpCircle, PopUpButton } from '../styled-components';
 import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
+import { PopUpCircle, PopUpButton } from '../styled-components';
 
 class PlayersLastMinute extends Component {
   state = { currentPlayer: 0, listOfPlayers: this.props.listOfPlayers };
@@ -45,7 +45,4 @@ class PlayersLastMinute extends Component {
   };
 }
 
-export default connect(
-  ({ game, players }) => ({ game, players }),
-  { changeGameState, killPlayer }
-)(PlayersLastMinute);
+export default connect(({ game, players }) => ({ game, players }), { changeGameState, killPlayer })(PlayersLastMinute);

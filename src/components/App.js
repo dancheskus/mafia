@@ -81,7 +81,7 @@ const App = props => {
     }, 200);
   };
 
-  const phase = props.game.gameState.phase;
+  const { phase } = props.game.gameState;
   const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
   const { tutorialEnabled } = props.settings;
 

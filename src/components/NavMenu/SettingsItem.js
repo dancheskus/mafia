@@ -2,8 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Switch from 'react-ios-switch';
 
-import { SettingsLine } from './style';
-
 import {
   switchAppMusic,
   switchTimerSounds,
@@ -11,6 +9,7 @@ import {
   switchMultiplePlayerRemove,
   switchSeatAllocator,
 } from 'redux/actions/settingsActions';
+import { SettingsLine } from './style';
 
 const onColor = 'rgb(122, 156, 236)';
 
@@ -60,7 +59,10 @@ const SettingsItem = props => {
   );
 };
 
-export default connect(
-  ({ settings }) => ({ settings }),
-  { switchAppMusic, switchTimerSounds, switchMafiaTimer, switchMultiplePlayerRemove, switchSeatAllocator }
-)(SettingsItem);
+export default connect(({ settings }) => ({ settings }), {
+  switchAppMusic,
+  switchTimerSounds,
+  switchMafiaTimer,
+  switchMultiplePlayerRemove,
+  switchSeatAllocator,
+})(SettingsItem);

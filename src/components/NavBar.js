@@ -6,11 +6,11 @@ import { countBy } from 'lodash';
 
 import { changeActivePlayer, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { unmutePlayer } from 'redux/actions/playersActions';
+import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 import { disableTutorial } from '../redux/actions/settingsActions';
 import NavMenu from './NavMenu';
 import colors from '../colors';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
-import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 import Timer from './Timer';
 import AudioPlayer from './AudioPlayer';
 
@@ -202,7 +202,10 @@ class Navigation extends Component {
   };
 }
 
-export default connect(
-  ({ game, players, settings }) => ({ game, players, settings }),
-  { changeActivePlayer, changeGameState, unmutePlayer, skipVotingDec, disableTutorial }
-)(Navigation);
+export default connect(({ game, players, settings }) => ({ game, players, settings }), {
+  changeActivePlayer,
+  changeGameState,
+  unmutePlayer,
+  skipVotingDec,
+  disableTutorial,
+})(Navigation);

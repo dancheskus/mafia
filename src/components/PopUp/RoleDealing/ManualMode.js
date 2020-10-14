@@ -10,9 +10,9 @@ import {
   addToSelectedNumbers,
   clearSelectedNumbers,
 } from 'redux/actions/gameActions';
-import { PopUpButton } from '../styled-components';
 import colors from 'colors.js';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
+import { PopUpButton } from '../styled-components';
 
 const RoleSelectionWrapper = styled.div`
   height: 80%;
@@ -135,7 +135,7 @@ class ManualMode extends Component {
         <RoleSelectionWrapper className='role-selection-wrapper'>
           <RoleSelection>
             <RoleCard mirnij onClick={() => this.changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
-              <ThumbUpIcon size={'60%'} fill={colors.RoleDealing.popupIconLight} />
+              <ThumbUpIcon size='60%' fill={colors.RoleDealing.popupIconLight} />
             </RoleCard>
             <RoleCard
               disabled={isDonDisabled}
@@ -143,7 +143,7 @@ class ManualMode extends Component {
               onClick={() => this.changeSelection('ДОН', isDonDisabled)}
               selected={currentPlayerRole === 'ДОН'}
             >
-              <DonRingIcon size={'60%'} fill={colors.RoleDealing.popupIcon} />
+              <DonRingIcon size='60%' fill={colors.RoleDealing.popupIcon} />
             </RoleCard>
             <RoleCard
               disabled={isMafiaDisabled}
@@ -151,7 +151,7 @@ class ManualMode extends Component {
               onClick={() => this.changeSelection('МАФИЯ', isMafiaDisabled)}
               selected={currentPlayerRole === 'МАФИЯ'}
             >
-              <ThumbDownIcon size={'60%'} fill={colors.RoleDealing.popupIcon} />
+              <ThumbDownIcon size='60%' fill={colors.RoleDealing.popupIcon} />
             </RoleCard>
             <RoleCard
               disabled={isSherifDisabled}
@@ -160,7 +160,7 @@ class ManualMode extends Component {
               selected={currentPlayerRole === 'ШЕРИФ'}
             >
               <SheriffOkIcon
-                size={'60%'}
+                size='60%'
                 fill={isSherifDisabled ? colors.RoleDealing.popupIcon : colors.RoleDealing.popupIconLight}
               />
             </RoleCard>
@@ -179,7 +179,10 @@ class ManualMode extends Component {
   };
 }
 
-export default connect(
-  ({ game, players }) => ({ game, players }),
-  { addRole, changeGameState, numbersPanelClickable, addToSelectedNumbers, clearSelectedNumbers }
-)(ManualMode);
+export default connect(({ game, players }) => ({ game, players }), {
+  addRole,
+  changeGameState,
+  numbersPanelClickable,
+  addToSelectedNumbers,
+  clearSelectedNumbers,
+})(ManualMode);

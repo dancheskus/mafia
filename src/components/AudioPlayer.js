@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import RingLoader from 'react-spinners/RingLoader';
 import { Howl } from 'howler';
 
-import { PlayIcon, PauseIcon } from 'icons/svgIcons';
-import { NextIcon } from './../icons/svgIcons';
+import { PlayIcon, PauseIcon, NextIcon } from 'icons/svgIcons';
+
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 
 const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
@@ -28,7 +28,7 @@ class AudioPlayer extends Component {
       src: `${musicUrl}${this.state.audioList[(this.state.audioNumber + 1) % this.state.audioList.length]}`,
     });
 
-    const phase = this.props.game.gameState.phase;
+    const { phase } = this.props.game.gameState;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
     if (musicAllowed) this.play();
 
@@ -38,8 +38,8 @@ class AudioPlayer extends Component {
   componentDidMount = () => {
     axios
       .get(musicUrl)
-      .then((res) => {
-        this.setState({ audioList: shuffle(res.data.map((el) => el.name)), loadError: false }, () => {
+      .then(res => {
+        this.setState({ audioList: shuffle(res.data.map(el => el.name)), loadError: false }, () => {
           this.loadAudio();
         });
       })
@@ -51,11 +51,11 @@ class AudioPlayer extends Component {
     this.soundForBuffering && this.soundForBuffering.unload();
   };
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = prevProps => {
     if (this.state.loadError) return;
 
     const prevPhase = prevProps.game.gameState.phase;
-    const phase = this.props.game.gameState.phase;
+    const { phase } = this.props.game.gameState;
     const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
     const musicWasAllowed = prevPhase === 'Night' || prevPhase === 'ZeroNight' || prevPhase === 'RoleDealing';
 
@@ -97,7 +97,7 @@ class AudioPlayer extends Component {
 
     this.setState(
       {
-        audioLoaded: nextAudioLoaded ? true : false,
+        audioLoaded: !!nextAudioLoaded,
         audioNumber: (this.state.audioNumber + 1) % this.state.audioList.length,
       },
       () => this.loadAudio()
@@ -122,7 +122,7 @@ class AudioPlayer extends Component {
                       <PlayIcon />
                     )
                   ) : (
-                    <RingLoader sizeUnit={'px'} size={20} color={'white'} />
+                    <RingLoader sizeUnit='px' size={20} color='white' />
                   )}
                 </NavBarCircleButton>
 

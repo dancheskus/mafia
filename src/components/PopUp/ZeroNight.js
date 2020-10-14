@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
-import { PopUpButton, PopUpLabel } from './styled-components';
-import Timer from '../Timer';
 import { changeGameState } from 'redux/actions/gameActions';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
+import { PopUpButton, PopUpLabel } from './styled-components';
+import Timer from '../Timer';
 
 const Icon = styled.div`
   display: flex;
@@ -84,7 +84,4 @@ const ZeroNight = props => {
   );
 };
 
-export default connect(
-  ({ game, players, settings }) => ({ game, players, settings }),
-  { changeGameState }
-)(ZeroNight);
+export default connect(({ game, players, settings }) => ({ game, players, settings }), { changeGameState })(ZeroNight);

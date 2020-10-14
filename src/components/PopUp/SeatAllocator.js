@@ -82,7 +82,6 @@ class SeatAllocator extends Component {
   );
 }
 
-export default connect(
-  ({ game }) => ({ game }),
-  { addToSelectedNumbers, clearSelectedNumbers, changeGameState }
-)(SeatAllocator);
+export default connect(({ game }) => ({ game }), { addToSelectedNumbers, clearSelectedNumbers, changeGameState })(
+  SeatAllocator
+);

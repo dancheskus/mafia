@@ -225,7 +225,8 @@ class NumbersPanel extends Component {
   };
 }
 
-export default connect(
-  ({ game, players, settings }) => ({ game, players, settings }),
-  { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber }
-)(NumbersPanel);
+export default connect(({ game, players, settings }) => ({ game, players, settings }), {
+  addToSelectedNumbers,
+  clearSelectedNumbers,
+  removeLastSelectedNumber,
+})(NumbersPanel);

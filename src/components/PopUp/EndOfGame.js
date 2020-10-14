@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 
 import checkForEnd from 'helpers/checkForEnd';
-import { PopUpButton } from './styled-components/PopUpButton';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
+import { PopUpButton } from './styled-components/PopUpButton';
 
 const GameResult = styled.div`
   width: 90%;
@@ -53,7 +53,8 @@ class EndOfGame extends Component {
   };
 }
 
-export default connect(
-  ({ game, players }) => ({ game, players }),
-  { resetGameReducer, resetPlayersReducer, minimizeMaximaizePopup }
-)(EndOfGame);
+export default connect(({ game, players }) => ({ game, players }), {
+  resetGameReducer,
+  resetPlayersReducer,
+  minimizeMaximaizePopup,
+})(EndOfGame);

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
-import { StyledNavMenu, MenuItems } from './style';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
+import { StyledNavMenu, MenuItems } from './style';
 import Settings from './Settings';
 
 const NavMenu = props => {
@@ -72,7 +72,6 @@ const NavMenu = props => {
   );
 };
 
-export default connect(
-  ({ game, settings }) => ({ game, settings }),
-  { resetPlayersReducer, resetGameReducer }
-)(NavMenu);
+export default connect(({ game, settings }) => ({ game, settings }), { resetPlayersReducer, resetGameReducer })(
+  NavMenu
+);

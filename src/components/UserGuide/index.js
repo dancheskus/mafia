@@ -91,7 +91,7 @@ class UsersGuide extends Component {
     this.props.resetPlayersReducer();
   };
 
-  splitLines = (text) => text.split('\n').map((i) => <p key={i}>{i}</p>);
+  splitLines = text => text.split('\n').map(i => <p key={i}>{i}</p>);
 
   render = () => {
     const { tutorialEnabled } = this.props.settings;

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { killPlayer } from 'redux/actions/playersActions';
-import { clearSelectedNumbers, changeGameState, skipVotingDec } from './../../../redux/actions/gameActions';
+import { ResetIcon } from 'icons/svgIcons';
+import { clearSelectedNumbers, changeGameState, skipVotingDec } from '../../../redux/actions/gameActions';
 import { ResultsNumbers } from './styled-components/Results';
 import { PopUpLabel, PopUpButton } from '../styled-components';
 import PlayersLastMinute from './PlayersLastMinute';
-import { ResetIcon } from 'icons/svgIcons';
 import ResetButton from './styled-components/ResetButton';
 
 class EndOfVoting extends Component {
@@ -113,7 +113,9 @@ class EndOfVoting extends Component {
   };
 }
 
-export default connect(
-  ({ game, players }) => ({ game, players }),
-  { killPlayer, clearSelectedNumbers, changeGameState, skipVotingDec }
-)(EndOfVoting);
+export default connect(({ game, players }) => ({ game, players }), {
+  killPlayer,
+  clearSelectedNumbers,
+  changeGameState,
+  skipVotingDec,
+})(EndOfVoting);

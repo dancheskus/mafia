@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 
 import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
-import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
-import Timer from '../Timer';
 import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'colors.js';
+import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
+import Timer from '../Timer';
 
 class Day extends Component {
   state = {
@@ -64,7 +64,10 @@ class Day extends Component {
   };
 }
 
-export default connect(
-  ({ game, players }) => ({ game, players }),
-  { clearSelectedNumbers, closePopup, openPopup, killPlayer, changeGameState }
-)(Day);
+export default connect(({ game, players }) => ({ game, players }), {
+  clearSelectedNumbers,
+  closePopup,
+  openPopup,
+  killPlayer,
+  changeGameState,
+})(Day);

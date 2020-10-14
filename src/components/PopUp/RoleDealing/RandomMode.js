@@ -14,6 +14,7 @@ import { addRole } from 'redux/actions/playersActions';
 import colors from 'colors.js';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import { PopUpButton } from '../styled-components';
+
 const { popupIcon, popupIconLight } = colors.RoleDealing;
 
 const Card = styled.div`
@@ -46,6 +47,7 @@ const PressText = styled.div`
 
 class RandomMode extends Component {
   state = { role: null };
+
   allRoles = shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН'));
 
   componentDidMount = () => this.props.replaceSelectedNumbersWith(0);
@@ -85,7 +87,7 @@ class RandomMode extends Component {
     <Card onClick={this.cardClicked}>
       {!this.state.role && !!this.allRoles.length && (
         <>
-          <EyeIcon size={'40%'} fill={popupIcon} />
+          <EyeIcon size='40%' fill={popupIcon} />
           <PressText>Нажми</PressText>
         </>
       )}
@@ -97,24 +99,21 @@ class RandomMode extends Component {
       )}
 
       {this.state.role &&
-        ((this.state.role === 'МАФИЯ' && <ThumbDownIcon size={'30%'} fill={popupIcon} />) ||
-          (this.state.role === 'ДОН' && <DonRingIcon size={'30%'} fill={popupIcon} />) ||
-          (this.state.role === 'МИРНЫЙ' && <ThumbUpIcon size={'30%'} fill={popupIconLight} />) ||
-          (this.state.role === 'ШЕРИФ' && <SheriffOkIcon size={'30%'} fill={popupIconLight} />))}
+        ((this.state.role === 'МАФИЯ' && <ThumbDownIcon size='30%' fill={popupIcon} />) ||
+          (this.state.role === 'ДОН' && <DonRingIcon size='30%' fill={popupIcon} />) ||
+          (this.state.role === 'МИРНЫЙ' && <ThumbUpIcon size='30%' fill={popupIconLight} />) ||
+          (this.state.role === 'ШЕРИФ' && <SheriffOkIcon size='30%' fill={popupIconLight} />))}
 
       {this.state.role && <RoleName light={this.props.game.lightMode}>{this.state.role}</RoleName>}
     </Card>
   );
 }
 
-export default connect(
-  ({ game }) => ({ game }),
-  {
-    lightModeOff,
-    lightModeOn,
-    clearSelectedNumbers,
-    addRole,
-    changeGameState,
-    replaceSelectedNumbersWith,
-  }
-)(RandomMode);
+export default connect(({ game }) => ({ game }), {
+  lightModeOff,
+  lightModeOn,
+  clearSelectedNumbers,
+  addRole,
+  changeGameState,
+  replaceSelectedNumbersWith,
+})(RandomMode);

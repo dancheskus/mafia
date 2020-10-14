@@ -77,13 +77,13 @@ class PopUp extends Component {
   };
 
   render = () => {
-    const phase = this.props.game.gameState.phase;
-    const lightMode = this.props.game.lightMode;
+    const { phase } = this.props.game.gameState;
+    const { lightMode } = this.props.game;
     const { tutorialEnabled } = this.props.settings;
 
     return (
       <StyledPopUp
-        className="styled-popup"
+        className='styled-popup'
         tutorialEnabled={tutorialEnabled}
         opened={this.props.opened}
         color={phase}
@@ -93,12 +93,12 @@ class PopUp extends Component {
         {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
           <MinimizeButton
             tutorialEnabled={tutorialEnabled}
-            className="minimize-button"
+            className='minimize-button'
             color={phase}
             light={lightMode}
             onClick={this.minimizeClicked}
           >
-            {this.props.game.popupMinimized ? <MaximizeIcon size={'50%'} /> : <MinimizeIcon size={'50%'} />}
+            {this.props.game.popupMinimized ? <MaximizeIcon size='50%' /> : <MinimizeIcon size='50%' />}
           </MinimizeButton>
         )}
 
@@ -108,7 +108,4 @@ class PopUp extends Component {
   };
 }
 
-export default connect(
-  ({ game, settings }) => ({ game, settings }),
-  { minimizeMaximaizePopup }
-)(PopUp);
+export default connect(({ game, settings }) => ({ game, settings }), { minimizeMaximaizePopup })(PopUp);

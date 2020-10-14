@@ -3,13 +3,12 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import colors from 'colors.js';
-import { MinimizeIcon, MaximizeIcon } from 'icons/svgIcons';
+import { MinimizeIcon, MaximizeIcon, NextIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul, returnPlayerToGame } from 'redux/actions/playersActions';
 import { changeGameState, skipVotingInc, skipVotingDec } from 'redux/actions/gameActions';
+import checkForEnd from 'helpers/checkForEnd';
 import PlayerNumber from './styled-components/PlayerNumber';
 import FoulContainer from './styled-components/FoulContainer';
-import checkForEnd from 'helpers/checkForEnd';
-import { NextIcon } from './../../icons/svgIcons';
 
 const CardContainer = styled.div`
   width: 50%;
@@ -84,6 +83,7 @@ class SingleCard extends Component {
   state = { foulsAmount: this.props.players[this.props.number].fouls.amount, lastFoulDeath: false };
 
   timer;
+
   returnToLifeTimer;
 
   componentWillUnmount = () => {
@@ -134,9 +134,9 @@ class SingleCard extends Component {
 
   render = () => {
     const isMuted = this.props.players[this.props.number].fouls.muted;
-    const isAlive = this.props.players[this.props.number].isAlive;
-    const phase = this.props.game.gameState.phase;
-    const role = this.props.players[this.props.number].role;
+    const { isAlive } = this.props.players[this.props.number];
+    const { phase } = this.props.game.gameState;
+    const { role } = this.props.players[this.props.number];
 
     return (
       <CardContainer order={this.props.order}>
@@ -160,7 +160,7 @@ class SingleCard extends Component {
           <FoulContainer isAlive={isAlive}>
             <RemoveFoul onClick={this.removeFoul} className={this.props.number === 7 && 'remove-foul'}>
               <FoulIcon remove>
-                <MinimizeIcon size={'50%'} />
+                <MinimizeIcon size='50%' />
               </FoulIcon>
             </RemoveFoul>
 
@@ -173,7 +173,7 @@ class SingleCard extends Component {
                 '!'.repeat(this.state.foulsAmount)
               ) : (
                 <FoulIcon>
-                  <MaximizeIcon size={'50%'} />
+                  <MaximizeIcon size='50%' />
                 </FoulIcon>
               )}
             </AddFoul>
@@ -184,7 +184,11 @@ class SingleCard extends Component {
   };
 }
 
-export default connect(
-  ({ game, players }) => ({ game, players }),
-  { addFoul, removeFoul, changeGameState, skipVotingInc, skipVotingDec, returnPlayerToGame }
-)(SingleCard);
+export default connect(({ game, players }) => ({ game, players }), {
+  addFoul,
+  removeFoul,
+  changeGameState,
+  skipVotingInc,
+  skipVotingDec,
+  returnPlayerToGame,
+})(SingleCard);

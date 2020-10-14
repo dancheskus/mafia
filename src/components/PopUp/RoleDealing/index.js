@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 
 import colors from 'colors.js';
+import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
+import { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable } from 'redux/actions/gameActions';
 import { PopUpButton } from '../styled-components';
 import RandomMode from './RandomMode';
 import ManualMode from './ManualMode';
-import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
-import { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable } from 'redux/actions/gameActions';
 
 const SvgWrapper = styled.div`
   display: flex;
@@ -51,7 +51,7 @@ const RoleDealing = props => {
 
   const buttonClicked = () => setModeApproved(true);
 
-  const lightMode = props.game.lightMode;
+  const { lightMode } = props.game;
 
   return (
     <>
@@ -65,7 +65,7 @@ const RoleDealing = props => {
                 setManualModeSelected(false);
               }}
             >
-              <RandomCubeIcon className={randomModeSelected ? 'selected' : null} size={'100px'} />
+              <RandomCubeIcon className={randomModeSelected ? 'selected' : null} size='100px' />
             </div>
             <div
               className='flex-grow-1 d-flex align-items-center justify-content-center'
@@ -74,7 +74,7 @@ const RoleDealing = props => {
                 setRandomModeSelected(false);
               }}
             >
-              <ListIcon className={manualModeSelected ? 'selected' : null} size={'100px'} />
+              <ListIcon className={manualModeSelected ? 'selected' : null} size='100px' />
             </div>
           </SvgWrapper>
           <div className='flex-grow-1 d-flex align-items-center'>
@@ -92,7 +92,8 @@ const RoleDealing = props => {
   );
 };
 
-export default connect(
-  ({ game, settings }) => ({ game, settings }),
-  { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable }
-)(RoleDealing);
+export default connect(({ game, settings }) => ({ game, settings }), {
+  clearSelectedNumbers,
+  lightModeOff,
+  numbersPanelNotClickable,
+})(RoleDealing);

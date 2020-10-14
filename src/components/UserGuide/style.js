@@ -12,7 +12,7 @@ export const GuideButton = styled.div`
   position: fixed;
   bottom: 20px;
 
-  ${(props) => {
+  ${props => {
     if (props.guideNextStep) return `right: 20px;`;
     if (props.skipGuide) return `left: 20px;`;
   }}

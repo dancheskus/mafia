@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Howl } from 'howler';
 
-import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
-import EndOfVoting from './EndOfVoting';
 import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/common/VictimSelector';
+import { ResetIcon } from 'icons/svgIcons';
+import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
+import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
 import secondsSoundFile from '../../../audio/Countdown_10sec_effects.mp3';
-import { ResetIcon } from 'icons/svgIcons';
 import ResetButton from './styled-components/ResetButton';
 
 const BottomButtonGroup = styled.div`
@@ -233,7 +233,9 @@ class Voting extends Component {
   };
 }
 
-export default connect(
-  ({ game, players }) => ({ game, players }),
-  { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec }
-)(Voting);
+export default connect(({ game, players }) => ({ game, players }), {
+  clearSelectedNumbers,
+  addToSelectedNumbers,
+  changeGameState,
+  skipVotingDec,
+})(Voting);

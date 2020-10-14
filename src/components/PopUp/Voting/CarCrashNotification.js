@@ -6,14 +6,14 @@ import { PopUpLabel, PopUpButton } from '../styled-components';
 
 const CarCrashNotification = props => (
   <>
-    <PopUpLabel className="h1">ПЕРЕГОЛОСОВКА</PopUpLabel>
+    <PopUpLabel className='h1'>ПЕРЕГОЛОСОВКА</PopUpLabel>
     <ResultsNumbers>
       {props.game.selectedNumbers.map(num => (
         <div key={num}>{num + 1}</div>
       ))}
     </ResultsNumbers>
 
-    <PopUpButton color="Voting" onClick={props.closeNotification}>
+    <PopUpButton color='Voting' onClick={props.closeNotification}>
       ОК
     </PopUpButton>
   </>

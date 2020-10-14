@@ -5,11 +5,11 @@ import styled from 'styled-components';
 import { killPlayer } from 'redux/actions/playersActions';
 import { changeGameState, addToSelectedNumbers } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
-import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
+import { SheriffStarIcon, TargetIcon, NextIcon } from 'icons/svgIcons';
 import { PopUpLabel, PopUpButton } from './styled-components';
 import VictimSelector from '../common/VictimSelector';
-import { NextIcon } from './../../icons/svgIcons';
-import colors from './../../colors';
+
+import colors from '../../colors';
 
 const Sheriff = styled.div`
   width: 70%;
@@ -133,7 +133,7 @@ class Night extends Component {
             <NextIcon />
           </BackButton>
 
-          <PopUpLabel color="Night" className="h2">
+          <PopUpLabel color='Night' className='h2'>
             Шериф ищет черных игроков
           </PopUpLabel>
 
@@ -143,13 +143,13 @@ class Night extends Component {
               .filter(x => x !== null)
               .map(plNum => (
                 <Target key={plNum}>
-                  <TargetIcon size="100%" />
+                  <TargetIcon size='100%' />
                   <span>{plNum + 1}</span>
                 </Target>
               ))}
           </DarkPlayers>
 
-          <PopUpButton onClick={this.goToDayPressed} color="Night">
+          <PopUpButton onClick={this.goToDayPressed} color='Night'>
             День
           </PopUpButton>
         </>
@@ -158,11 +158,11 @@ class Night extends Component {
     if (this.state.donTime)
       return (
         <>
-          <BackButton className="test" onClick={() => this.setState({ donTime: false, playerToKill: undefined })}>
+          <BackButton className='test' onClick={() => this.setState({ donTime: false, playerToKill: undefined })}>
             <NextIcon />
           </BackButton>
 
-          <PopUpLabel color="Night" className="h2">
+          <PopUpLabel color='Night' className='h2'>
             Дон ищет шерифа
           </PopUpLabel>
 
@@ -171,7 +171,7 @@ class Night extends Component {
             <span>{this.props.players.findIndex(player => player.role === 'ШЕРИФ') + 1}</span>
           </Sheriff>
 
-          <PopUpButton onClick={() => this.setState({ sheriffTime: true })} color="Night">
+          <PopUpButton onClick={() => this.setState({ sheriffTime: true })} color='Night'>
             Далее
           </PopUpButton>
         </>
@@ -179,13 +179,13 @@ class Night extends Component {
 
     return (
       <>
-        <PopUpLabel color="Night" className="h2">
+        <PopUpLabel color='Night' className='h2'>
           В кого стреляет мафия?
         </PopUpLabel>
 
         <VictimSelector shooting onNumberSelected={this.onNumberSelected} />
 
-        <PopUpButton onClick={() => this.setState({ donTime: true })} color="Night">
+        <PopUpButton onClick={() => this.setState({ donTime: true })} color='Night'>
           Далее
         </PopUpButton>
       </>
@@ -193,7 +193,8 @@ class Night extends Component {
   };
 }
 
-export default connect(
-  ({ game, players }) => ({ game, players }),
-  { killPlayer, changeGameState, addToSelectedNumbers }
-)(Night);
+export default connect(({ game, players }) => ({ game, players }), {
+  killPlayer,
+  changeGameState,
+  addToSelectedNumbers,
+})(Night);
