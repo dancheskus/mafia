@@ -5,12 +5,12 @@ import produce from 'immer';
 const savedSettings = localStorage.settings ? JSON.parse(localStorage.settings) : {};
 
 const initialState = {
-  appMusic: savedSettings.appMusic !== undefined ? savedSettings.appMusic : true,
-  timerSounds: savedSettings.timerSounds !== undefined ? savedSettings.timerSounds : true,
-  mafiaTimer: savedSettings.mafiaTimer !== undefined ? savedSettings.mafiaTimer : true,
-  multiplePlayerRemove: savedSettings.multiplePlayerRemove !== undefined ? savedSettings.multiplePlayerRemove : true,
-  seatAllocator: savedSettings.seatAllocator !== undefined ? savedSettings.seatAllocator : true,
-  tutorialEnabled: savedSettings.tutorialEnabled !== undefined ? savedSettings.tutorialEnabled : true,
+  appMusic: savedSettings.appMusic ?? true,
+  timerSounds: savedSettings.timerSounds ?? true,
+  mafiaTimer: savedSettings.mafiaTimer ?? true,
+  multiplePlayerRemove: savedSettings.multiplePlayerRemove ?? true,
+  seatAllocator: savedSettings.seatAllocator ?? true,
+  tutorialEnabled: savedSettings.tutorialEnabled ?? true,
 };
 
 export default (state = initialState, action, root) => {
