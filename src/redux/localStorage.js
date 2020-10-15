@@ -9,9 +9,7 @@ const compareKeys = (a, b) => {
 export const loadState = () => {
   try {
     const serializedState = localStorage.state;
-    if (serializedState === null) {
-      return undefined;
-    }
+    if (serializedState === null) return undefined;
 
     // Если добавлен новый элемент в gameState, то состояние сбрасывается, а не берется из localStorage
     if (!compareKeys(initialState, JSON.parse(serializedState).game)) return undefined;
