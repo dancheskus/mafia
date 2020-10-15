@@ -12,7 +12,7 @@ import { Muted, StartStopButton, TimeAndPlayWrapper } from './style';
 class Timer extends Component {
   initialState = {
     timerWorking: false,
-    secondsLeft: this.props.time || 60,
+    timeLeft: this.props.time || 60,
     playerMuted: this.props.players[this.props.game.activePlayer].fouls.muted,
   };
 
@@ -40,13 +40,13 @@ class Timer extends Component {
   };
 
   startPauseClicked = () => {
-    if (this.state.timerWorking || this.state.secondsLeft === 0) return this.stopTimer();
+    if (this.state.timerWorking || this.state.timeLeft === 0) return this.stopTimer();
 
-    this.setState({ timerWorking: true, secondsLeft: this.state.secondsLeft - 1 });
+    this.setState({ timerWorking: true, timeLeft: this.state.timeLeft - 1 });
 
     this.timer = setInterval(() => {
-      this.setState({ secondsLeft: this.state.secondsLeft - 1 });
-      if (this.state.secondsLeft === 0) this.stopTimer();
+      this.setState({ timeLeft: this.state.timeLeft - 1 });
+      if (this.state.timeLeft === 0) this.stopTimer();
     }, 1000);
   };
 
@@ -58,13 +58,22 @@ class Timer extends Component {
   };
 
   render = () => {
-    const { phase } = this.props.game.gameState;
-    const timerSoundAllowed =
-      this.props.settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night' && this.state.timerWorking;
-    const time = this.state.secondsLeft;
-    const minutes = Math.floor(time / 60);
-    const seconds = time - minutes * 60;
-    const isMini = this.props.mini;
+    const {
+      game: {
+        gameState: { phase },
+      },
+      settings,
+      mini,
+      time,
+      killedOnLastMinute,
+    } = this.props;
+
+    const { timerWorking, timeLeft, playerMuted } = this.state;
+
+    const timerSoundAllowed = settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night' && timerWorking;
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft - minutes * 60;
+    const isMini = mini;
 
     if (timerSoundAllowed) {
       const { secondsSound, countdownEndSound } = this;
@@ -74,31 +83,29 @@ class Timer extends Component {
       if (countdownEndSound) seconds === 0 && !countdownEndSound.playing() && countdownEndSound.play();
     }
 
+    const playPauseIconColor = isMini ? 'white' : timeLeft > 10 ? 'white' : '#FB6F6F';
+
     return (
       <>
         <TimeAndPlayWrapper
           mini={isMini}
-          time={time}
-          onClick={isMini && !this.state.playerMuted ? this.startPauseClicked : null}
+          time={timeLeft}
+          onClick={isMini && !playerMuted ? this.startPauseClicked : null}
         >
-          {this.props.time === 0 ? (
+          {time === 0 ? (
             <Muted>
               <MutedIcon size='70%' fill={colors.Day.navBarText} />
             </Muted>
           ) : (
             <>
-              {this.props.killedOnLastMinute ? (
+              {killedOnLastMinute ? (
                 '4 фол'
               ) : (
                 <>
                   {`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}
 
                   <StartStopButton mini={isMini} color={phase} onClick={!isMini ? this.startPauseClicked : null}>
-                    {this.state.timerWorking ? (
-                      <PauseIcon fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'} />
-                    ) : (
-                      <PlayIcon fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'} />
-                    )}
+                    {timerWorking ? <PauseIcon fill={playPauseIconColor} /> : <PlayIcon fill={playPauseIconColor} />}
                   </StartStopButton>
                 </>
               )}
