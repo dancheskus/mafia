@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import colors from 'colors.js';
+import colors from 'style/colors';
 
 export const PopUpLabel = styled.div`
   text-transform: uppercase;

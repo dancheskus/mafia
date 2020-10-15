@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Howl } from 'howler';
 
 import { PauseIcon, ResetIcon, PlayIcon, MutedIcon } from 'icons/svgIcons';
-import colors from 'colors.js';
+import colors from 'style/colors';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 import secondsSoundFile from '../audio/Countdown_10sec_effects.mp3';
 import countdownEndFile from '../audio/Countdown_end.mp3';

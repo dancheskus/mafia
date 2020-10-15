@@ -9,7 +9,7 @@ import { SheriffStarIcon, TargetIcon, NextIcon } from 'icons/svgIcons';
 import { PopUpLabel, PopUpButton } from './styled-components';
 import VictimSelector from '../common/VictimSelector';
 
-import colors from '../../colors';
+import colors from '../../style/colors';
 
 const Sheriff = styled.div`
   width: 70%;

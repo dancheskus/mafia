@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import colors from 'colors.js';
+import colors from 'style/colors';
 import { MinimizeIcon, MaximizeIcon, NextIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul, returnPlayerToGame } from 'redux/actions/playersActions';
 import { changeGameState, skipVotingInc, skipVotingDec } from 'redux/actions/gameActions';

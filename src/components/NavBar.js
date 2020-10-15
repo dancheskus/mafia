@@ -9,7 +9,7 @@ import { unmutePlayer } from 'redux/actions/playersActions';
 import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 import { disableTutorial } from '../redux/actions/settingsActions';
 import NavMenu from './NavMenu';
-import colors from '../colors';
+import colors from '../style/colors';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 import Timer from './Timer';
 import AudioPlayer from './AudioPlayer';

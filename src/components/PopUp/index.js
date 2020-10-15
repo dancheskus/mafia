@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import colors from 'colors.js';
+import colors from 'style/colors';
 import { MaximizeIcon, MinimizeIcon } from 'icons/svgIcons';
 import { minimizeMaximaizePopup } from '../../redux/actions/gameActions';
 

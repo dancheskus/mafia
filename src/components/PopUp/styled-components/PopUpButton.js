@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import colors from 'colors.js';
+import colors from 'style/colors';
 
 export const PopUpButton = styled.button`
   background: ${props => (props.light ? colors[props.color].popupButtonLight : colors[props.color].popupButton)};

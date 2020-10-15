@@ -4,7 +4,7 @@ import { shuffle, range, random } from 'lodash';
 import { connect } from 'react-redux';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
-import colors from 'colors.js';
+import colors from 'style/colors';
 import { PopUpButton } from './styled-components';
 
 const BigCircle = styled.div`

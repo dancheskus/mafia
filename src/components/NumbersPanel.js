@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { range, last } from 'lodash';
 import styled from 'styled-components';
 
-import colors from 'colors.js';
+import colors from 'style/colors';
 import { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber } from '../redux/actions/gameActions';
 
 const Panel = styled.div`

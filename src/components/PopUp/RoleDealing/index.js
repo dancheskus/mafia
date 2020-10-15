@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import colors from 'colors.js';
+import colors from 'style/colors';
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
 import { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable } from 'redux/actions/gameActions';
 import { PopUpButton } from '../styled-components';

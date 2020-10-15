@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
 import { CylinderIcon } from 'icons/svgIcons';
-import colors from 'colors.js';
+import colors from 'style/colors';
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 import Timer from '../Timer';
 

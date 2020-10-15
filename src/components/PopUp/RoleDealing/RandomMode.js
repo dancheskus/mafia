@@ -11,7 +11,7 @@ import {
   replaceSelectedNumbersWith,
 } from 'redux/actions/gameActions';
 import { addRole } from 'redux/actions/playersActions';
-import colors from 'colors.js';
+import colors from 'style/colors';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import { PopUpButton } from '../styled-components';
 

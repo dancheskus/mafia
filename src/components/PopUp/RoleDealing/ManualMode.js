@@ -10,7 +10,7 @@ import {
   addToSelectedNumbers,
   clearSelectedNumbers,
 } from 'redux/actions/gameActions';
-import colors from 'colors.js';
+import colors from 'style/colors';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import { PopUpButton } from '../styled-components';
 
