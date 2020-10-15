@@ -30,7 +30,8 @@
     "no-unused-expressions": [
       "error",
       {
-        "allowTernary": true
+        "allowTernary": true,
+        "allowShortCircuit": true
       }
     ],
     "react/jsx-one-expression-per-line": "off",

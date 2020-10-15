@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
