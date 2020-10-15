@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+
 import colors from 'style/colors';
 
 export const TimeAndPlayWrapper = styled.div`
