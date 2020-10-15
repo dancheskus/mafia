@@ -2,8 +2,9 @@ import { countBy } from 'lodash';
 
 export default (players, lastRemovedPlayer) => {
   const allAlivePlayers = countBy(
-    players.map(player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ' ? 'black' : 'red'))
+    players.map(({ isAlive, role }) => isAlive && (role === 'ДОН' || role === 'МАФИЯ' ? 'black' : 'red'))
   );
+
   if (lastRemovedPlayer && lastRemovedPlayer[0] >= 0) {
     lastRemovedPlayer.forEach(playerNumber => {
       const { role } = players[playerNumber];
