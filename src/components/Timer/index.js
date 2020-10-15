@@ -1,69 +1,13 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { Howl } from 'howler';
 
 import { PauseIcon, ResetIcon, PlayIcon, MutedIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
-import NavBarCircleButton from './styled-components/NavBarCircleButton';
-import secondsSoundFile from '../audio/Countdown_10sec_effects.mp3';
-import countdownEndFile from '../audio/Countdown_end.mp3';
-
-const TimeAndPlayWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  line-height: 1;
-
-  ${props =>
-    props.mini
-      ? `
-          width: 45px;
-          min-height: 45px;
-          cursor: pointer;
-          background: ${colors.Day.deadPlayerCardNumber};
-          border-radius: 5px; 
-        `
-      : `
-          font-size: 400%;
-          color: ${props.time > 10 ? 'white' : '#FB6F6F'};
-
-          @media (max-height: 630px) {
-            font-size: 300%;
-          }
-      `};
-`;
-
-const StartStopButton = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  ${props =>
-    !props.mini
-      ? `
-      background: ${props => colors[props.color].popupButton};
-      height: 40px;
-      width: 40px;
-
-      @media (max-height: 630px) {
-        height: 35px;
-        width: 35px;
-      }
-    `
-      : `
-      height: 20px;
-      width: 20px;
-    `}
-`;
-
-const Muted = styled.div`
-  padding: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
+import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
+import countdownEndFile from 'audio/Countdown_end.mp3';
+import NavBarCircleButton from '../styled-components/NavBarCircleButton';
+import { Muted, StartStopButton, TimeAndPlayWrapper } from './style';
 
 class Timer extends Component {
   initialState = {
@@ -148,6 +92,7 @@ class Timer extends Component {
               ) : (
                 <>
                   {`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}
+
                   <StartStopButton mini={isMini} color={phase} onClick={!isMini ? this.startPauseClicked : null}>
                     {this.state.timerWorking ? (
                       <PauseIcon fill={isMini ? 'white' : time > 10 ? 'white' : '#FB6F6F'} />
