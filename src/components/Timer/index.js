@@ -73,7 +73,6 @@ class Timer extends Component {
     const timerSoundAllowed = settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night' && timerWorking;
     const minutes = Math.floor(timeLeft / 60);
     const seconds = timeLeft - minutes * 60;
-    const isMini = mini;
 
     if (timerSoundAllowed) {
       const { secondsSound, countdownEndSound } = this;
@@ -83,15 +82,11 @@ class Timer extends Component {
       if (countdownEndSound) seconds === 0 && !countdownEndSound.playing() && countdownEndSound.play();
     }
 
-    const playPauseIconColor = isMini ? 'white' : timeLeft > 10 ? 'white' : '#FB6F6F';
+    const playPauseIconColor = mini ? 'white' : timeLeft > 10 ? 'white' : '#FB6F6F';
 
     return (
       <>
-        <TimeAndPlayWrapper
-          mini={isMini}
-          time={timeLeft}
-          onClick={isMini && !playerMuted ? this.startPauseClicked : null}
-        >
+        <TimeAndPlayWrapper mini={mini} time={timeLeft} onClick={mini && !playerMuted ? this.startPauseClicked : null}>
           {time === 0 ? (
             <Muted>
               <MutedIcon size='70%' fill={colors.Day.navBarText} />
@@ -104,7 +99,7 @@ class Timer extends Component {
                 <>
                   {`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}
 
-                  <StartStopButton mini={isMini} color={phase} onClick={!isMini ? this.startPauseClicked : null}>
+                  <StartStopButton mini={mini} color={phase} onClick={!mini ? this.startPauseClicked : null}>
                     {timerWorking ? <PauseIcon fill={playPauseIconColor} /> : <PlayIcon fill={playPauseIconColor} />}
                   </StartStopButton>
                 </>
@@ -113,7 +108,7 @@ class Timer extends Component {
           )}
         </TimeAndPlayWrapper>
 
-        {isMini && (
+        {mini && (
           <NavBarCircleButton onClick={this.resetClicked}>
             <ResetIcon size='70%' />
           </NavBarCircleButton>
