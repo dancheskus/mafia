@@ -9,6 +9,8 @@ import RandomMode from './RandomMode';
 import ManualMode from './ManualMode';
 import { SvgWrapper } from './style';
 
+const svgClassName = 'flex-grow-1 d-flex align-items-center justify-content-center';
+
 export default () => {
   const {
     settings: { tutorialEnabled },
@@ -43,17 +45,11 @@ export default () => {
   return (
     <>
       <SvgWrapper>
-        <div
-          className='flex-grow-1 d-flex align-items-center justify-content-center'
-          onClick={() => setRandomModeSelected(true)}
-        >
+        <div className={svgClassName} onClick={() => setRandomModeSelected(true)}>
           <RandomCubeIcon className={randomModeSelected ? 'selected' : null} size='100px' />
         </div>
 
-        <div
-          className='flex-grow-1 d-flex align-items-center justify-content-center'
-          onClick={() => setRandomModeSelected(false)}
-        >
+        <div className={svgClassName} onClick={() => setRandomModeSelected(false)}>
           <ListIcon className={!randomModeSelected ? 'selected' : null} size='100px' />
         </div>
       </SvgWrapper>
