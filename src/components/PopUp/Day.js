@@ -5,6 +5,7 @@ import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 're
 import { killPlayer } from 'redux/actions/playersActions';
 import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
+
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 import Timer from '../Timer';
 
@@ -43,19 +44,23 @@ class Day extends Component {
         {killedPlayer >= 0 ? (
           <>
             <PopUpLabel className='h1'>Убит</PopUpLabel>
+
             <PopUpCircle mini color='Night'>
               {killedPlayer + 1}
             </PopUpCircle>
+
             <Timer killedOnLastMinute={!this.props.players[killedPlayer].isAlive} key={this.props.game.popupOpened} />
           </>
         ) : (
           <>
             <PopUpLabel className='h1'>Несострел</PopUpLabel>
+
             <PopUpCircle>
               <CylinderIcon fill={colors.Day.popupNightResult} size='80%' />
             </PopUpCircle>
           </>
         )}
+
         <PopUpButton color='Day' onClick={this.closePopup}>
           Закрыть
         </PopUpButton>

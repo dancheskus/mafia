@@ -34,16 +34,13 @@ class RandomMode extends Component {
   cardClicked = () => {
     const { game, lightModeOff, replaceSelectedNumbersWith, addRole, lightModeOn } = this.props;
     const playerNumber = game.selectedNumbers[0];
-
-    if (this.state.role) return;
+    if (this.state.role || !this.allRoles.length) return;
 
     this.closeCardTimer = setTimeout(() => {
       this.setState({ role: null });
       lightModeOff();
-      replaceSelectedNumbersWith(playerNumber + 1);
+      replaceSelectedNumbersWith(playerNumber + 1 <= 9 ? playerNumber + 1 : 9);
     }, 1800);
-
-    if (!this.allRoles.length) return;
 
     const role = this.allRoles.pop();
     addRole({ playerNumber, role });

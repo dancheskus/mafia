@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
+
 import { StyledNavMenu, MenuItems } from './style';
 import Settings from './Settings';
 
