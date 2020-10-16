@@ -2,6 +2,10 @@ import styled from 'styled-components';
 
 import colors from 'style/colors';
 
+const {
+  RoleDealing: { dealingMode, dealingModeSelected },
+} = colors;
+
 export const SvgWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -10,15 +14,16 @@ export const SvgWrapper = styled.div`
   flex-grow: 3;
 
   div:not(:last-child) {
-    border-bottom: 2px solid ${colors.RoleDealing.dealingMode};
+    border-bottom: 2px solid ${dealingMode};
   }
 
   path {
-    fill: ${props => (props.selected ? colors.RoleDealing.dealingModeSelected : colors.RoleDealing.dealingMode)};
+    fill: ${({ selected }) => (selected ? dealingModeSelected : dealingMode)};
     transition: fill 0.3s;
   }
+
   div:hover path,
   .selected path {
-    fill: ${colors.RoleDealing.dealingModeSelected};
+    fill: ${dealingModeSelected};
   }
 `;
