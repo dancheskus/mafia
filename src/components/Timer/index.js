@@ -25,9 +25,9 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
     },
   } = useSelector(state => state);
 
-  const defaultTimerLeft = time || 60;
+  const defaultTimeLeft = time || 60;
   const [timerWorking, setTimerWorking] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(defaultTimerLeft);
+  const [timeLeft, setTimeLeft] = useState(defaultTimeLeft);
   const playerMuted = players[activePlayer].fouls.muted;
 
   const minutes = Math.floor(timeLeft / 60);
@@ -41,7 +41,7 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
   };
 
   const resetTimer = () => {
-    setTimeLeft(defaultTimerLeft);
+    setTimeLeft(defaultTimeLeft);
     setTimerWorking(false);
   };
 
