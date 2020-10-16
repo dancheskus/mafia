@@ -8,13 +8,12 @@ import { changeActivePlayer, changeGameState, skipVotingDec } from 'redux/action
 import { unmutePlayer } from 'redux/actions/playersActions';
 import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 
+import colors from '../style/colors';
+import { disableTutorial } from '../redux/actions/settingsActions';
 import NavMenu from './NavMenu';
 import NavBarCircleButton from './styled-components/NavBarCircleButton';
 import Timer from './Timer';
 import AudioPlayer from './AudioPlayer';
-
-import colors from '../style/colors';
-import { disableTutorial } from '../redux/actions/settingsActions';
 
 const BackIcon = styled(NextIcon)`
   transform: rotate(180deg);

@@ -7,9 +7,8 @@ import colors from 'style/colors';
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import countdownEndFile from 'audio/Countdown_end.mp3';
 
-import { MutedWrapper, StartStopButton, TimeAndPlayWrapper } from './style';
-
 import NavBarCircleButton from '../styled-components/NavBarCircleButton';
+import { MutedWrapper, StartStopButton, TimeAndPlayWrapper } from './style';
 
 const volume = 1;
 const secondsSound = new Howl({ src: `${secondsSoundFile}`, volume, sprite: { oneSec: [0, 1020] } });
