@@ -54,8 +54,9 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
     killedOnLastMinute && setTimerWorking(false);
   }, [killedOnLastMinute]);
 
+  const timerSoundAllowed = settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night' && timerWorking;
+
   useEffect(() => {
-    const timerSoundAllowed = settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night' && timerWorking;
     let interval;
 
     if (timerWorking) {
@@ -77,7 +78,7 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
     } else if (seconds !== 0) clearInterval(interval);
 
     return () => clearInterval(interval);
-  }, [timerWorking, seconds]);
+  }, [timerWorking, seconds, timerSoundAllowed]);
 
   const playPauseIconColor = mini ? 'white' : timeLeft > 10 ? 'white' : '#FB6F6F';
 
