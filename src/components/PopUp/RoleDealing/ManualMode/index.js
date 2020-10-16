@@ -17,32 +17,39 @@ import { Notification, RoleCard, RoleSelection, RoleSelectionWrapper } from './s
 
 class ManualMode extends Component {
   componentDidMount = () => {
-    this.props.addToSelectedNumbers(0);
-    this.props.numbersPanelClickable();
+    const { addToSelectedNumbers, numbersPanelClickable } = this.props;
+
+    addToSelectedNumbers(0);
+    numbersPanelClickable();
   };
 
   componentDidUpdate = prevState => {
+    const { game, resetMode } = this.props;
+
     // Возвращаемся на пред. страницу при "Новой игре"
-    prevState.game.selectedNumbers.length > 0 && this.props.game.selectedNumbers.length === 0 && this.props.resetMode();
+    prevState.game.selectedNumbers.length > 0 && game.selectedNumbers.length === 0 && resetMode();
   };
 
   changeSelection = (role, disabled) => {
+    const { game, addRole } = this.props;
+
     if (disabled) return;
-    this.props.addRole({ playerNumber: this.props.game.selectedNumbers[0], role });
+    addRole({ playerNumber: game.selectedNumbers[0], role });
   };
 
   startGameClicked = () => {
-    this.props.clearSelectedNumbers();
+    const { clearSelectedNumbers, changeGameState } = this.props;
 
-    this.props.changeGameState({ phase: 'ZeroNight' });
+    clearSelectedNumbers();
+    changeGameState({ phase: 'ZeroNight' });
   };
 
   render = () => {
-    const currentPlayerRole = this.props.players[this.props.game.selectedNumbers[0]]
-      ? this.props.players[this.props.game.selectedNumbers[0]].role
-      : null;
+    const { game, players } = this.props;
 
-    const { МАФИЯ, ШЕРИФ, ДОН } = countBy(this.props.players.map(player => player.role));
+    const currentPlayerRole = players[game.selectedNumbers[0]] ? players[game.selectedNumbers[0]].role : null;
+
+    const { МАФИЯ, ШЕРИФ, ДОН } = countBy(players.map(player => player.role));
     const isButtonDisabled = МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1;
     const isDonDisabled = ДОН === 1 && currentPlayerRole !== 'ДОН';
     const isMafiaDisabled = МАФИЯ === 2 && currentPlayerRole !== 'МАФИЯ';
@@ -55,6 +62,7 @@ class ManualMode extends Component {
             <RoleCard mirnij onClick={() => this.changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
               <ThumbUpIcon size='60%' fill={colors.RoleDealing.popupIconLight} />
             </RoleCard>
+
             <RoleCard
               disabled={isDonDisabled}
               don
@@ -63,6 +71,7 @@ class ManualMode extends Component {
             >
               <DonRingIcon size='60%' fill={colors.RoleDealing.popupIcon} />
             </RoleCard>
+
             <RoleCard
               disabled={isMafiaDisabled}
               mafia
@@ -71,6 +80,7 @@ class ManualMode extends Component {
             >
               <ThumbDownIcon size='60%' fill={colors.RoleDealing.popupIcon} />
             </RoleCard>
+
             <RoleCard
               disabled={isSherifDisabled}
               sherif
