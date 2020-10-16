@@ -32,53 +32,61 @@ class RandomMode extends Component {
   };
 
   cardClicked = () => {
-    const playerNumber = this.props.game.selectedNumbers[0];
+    const { game, lightModeOff, replaceSelectedNumbersWith, addRole, lightModeOn } = this.props;
+    const playerNumber = game.selectedNumbers[0];
 
     if (this.state.role) return;
 
     this.closeCardTimer = setTimeout(() => {
       this.setState({ role: null });
-      this.props.lightModeOff();
-      this.props.replaceSelectedNumbersWith(playerNumber + 1);
+      lightModeOff();
+      replaceSelectedNumbersWith(playerNumber + 1);
     }, 1800);
 
     if (!this.allRoles.length) return;
 
     const role = this.allRoles.pop();
-    this.props.addRole({ playerNumber, role });
+    addRole({ playerNumber, role });
     this.setState({ role });
-    if (role === 'МИРНЫЙ' || role === 'ШЕРИФ') this.props.lightModeOn();
+    if (role === 'МИРНЫЙ' || role === 'ШЕРИФ') lightModeOn();
   };
 
   startGameClicked = () => {
-    this.props.clearSelectedNumbers();
-    this.props.changeGameState({ phase: 'ZeroNight' });
+    const { clearSelectedNumbers, changeGameState } = this.props;
+
+    clearSelectedNumbers();
+    changeGameState({ phase: 'ZeroNight' });
   };
 
-  render = () => (
-    <Card onClick={this.cardClicked}>
-      {!this.state.role && !!this.allRoles.length && (
-        <>
-          <EyeIcon size='40%' fill={popupIcon} />
-          <PressText>Нажми</PressText>
-        </>
-      )}
+  render = () => {
+    const { role } = this.state;
 
-      {!this.state.role && !this.allRoles.length && (
-        <ScaledPopUpButton onClick={this.startGameClicked} color='RoleDealing'>
-          Играть
-        </ScaledPopUpButton>
-      )}
+    return (
+      <Card onClick={this.cardClicked}>
+        {!role && !!this.allRoles.length && (
+          <>
+            <EyeIcon size='40%' fill={popupIcon} />
 
-      {this.state.role &&
-        ((this.state.role === 'МАФИЯ' && <ThumbDownIcon size='30%' fill={popupIcon} />) ||
-          (this.state.role === 'ДОН' && <DonRingIcon size='30%' fill={popupIcon} />) ||
-          (this.state.role === 'МИРНЫЙ' && <ThumbUpIcon size='30%' fill={popupIconLight} />) ||
-          (this.state.role === 'ШЕРИФ' && <SheriffOkIcon size='30%' fill={popupIconLight} />))}
+            <PressText>Нажми</PressText>
+          </>
+        )}
 
-      {this.state.role && <RoleName light={this.props.game.lightMode}>{this.state.role}</RoleName>}
-    </Card>
-  );
+        {!role && !this.allRoles.length && (
+          <ScaledPopUpButton onClick={this.startGameClicked} color='RoleDealing'>
+            Играть
+          </ScaledPopUpButton>
+        )}
+
+        {role &&
+          ((role === 'МАФИЯ' && <ThumbDownIcon size='30%' fill={popupIcon} />) ||
+            (role === 'ДОН' && <DonRingIcon size='30%' fill={popupIcon} />) ||
+            (role === 'МИРНЫЙ' && <ThumbUpIcon size='30%' fill={popupIconLight} />) ||
+            (role === 'ШЕРИФ' && <SheriffOkIcon size='30%' fill={popupIconLight} />))}
+
+        {role && <RoleName light={this.props.game.lightMode}>{role}</RoleName>}
+      </Card>
+    );
+  };
 }
 
 export default connect(({ game }) => ({ game }), {
