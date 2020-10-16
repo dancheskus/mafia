@@ -50,7 +50,7 @@ export const StartStopButton = styled.div`
         `}
 `;
 
-export const Muted = styled.div`
+export const MutedWrapper = styled.div`
   padding: 5px;
   display: flex;
   justify-content: center;

@@ -7,7 +7,7 @@ import colors from 'style/colors';
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import countdownEndFile from 'audio/Countdown_end.mp3';
 
-import { Muted, StartStopButton, TimeAndPlayWrapper } from './style';
+import { MutedWrapper, StartStopButton, TimeAndPlayWrapper } from './style';
 
 import NavBarCircleButton from '../styled-components/NavBarCircleButton';
 
@@ -16,19 +16,21 @@ const secondsSound = new Howl({ src: `${secondsSoundFile}`, volume, sprite: { on
 const countdownEndSound = new Howl({ src: `${countdownEndFile}`, volume });
 
 export default ({ mini, time, killedOnLastMinute, autostart }) => {
+  const { players, settings, game } = useSelector(state => state);
   const {
-    players,
-    settings,
-    game: {
-      activePlayer,
-      gameState: { phase },
-    },
-  } = useSelector(state => state);
+    activePlayer,
+    gameState: { phase },
+  } = game;
 
-  const defaultTimeLeft = time || 60;
+  const {
+    isAlive,
+    fouls: { muted },
+  } = players[activePlayer];
+
+  const defaultTimeLeft = typeof time === 'number' ? time : 60;
+
   const [timerWorking, setTimerWorking] = useState(false);
   const [timeLeft, setTimeLeft] = useState(defaultTimeLeft);
-  const playerMuted = players[activePlayer].fouls.muted;
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft - minutes * 60;
@@ -46,49 +48,47 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
   };
 
   useEffect(() => {
-    autostart && !playerMuted && setTimerWorking(true);
-  }, [autostart, playerMuted]);
+    autostart && !muted && isAlive && setTimerWorking(true);
+  }, [autostart, muted, isAlive]);
 
   useEffect(() => {
-    // Остановить таймер, если игрок получил 4-й фол во время последней минуты.
-    killedOnLastMinute && setTimerWorking(false);
-  }, [killedOnLastMinute]);
+    // Остановить таймер, если игрок получил 4-й фол во время последней минуты, игрок заглушен 3-м фолом или убит 4-м фолом.
+    (killedOnLastMinute || !isAlive || muted) && setTimerWorking(false);
+  }, [killedOnLastMinute, isAlive, muted]);
 
-  const timerSoundAllowed = settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night' && timerWorking;
+  const timerSoundAllowed = settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night';
+
+  useEffect(() => {
+    // Звуки таймера
+
+    if (timerSoundAllowed) {
+      if (secondsSound) timeLeft === 10 && !secondsSound.playing() && secondsSound.play('oneSec');
+
+      if (countdownEndSound) timeLeft === 0 && !countdownEndSound.playing() && countdownEndSound.play();
+    }
+  }, [timerSoundAllowed, timeLeft]);
 
   useEffect(() => {
     let interval;
 
+    if (timeLeft === 0) setTimerWorking(false);
+
     if (timerWorking) {
-      interval = setInterval(() => {
-        setTimeLeft(timeLeft => {
-          const newTimeLeft = timeLeft - 1;
-
-          if (newTimeLeft === 0) setTimerWorking(false);
-
-          if (timerSoundAllowed) {
-            if (secondsSound) newTimeLeft === 10 && !secondsSound.playing() && secondsSound.play('oneSec');
-
-            if (countdownEndSound) newTimeLeft === 0 && !countdownEndSound.playing() && countdownEndSound.play();
-          }
-
-          return newTimeLeft;
-        });
-      }, 1000);
-    } else if (seconds !== 0) clearInterval(interval);
+      interval = setInterval(() => setTimeLeft(timeLeft => timeLeft - 1), 1000);
+    } else if (timeLeft !== 0) clearInterval(interval);
 
     return () => clearInterval(interval);
-  }, [timerWorking, seconds, timerSoundAllowed]);
+  }, [timerWorking, timerSoundAllowed, timeLeft]);
 
   const playPauseIconColor = mini ? 'white' : timeLeft > 10 ? 'white' : '#FB6F6F';
 
   return (
     <>
-      <TimeAndPlayWrapper mini={mini} time={timeLeft} onClick={mini && !playerMuted ? startPauseTimer : null}>
+      <TimeAndPlayWrapper mini={mini} time={timeLeft} onClick={mini && !muted ? startPauseTimer : null}>
         {time === 0 ? (
-          <Muted>
+          <MutedWrapper>
             <MutedIcon size='70%' fill={colors.Day.navBarText} />
-          </Muted>
+          </MutedWrapper>
         ) : (
           <>
             {killedOnLastMinute ? (
