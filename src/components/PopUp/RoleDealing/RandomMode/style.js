@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import colors from 'style/colors';
 import { PopUpButton } from 'components/PopUp/styled-components';
 
-const { popupIcon } = colors.RoleDealing;
+const { popupIcon, popupTextLight, popupText } = colors.RoleDealing;
 
 export const Card = styled.div`
   flex-grow: 1;
@@ -16,10 +16,7 @@ export const Card = styled.div`
 
 export const RoleName = styled.h1`
   font-size: 400%;
-  color: ${({ light }) => {
-    const { popupTextLight, popupText } = colors.RoleDealing;
-    return light ? popupTextLight : popupText;
-  }};
+  color: ${({ light }) => (light ? popupTextLight : popupText)};
 `;
 
 export const ScaledPopUpButton = styled(PopUpButton)`
