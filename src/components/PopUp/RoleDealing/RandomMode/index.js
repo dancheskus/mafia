@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { shuffle, concat, fill } from 'lodash';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 
 import {
   lightModeOff,
@@ -13,37 +12,10 @@ import {
 import { addRole } from 'redux/actions/playersActions';
 import colors from 'style/colors';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
-import { PopUpButton } from '../styled-components';
+
+import { PressText, RoleName, ScaledPopUpButton, Card } from './style';
 
 const { popupIcon, popupIconLight } = colors.RoleDealing;
-
-const Card = styled.div`
-  flex-grow: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-`;
-
-const RoleName = styled.h1`
-  font-size: 400%;
-  color: ${({ light }) => (light ? colors.RoleDealing.popupTextLight : colors.RoleDealing.popupText)};
-`;
-
-const ScaledPopUpButton = styled(PopUpButton)`
-  transform: scale(2);
-`;
-
-const PressText = styled.div`
-  font-size: 4rem;
-  color: ${popupIcon};
-  text-transform: uppercase;
-
-  @media (max-width: 767px) {
-    font-size: 3rem;
-  }
-`;
 
 class RandomMode extends Component {
   state = { role: null };

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import colors from 'style/colors';
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
 import { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable } from 'redux/actions/gameActions';
+
 import { PopUpButton } from '../styled-components';
 import RandomMode from './RandomMode';
 import ManualMode from './ManualMode';
@@ -30,17 +31,26 @@ const SvgWrapper = styled.div`
   }
 `;
 
-const RoleDealing = props => {
+export default () => {
+  const {
+    settings: { tutorialEnabled },
+    game: {
+      lightMode,
+      gameState: { phase },
+    },
+  } = useSelector(state => state);
+  const dispatch = useDispatch();
+
   const [randomModeSelected, setRandomModeSelected] = useState(true);
   const [manualModeSelected, setManualModeSelected] = useState(false);
   const [modeApproved, setModeApproved] = useState(false);
 
   useEffect(() => {
-    props.clearSelectedNumbers();
-    props.lightModeOff();
-    props.numbersPanelNotClickable();
+    dispatch(clearSelectedNumbers());
+    dispatch(lightModeOff());
+    dispatch(numbersPanelNotClickable());
 
-    if (props.settings.tutorialEnabled && modeApproved === false) {
+    if (tutorialEnabled && modeApproved === false) {
       setRandomModeSelected(false);
       setManualModeSelected(true);
       setModeApproved(true);
@@ -50,8 +60,6 @@ const RoleDealing = props => {
   const resetMode = () => setModeApproved(false);
 
   const buttonClicked = () => setModeApproved(true);
-
-  const { lightMode } = props.game;
 
   return (
     <>
@@ -78,7 +86,7 @@ const RoleDealing = props => {
             </div>
           </SvgWrapper>
           <div className='flex-grow-1 d-flex align-items-center'>
-            <PopUpButton color={props.game.gameState.phase} light={lightMode} onClick={buttonClicked}>
+            <PopUpButton color={phase} light={lightMode} onClick={buttonClicked}>
               {randomModeSelected ? 'автоматически' : 'вручную'}
             </PopUpButton>
           </div>
@@ -91,9 +99,3 @@ const RoleDealing = props => {
     </>
   );
 };
-
-export default connect(({ game, settings }) => ({ game, settings }), {
-  clearSelectedNumbers,
-  lightModeOff,
-  numbersPanelNotClickable,
-})(RoleDealing);

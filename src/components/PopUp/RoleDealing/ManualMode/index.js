@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 import { countBy } from 'lodash';
 
 import { addRole } from 'redux/actions/playersActions';
@@ -12,90 +11,9 @@ import {
 } from 'redux/actions/gameActions';
 import colors from 'style/colors';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
-import { PopUpButton } from '../styled-components';
+import { PopUpButton } from 'components/PopUp/styled-components';
 
-const RoleSelectionWrapper = styled.div`
-  height: 80%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const RoleSelection = styled.div`
-  width: 50%;
-  height: 80%;
-  display: flex;
-  flex-wrap: wrap;
-
-  > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid transparent;
-    transition: border 0.1s;
-    width: 50%;
-    height: 50%;
-  }
-
-  @media (max-width: 991px) {
-    width: 60%;
-  }
-  @media (max-width: 767px) {
-    width: 80%;
-  }
-`;
-
-const RoleCard = styled.div`
-  border: ${props => (props.selected ? '2px solid white' : null)} !important;
-
-  ${props => {
-    if (props.mafia)
-      return `
-      border-radius: 0 0 0 10px;
-      background: ${colors.RoleDealing.popupButton};
-    `;
-    if (props.don)
-      return `
-      border-radius: 0 10px 0 0;
-      background: ${colors.RoleDealing.popupButton};
-    `;
-    if (props.sherif)
-      return `
-      background: ${colors.RoleDealing.popupBackgroundLight};
-      border-radius: 0 0 10px 0;
-    `;
-    if (props.mirnij)
-      return `
-      background: ${colors.RoleDealing.popupBackgroundLight};
-      border-radius: 10px 0 0 0;
-    `;
-  }}
-
-  ${props => props.disabled && 'background: grey; filter: brightness(25%) grayscale(100%)'}
-`;
-
-const Notification = styled.div`
-  text-align: center;
-  line-height: 1;
-  margin: 20px;
-
-  ${props => (!props.disabled ? `color: transparent` : `animation: blinkingText 6s infinite`)};
-
-  @keyframes blinkingText {
-    0% {
-      color: transparent;
-    }
-
-    50% {
-      color: white;
-    }
-
-    100% {
-      color: transparent;
-    }
-  }
-`;
+import { Notification, RoleCard, RoleSelection, RoleSelectionWrapper } from './style';
 
 class ManualMode extends Component {
   componentDidMount = () => {
