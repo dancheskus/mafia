@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { countBy } from 'lodash';
 
@@ -12,22 +12,26 @@ import {
 import colors from 'style/colors';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import { PopUpButton } from 'components/PopUp/styled-components';
+import usePreviousState from 'helpers/usePreviousState';
 
 import { Notification, RoleCard, RoleSelection, RoleSelectionWrapper } from './style';
 
+const {
+  RoleDealing: { popupIconLight, popupIcon },
+} = colors;
+
 export default ({ resetMode }) => {
   const dispatch = useDispatch();
-  const { game, players } = useSelector(store => store);
+  const {
+    game: { selectedNumbers },
+    players,
+  } = useSelector(store => store);
 
-  const prevSelectedNumbersLengthRef = useRef();
-  useEffect(() => {
-    prevSelectedNumbersLengthRef.current = game.selectedNumbers.length;
-  });
-  const prevSelectedNumbersLength = prevSelectedNumbersLengthRef.current;
+  const prevSelectedNumbersLength = usePreviousState(selectedNumbers.length);
 
   useEffect(() => {
     // Возвращаемся на пред. страницу при "Новой игре", если выключена раздача номеров
-    prevSelectedNumbersLength > 0 && game.selectedNumbers.length === 0 && resetMode();
+    prevSelectedNumbersLength > 0 && selectedNumbers.length === 0 && resetMode();
   });
 
   useEffect(() => {
@@ -35,9 +39,11 @@ export default ({ resetMode }) => {
     dispatch(numbersPanelClickable());
   }, [dispatch]);
 
+  const playerNumber = selectedNumbers[0];
+
   const changeSelection = (role, disabled) => {
     if (disabled) return;
-    dispatch(addRole({ playerNumber: game.selectedNumbers[0], role }));
+    dispatch(addRole({ playerNumber, role }));
   };
 
   const startGameClicked = () => {
@@ -45,9 +51,9 @@ export default ({ resetMode }) => {
     dispatch(changeGameState({ phase: 'ZeroNight' }));
   };
 
-  const currentPlayerRole = players[game.selectedNumbers[0]] ? players[game.selectedNumbers[0]].role : null;
+  const currentPlayerRole = players[playerNumber]?.role || null;
 
-  const { МАФИЯ, ШЕРИФ, ДОН } = countBy(players.map(player => player.role));
+  const { МАФИЯ, ШЕРИФ, ДОН } = countBy(players.map(({ role }) => role));
   const isButtonDisabled = МАФИЯ !== 2 || ШЕРИФ !== 1 || ДОН !== 1;
   const isDonDisabled = ДОН === 1 && currentPlayerRole !== 'ДОН';
   const isMafiaDisabled = МАФИЯ === 2 && currentPlayerRole !== 'МАФИЯ';
@@ -58,7 +64,7 @@ export default ({ resetMode }) => {
       <RoleSelectionWrapper className='role-selection-wrapper'>
         <RoleSelection>
           <RoleCard mirnij onClick={() => changeSelection('МИРНЫЙ')} selected={currentPlayerRole === 'МИРНЫЙ'}>
-            <ThumbUpIcon size='60%' fill={colors.RoleDealing.popupIconLight} />
+            <ThumbUpIcon size='60%' fill={popupIconLight} />
           </RoleCard>
 
           <RoleCard
@@ -67,7 +73,7 @@ export default ({ resetMode }) => {
             onClick={() => changeSelection('ДОН', isDonDisabled)}
             selected={currentPlayerRole === 'ДОН'}
           >
-            <DonRingIcon size='60%' fill={colors.RoleDealing.popupIcon} />
+            <DonRingIcon size='60%' fill={popupIcon} />
           </RoleCard>
 
           <RoleCard
@@ -76,7 +82,7 @@ export default ({ resetMode }) => {
             onClick={() => changeSelection('МАФИЯ', isMafiaDisabled)}
             selected={currentPlayerRole === 'МАФИЯ'}
           >
-            <ThumbDownIcon size='60%' fill={colors.RoleDealing.popupIcon} />
+            <ThumbDownIcon size='60%' fill={popupIcon} />
           </RoleCard>
 
           <RoleCard
@@ -85,10 +91,7 @@ export default ({ resetMode }) => {
             onClick={() => changeSelection('ШЕРИФ', isSherifDisabled)}
             selected={currentPlayerRole === 'ШЕРИФ'}
           >
-            <SheriffOkIcon
-              size='60%'
-              fill={isSherifDisabled ? colors.RoleDealing.popupIcon : colors.RoleDealing.popupIconLight}
-            />
+            <SheriffOkIcon size='60%' fill={isSherifDisabled ? popupIcon : popupIconLight} />
           </RoleCard>
         </RoleSelection>
       </RoleSelectionWrapper>
