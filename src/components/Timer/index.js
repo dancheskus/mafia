@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Howl } from 'howler';
+import { useTimer } from 'use-timer';
 
 import { PauseIcon, ResetIcon, PlayIcon, MutedIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
@@ -26,10 +27,28 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
     fouls: { muted },
   } = players[activePlayer];
 
-  const defaultTimeLeft = typeof time === 'number' ? time : 60;
+  const timerSoundAllowed = settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night';
 
-  const [timerWorking, setTimerWorking] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(defaultTimeLeft);
+  const {
+    time: timeLeft,
+    start: startTimer,
+    isRunning: isTimerRunning,
+    pause: pauseTimer,
+    reset: resetTimer,
+    advanceTime,
+  } = useTimer({
+    initialTime: typeof time === 'number' ? time : 60,
+    endTime: 0,
+    timerType: 'DECREMENTAL',
+    onTimeUpdate: time => {
+      // Звуки таймера
+
+      if (!timerSoundAllowed) return;
+
+      if (secondsSound) time === 10 && !secondsSound.playing() && secondsSound.play('oneSec');
+      if (countdownEndSound) time === 0 && !countdownEndSound.playing() && countdownEndSound.play();
+    },
+  });
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft - minutes * 60;
@@ -37,47 +56,22 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
   const startPauseTimer = () => {
     if (timeLeft === 0) return;
 
-    if (!timerWorking) setTimeLeft(timeLeft - 1);
-    setTimerWorking(!timerWorking);
-  };
-
-  const resetTimer = () => {
-    setTimeLeft(defaultTimeLeft);
-    setTimerWorking(false);
+    if (isTimerRunning) {
+      pauseTimer();
+    } else {
+      advanceTime(1);
+      startTimer();
+    }
   };
 
   useEffect(() => {
-    autostart && !muted && isAlive && setTimerWorking(true);
-  }, [autostart, muted, isAlive]);
+    autostart && !muted && isAlive && startTimer();
+  }, [autostart, muted, isAlive, startTimer]);
 
   useEffect(() => {
     // Остановить таймер, если игрок получил 4-й фол во время последней минуты, игрок заглушен 3-м фолом или убит 4-м фолом.
-    (killedOnLastMinute || !isAlive || muted) && setTimerWorking(false);
-  }, [killedOnLastMinute, isAlive, muted]);
-
-  const timerSoundAllowed = settings.timerSounds && phase !== 'ZeroNight' && phase !== 'Night';
-
-  useEffect(() => {
-    // Звуки таймера
-
-    if (timerSoundAllowed) {
-      if (secondsSound) timeLeft === 10 && !secondsSound.playing() && secondsSound.play('oneSec');
-
-      if (countdownEndSound) timeLeft === 0 && !countdownEndSound.playing() && countdownEndSound.play();
-    }
-  }, [timerSoundAllowed, timeLeft]);
-
-  useEffect(() => {
-    let interval;
-
-    if (timeLeft === 0) setTimerWorking(false);
-
-    if (timerWorking) {
-      interval = setInterval(() => setTimeLeft(timeLeft => timeLeft - 1), 1000);
-    } else if (timeLeft !== 0) clearInterval(interval);
-
-    return () => clearInterval(interval);
-  }, [timerWorking, timerSoundAllowed, timeLeft]);
+    (killedOnLastMinute || !isAlive || muted) && pauseTimer();
+  }, [killedOnLastMinute, isAlive, muted, pauseTimer]);
 
   const playPauseIconColor = mini ? 'white' : timeLeft > 10 ? 'white' : '#FB6F6F';
 
@@ -97,7 +91,7 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
                 {`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}
 
                 <StartStopButton mini={mini} color={phase} onClick={!mini ? startPauseTimer : null}>
-                  {timerWorking ? <PauseIcon fill={playPauseIconColor} /> : <PlayIcon fill={playPauseIconColor} />}
+                  {isTimerRunning ? <PauseIcon fill={playPauseIconColor} /> : <PlayIcon fill={playPauseIconColor} />}
                 </StartStopButton>
               </>
             )}
