@@ -7,6 +7,7 @@ import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVoting
 import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/common/VictimSelector';
 import { ResetIcon } from 'icons/svgIcons';
+
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';

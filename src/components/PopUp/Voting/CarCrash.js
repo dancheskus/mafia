@@ -1,37 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 
 import Timer from 'components/Timer';
 import VictimSelector from 'components/common/VictimSelector';
+
 import CarCrashNotification from './CarCrashNotification';
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 
-const CarCrash = props => {
-  const [notification, setNotification] = useState(true);
-  const [currentPlayer, setCurrentPlayer] = useState(0);
+export default ({ secondTime, closeCarCrash, votingFinishedClicked }) => {
+  const {
+    players,
+    game: { selectedNumbers },
+    settings: { multiplePlayerRemove },
+  } = useSelector(store => store);
+
   const [selectedNumber, setSelectedNumber] = useState(null);
 
+  const stopVoting = useCallback(() => {
+    const alivePlayers = players.filter(({ isAlive }) => isAlive).length;
+
+    votingFinishedClicked(selectedNumber > alivePlayers / 2);
+  }, [players, selectedNumber, votingFinishedClicked]);
+
   useEffect(() => {
-    if (props.secondTime && !props.settings.multiplePlayerRemove) stopVoting();
-  }, []);
-
-  const closeNotification = () => setNotification(false);
-
-  const nextPlayer = () => setCurrentPlayer(currentPlayer + 1);
+    if (secondTime && !multiplePlayerRemove) stopVoting();
+  }, [secondTime, multiplePlayerRemove, stopVoting]);
 
   const onNumberSelected = num => setSelectedNumber(num + 1 === selectedNumber ? null : num + 1);
+  const deadPlayers = players.filter(player => !player.isAlive).length;
 
-  const stopVoting = () => {
-    const alivePlayers = props.players.filter(player => player.isAlive).length;
-
-    props.votingFinishedClicked(selectedNumber > alivePlayers / 2);
-  };
-
-  const { selectedNumbers } = props.game;
-  const lastPlayer = currentPlayer === selectedNumbers.length - 1;
-  const deadPlayers = props.players.filter(player => !player.isAlive).length;
-
-  if (props.secondTime)
+  if (secondTime)
     return (
       <>
         <PopUpLabel className='h2 text-warning'>Вывести всех выставленных?</PopUpLabel>
@@ -44,7 +42,12 @@ const CarCrash = props => {
       </>
     );
 
-  if (notification) return <CarCrashNotification closeNotification={closeNotification} />;
+  const [notification, setNotification] = useState(true);
+  if (notification) return <CarCrashNotification closeNotification={() => setNotification(false)} />;
+
+  const [currentPlayer, setCurrentPlayer] = useState(0);
+  const nextPlayer = () => setCurrentPlayer(currentPlayer + 1);
+  const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 
   return (
     <>
@@ -52,11 +55,9 @@ const CarCrash = props => {
 
       <Timer time={30} key={currentPlayer} />
 
-      <PopUpButton color='Voting' onClick={lastPlayer ? props.closeCarCrash : nextPlayer}>
+      <PopUpButton color='Voting' onClick={lastPlayer ? closeCarCrash : nextPlayer}>
         {lastPlayer ? 'Завершить' : 'Далее'}
       </PopUpButton>
     </>
   );
 };
-
-export default connect(({ game, players, settings }) => ({ game, players, settings }))(CarCrash);

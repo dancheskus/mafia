@@ -1,24 +1,25 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { ResultsNumbers } from './styled-components/Results';
 import { PopUpLabel, PopUpButton } from '../styled-components';
 
-const CarCrashNotification = props => (
-  <>
-    <PopUpLabel className='h1'>ПЕРЕГОЛОСОВКА</PopUpLabel>
-    <ResultsNumbers>
-      {props.game.selectedNumbers.map(num => (
-        <div key={num}>{num + 1}</div>
-      ))}
-    </ResultsNumbers>
+export default ({ closeNotification }) => {
+  const { selectedNumbers } = useSelector(({ game }) => game);
 
-    <PopUpButton color='Voting' onClick={props.closeNotification}>
-      ОК
-    </PopUpButton>
-  </>
-);
+  return (
+    <>
+      <PopUpLabel className='h1'>ПЕРЕГОЛОСОВКА</PopUpLabel>
 
-const mapStateToProps = ({ game }) => ({ game });
+      <ResultsNumbers>
+        {selectedNumbers.map(num => (
+          <div key={num}>{num + 1}</div>
+        ))}
+      </ResultsNumbers>
 
-export default connect(mapStateToProps)(CarCrashNotification);
+      <PopUpButton color='Voting' onClick={closeNotification}>
+        ОК
+      </PopUpButton>
+    </>
+  );
+};
