@@ -65,7 +65,7 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
 
       if (countdownEndSound) timeLeft === 0 && !countdownEndSound.playing() && countdownEndSound.play();
     }
-  }, [timerSoundAllowed, timeLeft]);
+  }, [timerSoundAllowed, timeLeft, timerWorking]);
 
   useEffect(() => {
     let interval;
