@@ -5,11 +5,9 @@ import { Panel, PanelItem } from './style';
 
 export default () => {
   const {
-    game: {
-      gameState: { phase },
-      selectedNumbers,
-    },
-  } = useSelector(state => state);
+    gameState: { phase },
+    selectedNumbers,
+  } = useSelector(({ game }) => game);
 
   return (
     <Panel color={phase} itemsCentered>

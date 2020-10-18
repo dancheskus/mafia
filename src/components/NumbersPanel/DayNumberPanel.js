@@ -9,13 +9,13 @@ import { Panel, PanelItem } from './style';
 
 export default () => {
   const {
+    players,
     game: {
       activePlayer,
       gameState: { phase },
       selectedNumbers,
       playerAddedToVotingList,
     },
-    players,
   } = useSelector(state => state);
   const dispatch = useDispatch();
 
