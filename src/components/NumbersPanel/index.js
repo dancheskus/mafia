@@ -6,6 +6,13 @@ import { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber } 
 
 import { Panel, PanelItem, PanelText } from './style';
 
+const useNotSelectedNumbers = () => {
+  const {
+    game: { selectedNumbers },
+  } = useSelector(state => state);
+  return range(0, 10).filter(e => !selectedNumbers.includes(e));
+};
+
 const SeatAllocatorNumberPanel = () => {
   const {
     game: {
@@ -13,6 +20,8 @@ const SeatAllocatorNumberPanel = () => {
       selectedNumbers,
     },
   } = useSelector(state => state);
+
+  const notSelectedNumbers = useNotSelectedNumbers();
 
   return (
     <Panel color={phase} className='seat-allocator-panel'>
@@ -22,11 +31,9 @@ const SeatAllocatorNumberPanel = () => {
         </PanelItem>
       ))}
 
-      {range(0, 10)
-        .filter(e => !selectedNumbers.includes(e))
-        .map(notSelNum => (
-          <PanelItem color={phase} key={notSelNum} />
-        ))}
+      {notSelectedNumbers.map(notSelNum => (
+        <PanelItem color={phase} key={notSelNum} />
+      ))}
     </Panel>
   );
 };
@@ -71,6 +78,8 @@ const DayNumberPanel = () => {
     setPlayerAddedNumber(true);
   };
 
+  const notSelectedNumbers = useNotSelectedNumbers();
+
   return (
     <Panel color={phase} className='day-panel' flash={isCurrentPlayerMuted}>
       {selectedNumbers.map(selNum => {
@@ -90,22 +99,20 @@ const DayNumberPanel = () => {
         );
       })}
 
-      {range(0, 10)
-        .filter(e => !selectedNumbers.includes(e))
-        .map(
-          notSelNum =>
-            players[notSelNum].isAlive && (
-              <PanelItem
-                color={phase}
-                key={notSelNum}
-                pointer
-                border={!playerAddedNumber}
-                onClick={() => selectNumber(notSelNum)}
-              >
-                {notSelNum + 1}
-              </PanelItem>
-            )
-        )}
+      {notSelectedNumbers.map(
+        notSelNum =>
+          players[notSelNum].isAlive && (
+            <PanelItem
+              color={phase}
+              key={notSelNum}
+              pointer
+              border={!playerAddedNumber}
+              onClick={() => selectNumber(notSelNum)}
+            >
+              {notSelNum + 1}
+            </PanelItem>
+          )
+      )}
     </Panel>
   );
 };
@@ -185,6 +192,7 @@ const RoleDealingNumberPanel = () => {
 
   const selectPlayer = playerNumber => {
     if (!numbersPanelClickable) return;
+
     dispatch(clearSelectedNumbers());
     dispatch(addToSelectedNumbers(playerNumber));
   };
