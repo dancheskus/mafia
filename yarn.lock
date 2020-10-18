@@ -12009,6 +12009,11 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
+use-timer@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/use-timer/-/use-timer-1.4.0.tgz#31cb293eb75ee0ad33c8808dd347cadde759190e"
+  integrity sha512-LyYyeKazgvmzRVNgETkMjw3lZZInrzBNOm4EA2q9n3o7XY0Ki5C4WnWnicTAMil5aIOoofaP445v3KwL3xvSkw==
+
 use@^3.1.0:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/use/-/use-3.1.1.tgz#d50c8cac79a19fbc20f2911f56eb973f4e10070f"

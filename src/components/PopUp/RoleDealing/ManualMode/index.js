@@ -31,7 +31,7 @@ export default ({ resetMode }) => {
 
   useEffect(() => {
     // Возвращаемся на пред. страницу при "Новой игре", если выключена раздача номеров
-    prevSelectedNumbersLength > 0 && selectedNumbers.length === 0 && resetMode();
+    prevSelectedNumbersLength > 0 && !selectedNumbers.length && resetMode();
   });
 
   useEffect(() => {

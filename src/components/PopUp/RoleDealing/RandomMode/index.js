@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { shuffle, concat, fill } from 'lodash';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useTimer } from 'use-timer';
 
 import {
   lightModeOff,
@@ -12,85 +13,91 @@ import {
 import { addRole } from 'redux/actions/playersActions';
 import colors from 'style/colors';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
+import usePreviousState from 'helpers/usePreviousState';
 
 import { PressText, RoleName, ScaledPopUpButton, Card } from './style';
 
 const { popupIcon, popupIconLight } = colors.RoleDealing;
 
-class RandomMode extends Component {
-  state = { role: null };
+const roleIcons = {
+  МАФИЯ: <ThumbDownIcon size='30%' fill={popupIcon} />,
+  ДОН: <DonRingIcon size='30%' fill={popupIcon} />,
+  МИРНЫЙ: <ThumbUpIcon size='30%' fill={popupIconLight} />,
+  ШЕРИФ: <SheriffOkIcon size='30%' fill={popupIconLight} />,
+};
 
-  allRoles = shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН'));
+export default ({ resetMode }) => {
+  const dispatch = useDispatch();
+  const {
+    game: { selectedNumbers, lightMode },
+  } = useSelector(store => store);
+  const [role, setRole] = useState(null);
 
-  componentDidMount = () => this.props.replaceSelectedNumbersWith(0);
+  const playerNumber = selectedNumbers[0];
 
-  componentWillUnmount = () => clearTimeout(this.closeCardTimer);
+  const { start: startCardBlockingTimer } = useTimer({
+    initialTime: 1,
+    endTime: 0,
+    timerType: 'DECREMENTAL',
+    interval: 1800,
+    onTimeOver: () => {
+      setRole(null);
+      dispatch(lightModeOff());
+      dispatch(replaceSelectedNumbersWith(playerNumber + 1 <= 9 ? playerNumber + 1 : 9));
+    },
+  });
 
-  componentDidUpdate = prevState => {
-    // Возвращаемся на пред. страницу при "Новой игре"
-    prevState.game.selectedNumbers.length > 0 && this.props.game.selectedNumbers.length === 0 && this.props.resetMode();
+  const { current: allRoles } = useRef(shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН')));
+
+  useEffect(() => {
+    dispatch(replaceSelectedNumbersWith(0));
+  }, [dispatch]);
+
+  const prevSelectedNumbersLength = usePreviousState(selectedNumbers.length);
+
+  useEffect(() => {
+    // Возвращаемся на пред. страницу при "Новой игре", если выключена раздача номеров
+    prevSelectedNumbersLength > 0 && !selectedNumbers.length && resetMode();
+  });
+
+  const showRole = () => {
+    if (role || !allRoles.length) return;
+
+    const newRole = allRoles.pop();
+    dispatch(addRole({ playerNumber, role: newRole }));
+    setRole(newRole);
+    if (newRole === 'МИРНЫЙ' || newRole === 'ШЕРИФ') dispatch(lightModeOn());
+
+    startCardBlockingTimer();
   };
 
-  cardClicked = () => {
-    const { game, lightModeOff, replaceSelectedNumbersWith, addRole, lightModeOn } = this.props;
-    const playerNumber = game.selectedNumbers[0];
-    if (this.state.role || !this.allRoles.length) return;
-
-    this.closeCardTimer = setTimeout(() => {
-      this.setState({ role: null });
-      lightModeOff();
-      replaceSelectedNumbersWith(playerNumber + 1 <= 9 ? playerNumber + 1 : 9);
-    }, 1800);
-
-    const role = this.allRoles.pop();
-    addRole({ playerNumber, role });
-    this.setState({ role });
-    if (role === 'МИРНЫЙ' || role === 'ШЕРИФ') lightModeOn();
+  const startGame = () => {
+    dispatch(clearSelectedNumbers());
+    dispatch(changeGameState({ phase: 'ZeroNight' }));
   };
 
-  startGameClicked = () => {
-    const { clearSelectedNumbers, changeGameState } = this.props;
+  return (
+    <Card onClick={showRole}>
+      {!role && !!allRoles.length && (
+        <>
+          <EyeIcon size='40%' fill={popupIcon} />
 
-    clearSelectedNumbers();
-    changeGameState({ phase: 'ZeroNight' });
-  };
+          <PressText>Нажми</PressText>
+        </>
+      )}
 
-  render = () => {
-    const { role } = this.state;
+      {!role && !allRoles.length && (
+        <ScaledPopUpButton onClick={startGame} color='RoleDealing'>
+          Играть
+        </ScaledPopUpButton>
+      )}
 
-    return (
-      <Card onClick={this.cardClicked}>
-        {!role && !!this.allRoles.length && (
-          <>
-            <EyeIcon size='40%' fill={popupIcon} />
-
-            <PressText>Нажми</PressText>
-          </>
-        )}
-
-        {!role && !this.allRoles.length && (
-          <ScaledPopUpButton onClick={this.startGameClicked} color='RoleDealing'>
-            Играть
-          </ScaledPopUpButton>
-        )}
-
-        {role &&
-          ((role === 'МАФИЯ' && <ThumbDownIcon size='30%' fill={popupIcon} />) ||
-            (role === 'ДОН' && <DonRingIcon size='30%' fill={popupIcon} />) ||
-            (role === 'МИРНЫЙ' && <ThumbUpIcon size='30%' fill={popupIconLight} />) ||
-            (role === 'ШЕРИФ' && <SheriffOkIcon size='30%' fill={popupIconLight} />))}
-
-        {role && <RoleName light={this.props.game.lightMode}>{role}</RoleName>}
-      </Card>
-    );
-  };
-}
-
-export default connect(({ game }) => ({ game }), {
-  lightModeOff,
-  lightModeOn,
-  clearSelectedNumbers,
-  addRole,
-  changeGameState,
-  replaceSelectedNumbersWith,
-})(RandomMode);
+      {role && (
+        <>
+          {roleIcons[role]}
+          <RoleName light={lightMode}>{role}</RoleName>
+        </>
+      )}
+    </Card>
+  );
+};
