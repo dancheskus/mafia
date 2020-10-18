@@ -1,84 +1,18 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { connect } from 'react-redux';
 import { countBy } from 'lodash';
 
+import NavMenu from 'components/NavMenu';
 import { changeActivePlayer, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import { unmutePlayer } from 'redux/actions/playersActions';
 import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
+import { disableTutorial } from 'redux/actions/settingsActions';
+import NavBarCircleButton from 'components/styled-components/NavBarCircleButton';
 
-import colors from '../style/colors';
-import { disableTutorial } from '../redux/actions/settingsActions';
-import NavMenu from './NavMenu';
-import NavBarCircleButton from './styled-components/NavBarCircleButton';
-import Timer from './Timer';
+import Timer from '../Timer';
 import AudioPlayer from './AudioPlayer';
-
-const BackIcon = styled(NextIcon)`
-  transform: rotate(180deg);
-`;
-
-const StyledNavigation = styled.div`
-  background: #46494e;
-  ${({ tutorialEnabled }) => !tutorialEnabled && 'z-index: 300'}
-
-  .container > * {
-    padding: 10px;
-    color: ${props => colors[props.color].navBarText};
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
-
-    &:not(:last-child) {
-      border-right: 2px solid #8f8f8f;
-      flex-grow: 1;
-    }
-  }
-`;
-
-const NavStateName = styled.h2`
-  margin: 0;
-  font-weight: 300;
-  font-size: 2rem;
-  text-transform: uppercase;
-
-  span {
-    ${({ tutorialEnabled }) => tutorialEnabled && 'animation: zoom 1s alternate ease-in 2;'}
-  }
-
-  @keyframes zoom {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.1);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
-
-  @media (max-width: 520px) {
-    font-size: 1.5rem;
-  }
-  @media (max-width: 400px) {
-    font-size: 1.3rem;
-  }
-`;
-
-const ButtonsWrapper = styled.div`
-  > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  > div:not(:first-child) {
-    margin-left: 15px;
-  }
-`;
+import { BackIcon, ButtonsWrapper, NavStateName, StyledNavigation } from './style';
 
 const mod = (n, m) => ((n % m) + m) % m;
 

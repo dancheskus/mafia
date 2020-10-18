@@ -9,6 +9,7 @@ import {
   switchMultiplePlayerRemove,
   switchSeatAllocator,
 } from 'redux/actions/settingsActions';
+
 import { SettingsLine } from './style';
 
 const onColor = 'rgb(122, 156, 236)';

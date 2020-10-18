@@ -26,7 +26,8 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
     fouls: { muted },
   } = players[activePlayer];
 
-  const defaultTimeLeft = typeof time === 'number' ? time : 60;
+  const defaultTimeLeft = 3;
+  // const defaultTimeLeft = typeof time === 'number' ? time : 60;
 
   const [timerWorking, setTimerWorking] = useState(false);
   const [timeLeft, setTimeLeft] = useState(defaultTimeLeft);
@@ -60,7 +61,7 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
   useEffect(() => {
     // Звуки таймера
 
-    if (timerSoundAllowed) {
+    if (timerSoundAllowed && timerWorking) {
       if (secondsSound) timeLeft === 10 && !secondsSound.playing() && secondsSound.play('oneSec');
 
       if (countdownEndSound) timeLeft === 0 && !countdownEndSound.playing() && countdownEndSound.play();

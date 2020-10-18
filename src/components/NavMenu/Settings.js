@@ -1,13 +1,14 @@
 import React from 'react';
 import { Howl } from 'howler';
 import { connect } from 'react-redux';
+
 import { enableTutorial } from 'redux/actions/settingsActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
-import secondsSoundFile from '../../audio/Countdown_10sec_effects.mp3';
-import countdownEndFile from '../../audio/Countdown_end.mp3';
+import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
+import countdownEndFile from 'audio/Countdown_end.mp3';
+import { NextIcon } from 'icons/svgIcons';
 
-import { NextIcon } from '../../icons/svgIcons';
 import SettingsItem from './SettingsItem';
 import { AppSettings, BottomButton, BackButton, BottomButtonsGroup } from './style';
 

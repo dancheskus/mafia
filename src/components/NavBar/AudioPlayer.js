@@ -6,8 +6,7 @@ import RingLoader from 'react-spinners/RingLoader';
 import { Howl } from 'howler';
 
 import { PlayIcon, PauseIcon, NextIcon } from 'icons/svgIcons';
-
-import NavBarCircleButton from './styled-components/NavBarCircleButton';
+import NavBarCircleButton from 'components/styled-components/NavBarCircleButton';
 
 const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
 
@@ -106,17 +105,18 @@ class AudioPlayer extends Component {
 
   render = () => {
     const { phase } = this.props.game.gameState;
+    const { loadError, audioList, audioLoaded, isPlayingVisualStatus } = this.state;
 
     return (
       <>
-        {this.state.loadError && 'Музыка не доступна'}
-        {this.state.audioList.length > 0 && (
+        {loadError && 'Музыка не доступна'}
+        {audioList.length > 0 && (
           <>
             {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
               <>
                 <NavBarCircleButton onClick={this.playPause} className='audio-player-pause-play'>
-                  {this.state.audioLoaded ? (
-                    this.state.isPlayingVisualStatus ? (
+                  {audioLoaded ? (
+                    isPlayingVisualStatus ? (
                       <PauseIcon />
                     ) : (
                       <PlayIcon />

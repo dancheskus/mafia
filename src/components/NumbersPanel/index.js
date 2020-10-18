@@ -1,82 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { range, last } from 'lodash';
-import styled from 'styled-components';
 
-import colors from 'style/colors';
-import { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber } from '../redux/actions/gameActions';
+import { addToSelectedNumbers, clearSelectedNumbers, removeLastSelectedNumber } from 'redux/actions/gameActions';
 
-const Panel = styled.div`
-  position: relative;
-  background: ${props => colors[props.color].numbersPanel};
-  padding: 10px;
-  border-radius: 15px;
-  margin-bottom: 15px;
-  display: flex;
-  justify-content: ${props => (props.itemsCentered ? 'center' : 'space-evenly')};
-  align-items: center;
-  ${props =>
-    props.itemsCentered &&
-    `
-    > div:not(:first-child) {
-      margin-left: 10px
-    }
-  `}
-
-  ${({ flash }) => flash && 'animation: flash 1.5s ease-in-out'}
-  
-
-  @keyframes flash {
-    0% {
-      transform: scale(1);
-    }
-    25% {
-      transform: scale(1.05);
-    }
-    50% {
-      transform: scale(1);
-    }
-  }
-`;
-
-const PanelItem = styled.div`
-  height: 30px;
-  width: 30px;
-  background: ${props => (props.selected ? colors[props.color].numberSelected : colors[props.color].number)};
-  border-radius: 50%;
-  color: white;
-  ${props => props.color === 'EndOfGame' && !props.isAlive && 'filter: brightness(60%); color: grey'}
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 500;
-  box-shadow: 0px 9px 35px -8px rgba(0, 0, 0, 0.49);
-  cursor: ${props => (props.pointer ? 'pointer' : 'default')};
-  ${props => props.border && `border: 2px solid ${colors.Day.addSecondFoulBackground};`}
-
-  @media (max-width: 404px) {
-    height: 25px;
-    width: 25px;
-    font-size: 0.8rem;
-  }
-
-  @media (max-width: 350px) {
-    height: 20px;
-    width: 20px;
-    font-size: 0.7rem;
-  }
-`;
-
-const PanelText = styled.div`
-  color: white;
-`;
+import { Panel, PanelItem, PanelText } from './style';
 
 class NumbersPanel extends Component {
   state = { playerAddedNumber: false };
 
   componentDidMount = () => {
-    const { playerAddedToVotingList } = this.props.game;
-    const { activePlayer } = this.props.game;
+    const { playerAddedToVotingList, activePlayer } = this.props.game;
 
     const playerMadeStepBack = playerAddedToVotingList[0] === activePlayer;
 
@@ -85,16 +19,24 @@ class NumbersPanel extends Component {
 
   render = () => {
     const {
-      gameState: { phase },
-      selectedNumbers,
-      numbersPanelClickable,
-    } = this.props.game;
+      game: {
+        activePlayer,
+        gameState: { phase },
+        selectedNumbers,
+        numbersPanelClickable,
+      },
+      players,
+      removeLastSelectedNumber,
+      addToSelectedNumbers,
+      clearSelectedNumbers,
+    } = this.props;
+    const { playerAddedNumber } = this.state;
 
-    const aliveMafiaAmount = this.props.players.filter(
+    const aliveMafiaAmount = players.filter(
       player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ')
     ).length;
 
-    const isCurrentPlayerMuted = this.props.players[this.props.game.activePlayer].fouls.muted;
+    const isCurrentPlayerMuted = players[activePlayer].fouls.muted;
 
     return (
       <>
@@ -117,7 +59,7 @@ class NumbersPanel extends Component {
         {phase === 'Day' && (
           <Panel color={phase} className='day-panel' flash={isCurrentPlayerMuted}>
             {selectedNumbers.map(selNum => {
-              const lastAddedNumber = selNum === last(selectedNumbers) && this.state.playerAddedNumber;
+              const lastAddedNumber = selNum === last(selectedNumbers) && playerAddedNumber;
 
               return (
                 <PanelItem
@@ -127,7 +69,7 @@ class NumbersPanel extends Component {
                   border={lastAddedNumber}
                   onClick={() => {
                     if (!lastAddedNumber) return;
-                    this.props.removeLastSelectedNumber();
+                    removeLastSelectedNumber();
                     this.setState({ playerAddedNumber: false });
                   }}
                   selected
@@ -141,20 +83,20 @@ class NumbersPanel extends Component {
               .filter(e => !selectedNumbers.includes(e))
               .map(
                 notSelNum =>
-                  this.props.players[notSelNum].isAlive && (
+                  players[notSelNum].isAlive && (
                     <PanelItem
                       color={phase}
                       key={notSelNum}
                       pointer
-                      border={!this.state.playerAddedNumber}
+                      border={!playerAddedNumber}
                       onClick={() => {
-                        if (!this.state.playerAddedNumber) {
-                          this.props.addToSelectedNumbers(notSelNum);
+                        if (!playerAddedNumber) {
+                          addToSelectedNumbers(notSelNum);
                         }
 
-                        if (this.state.playerAddedNumber) {
-                          this.props.removeLastSelectedNumber();
-                          this.props.addToSelectedNumbers(notSelNum);
+                        if (playerAddedNumber) {
+                          removeLastSelectedNumber();
+                          addToSelectedNumbers(notSelNum);
                         }
                         this.setState({ playerAddedNumber: true });
                       }}
@@ -184,7 +126,7 @@ class NumbersPanel extends Component {
 
         {phase === 'EndOfGame' && (
           <Panel color={phase}>
-            {this.props.players.map((player, i) => (
+            {players.map((player, i) => (
               <PanelItem
                 isAlive={player.isAlive}
                 color={phase}
@@ -207,14 +149,14 @@ class NumbersPanel extends Component {
                 selected={num === selectedNumbers[0]}
                 onClick={() => {
                   if (!numbersPanelClickable) return;
-                  this.props.clearSelectedNumbers();
-                  this.props.addToSelectedNumbers(num);
+                  clearSelectedNumbers();
+                  addToSelectedNumbers(num);
                 }}
               >
-                {numbersPanelClickable && this.props.players[num].role === 'МАФИЯ' && 'М'}
-                {numbersPanelClickable && this.props.players[num].role === 'ШЕРИФ' && 'Ш'}
-                {numbersPanelClickable && this.props.players[num].role === 'ДОН' && 'Д'}
-                {numbersPanelClickable && this.props.players[num].role === 'МИРНЫЙ' && num + 1}
+                {numbersPanelClickable && players[num].role === 'МАФИЯ' && 'М'}
+                {numbersPanelClickable && players[num].role === 'ШЕРИФ' && 'Ш'}
+                {numbersPanelClickable && players[num].role === 'ДОН' && 'Д'}
+                {numbersPanelClickable && players[num].role === 'МИРНЫЙ' && num + 1}
                 {!numbersPanelClickable && num + 1}
               </PanelItem>
             ))}
