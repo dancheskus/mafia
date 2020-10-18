@@ -26,8 +26,7 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
     fouls: { muted },
   } = players[activePlayer];
 
-  const defaultTimeLeft = 3;
-  // const defaultTimeLeft = typeof time === 'number' ? time : 60;
+  const defaultTimeLeft = typeof time === 'number' ? time : 60;
 
   const [timerWorking, setTimerWorking] = useState(false);
   const [timeLeft, setTimeLeft] = useState(defaultTimeLeft);
