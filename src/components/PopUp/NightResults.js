@@ -35,20 +35,28 @@ class Day extends Component {
     dayNumber === 1 && closePopup();
   };
 
-  _closePopup = () => {
+  goToDay = () => {
     const { killedPlayer } = this;
-    const { closePopup, killPlayer, game, changeGameState } = this.props;
+    const {
+      closePopup,
+      killPlayer,
+      game: {
+        activePlayer,
+        gameState: { dayNumber },
+      },
+      changeGameState,
+    } = this.props;
 
     closePopup();
     killedPlayer >= 0 && killPlayer(killedPlayer);
-    if (killedPlayer === game.activePlayer) changeGameState({ phase: 'Day', dayNumber: game.gameState.dayNumber });
+    if (killedPlayer === activePlayer) changeGameState({ phase: 'Day', dayNumber });
     // В данном случае changeGameState используется только для вызова смены активного и открывающего игроков на +1.
   };
 
   render = () => {
     const {
       killedPlayer,
-      _closePopup,
+      goToDay,
       props: {
         game: { popupOpened },
         players,
@@ -77,7 +85,7 @@ class Day extends Component {
           </>
         )}
 
-        <PopUpButton color='Day' onClick={_closePopup}>
+        <PopUpButton color='Day' onClick={goToDay}>
           Закрыть
         </PopUpButton>
       </>
