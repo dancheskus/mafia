@@ -10,10 +10,8 @@ import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 import Timer from '../Timer';
 
 class Day extends Component {
-  state = {
-    killedPlayer:
-      this.props.game.selectedNumbers[0] >= 0 ? this.props.game.selectedNumbers[0] : Number(localStorage.killedPlayer),
-  };
+  killedPlayer =
+    this.props.game.selectedNumbers[0] >= 0 ? this.props.game.selectedNumbers[0] : Number(localStorage.killedPlayer);
 
   componentWillUnmount = () => {
     localStorage.removeItem('killedPlayer');
@@ -21,23 +19,41 @@ class Day extends Component {
   };
 
   componentDidMount = () => {
-    this.props.clearSelectedNumbers();
+    const {
+      closePopup,
+      game: {
+        popupOpened,
+        gameState: { dayNumber },
+      },
+      clearSelectedNumbers,
+    } = this.props;
 
-    this.props.game.popupOpened && localStorage.setItem('killedPlayer', this.state.killedPlayer);
+    clearSelectedNumbers();
 
-    this.props.game.gameState.dayNumber === 1 && this.props.closePopup();
+    popupOpened && localStorage.setItem('killedPlayer', this.killedPlayer);
+
+    dayNumber === 1 && closePopup();
   };
 
-  closePopup = () => {
-    this.props.closePopup();
-    this.state.killedPlayer >= 0 && this.props.killPlayer(this.state.killedPlayer);
-    if (this.state.killedPlayer === this.props.game.activePlayer)
-      this.props.changeGameState({ phase: 'Day', dayNumber: this.props.game.gameState.dayNumber });
+  _closePopup = () => {
+    const { killedPlayer } = this;
+    const { closePopup, killPlayer, game, changeGameState } = this.props;
+
+    closePopup();
+    killedPlayer >= 0 && killPlayer(killedPlayer);
+    if (killedPlayer === game.activePlayer) changeGameState({ phase: 'Day', dayNumber: game.gameState.dayNumber });
     // В данном случае changeGameState используется только для вызова смены активного и открывающего игроков на +1.
   };
 
   render = () => {
-    const { killedPlayer } = this.state;
+    const {
+      killedPlayer,
+      _closePopup,
+      props: {
+        game: { popupOpened },
+        players,
+      },
+    } = this;
 
     return (
       <>
@@ -49,7 +65,7 @@ class Day extends Component {
               {killedPlayer + 1}
             </PopUpCircle>
 
-            <Timer killedOnLastMinute={!this.props.players[killedPlayer].isAlive} key={this.props.game.popupOpened} />
+            <Timer killedOnLastMinute={!players[killedPlayer].isAlive} key={popupOpened} />
           </>
         ) : (
           <>
@@ -61,7 +77,7 @@ class Day extends Component {
           </>
         )}
 
-        <PopUpButton color='Day' onClick={this.closePopup}>
+        <PopUpButton color='Day' onClick={_closePopup}>
           Закрыть
         </PopUpButton>
       </>
