@@ -15,6 +15,8 @@ export default ({ secondTime, closeCarCrash, votingFinishedClicked }) => {
   } = useSelector(store => store);
 
   const [selectedNumber, setSelectedNumber] = useState(null);
+  const [notification, setNotification] = useState(true);
+  const [currentPlayer, setCurrentPlayer] = useState(0);
 
   const stopVoting = useCallback(() => {
     const alivePlayers = players.filter(({ isAlive }) => isAlive).length;
@@ -42,10 +44,8 @@ export default ({ secondTime, closeCarCrash, votingFinishedClicked }) => {
       </>
     );
 
-  const [notification, setNotification] = useState(true);
   if (notification) return <CarCrashNotification closeNotification={() => setNotification(false)} />;
 
-  const [currentPlayer, setCurrentPlayer] = useState(0);
   const nextPlayer = () => setCurrentPlayer(currentPlayer + 1);
   const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 

@@ -1,68 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
 
-import NavBar from './NavBar';
-import NumbersPanel from './NumbersPanel';
-import PopUp from './PopUp';
-import SeatAllocator from './PopUp/SeatAllocator';
-import RoleDealing from './PopUp/RoleDealing';
-import ZeroNight from './PopUp/ZeroNight';
-import PlayerCards from './PlayerCards';
-import Voting from './PopUp/Voting';
-import Night from './PopUp/Night';
-import NightResults from './PopUp/NightResults';
-import EndOfGame from './PopUp/EndOfGame';
-import GuideWrapper from './UserGuide';
-import { GuideOverlay } from './UserGuide/style';
+import NavBar from 'components/NavBar';
+import NumbersPanel from 'components/NumbersPanel';
+import PopUp from 'components/PopUp';
+import SeatAllocator from 'components/PopUp/SeatAllocator';
+import RoleDealing from 'components/PopUp/RoleDealing';
+import ZeroNight from 'components/PopUp/ZeroNight';
+import PlayerCards from 'components/PlayerCards';
+import Voting from 'components/PopUp/Voting';
+import Night from 'components/PopUp/Night';
+import NightResults from 'components/PopUp/NightResults';
+import EndOfGame from 'components/PopUp/EndOfGame';
+import GuideWrapper from 'components/UserGuide';
+import { GuideOverlay } from 'components/UserGuide/style';
 
-const AppWrapper = styled.div`
-  height: 100vh;
-  height: ${props => props.appHeight}px;
-  overflow: hidden;
-`;
-
-const MainApp = styled.div`
-  flex-grow: 1;
-  min-height: 0;
-  background-image: radial-gradient(circle at right bottom, #8b96af, #666a73);
-  .container {
-    padding: 15px;
-  }
-`;
-
-const MainContentWrapper = styled.div`
-  display: flex;
-  height: 100%;
-  flex-direction: column-reverse;
-  position: relative;
-  justify-content: center;
-  min-height: 0;
-`;
-
-const UnsupportedRes = styled.div`
-  z-index: 5000;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: green;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  > h3 {
-    width: 50%;
-    text-align: center;
-    background: white;
-    color: black;
-    padding: 30px 10px;
-    border-radius: 20px;
-    opacity: 0.8;
-  }
-`;
+import { AppWrapper, MainApp, MainContentWrapper, UnsupportedRes } from './style';
 
 export default () => {
   const {
@@ -114,7 +68,7 @@ export default () => {
               {phase !== 'startScreen' && <NumbersPanel key={activePlayer} />}
 
               <MainContentWrapper>
-                {<PopUp key={phase + 1} opened={popupOpened} popupChild={PopUpChildComponent} />}
+                {<PopUp key={phase + 1} opened={popupOpened} PopupChild={PopUpChildComponent} />}
 
                 {phase !== 'SeatAllocator' && phase !== 'RoleDealing' && phase !== 'EndOfGame' && (
                   <PlayerCards key={phase} />
