@@ -1,44 +1,12 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import styled from 'styled-components';
 
 import { changeGameState } from 'redux/actions/gameActions';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
-import { PopUpButton, PopUpLabel } from './styled-components';
-import Timer from '../Timer';
+import Timer from 'components/Timer';
 
-const Icon = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-
-  span {
-    color: white;
-    font-size: 2rem;
-    position: absolute;
-  }
-
-  .label {
-    color: white;
-    position: absolute;
-    bottom: -30%;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 170%;
-  }
-`;
-
-const TwoIcons = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 60%;
-
-  @media (max-width: 767px) {
-    width: 80%;
-  }
-`;
+import { PopUpButton, PopUpLabel } from '../styled-components';
+import { Icon, TwoIcons } from './style';
 
 export default () => {
   const dispatch = useDispatch();

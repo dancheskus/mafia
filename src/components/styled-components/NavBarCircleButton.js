@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import colors from 'style/colors';
 
 export default styled.div`
@@ -9,5 +10,5 @@ export default styled.div`
   height: 30px;
   border-radius: 50%;
   background: ${colors.Day.deadPlayerCardNumber};
-  ${props => (props.disabled ? 'filter: brightness(45%)' : 'cursor: pointer')}
+  ${({ disabled }) => (disabled ? 'filter: brightness(45%)' : 'cursor: pointer')}
 `;

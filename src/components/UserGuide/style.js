@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const GuideButton = styled.div`
   z-index: 3500;
@@ -71,7 +71,7 @@ export const GuideStepWrapperStyle = styled.div`
   ${({ position }) => {
     switch (position) {
       case 'left':
-        return `
+        return css`
           top: 50%;
           left: 8px;
           transform: translateY(-50%);
@@ -83,7 +83,7 @@ export const GuideStepWrapperStyle = styled.div`
         `;
 
       case 'top':
-        return `
+        return css`
           top: 70px;
           left: 50%;
           transform: translateX(-50%);
@@ -95,7 +95,7 @@ export const GuideStepWrapperStyle = styled.div`
         `;
 
       case 'afterNumbersPanel':
-        return `
+        return css`
           top: 135px;
           left: 50%;
           transform: translateX(-50%);
@@ -107,7 +107,7 @@ export const GuideStepWrapperStyle = styled.div`
         `;
 
       case 'bottom':
-        return `
+        return css`
           bottom: 80px;
           left: 50%;
           transform: translateX(-50%);
@@ -119,7 +119,7 @@ export const GuideStepWrapperStyle = styled.div`
         `;
 
       default:
-        return `
+        return css`
           top: 50%;
           left: 50%;
           transform: translate(-50%, -50%);
