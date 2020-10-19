@@ -7,11 +7,11 @@ import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVoting
 import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/common/VictimSelector';
 import { ResetIcon } from 'icons/svgIcons';
+import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
-import secondsSoundFile from '../../../audio/Countdown_10sec_effects.mp3';
 import ResetButton from './styled-components/ResetButton';
 
 const BottomButtonGroup = styled.div`
@@ -41,16 +41,21 @@ class Voting extends Component {
   state = { ...this.initialState };
 
   componentWillUpdate = () => {
+    const { players, changeGameState } = this.props;
     // При обновлении компонента, при необходимых условиях, завершаем игру
-    checkForEnd(this.props.players).status && this.props.changeGameState({ phase: 'EndOfGame' });
+    checkForEnd(players).status && changeGameState({ phase: 'EndOfGame' });
   };
 
   componentWillMount = () => {
-    const { gameState, selectedNumbers, skipVoting } = this.props.game;
+    const {
+      gameState: { dayNumber },
+      selectedNumbers,
+      skipVoting,
+    } = this.props.game;
     // Если не 1-ый день и выставлен только 1 игрок и не пропускается голосование, заканчиваем голосование убивая единственного выставленного игрока
-    if (gameState.dayNumber > 1 && selectedNumbers.length === 1 && !skipVoting) this.votingFinishedClicked();
+    if (dayNumber > 1 && selectedNumbers.length === 1 && !skipVoting) this.votingFinishedClicked();
 
-    if ((gameState.dayNumber === 1 && selectedNumbers.length === 1) || skipVoting) this.setState({ endOfVoting: true });
+    if ((dayNumber === 1 && selectedNumbers.length === 1) || skipVoting) this.setState({ endOfVoting: true });
 
     this.stopVotingSound = new Howl({
       src: `${secondsSoundFile}`,
@@ -59,12 +64,19 @@ class Voting extends Component {
   };
 
   componentWillUnmount = () => {
-    const numberOfVotedOutPlayersWithFourthFoul = this.state.lastMinuteFor.filter(
-      plNum => !this.props.players[plNum].isAlive
-    ).length;
-    if (this.props.game.skipVoting && this.state.lastMinuteFor.length !== 0) {
-      for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) this.props.skipVotingDec();
+    const {
+      game: { skipVoting },
+      players,
+      skipVotingDec,
+    } = this.props;
+    const { lastMinuteFor } = this.state;
+
+    const numberOfVotedOutPlayersWithFourthFoul = lastMinuteFor.filter(plNum => !players[plNum].isAlive).length;
+
+    if (skipVoting && lastMinuteFor.length !== 0) {
+      for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) skipVotingDec();
     }
+
     clearInterval(this.timer);
   };
 
@@ -80,17 +92,25 @@ class Voting extends Component {
 
   getNewVotingList = () => {
     const { votesPerPlayer } = this.state;
+    const {
+      game: { selectedNumbers },
+    } = this.props;
 
     const largestNumber = Math.max(...votesPerPlayer); // Вычисляем максимальное кол-во проголосовавших в одного игрока
     const newVotingList = [];
-    votesPerPlayer.filter((el, i) => el === largestNumber && newVotingList.push(this.props.game.selectedNumbers[i]));
+    votesPerPlayer.filter((el, i) => el === largestNumber && newVotingList.push(selectedNumbers[i]));
     // Если макс. число одно, то в новом списке будет 1 игрок, которого и выгонят. Если будет больше, то в массив будут добавлятся игроки с одинаковым кол-вом голосов
 
     return newVotingList;
   };
 
   votingFinishedClicked = killAll => {
-    const { lastMinuteFor } = this.state;
+    const { lastMinuteFor, carCrashClosed } = this.state;
+    const {
+      clearSelectedNumbers,
+      addToSelectedNumbers,
+      game: { selectedNumbers },
+    } = this.props;
     const newVotingList = this.getNewVotingList();
 
     if (newVotingList.length === 1) {
@@ -102,7 +122,7 @@ class Voting extends Component {
     if (killAll === true) {
       this.setState({
         endOfVoting: true,
-        lastMinuteFor: lastMinuteFor.concat(this.props.game.selectedNumbers),
+        lastMinuteFor: lastMinuteFor.concat(selectedNumbers),
       });
     }
 
@@ -112,27 +132,33 @@ class Voting extends Component {
     // ВКЛЮЧЕНИЕ АВТОКАТАСТРОФЫ
     if (newVotingList.length > 1) {
       // Если выставлено больше 2 игроков
-      if (!this.state.carCrashClosed) {
+      if (!carCrashClosed) {
         // Первый раз одинаковое кол-во голосов
-        this.props.clearSelectedNumbers();
-        newVotingList.map(num => this.props.addToSelectedNumbers(num));
+        clearSelectedNumbers();
+        newVotingList.map(num => addToSelectedNumbers(num));
       }
       this.setState({ carCrash: true });
     }
   };
 
   countAvaliableVoters = () => {
-    const deadPlayers = this.props.players.filter(player => !player.isAlive).length;
-    const avaliableVoters =
-      this.state.votesPerPlayer.length >= 1 ? 9 - this.state.votesPerPlayer.reduce((a, b) => a + b) : 9;
+    const { votesPerPlayer } = this.state;
+    const { players } = this.props;
+
+    const deadPlayers = players.filter(player => !player.isAlive).length;
+    const avaliableVoters = votesPerPlayer.length >= 1 ? 9 - votesPerPlayer.reduce((a, b) => a + b) : 9;
 
     this.setState({ avaliableVoters: avaliableVoters - deadPlayers });
   };
 
   nextButtonClicked = () => {
     const { currentPlayer, votesPerPlayer, avaliableVoters } = this.state;
-    const votingPlayersAmount = this.props.game.selectedNumbers.length;
-    const votersLeft = avaliableVoters - this.state.votesPerPlayer[currentPlayer] + 1;
+    const {
+      game: { selectedNumbers },
+    } = this.props;
+
+    const votingPlayersAmount = selectedNumbers.length;
+    const votersLeft = avaliableVoters - votesPerPlayer[currentPlayer] + 1;
 
     this.countAvaliableVoters();
     this.setState({ timerStopped: false });
@@ -152,7 +178,9 @@ class Voting extends Component {
   };
 
   timerClicked = () => {
-    if (this.state.timerStarted) return;
+    const { timerStarted } = this.state;
+
+    if (timerStarted) return;
     this.setState({ timerStarted: true });
 
     this.timer = setTimeout(() => {
@@ -162,33 +190,48 @@ class Voting extends Component {
   };
 
   resetVoting = () => {
+    const { clearSelectedNumbers, addToSelectedNumbers } = this.props;
+
     if (window.confirm('Сбросить голосование?')) {
       this.setState({ ...this.initialState });
-      this.props.clearSelectedNumbers();
+      clearSelectedNumbers();
       this.initialSelectedNumbers.forEach(num => {
-        this.props.addToSelectedNumbers(num);
+        addToSelectedNumbers(num);
       });
     }
   };
 
   render = () => {
-    const { currentPlayer, lastMinuteFor } = this.state;
-    const { selectedNumbers, skipVoting } = this.props.game;
+    const {
+      currentPlayer,
+      lastMinuteFor,
+      endOfVoting,
+      carCrash,
+      carCrashClosed,
+      avaliableVoters,
+      timerStopped,
+      timerStarted,
+    } = this.state;
+    const {
+      selectedNumbers,
+      skipVoting,
+      gameState: { dayNumber },
+    } = this.props.game;
+
     const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 
-    if (this.state.endOfVoting || skipVoting)
+    if (endOfVoting || skipVoting)
       return (
         <EndOfVoting
           resetFn={this.resetVoting}
           votingSkipped={
-            (skipVoting && lastMinuteFor.length === 0) ||
-            (this.props.game.gameState.dayNumber === 1 && this.props.game.selectedNumbers.length === 1)
+            (skipVoting && lastMinuteFor.length === 0) || (dayNumber === 1 && selectedNumbers.length === 1)
           }
           lastMinuteFor={lastMinuteFor}
         />
       );
 
-    if (this.state.carCrash)
+    if (carCrash)
       return (
         <>
           <ResetButton onClick={this.resetVoting}>
@@ -197,7 +240,7 @@ class Voting extends Component {
 
           <CarCrash
             closeCarCrash={this.closeCarCrash}
-            secondTime={this.state.carCrashClosed}
+            secondTime={carCrashClosed}
             votingFinishedClicked={this.votingFinishedClicked}
           />
         </>
@@ -209,18 +252,18 @@ class Voting extends Component {
           <ResetIcon size='75%' />
         </ResetButton>
 
-        {this.state.carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
+        {carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 
-        <PopUpCircle mini={this.state.carCrashClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
+        <PopUpCircle mini={carCrashClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
 
         <VictimSelector
           lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке
-          votesLeft={this.state.avaliableVoters} // для disabled кнопки
+          votesLeft={avaliableVoters} // для disabled кнопки
           key={currentPlayer} // чтобы перерендеривался каждый раз
           onNumberSelected={this.onNumberSelected} // callback
         />
 
-        <BottomButtonGroup buttonOncePressed={this.state.timerStopped || this.state.timerStarted}>
+        <BottomButtonGroup buttonOncePressed={timerStopped || timerStarted}>
           <PopUpButton color='Voting' onClick={this.timerClicked}>
             2 сек
           </PopUpButton>
