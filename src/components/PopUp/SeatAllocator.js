@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
 import colors from 'style/colors';
+
 import { PopUpButton } from './styled-components';
 
 const BigCircle = styled.div`
@@ -71,6 +72,7 @@ class SeatAllocator extends Component {
       >
         {this.state.randomNumber ? this.state.randomNumber : 'нажми'}
       </BigCircle>
+
       <PopUpButton
         color={this.props.game.gameState.phase}
         onClick={this.buttonClicked}
