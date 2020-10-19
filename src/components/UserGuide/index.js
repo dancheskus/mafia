@@ -19,6 +19,8 @@ import {
 } from './style';
 import stepDescription from './stepDescription';
 
+const splitLines = text => text.split('\n').map(i => <p key={i}>{i}</p>);
+
 class UsersGuide extends Component {
   state = { currentStep: 0 };
 
@@ -106,8 +108,6 @@ class UsersGuide extends Component {
     resetPlayersReducer();
   };
 
-  splitLines = text => text.split('\n').map(i => <p key={i}>{i}</p>);
-
   render = () => {
     const {
       children,
@@ -115,15 +115,14 @@ class UsersGuide extends Component {
     } = this.props;
     const { currentStep } = this.state;
     const guideStepsAvaliable = currentStep < stepDescription.length - 1;
+    const { position, title, content } = stepDescription[currentStep];
 
     return tutorialEnabled ? (
       <GuideWrapperStyle currentStep={currentStep}>
-        <GuideStepWrapperStyle position={stepDescription[currentStep].position}>
-          {stepDescription[currentStep].title && (
-            <GuideStepTitleStyle>{stepDescription[currentStep].title}</GuideStepTitleStyle>
-          )}
+        <GuideStepWrapperStyle position={position}>
+          {title && <GuideStepTitleStyle>{title}</GuideStepTitleStyle>}
 
-          <GuideStepContentStyle>{this.splitLines(stepDescription[currentStep].content)}</GuideStepContentStyle>
+          <GuideStepContentStyle>{splitLines(content)}</GuideStepContentStyle>
         </GuideStepWrapperStyle>
 
         <GuideButton guideNextStep onClick={guideStepsAvaliable ? this.nextStep : this.endGuide}>
