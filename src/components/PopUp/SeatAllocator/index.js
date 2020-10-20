@@ -47,26 +47,28 @@ class SeatAllocator extends Component {
     }, 40);
   };
 
-  render = () => (
-    <>
-      <BigCircle
-        className='d-flex justify-content-center align-items-center seat-allocator-big-circle'
-        onClick={this.randomClicked}
-        number={this.state.randomNumber}
-        enabled={this.seats.length}
-      >
-        {this.state.randomNumber ? this.state.randomNumber : 'нажми'}
-      </BigCircle>
+  render = () => {
+    const { randomClicked, seats, buttonClicked } = this;
+    const { randomNumber } = this.state;
+    const { phase } = this.props.game.gameState;
 
-      <PopUpButton
-        color={this.props.game.gameState.phase}
-        onClick={this.buttonClicked}
-        className='seat-allocator-popup-button'
-      >
-        {this.seats.length ? 'пропустить' : 'играть'}
-      </PopUpButton>
-    </>
-  );
+    return (
+      <>
+        <BigCircle
+          className='d-flex justify-content-center align-items-center seat-allocator-big-circle'
+          onClick={randomClicked}
+          number={randomNumber}
+          enabled={seats.length}
+        >
+          {randomNumber || 'нажми'}
+        </BigCircle>
+
+        <PopUpButton color={phase} onClick={buttonClicked} className='seat-allocator-popup-button'>
+          {seats.length ? 'пропустить' : 'играть'}
+        </PopUpButton>
+      </>
+    );
+  };
 }
 
 export default connect(({ game }) => ({ game }), { addToSelectedNumbers, clearSelectedNumbers, changeGameState })(
