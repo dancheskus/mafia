@@ -1,83 +1,12 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { connect } from 'react-redux';
 
-import colors from 'style/colors';
 import { MinimizeIcon, MaximizeIcon, NextIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul, returnPlayerToGame } from 'redux/actions/playersActions';
 import { changeGameState, skipVotingInc, skipVotingDec } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
-import PlayerNumber from './styled-components/PlayerNumber';
-import FoulContainer from './styled-components/FoulContainer';
 
-const CardContainer = styled.div`
-  width: 50%;
-  display: flex;
-  padding: 2px;
-  flex-basis: 20%;
-  order: ${props => props.order};
-`;
-
-const Card = styled.div`
-  border-radius: 10px;
-  overflow: hidden;
-  flex-grow: 1;
-  border: 4px solid ${props => (props.activePlayer ? colors.Day.activePlayer : 'transparent')};
-  display: flex;
-  position: relative;
-`;
-
-const RemoveFoul = styled.div`
-  background: ${colors.Day.removeFoulBackground};
-`;
-
-const AddFoul = styled.div`
-  background: ${props =>
-    props.amount === 2
-      ? colors.Day.addSecondFoulBackground
-      : props.amount === 3 || props.amount === 4
-      ? colors.Day.addThirdFoulBackground
-      : colors.Day.addFoulBackground};
-`;
-
-const FoulIcon = styled.div`
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  background: ${props => (props.remove ? colors.Day.addFoulBackground : colors.Day.removeFoulBackground)};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const BackButton = styled.div`
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: ${colors.Night.popupButton};
-  display: flex;
-  flex-direction: center;
-  justify-content: center;
-  padding: 7px;
-  transform: rotate(180deg);
-  cursor: pointer;
-  transition: filter 0.2s !important;
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-
-  :hover {
-    filter: brightness(120%);
-  }
-
-  @media (max-height: 860px) {
-    width: 25px;
-    height: 25px;
-    bottom: 5px;
-    left: 5px;
-    padding: 5px;
-  }
-`;
+import { FoulContainer, PlayerNumber, CardContainer, Card, RemoveFoul, AddFoul, FoulIcon, BackButton } from './style';
 
 class SingleCard extends Component {
   state = { foulsAmount: this.props.players[this.props.number].fouls.amount, lastFoulDeath: false };
