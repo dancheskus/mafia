@@ -28,7 +28,7 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
 
   const defaultTimeLeft = typeof time === 'number' ? time : 60;
 
-  const [timerWorking, setTimerWorking] = useState(false);
+  const [timerWorking, setTimerWorking] = useState(!!(autostart && !muted && isAlive));
   const [timeLeft, setTimeLeft] = useState(defaultTimeLeft);
 
   const minutes = Math.floor(timeLeft / 60);
@@ -45,10 +45,6 @@ export default ({ mini, time, killedOnLastMinute, autostart }) => {
     setTimeLeft(defaultTimeLeft);
     setTimerWorking(false);
   };
-
-  useEffect(() => {
-    autostart && !muted && isAlive && setTimerWorking(true);
-  }, [autostart, muted, isAlive]);
 
   useEffect(() => {
     // Остановить таймер, если игрок получил 4-й фол во время последней минуты, игрок заглушен 3-м фолом или убит 4-м фолом.

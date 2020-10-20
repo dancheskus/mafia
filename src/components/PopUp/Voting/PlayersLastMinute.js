@@ -15,7 +15,7 @@ import { PopUpCircle, PopUpButton } from '../styled-components';
 class PlayersLastMinute extends Component {
   state = { currentPlayer: 0, listOfPlayers: this.props.listOfPlayers };
 
-  componentWillMount = () => {
+  UNSAFE_componentWillMount = () => {
     if (checkForEnd(this.props.players, this.state.listOfPlayers).status) {
       this.state.listOfPlayers.map(plNum => this.props.killPlayer(plNum));
       this.props.changeGameState({ phase: 'EndOfGame' });

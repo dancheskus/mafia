@@ -35,6 +35,7 @@ export default () => {
   const prevPhaseState = usePreviousState(phase);
   const prevPlayersState = usePreviousState(players);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (prevPhaseState !== 'Day' && stepBackAvaliable) setStepBackAvaliable(false);
 

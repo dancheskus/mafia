@@ -26,19 +26,17 @@ export default () => {
   );
 
   useEffect(() => {
-    return () => {
-      localStorage.removeItem('killedPlayer');
-      dispatch(openPopup());
-    };
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(clearSelectedNumbers());
 
     popupOpened && localStorage.setItem('killedPlayer', killedPlayer);
 
     dayNumber === 1 && dispatch(closePopup());
-  }, [dispatch, dayNumber, killedPlayer, popupOpened]);
+
+    return () => {
+      localStorage.removeItem('killedPlayer');
+      dispatch(openPopup());
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const goToDay = () => {
     dispatch(closePopup());
@@ -46,6 +44,8 @@ export default () => {
     if (killedPlayer === activePlayer) dispatch(changeGameState({ phase: 'Day', dayNumber }));
     // В данном случае changeGameState используется только для вызова смены активного и открывающего игроков на +1.
   };
+
+  if (dayNumber === 1) return null;
 
   return (
     <>

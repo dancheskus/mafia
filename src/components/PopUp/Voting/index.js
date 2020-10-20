@@ -40,13 +40,13 @@ class Voting extends Component {
 
   state = { ...this.initialState };
 
-  componentWillUpdate = () => {
+  UNSAFE_componentWillUpdate = () => {
     const { players, changeGameState } = this.props;
     // При обновлении компонента, при необходимых условиях, завершаем игру
     checkForEnd(players).status && changeGameState({ phase: 'EndOfGame' });
   };
 
-  componentWillMount = () => {
+  UNSAFE_componentWillMount = () => {
     const {
       gameState: { dayNumber },
       selectedNumbers,
