@@ -10,7 +10,7 @@ export default () => {
   return (
     <CardsWrapper>
       {players.map((_, plNum) => (
-        <SingleCard key={plNum} number={plNum} order={plNum > 4 ? Math.abs(plNum - 9) + 4 : plNum} />
+        <SingleCard key={plNum} playerNumber={plNum} order={plNum > 4 ? Math.abs(plNum - 9) + 4 : plNum} />
       ))}
     </CardsWrapper>
   );

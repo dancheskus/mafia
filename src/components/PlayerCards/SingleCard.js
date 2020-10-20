@@ -9,7 +9,7 @@ import checkForEnd from 'helpers/checkForEnd';
 import { FoulContainer, PlayerNumber, CardContainer, Card, RemoveFoul, AddFoul, FoulIcon, BackButton } from './style';
 
 class SingleCard extends Component {
-  state = { foulsAmount: this.props.players[this.props.number].fouls.amount, lastFoulDeath: false };
+  state = { foulsAmount: this.props.players[this.props.playerNumber].fouls.amount, lastFoulDeath: false };
 
   timer;
 
@@ -21,18 +21,30 @@ class SingleCard extends Component {
   };
 
   addFoul = () => {
-    if (this.state.foulsAmount === 4) return;
+    const {
+      players,
+      addFoul,
+      skipVotingInc,
+      playerNumber,
+      changeGameState,
+      game: {
+        gameState: { phase },
+      },
+    } = this.props;
+    const { foulsAmount } = this.state;
 
-    this.setState({ foulsAmount: this.state.foulsAmount + 1 });
+    if (foulsAmount === 4) return;
 
-    if (this.state.foulsAmount !== 3) return this.props.addFoul(this.props.number);
+    this.setState({ foulsAmount: foulsAmount + 1 });
+
+    if (foulsAmount !== 3) return addFoul(playerNumber);
 
     this.timer = setTimeout(() => {
-      this.props.addFoul(this.props.number);
+      addFoul(playerNumber);
 
-      if (checkForEnd(this.props.players).status) return this.props.changeGameState({ phase: 'EndOfGame' });
+      if (checkForEnd(players).status) return changeGameState({ phase: 'EndOfGame' });
 
-      if (this.props.game.gameState.phase === 'Day') {
+      if (phase === 'Day') {
         this.setState({ lastFoulDeath: true });
 
         this.returnToLifeTimer = setTimeout(() => {
@@ -40,66 +52,81 @@ class SingleCard extends Component {
         }, 5000);
       }
 
-      this.props.skipVotingInc();
+      skipVotingInc();
     }, 2000);
   };
 
   removeFoul = () => {
-    if (this.state.foulsAmount === 0) return;
-    this.setState({ foulsAmount: this.state.foulsAmount - 1 });
-    if (this.state.foulsAmount === 4) {
+    const { removeFoul, playerNumber } = this.props;
+    const { foulsAmount } = this.state;
+
+    if (foulsAmount === 0) return;
+    this.setState({ foulsAmount: foulsAmount - 1 });
+    if (foulsAmount === 4) {
       clearTimeout(this.timer);
     } else {
-      this.props.removeFoul(this.props.number);
+      removeFoul(playerNumber);
     }
   };
 
   backToLife = () => {
+    const { returnPlayerToGame, playerNumber, skipVotingDec } = this.props;
+
     clearTimeout(this.returnToLifeTimer);
-    this.props.returnPlayerToGame(this.props.number);
-    this.props.skipVotingDec();
+    returnPlayerToGame(playerNumber);
+    skipVotingDec();
     this.setState({ foulsAmount: 3, lastFoulDeath: false });
   };
 
   render = () => {
-    const isMuted = this.props.players[this.props.number].fouls.muted;
-    const { isAlive } = this.props.players[this.props.number];
-    const { phase } = this.props.game.gameState;
-    const { role } = this.props.players[this.props.number];
+    const { backToLife, removeFoul, addFoul } = this;
+    const { lastFoulDeath, foulsAmount } = this.state;
+    const {
+      order,
+      playerNumber,
+      players,
+      game: {
+        activePlayer,
+        opensTable,
+        gameState: { phase },
+      },
+    } = this.props;
+
+    const {
+      isAlive,
+      role,
+      fouls: { muted },
+    } = players[playerNumber];
 
     return (
-      <CardContainer order={this.props.order}>
-        <Card isAlive={isAlive} activePlayer={phase === 'Day' && this.props.game.activePlayer === this.props.number}>
+      <CardContainer order={order}>
+        <Card isAlive={isAlive} activePlayer={phase === 'Day' && activePlayer === playerNumber}>
           <PlayerNumber
             darkSide={role === 'МАФИЯ' || role === 'ДОН'}
             role={role}
-            isMuted={isMuted}
+            isMuted={muted}
             isAlive={isAlive}
-            opensTable={phase === 'Day' && this.props.game.opensTable === this.props.number}
+            opensTable={phase === 'Day' && opensTable === playerNumber}
           >
-            {this.state.lastFoulDeath && (
-              <BackButton onClick={this.backToLife}>
+            {lastFoulDeath && (
+              <BackButton onClick={backToLife}>
                 <NextIcon fill='lightgrey' />
               </BackButton>
             )}
 
-            <div className='number'>{this.props.number + 1}</div>
+            <div className='number'>{playerNumber + 1}</div>
           </PlayerNumber>
 
           <FoulContainer isAlive={isAlive}>
-            <RemoveFoul onClick={this.removeFoul} className={this.props.number === 7 && 'remove-foul'}>
+            <RemoveFoul onClick={removeFoul} className={playerNumber === 7 && 'remove-foul'}>
               <FoulIcon remove>
                 <MinimizeIcon size='50%' />
               </FoulIcon>
             </RemoveFoul>
 
-            <AddFoul
-              amount={this.state.foulsAmount}
-              onClick={this.addFoul}
-              className={this.props.number === 7 && 'add-foul'}
-            >
-              {this.state.foulsAmount ? (
-                '!'.repeat(this.state.foulsAmount)
+            <AddFoul amount={foulsAmount} onClick={addFoul} className={playerNumber === 7 && 'add-foul'}>
+              {foulsAmount ? (
+                '!'.repeat(foulsAmount)
               ) : (
                 <FoulIcon>
                   <MaximizeIcon size='50%' />
