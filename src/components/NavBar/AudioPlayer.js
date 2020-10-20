@@ -10,26 +10,29 @@ import NavBarCircleButton from 'components/styled-components/NavBarCircleButton'
 
 const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
 
+const checkMusicAllowedByPhase = phase => phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
+
 class AudioPlayer extends Component {
   state = { isPlayingVisualStatus: false, audioList: [], audioNumber: 0, audioLoaded: false, loadError: false };
 
   loadAudio = () => {
+    const { audioNumber, audioList } = this.state;
+
     if (this.sound) this.sound.unload();
 
     this.sound = new Howl({
-      src: `${musicUrl}${this.state.audioList[this.state.audioNumber]}`,
+      src: `${musicUrl}${audioList[audioNumber]}`,
       onend: () => this.nextAudio(),
     });
 
     if (this.soundForBuffering) this.soundForBuffering.unload();
 
     this.soundForBuffering = new Howl({
-      src: `${musicUrl}${this.state.audioList[(this.state.audioNumber + 1) % this.state.audioList.length]}`,
+      src: `${musicUrl}${audioList[(audioNumber + 1) % audioList.length]}`,
     });
 
     const { phase } = this.props.game.gameState;
-    const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
-    if (musicAllowed) this.play();
+    if (checkMusicAllowedByPhase(phase)) this.play();
 
     this.sound.once('load', () => this.setState({ audioLoaded: true }));
   };
@@ -38,9 +41,7 @@ class AudioPlayer extends Component {
     axios
       .get(musicUrl)
       .then(res => {
-        this.setState({ audioList: shuffle(res.data.map(el => el.name)), loadError: false }, () => {
-          this.loadAudio();
-        });
+        this.setState({ audioList: shuffle(res.data.map(({ name }) => name)), loadError: false }, this.loadAudio);
       })
       .catch(() => this.setState({ loadError: true }));
   };
@@ -55,8 +56,8 @@ class AudioPlayer extends Component {
 
     const prevPhase = prevProps.game.gameState.phase;
     const { phase } = this.props.game.gameState;
-    const musicAllowed = phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
-    const musicWasAllowed = prevPhase === 'Night' || prevPhase === 'ZeroNight' || prevPhase === 'RoleDealing';
+    const musicAllowed = checkMusicAllowedByPhase(phase);
+    const musicWasAllowed = checkMusicAllowedByPhase(prevPhase);
 
     if (!musicWasAllowed && musicAllowed) this.play();
     if (musicWasAllowed && !musicAllowed) this.pause();
@@ -90,14 +91,16 @@ class AudioPlayer extends Component {
   };
 
   nextAudio = () => {
-    if (!this.state.audioLoaded) return;
+    const { audioLoaded, audioNumber, audioList } = this.state;
+
+    if (!audioLoaded) return;
 
     const nextAudioLoaded = this.soundForBuffering && this.soundForBuffering.state() === 'loaded';
 
     this.setState(
       {
         audioLoaded: !!nextAudioLoaded,
-        audioNumber: (this.state.audioNumber + 1) % this.state.audioList.length,
+        audioNumber: (audioNumber + 1) % audioList.length,
       },
       () => this.loadAudio()
     );
@@ -110,9 +113,10 @@ class AudioPlayer extends Component {
     return (
       <>
         {loadError && 'Музыка не доступна'}
+
         {audioList.length > 0 && (
           <>
-            {(phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing') && (
+            {checkMusicAllowedByPhase(phase) && (
               <>
                 <NavBarCircleButton onClick={this.playPause} className='audio-player-pause-play'>
                   {audioLoaded ? (
