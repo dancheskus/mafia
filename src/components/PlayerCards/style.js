@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import colors from 'style/colors';
 
@@ -11,45 +11,44 @@ export const CardsWrapper = styled.div`
 `;
 
 export const PlayerNumber = styled.div`
-  background: ${props =>
-    !props.isAlive
+  ${({ isAlive, opensTable, isMuted }) => css`
+    background: ${!isAlive
       ? colors.Day.deadPlayerCardBackground
-      : props.isMuted
+      : isMuted
       ? colors.Day.warningPlayerCardBackground
       : colors.Day.playerCardBackground};
-  flex-grow: 1;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 4rem;
-  color: ${props =>
-    !props.isAlive
+    flex-grow: 1;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4rem;
+    color: ${!isAlive
       ? colors.Day.deadPlayerCardNumber
-      : props.isMuted
+      : isMuted
       ? colors.Day.deadPlayerCardNumber
       : colors.Day.playerCardNumber};
-  position: relative;
+    position: relative;
 
-  ::before {
-    content: '';
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    background: ${props => props.opensTable && colors.Day.playerOpensTable};
-    opacity: 0.7;
-    position: absolute;
-    top: 7px;
-    left: 7px;
-  }
+    ::before {
+      content: '';
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      background: ${opensTable && colors.Day.playerOpensTable};
+      opacity: 0.7;
+      position: absolute;
+      top: 7px;
+      left: 7px;
+    }
+  `};
 `;
 
 export const FoulContainer = styled.div`
   width: 50%;
   height: 100%;
-  display: flex;
   flex-wrap: wrap;
-  display: ${props => !props.isAlive && 'none'};
+  display: ${({ isAlive }) => (isAlive ? 'flex' : 'none')};
 
   > div {
     width: 100%;
@@ -67,14 +66,14 @@ export const CardContainer = styled.div`
   display: flex;
   padding: 2px;
   flex-basis: 20%;
-  order: ${props => props.order};
+  order: ${({ order }) => order};
 `;
 
 export const Card = styled.div`
   border-radius: 10px;
   overflow: hidden;
   flex-grow: 1;
-  border: 4px solid ${props => (props.activePlayer ? colors.Day.activePlayer : 'transparent')};
+  border: 4px solid ${({ activePlayer }) => (activePlayer ? colors.Day.activePlayer : 'transparent')};
   display: flex;
   position: relative;
 `;
@@ -84,10 +83,10 @@ export const RemoveFoul = styled.div`
 `;
 
 export const AddFoul = styled.div`
-  background: ${props =>
-    props.amount === 2
+  background: ${({ amount }) =>
+    amount === 2
       ? colors.Day.addSecondFoulBackground
-      : props.amount === 3 || props.amount === 4
+      : amount === 3 || amount === 4
       ? colors.Day.addThirdFoulBackground
       : colors.Day.addFoulBackground};
 `;
@@ -96,7 +95,7 @@ export const FoulIcon = styled.div`
   border-radius: 50%;
   width: 25px;
   height: 25px;
-  background: ${props => (props.remove ? colors.Day.addFoulBackground : colors.Day.removeFoulBackground)};
+  background: ${({ remove }) => (remove ? colors.Day.addFoulBackground : colors.Day.removeFoulBackground)};
   display: flex;
   justify-content: center;
   align-items: center;
