@@ -1,26 +1,11 @@
 import React, { Component } from 'react';
-import styled from 'styled-components';
 import { shuffle, range, random } from 'lodash';
 import { connect } from 'react-redux';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
-import colors from 'style/colors';
 
-import { PopUpButton } from './styled-components';
-
-const BigCircle = styled.div`
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  font-weight: 600;
-  text-transform: uppercase;
-  ${({ enabled }) => enabled && 'cursor: pointer'};
-
-  ${props =>
-    props.number
-      ? ` font-size: 9rem; color: ${colors.SeatAllocator.popupText}; background: white; `
-      : `font-size: 2.3rem; color: white; background: ${colors.SeatAllocator.popupCircleBackground}; `}
-`;
+import { PopUpButton } from '../styled-components';
+import { BigCircle } from './style';
 
 class SeatAllocator extends Component {
   state = { randomNumber: null };
