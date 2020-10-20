@@ -5,9 +5,9 @@ import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 're
 import { killPlayer } from 'redux/actions/playersActions';
 import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
+import Timer from 'components/Timer';
 
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
-import Timer from '../Timer';
 
 export default () => {
   const {

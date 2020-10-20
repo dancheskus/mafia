@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 
 import { killPlayer } from 'redux/actions/playersActions';
 import { ResetIcon } from 'icons/svgIcons';
+
 import { clearSelectedNumbers, changeGameState, skipVotingDec } from '../../../redux/actions/gameActions';
 import { ResultsNumbers } from './styled-components/Results';
 import { PopUpLabel, PopUpButton } from '../styled-components';

@@ -9,6 +9,7 @@ import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
+
 import { PopUpCircle, PopUpButton } from '../styled-components';
 
 class PlayersLastMinute extends Component {

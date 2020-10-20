@@ -11,7 +11,7 @@ import ZeroNight from 'components/PopUp/ZeroNight';
 import PlayerCards from 'components/PlayerCards';
 import Voting from 'components/PopUp/Voting';
 import Night from 'components/PopUp/Night';
-import NightResults from 'components/PopUp/NightResults';
+import Day from 'components/PopUp/Day';
 import EndOfGame from 'components/PopUp/EndOfGame';
 import GuideWrapper from 'components/UserGuide';
 import { GuideOverlay } from 'components/UserGuide/style';
@@ -44,9 +44,7 @@ export default () => {
     window.addEventListener('resize', updateHeight);
   }, []);
 
-  const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day: NightResults, EndOfGame }[
-    phase
-  ];
+  const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
 
   return (
     <>
