@@ -1,6 +1,6 @@
 import React from 'react';
 import { Howl } from 'howler';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { enableTutorial } from 'redux/actions/settingsActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
@@ -12,14 +12,15 @@ import { NextIcon } from 'icons/svgIcons';
 import SettingsItem from './SettingsItem';
 import { AppSettings, BottomButton, BackButton, BottomButtonsGroup } from './style';
 
-const Settings = props => {
-  const enableTutorial = () => {
-    props.resetGameReducer();
-    props.resetPlayersReducer();
-    props.enableTutorial();
-  };
+export default ({ hide, onClose }) => {
+  const dispatch = useDispatch();
+  const { tutorialEnabled } = useSelector(({ settings }) => settings);
 
-  const { tutorialEnabled } = props.settings;
+  const startTutorial = () => {
+    dispatch(resetGameReducer());
+    dispatch(resetPlayersReducer());
+    dispatch(enableTutorial());
+  };
 
   const secondsSound = new Howl({ src: `${secondsSoundFile}`, sprite: { oneSec: [0, 1020] } });
   const countdownEndSound = new Howl({ src: `${countdownEndFile}` });
@@ -27,14 +28,12 @@ const Settings = props => {
   const enableSounds = () => {
     secondsSound.play('oneSec');
 
-    setTimeout(() => {
-      countdownEndSound.play();
-    }, 1500);
+    setTimeout(() => countdownEndSound.play(), 1500);
   };
 
   return (
-    <AppSettings hide={props.hide} tutorialEnabled={tutorialEnabled}>
-      <BackButton onClick={props.onClose}>
+    <AppSettings hide={hide} tutorialEnabled={tutorialEnabled}>
+      <BackButton onClick={onClose}>
         <NextIcon />
       </BackButton>
 
@@ -45,13 +44,9 @@ const Settings = props => {
       <SettingsItem title='Предлагать вывести всех после повторной переголосовки' type='multiplePlayerRemove' />
 
       <BottomButtonsGroup>
-        <BottomButton onClick={enableTutorial}>Включить обучение</BottomButton>
+        <BottomButton onClick={startTutorial}>Включить обучение</BottomButton>
         <BottomButton onClick={enableSounds}>Пример звуков</BottomButton>
       </BottomButtonsGroup>
     </AppSettings>
   );
 };
-
-export default connect(({ settings }) => ({ settings }), { enableTutorial, resetGameReducer, resetPlayersReducer })(
-  Settings
-);
