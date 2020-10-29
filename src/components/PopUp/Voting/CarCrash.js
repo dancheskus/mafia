@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 
 import Timer from 'components/Timer';
-import VictimSelector from 'components/common/VictimSelector';
+import VictimSelector from 'components/VictimSelector';
 
 import CarCrashNotification from './CarCrashNotification';
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';

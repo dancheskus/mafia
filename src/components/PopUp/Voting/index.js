@@ -5,7 +5,7 @@ import { Howl } from 'howler';
 
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
-import VictimSelector from 'components/common/VictimSelector';
+import VictimSelector from 'components/VictimSelector';
 import { ResetIcon } from 'icons/svgIcons';
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 

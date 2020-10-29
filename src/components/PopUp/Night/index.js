@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import VictimSelector from 'components/common/VictimSelector';
+import VictimSelector from 'components/VictimSelector';
 
 import { PopUpLabel, PopUpButton } from '../styled-components';
 import SheriffTimePage from './SheriffTimePage';

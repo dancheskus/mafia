@@ -11,8 +11,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { range } from 'lodash';
 
-import VotingSingleElement from './VotingSingleElement';
-import VotingBlock from './VotingBlock';
+import { VotingSingleElement, VotingBlock } from './style';
 
 const VictimSelector = props => {
   const [selectedNumber, setSelectedNumber] = useState(null);
