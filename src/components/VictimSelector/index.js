@@ -8,19 +8,19 @@
 */
 
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { range } from 'lodash';
 
 import { VotingSingleElement, VotingBlock } from './style';
 
-const VictimSelector = props => {
+export default ({ lastPlayer, votesLeft, shooting, onNumberSelected }) => {
   const [selectedNumber, setSelectedNumber] = useState(null);
-
-  const { lastPlayer, votesLeft, shooting, players } = props;
+  const players = useSelector(({ players }) => players);
 
   const selectNumber = num => {
     if (lastPlayer) return; // Отключает возможность снять голос с последнего игрока
-    props.onNumberSelected(num);
+
+    onNumberSelected(num);
     setSelectedNumber(num === selectedNumber ? null : num);
   };
 
@@ -40,5 +40,3 @@ const VictimSelector = props => {
     </VotingBlock>
   );
 };
-
-export default connect(({ game, players }) => ({ game, players }))(VictimSelector);
