@@ -2,8 +2,8 @@
 // 1. список уходящих игроков
 // 2. коллбэк уводящий в ночь
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
@@ -12,38 +12,41 @@ import { killPlayer } from 'redux/actions/playersActions';
 
 import { PopUpCircle, PopUpButton } from '../styled-components';
 
-class PlayersLastMinute extends Component {
-  state = { currentPlayer: 0, listOfPlayers: this.props.listOfPlayers };
+export default props => {
+  const dispatch = useDispatch();
+  const players = useSelector(({ players }) => players);
 
-  UNSAFE_componentWillMount = () => {
-    if (checkForEnd(this.props.players, this.state.listOfPlayers).status) {
-      this.state.listOfPlayers.map(plNum => this.props.killPlayer(plNum));
-      this.props.changeGameState({ phase: 'EndOfGame' });
-    }
-  };
+  const [currentPlayer, setCurrentPlayer] = useState(0);
+  const [listOfPlayers, setListOfPlayers] = useState(props.listOfPlayers);
 
-  nextPlayer = () => this.setState({ currentPlayer: this.state.currentPlayer + 1 });
+  useEffect(() => {
+    return () => {
+      if (checkForEnd(players, listOfPlayers).status) {
+        listOfPlayers.map(plNum => dispatch(killPlayer(plNum)));
+        dispatch(changeGameState({ phase: 'EndOfGame' }));
+      }
+    };
+  }, [dispatch, listOfPlayers, players]);
 
-  render = () => {
-    const { currentPlayer, listOfPlayers } = this.state;
-    const lastPlayer = listOfPlayers.length - 1 - currentPlayer === 0;
+  const nextPlayer = () => setCurrentPlayer(currentPlayer + 1);
 
-    return (
-      <>
-        <PopUpCircle>{listOfPlayers[currentPlayer] + 1}</PopUpCircle>
+  const lastPlayer = listOfPlayers.length - 1 - currentPlayer === 0;
 
-        <Timer
-          key={currentPlayer}
-          killedOnLastMinute={this.props.killedOnLastMinute[currentPlayer]}
-          time={listOfPlayers.length > 1 && 30}
-        />
+  return (
+    <>
+      <PopUpCircle>{listOfPlayers[currentPlayer] + 1}</PopUpCircle>
 
-        <PopUpButton color='Voting' onClick={lastPlayer ? this.props.goToNight : this.nextPlayer}>
-          {lastPlayer ? 'Ночь' : 'Далее'}
-        </PopUpButton>
-      </>
-    );
-  };
-}
+      <Timer
+        key={currentPlayer}
+        killedOnLastMinute={props.killedOnLastMinute[currentPlayer]}
+        time={listOfPlayers.length > 1 && 30}
+      />
 
-export default connect(({ game, players }) => ({ game, players }), { changeGameState, killPlayer })(PlayersLastMinute);
+      <PopUpButton color='Voting' onClick={lastPlayer ? props.goToNight : nextPlayer}>
+        {lastPlayer ? 'Ночь' : 'Далее'}
+      </PopUpButton>
+    </>
+  );
+};
+
+// export default connect(({ players }) => ({ players }), { changeGameState, killPlayer })(PlayersLastMinute);

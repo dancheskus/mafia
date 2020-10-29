@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { shuffle } from 'lodash';
 import { useSelector } from 'react-redux';
@@ -20,17 +20,20 @@ const useUnloadSoundOnUnmount = sound => {
 };
 
 export default () => {
-  const [soundUrl, setSoundUrl] = useState(null);
-  const [bufferSoundUrl, setBufferSoundUrl] = useState(null);
+  const [bufferSoundUrl, setBufferSoundUrl] = useState();
   const [soundLoaded, setSoundLoaded] = useState(false);
   const [isPlayingVisualStatus, setIsPlayingVisualStatus] = useState(true);
-  const [trackNumber, setTrackNumber] = useState(0);
   const [trackList, setTrackList] = useState([]);
   const [trackListLoadError, setTrackListLoadError] = useState(false);
-  // const [musicLoadError, setMusicLoadError] = useState(0);
+  const [musicLoadError, setMusicLoadError] = useState(0);
+  const [trackNumber, setTrackNumber] = useState();
+  const soundUrl = trackList?.[trackNumber];
+  // const [nextSoundLoaded, setNextSoundLoaded] = useState(false);
+  const nextSoundLoaded = useRef(false);
+  // testRef.current = nextSoundLoaded;
 
   const { phase } = useSelector(({ game }) => game.gameState);
-  const nextTrackNumber = (trackNumber + 1) % trackList.length;
+  const nextTrackNumber = trackNumber !== undefined && (trackNumber + 1) % trackList.length;
 
   useEffect(() => {
     // fetching tracklist
@@ -41,35 +44,41 @@ export default () => {
   }, []);
 
   useEffect(() => {
-    // changing sound url when tracklist is ready
     if (!trackList.length) return;
 
-    setSoundUrl(`${trackList[trackNumber]}`);
-  }, [trackList]); // eslint-disable-line react-hooks/exhaustive-deps
+    setTrackNumber(0);
+  }, [trackList]);
+
+  let nextTrack;
 
   const [
     playSound,
     { isPlaying: soundIsPlaying, pause: pauseSound, stop: stopSound, duration: soundReady, sound },
   ] = useSound(soundUrl, {
     onload: () => {
-      // setMusicLoadError(0);
-      setSoundLoaded(true);
-      setBufferSoundUrl(`${trackList[nextTrackNumber]}`);
+      setMusicLoadError(0);
+
+      setBufferSoundUrl(trackList[nextTrackNumber]);
     },
-    onplay: () => setIsPlayingVisualStatus(true),
+    onplay: () => {
+      setSoundLoaded(true);
+      setIsPlayingVisualStatus(true);
+    },
     onpause: () => setIsPlayingVisualStatus(false),
-    onend: () => nextTrack(), // eslint-disable-line no-use-before-define
+    onend: () => nextTrack(),
     onloaderror: () => {
-      // if (!soundUrl) return;
-      // console.log('load error', musicLoadError);
-      // if (musicLoadError === 3) return nextTrack();
-      // setMusicLoadError(musicLoadError + 1);
-      setSoundUrl(`${trackList[trackNumber]}`);
-      // nextTrack();
+      if (!soundUrl || musicLoadError === 3) return;
+
+      setMusicLoadError(musicLoadError + 1);
+      nextTrack();
     },
   });
-  const [, { sound: bufferSound }] = useSound(bufferSoundUrl);
-  const nextSoundLoaded = bufferSound?.state() === 'loaded';
+  const [, { sound: bufferSound }] = useSound(bufferSoundUrl, {
+    onload: () => {
+      nextSoundLoaded.current = true;
+    },
+  });
+  // const nextSoundLoaded = bufferSound?.state() === 'loaded';
 
   const prevPhaseState = usePreviousState(phase);
   useEffect(() => {
@@ -86,47 +95,49 @@ export default () => {
   useUnloadSoundOnUnmount(bufferSound);
 
   useEffect(() => {
+    // soundReady && sound.seek(sound.duration() - 10);
     // start music autoplay if sound is ready and music is allowed
     checkMusicAllowedByPhase(phase) && soundReady && playSound();
   }, [soundReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    soundLoaded && nextSoundLoaded && setSoundLoaded(true);
-  }, [soundLoaded, nextSoundLoaded]);
+  nextTrack = () => {
+    // console.log(soundLoaded);
+    // console.log('На входе', nextSoundLoaded.current);
+    !nextSoundLoaded.current && soundLoaded && setSoundLoaded(false);
 
-  const nextTrack = () => {
-    if (!soundLoaded) return;
+    // prevent multiple times button click
+    if (sound?.state() === 'loading') return;
+
+    console.log('laoding next');
 
     stopSound();
-    !nextSoundLoaded && setSoundLoaded(false);
-    setSoundUrl(`${trackList[nextTrackNumber]}`);
-    setTrackNumber(nextTrackNumber);
+    nextSoundLoaded.current = false;
+    // console.log('На выходе', nextSoundLoaded.current);
+    // setNextSoundLoaded(false);
+    trackNumber !== undefined && setTrackNumber(nextTrackNumber);
+    // console.log('here');
   };
 
   const togglePlay = () => (soundIsPlaying ? pauseSound() : playSound());
   const PlayPauseIcon = () => (isPlayingVisualStatus ? <PauseIcon /> : <PlayIcon />);
 
-  return (
-    <>
-      {trackListLoadError && 'Музыка не доступна'}
+  if (trackListLoadError) return 'Музыка не доступна';
+  if (musicLoadError === 3) return 'Ошибка загрузки музыки';
+  if (trackList.length > 0)
+    return (
+      <>
+        {checkMusicAllowedByPhase(phase) && (
+          <>
+            <NavBarCircleButton onClick={togglePlay} className='audio-player-pause-play'>
+              {soundLoaded ? <PlayPauseIcon /> : <RingLoader sizeUnit='px' size={20} color='white' />}
+            </NavBarCircleButton>
 
-      {/* {musicLoadError === 4 && 'Ошибка загрузки музыки'} */}
-
-      {trackList.length > 0 && (
-        <>
-          {checkMusicAllowedByPhase(phase) && (
-            <>
-              <NavBarCircleButton onClick={togglePlay} className='audio-player-pause-play'>
-                {soundLoaded ? <PlayPauseIcon /> : <RingLoader sizeUnit='px' size={20} color='white' />}
-              </NavBarCircleButton>
-
-              <NavBarCircleButton onClick={nextTrack} className='audio-player-next'>
-                <NextIcon size='60%' />
-              </NavBarCircleButton>
-            </>
-          )}
-        </>
-      )}
-    </>
-  );
+            <NavBarCircleButton onClick={nextTrack} className='audio-player-next'>
+              <NextIcon size='60%' />
+            </NavBarCircleButton>
+          </>
+        )}
+      </>
+    );
+  return null;
 };
