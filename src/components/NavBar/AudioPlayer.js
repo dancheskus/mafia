@@ -13,6 +13,12 @@ const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
 
 const checkMusicAllowedByPhase = phase => phase === 'Night' || phase === 'ZeroNight' || phase === 'RoleDealing';
 
+const useUnloadSoundOnUnmount = sound => {
+  useEffect(() => {
+    return () => sound && sound.unload();
+  }, [sound]);
+};
+
 export default () => {
   const [soundUrl, setSoundUrl] = useState(null);
   const [bufferSoundUrl, setBufferSoundUrl] = useState(null);
@@ -24,6 +30,7 @@ export default () => {
   // const [musicLoadError, setMusicLoadError] = useState(0);
 
   const { phase } = useSelector(({ game }) => game.gameState);
+  const nextTrackNumber = (trackNumber + 1) % trackList.length;
 
   useEffect(() => {
     // fetching tracklist
@@ -47,7 +54,7 @@ export default () => {
     onload: () => {
       // setMusicLoadError(0);
       setSoundLoaded(true);
-      setBufferSoundUrl(`${trackList[(trackNumber + 1) % trackList.length]}`);
+      setBufferSoundUrl(`${trackList[nextTrackNumber]}`);
     },
     onplay: () => setIsPlayingVisualStatus(true),
     onpause: () => setIsPlayingVisualStatus(false),
@@ -75,15 +82,8 @@ export default () => {
     if (musicWasAllowed && !musicAllowed) pauseSound();
   });
 
-  useEffect(() => {
-    // Unloading sound on unmount
-    return () => sound && sound.unload();
-  }, [sound]);
-
-  useEffect(() => {
-    // Unloading bufferSound on unmount
-    return () => bufferSound && bufferSound.unload();
-  }, [bufferSound]);
+  useUnloadSoundOnUnmount(sound);
+  useUnloadSoundOnUnmount(bufferSound);
 
   useEffect(() => {
     // start music autoplay if sound is ready and music is allowed
@@ -97,11 +97,10 @@ export default () => {
   const nextTrack = () => {
     if (!soundLoaded) return;
 
-    const newTrackNumber = (trackNumber + 1) % trackList.length;
     stopSound();
     !nextSoundLoaded && setSoundLoaded(false);
-    setSoundUrl(`${trackList[newTrackNumber]}`);
-    setTrackNumber(newTrackNumber);
+    setSoundUrl(`${trackList[nextTrackNumber]}`);
+    setTrackNumber(nextTrackNumber);
   };
 
   const togglePlay = () => (soundIsPlaying ? pauseSound() : playSound());
