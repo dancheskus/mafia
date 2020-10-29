@@ -35,7 +35,7 @@ export default ({ resetMode }) => {
 
   const playerNumber = selectedNumbers[0];
 
-  const { start: startCardBlockingTimer } = useTimer({
+  const { start: startCardBlockingTimer, status: timerStatus } = useTimer({
     initialTime: 1,
     endTime: 0,
     timerType: 'DECREMENTAL',
@@ -61,7 +61,7 @@ export default ({ resetMode }) => {
   });
 
   const showRole = () => {
-    if (role || !allRoles.length) return;
+    if (timerStatus === 'RUNNING' || !allRoles.length) return;
 
     const newRole = allRoles.pop();
     dispatch(addRole({ playerNumber, role: newRole }));
