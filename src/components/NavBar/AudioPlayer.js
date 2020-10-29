@@ -19,24 +19,26 @@ export default () => {
   const [soundLoaded, setSoundLoaded] = useState(false);
   const [isPlayingVisualStatus, setIsPlayingVisualStatus] = useState(true);
   const [trackNumber, setTrackNumber] = useState(0);
-  const [audioList, setAudioList] = useState([]);
+  const [trackList, setTrackList] = useState([]);
   const [listLoadError, setListLoadError] = useState(false);
   // const [musicLoadError, setMusicLoadError] = useState(0);
 
   const { phase } = useSelector(({ game }) => game.gameState);
 
   useEffect(() => {
+    // fetching tracklist
     axios
       .get(musicUrl)
-      .then(({ data }) => setAudioList(shuffle(data.map(({ name }) => name))))
+      .then(({ data }) => setTrackList(shuffle(data.map(({ name }) => musicUrl + name))))
       .catch(() => setListLoadError(true));
   }, []);
 
   useEffect(() => {
-    if (!audioList.length) return;
+    // changing sound url when tracklist is ready
+    if (!trackList.length) return;
 
-    setSoundUrl(`${musicUrl}${audioList[trackNumber]}`);
-  }, [audioList]);
+    setSoundUrl(`${trackList[trackNumber]}`);
+  }, [trackList]);
 
   const [
     playSound,
@@ -45,7 +47,7 @@ export default () => {
     onload: () => {
       // setMusicLoadError(0);
       setSoundLoaded(true);
-      setBufferSoundUrl(`${musicUrl}${audioList[(trackNumber + 1) % audioList.length]}`);
+      setBufferSoundUrl(`${trackList[(trackNumber + 1) % trackList.length]}`);
     },
     onplay: () => setIsPlayingVisualStatus(true),
     onpause: () => setIsPlayingVisualStatus(false),
@@ -55,11 +57,11 @@ export default () => {
       // console.log('load error', musicLoadError);
       // if (musicLoadError === 3) return nextTrack();
       // setMusicLoadError(musicLoadError + 1);
-      setSoundUrl(`${musicUrl}${audioList[trackNumber]}`);
+      setSoundUrl(`${trackList[trackNumber]}`);
       // nextTrack();
     },
   });
-  const [_, { sound: bufferSound }] = useSound(bufferSoundUrl);
+  const [, { sound: bufferSound }] = useSound(bufferSoundUrl);
   const nextSoundLoaded = bufferSound?.state() === 'loaded';
 
   const prevPhaseState = usePreviousState(phase);
@@ -77,11 +79,12 @@ export default () => {
   }, [sound]);
 
   useEffect(() => {
-    // Unloading sound on unmount
+    // Unloading bufferSound on unmount
     return () => bufferSound && bufferSound.unload();
   }, [bufferSound]);
 
   useEffect(() => {
+    // start music autoplay if sound is ready and music is allowed
     checkMusicAllowedByPhase(phase) && soundReady && playSound();
   }, [soundReady]);
 
@@ -92,14 +95,15 @@ export default () => {
   const nextTrack = () => {
     if (!soundLoaded) return;
 
-    const newTrackNumber = (trackNumber + 1) % audioList.length;
+    const newTrackNumber = (trackNumber + 1) % trackList.length;
     stopSound();
     !nextSoundLoaded && setSoundLoaded(false);
-    setSoundUrl(`${musicUrl}${audioList[newTrackNumber]}`);
+    setSoundUrl(`${trackList[newTrackNumber]}`);
     setTrackNumber(newTrackNumber);
   };
 
   const togglePlay = () => (soundIsPlaying ? pauseSound() : playSound());
+  const PlayPauseIcon = () => (isPlayingVisualStatus ? <PauseIcon /> : <PlayIcon />);
 
   return (
     <>
@@ -107,20 +111,12 @@ export default () => {
 
       {/* {musicLoadError === 4 && 'Ошибка загрузки музыки'} */}
 
-      {audioList.length > 0 && (
+      {trackList.length > 0 && (
         <>
           {checkMusicAllowedByPhase(phase) && (
             <>
               <NavBarCircleButton onClick={togglePlay} className='audio-player-pause-play'>
-                {soundLoaded ? (
-                  isPlayingVisualStatus ? (
-                    <PauseIcon />
-                  ) : (
-                    <PlayIcon />
-                  )
-                ) : (
-                  <RingLoader sizeUnit='px' size={20} color='white' />
-                )}
+                {soundLoaded ? <PlayPauseIcon /> : <RingLoader sizeUnit='px' size={20} color='white' />}
               </NavBarCircleButton>
 
               <NavBarCircleButton onClick={nextTrack} className='audio-player-next'>
