@@ -38,15 +38,16 @@ export default () => {
     // fetching tracklist
     axios
       .get(musicUrl)
-      .then(({ data }) => setTrackList(shuffle(data.map(({ name }) => musicUrl + name))))
+      .then(({ data }) => {
+        setTrackList(shuffle(data.map(({ name }) => musicUrl + name)));
+        setTrackNumber(0);
+      })
       .catch(() => setTrackListLoadError(true));
   }, []);
 
-  useEffect(() => {
-    if (!trackList.length) return;
-
-    setTrackNumber(0);
-  }, [trackList]);
+  const prevPhaseState = usePreviousState(phase);
+  const musicAllowed = checkMusicAllowedByPhase(phase);
+  const musicWasAllowed = checkMusicAllowedByPhase(prevPhaseState);
 
   let nextTrack;
 
@@ -56,7 +57,6 @@ export default () => {
   ] = useSound(soundUrl, {
     onload: () => {
       setMusicLoadError(0);
-
       setBufferSoundUrl(trackList[nextTrackNumber]);
     },
     onplay: () => {
@@ -80,12 +80,8 @@ export default () => {
     },
   });
 
-  const prevPhaseState = usePreviousState(phase);
   useEffect(() => {
     if (trackListLoadError) return;
-
-    const musicAllowed = checkMusicAllowedByPhase(phase);
-    const musicWasAllowed = checkMusicAllowedByPhase(prevPhaseState);
 
     if (!musicWasAllowed && musicAllowed) playSound();
     if (musicWasAllowed && !musicAllowed) pauseSound();
@@ -98,7 +94,7 @@ export default () => {
     // soundReady && sound.seek(sound.duration() - 10); // for development. Finding last track seconds
 
     // start music autoplay if sound is ready and music is allowed
-    checkMusicAllowedByPhase(phase) && soundReady && playSound();
+    musicAllowed && soundReady && playSound();
   }, [soundReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   nextTrack = () => {
@@ -116,7 +112,7 @@ export default () => {
 
   if (trackListLoadError) return 'Музыка не доступна';
   if (musicLoadError === 3) return 'Ошибка загрузки музыки';
-  if (trackList.length > 0 && checkMusicAllowedByPhase(phase))
+  if (trackList.length > 0 && musicAllowed)
     return (
       <>
         <NavBarCircleButton onClick={togglePlay} className='audio-player-pause-play'>
