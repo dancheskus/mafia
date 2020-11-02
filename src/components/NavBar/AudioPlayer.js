@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { shuffle } from 'lodash';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import useSound from 'use-sound';
 import { PlayIcon, PauseIcon, NextIcon } from 'icons/svgIcons';
 import NavBarCircleButton from 'components/styled-components/NavBarCircleButton';
 import usePreviousState from 'helpers/usePreviousState';
+import { useCustomRef } from 'helpers/useCustomRef';
 
 const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
 
@@ -28,7 +29,7 @@ export default () => {
   const [musicLoadError, setMusicLoadError] = useState(0);
   const [trackNumber, setTrackNumber] = useState();
   const soundUrl = trackList?.[trackNumber];
-  const nextSoundLoaded = useRef();
+  const [nextSoundLoadedRef, setNextSoundLoadedRef] = useCustomRef();
 
   const { phase } = useSelector(({ game }) => game.gameState);
   const nextTrackNumber = trackNumber !== undefined && (trackNumber + 1) % trackList.length;
@@ -73,8 +74,8 @@ export default () => {
   });
   const [, { sound: bufferSound }] = useSound(bufferSoundUrl, {
     onload: () => {
-      if (nextSoundLoaded.current === undefined || nextSoundLoaded.current === trackNumber) {
-        nextSoundLoaded.current = nextTrackNumber;
+      if (nextSoundLoadedRef === undefined || nextSoundLoadedRef === trackNumber) {
+        setNextSoundLoadedRef(nextTrackNumber);
       }
     },
   });
@@ -94,13 +95,14 @@ export default () => {
   useUnloadSoundOnUnmount(bufferSound);
 
   useEffect(() => {
-    // soundReady && sound.seek(sound.duration() - 10);
+    // soundReady && sound.seek(sound.duration() - 10); // for development. Finding last track seconds
+
     // start music autoplay if sound is ready and music is allowed
     checkMusicAllowedByPhase(phase) && soundReady && playSound();
   }, [soundReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   nextTrack = () => {
-    nextSoundLoaded.current !== nextTrackNumber && soundLoaded && setSoundLoaded(false);
+    nextSoundLoadedRef !== nextTrackNumber && soundLoaded && setSoundLoaded(false);
 
     // prevent multiple times button click
     if (sound?.state() === 'loading') return;
