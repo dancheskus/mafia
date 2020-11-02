@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 'redux/actions/gameActions';
@@ -6,6 +6,7 @@ import { killPlayer } from 'redux/actions/playersActions';
 import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
 import Timer from 'components/Timer';
+import { useCustomRef } from 'helpers/useCustomRef';
 
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
@@ -21,14 +22,14 @@ export default () => {
   } = useSelector(state => state);
   const dispatch = useDispatch();
 
-  const { current: killedPlayer } = useRef(
+  const [killedPlayerRef] = useCustomRef(
     selectedNumbers[0] >= 0 ? selectedNumbers[0] : Number(localStorage.killedPlayer)
   );
 
   useEffect(() => {
     dispatch(clearSelectedNumbers());
 
-    popupOpened && localStorage.setItem('killedPlayer', killedPlayer);
+    popupOpened && localStorage.setItem('killedPlayer', killedPlayerRef);
 
     dayNumber === 1 && dispatch(closePopup());
 
@@ -40,8 +41,8 @@ export default () => {
 
   const goToDay = () => {
     dispatch(closePopup());
-    killedPlayer >= 0 && dispatch(killPlayer(killedPlayer));
-    if (killedPlayer === activePlayer) dispatch(changeGameState({ phase: 'Day', dayNumber }));
+    killedPlayerRef >= 0 && dispatch(killPlayer(killedPlayerRef));
+    if (killedPlayerRef === activePlayer) dispatch(changeGameState({ phase: 'Day', dayNumber }));
     // В данном случае changeGameState используется только для вызова смены активного и открывающего игроков на +1.
   };
 
@@ -49,15 +50,15 @@ export default () => {
 
   return (
     <>
-      {killedPlayer >= 0 ? (
+      {killedPlayerRef >= 0 ? (
         <>
           <PopUpLabel className='h1'>Убит</PopUpLabel>
 
           <PopUpCircle mini color='Night'>
-            {killedPlayer + 1}
+            {killedPlayerRef + 1}
           </PopUpCircle>
 
-          <Timer killedOnLastMinute={!players[killedPlayer].isAlive} key={popupOpened} />
+          <Timer killedOnLastMinute={!players[killedPlayerRef].isAlive} key={popupOpened} />
         </>
       ) : (
         <>

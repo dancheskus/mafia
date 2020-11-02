@@ -116,20 +116,16 @@ export default () => {
 
   if (trackListLoadError) return 'Музыка не доступна';
   if (musicLoadError === 3) return 'Ошибка загрузки музыки';
-  if (trackList.length > 0)
+  if (trackList.length > 0 && checkMusicAllowedByPhase(phase))
     return (
       <>
-        {checkMusicAllowedByPhase(phase) && (
-          <>
-            <NavBarCircleButton onClick={togglePlay} className='audio-player-pause-play'>
-              {soundLoaded ? <PlayPauseIcon /> : <RingLoader sizeUnit='px' size={20} color='white' />}
-            </NavBarCircleButton>
+        <NavBarCircleButton onClick={togglePlay} className='audio-player-pause-play'>
+          {soundLoaded ? <PlayPauseIcon /> : <RingLoader sizeUnit='px' size={20} color='white' />}
+        </NavBarCircleButton>
 
-            <NavBarCircleButton onClick={nextTrack} className='audio-player-next'>
-              <NextIcon size='60%' />
-            </NavBarCircleButton>
-          </>
-        )}
+        <NavBarCircleButton onClick={nextTrack} className='audio-player-next'>
+          <NextIcon size='60%' />
+        </NavBarCircleButton>
       </>
     );
   return null;

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shuffle, concat, fill } from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTimer } from 'use-timer';
@@ -14,6 +14,7 @@ import { addRole } from 'redux/actions/playersActions';
 import colors from 'style/colors';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import usePreviousState from 'helpers/usePreviousState';
+import { useCustomRef } from 'helpers/useCustomRef';
 
 import { PressText, RoleName, ScaledPopUpButton, Card } from './style';
 
@@ -47,7 +48,7 @@ export default ({ resetMode }) => {
     },
   });
 
-  const { current: allRoles } = useRef(shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН')));
+  const [allRolesRef] = useCustomRef(shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН')));
 
   useEffect(() => {
     dispatch(replaceSelectedNumbersWith(0));
@@ -61,9 +62,9 @@ export default ({ resetMode }) => {
   });
 
   const showRole = () => {
-    if (timerStatus === 'RUNNING' || !allRoles.length) return;
+    if (timerStatus === 'RUNNING' || !allRolesRef.length) return;
 
-    const newRole = allRoles.pop();
+    const newRole = allRolesRef.pop();
     dispatch(addRole({ playerNumber, role: newRole }));
     setRole(newRole);
     if (newRole === 'МИРНЫЙ' || newRole === 'ШЕРИФ') dispatch(lightModeOn());
@@ -78,7 +79,7 @@ export default ({ resetMode }) => {
 
   return (
     <Card onClick={showRole}>
-      {!role && !!allRoles.length && (
+      {!role && !!allRolesRef.length && (
         <>
           <EyeIcon size='40%' fill={popupIcon} />
 
@@ -86,7 +87,7 @@ export default ({ resetMode }) => {
         </>
       )}
 
-      {!role && !allRoles.length && (
+      {!role && !allRolesRef.length && (
         <ScaledPopUpButton onClick={startGame} color='RoleDealing'>
           Играть
         </ScaledPopUpButton>
