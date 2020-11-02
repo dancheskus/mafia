@@ -28,9 +28,7 @@ export default () => {
   const [musicLoadError, setMusicLoadError] = useState(0);
   const [trackNumber, setTrackNumber] = useState();
   const soundUrl = trackList?.[trackNumber];
-  // const [nextSoundLoaded, setNextSoundLoaded] = useState(false);
-  const nextSoundLoaded = useRef(false);
-  // testRef.current = nextSoundLoaded;
+  const nextSoundLoaded = useRef();
 
   const { phase } = useSelector(({ game }) => game.gameState);
   const nextTrackNumber = trackNumber !== undefined && (trackNumber + 1) % trackList.length;
@@ -75,10 +73,11 @@ export default () => {
   });
   const [, { sound: bufferSound }] = useSound(bufferSoundUrl, {
     onload: () => {
-      nextSoundLoaded.current = true;
+      if (nextSoundLoaded.current === undefined || nextSoundLoaded.current === trackNumber) {
+        nextSoundLoaded.current = nextTrackNumber;
+      }
     },
   });
-  // const nextSoundLoaded = bufferSound?.state() === 'loaded';
 
   const prevPhaseState = usePreviousState(phase);
   useEffect(() => {
@@ -101,21 +100,13 @@ export default () => {
   }, [soundReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   nextTrack = () => {
-    // console.log(soundLoaded);
-    // console.log('На входе', nextSoundLoaded.current);
-    !nextSoundLoaded.current && soundLoaded && setSoundLoaded(false);
+    nextSoundLoaded.current !== nextTrackNumber && soundLoaded && setSoundLoaded(false);
 
     // prevent multiple times button click
     if (sound?.state() === 'loading') return;
 
-    console.log('laoding next');
-
     stopSound();
-    nextSoundLoaded.current = false;
-    // console.log('На выходе', nextSoundLoaded.current);
-    // setNextSoundLoaded(false);
     trackNumber !== undefined && setTrackNumber(nextTrackNumber);
-    // console.log('here');
   };
 
   const togglePlay = () => (soundIsPlaying ? pauseSound() : playSound());
