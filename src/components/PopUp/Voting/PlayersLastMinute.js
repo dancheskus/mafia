@@ -12,12 +12,11 @@ import { killPlayer } from 'redux/actions/playersActions';
 
 import { PopUpCircle, PopUpButton } from '../styled-components';
 
-export default props => {
+export default ({ listOfPlayers, killedOnLastMinute, goToNight }) => {
   const dispatch = useDispatch();
   const players = useSelector(({ players }) => players);
 
   const [currentPlayer, setCurrentPlayer] = useState(0);
-  const [listOfPlayers, setListOfPlayers] = useState(props.listOfPlayers);
 
   useEffect(() => {
     return () => {
@@ -38,15 +37,13 @@ export default props => {
 
       <Timer
         key={currentPlayer}
-        killedOnLastMinute={props.killedOnLastMinute[currentPlayer]}
+        killedOnLastMinute={killedOnLastMinute[currentPlayer]}
         time={listOfPlayers.length > 1 && 30}
       />
 
-      <PopUpButton color='Voting' onClick={lastPlayer ? props.goToNight : nextPlayer}>
+      <PopUpButton color='Voting' onClick={lastPlayer ? goToNight : nextPlayer}>
         {lastPlayer ? 'Ночь' : 'Далее'}
       </PopUpButton>
     </>
   );
 };
-
-// export default connect(({ players }) => ({ players }), { changeGameState, killPlayer })(PlayersLastMinute);
