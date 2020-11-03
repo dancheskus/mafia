@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, batch } from 'react-redux';
 import { countBy } from 'lodash';
 
 import { addRole } from 'redux/actions/playersActions';
@@ -35,20 +35,25 @@ export default ({ resetMode }) => {
   });
 
   useEffect(() => {
-    dispatch(addToSelectedNumbers(0));
-    dispatch(numbersPanelClickable());
+    batch(() => {
+      dispatch(addToSelectedNumbers(0));
+      dispatch(numbersPanelClickable());
+    });
   }, [dispatch]);
 
   const playerNumber = selectedNumbers[0];
 
   const changeSelection = (role, disabled) => {
     if (disabled) return;
+
     dispatch(addRole({ playerNumber, role }));
   };
 
   const startGameClicked = () => {
-    dispatch(clearSelectedNumbers());
-    dispatch(changeGameState({ phase: 'ZeroNight' }));
+    batch(() => {
+      dispatch(clearSelectedNumbers());
+      dispatch(changeGameState({ phase: 'ZeroNight' }));
+    });
   };
 
   const currentPlayerRole = players[playerNumber]?.role || null;

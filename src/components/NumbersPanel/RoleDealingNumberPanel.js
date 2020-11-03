@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { range } from 'lodash';
 
 import { addToSelectedNumbers, clearSelectedNumbers } from 'redux/actions/gameActions';
@@ -20,8 +20,10 @@ export default () => {
   const selectPlayer = playerNumber => {
     if (!numbersPanelClickable) return;
 
-    dispatch(clearSelectedNumbers());
-    dispatch(addToSelectedNumbers(playerNumber));
+    batch(() => {
+      dispatch(clearSelectedNumbers());
+      dispatch(addToSelectedNumbers(playerNumber));
+    });
   };
 
   return (

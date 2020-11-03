@@ -1,6 +1,6 @@
 import React from 'react';
 import { Howl } from 'howler';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { enableTutorial } from 'redux/actions/settingsActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
@@ -17,9 +17,11 @@ export default ({ hide, onClose }) => {
   const { tutorialEnabled } = useSelector(({ settings }) => settings);
 
   const startTutorial = () => {
-    dispatch(resetGameReducer());
-    dispatch(resetPlayersReducer());
-    dispatch(enableTutorial());
+    batch(() => {
+      dispatch(resetGameReducer());
+      dispatch(resetPlayersReducer());
+      dispatch(enableTutorial());
+    });
   };
 
   const secondsSound = new Howl({ src: `${secondsSoundFile}`, sprite: { oneSec: [0, 1020] } });

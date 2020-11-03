@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { killPlayer } from 'redux/actions/playersActions';
 
@@ -29,13 +29,15 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
   const closeNotification = () => setNotification(false);
 
   const goToNight = () => {
-    dispatch(clearSelectedNumbers());
-    votingSkipped && dispatch(skipVotingDec());
-    dispatch(changeGameState({ phase: 'Night' }));
+    batch(() => {
+      dispatch(clearSelectedNumbers());
+      votingSkipped && dispatch(skipVotingDec());
+      dispatch(changeGameState({ phase: 'Night' }));
 
-    lastMinuteFor.forEach(plNum => {
-      if (!players[plNum].isAlive) dispatch(skipVotingDec());
-      dispatch(killPlayer(plNum));
+      lastMinuteFor.forEach(plNum => {
+        if (!players[plNum].isAlive) dispatch(skipVotingDec());
+        dispatch(killPlayer(plNum));
+      });
     });
   };
 

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
@@ -40,9 +40,11 @@ export default () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const goToDay = () => {
-    dispatch(closePopup());
-    killedPlayerRef >= 0 && dispatch(killPlayer(killedPlayerRef));
-    if (killedPlayerRef === activePlayer) dispatch(changeGameState({ phase: 'Day', dayNumber }));
+    batch(() => {
+      dispatch(closePopup());
+      killedPlayerRef >= 0 && dispatch(killPlayer(killedPlayerRef));
+      if (killedPlayerRef === activePlayer) dispatch(changeGameState({ phase: 'Day', dayNumber }));
+    });
     // В данном случае changeGameState используется только для вызова смены активного и открывающего игроков на +1.
   };
 

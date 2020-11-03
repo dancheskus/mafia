@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, batch } from 'react-redux';
 
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
@@ -26,8 +26,10 @@ export default () => {
   const newGameClicked = () => {
     const startNewGame = () => {
       localStorage.clear();
-      dispatch(resetGameReducer());
-      dispatch(resetPlayersReducer());
+      batch(() => {
+        dispatch(resetGameReducer());
+        dispatch(resetPlayersReducer());
+      });
       setIsChecked(false);
     };
 

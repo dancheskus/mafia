@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { last } from 'lodash';
 
 import { addToSelectedNumbers, removeLastSelectedNumber } from 'redux/actions/gameActions';
@@ -37,12 +37,14 @@ export default () => {
   };
 
   const selectNumber = notSelNum => {
-    if (!playerAddedNumber) dispatch(addToSelectedNumbers(notSelNum));
+    batch(() => {
+      if (!playerAddedNumber) dispatch(addToSelectedNumbers(notSelNum));
 
-    if (playerAddedNumber) {
-      dispatch(removeLastSelectedNumber());
-      dispatch(addToSelectedNumbers(notSelNum));
-    }
+      if (playerAddedNumber) {
+        dispatch(removeLastSelectedNumber());
+        dispatch(addToSelectedNumbers(notSelNum));
+      }
+    });
 
     setPlayerAddedNumber(true);
   };

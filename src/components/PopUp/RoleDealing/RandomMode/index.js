@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { shuffle, concat, fill } from 'lodash';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch, batch } from 'react-redux';
 import { useTimer } from 'use-timer';
 
 import {
@@ -41,8 +41,10 @@ export default ({ resetMode }) => {
     interval: 1800,
     onTimeOver: () => {
       setRole(null);
-      dispatch(lightModeOff());
-      dispatch(replaceSelectedNumbersWith(playerNumber + 1 <= 9 ? playerNumber + 1 : 9));
+      batch(() => {
+        dispatch(lightModeOff());
+        dispatch(replaceSelectedNumbersWith(playerNumber + 1 <= 9 ? playerNumber + 1 : 9));
+      });
     },
   });
 
@@ -71,8 +73,10 @@ export default ({ resetMode }) => {
   };
 
   const startGame = () => {
-    dispatch(clearSelectedNumbers());
-    dispatch(changeGameState({ phase: 'ZeroNight' }));
+    batch(() => {
+      dispatch(clearSelectedNumbers());
+      dispatch(changeGameState({ phase: 'ZeroNight' }));
+    });
   };
 
   return (

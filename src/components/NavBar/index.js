@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from 'reactstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { countBy } from 'lodash';
 
 import NavMenu from 'components/NavMenu';
@@ -46,8 +46,10 @@ export default () => {
   });
 
   const goToNextAlivePlayer = (i = activePlayer + 1) => {
-    dispatch(unmutePlayer(mod(i - 1, 10)));
-    players[mod(i, 10)].isAlive ? dispatch(changeActivePlayer(mod(i, 10))) : goToNextAlivePlayer(i + 1);
+    batch(() => {
+      dispatch(unmutePlayer(mod(i - 1, 10)));
+      players[mod(i, 10)].isAlive ? dispatch(changeActivePlayer(mod(i, 10))) : goToNextAlivePlayer(i + 1);
+    });
     setStepBackAvaliable(true);
   };
 
@@ -59,12 +61,14 @@ export default () => {
   };
 
   const toVotingClicked = () => {
-    dispatch(disableTutorial());
+    batch(() => {
+      dispatch(disableTutorial());
 
-    if (selectedNumbers.length) return dispatch(changeGameState({ phase: 'Voting' }));
+      if (selectedNumbers.length) return dispatch(changeGameState({ phase: 'Voting' }));
 
-    dispatch(skipVotingDec());
-    dispatch(changeGameState({ phase: 'Night' }));
+      dispatch(skipVotingDec());
+      dispatch(changeGameState({ phase: 'Night' }));
+    });
   };
 
   const phaseTitles = {

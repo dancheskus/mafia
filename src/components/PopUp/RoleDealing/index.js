@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
 import { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable } from 'redux/actions/gameActions';
@@ -25,9 +25,11 @@ export default () => {
   const [modeApproved, setModeApproved] = useState(false);
 
   useEffect(() => {
-    dispatch(numbersPanelNotClickable());
-    dispatch(lightModeOff());
-    dispatch(clearSelectedNumbers());
+    batch(() => {
+      dispatch(numbersPanelNotClickable());
+      dispatch(lightModeOff());
+      dispatch(clearSelectedNumbers());
+    });
   }, [dispatch]);
 
   useEffect(() => {

@@ -3,7 +3,7 @@
 // 2. коллбэк уводящий в ночь
 
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 
 import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
@@ -21,8 +21,10 @@ export default ({ listOfPlayers, lastMinuteFor, goToNight }) => {
 
   useEffect(() => {
     if (checkForEnd(players, listOfPlayers).status) {
-      listOfPlayers.map(plNum => dispatch(killPlayer(plNum)));
-      dispatch(changeGameState({ phase: 'EndOfGame' }));
+      batch(() => {
+        listOfPlayers.map(plNum => dispatch(killPlayer(plNum)));
+        dispatch(changeGameState({ phase: 'EndOfGame' }));
+      });
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 import { useTimer } from 'use-timer';
 
 import { MinimizeIcon, MaximizeIcon, NextIcon } from 'icons/svgIcons';
@@ -43,11 +43,13 @@ export default ({ order, playerNumber }) => {
     timerType: 'DECREMENTAL',
     interval: 2000,
     onTimeOver: () => {
-      dispatch(addFoul(playerNumber));
+      batch(() => {
+        dispatch(addFoul(playerNumber));
 
-      if (checkForEnd(players).status) return dispatch(changeGameState({ phase: 'EndOfGame' }));
+        if (checkForEnd(players).status) return dispatch(changeGameState({ phase: 'EndOfGame' }));
 
-      dispatch(skipVotingInc());
+        dispatch(skipVotingInc());
+      });
 
       if (phase === 'Day') {
         setLastFoulDeath(true);
@@ -78,8 +80,10 @@ export default ({ order, playerNumber }) => {
 
   const backToLife = () => {
     returnToLifeTimer.reset();
-    dispatch(returnPlayerToGame(playerNumber));
-    dispatch(skipVotingDec());
+    batch(() => {
+      dispatch(returnPlayerToGame(playerNumber));
+      dispatch(skipVotingDec());
+    });
     setFoulsAmount(3);
     setLastFoulDeath(false);
   };

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { batch, useDispatch, useSelector } from 'react-redux';
 
 import checkForEnd from 'helpers/checkForEnd';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
@@ -24,8 +24,10 @@ export default () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const startNewGame = () => {
-    dispatch(resetGameReducer());
-    dispatch(resetPlayersReducer());
+    batch(() => {
+      dispatch(resetGameReducer());
+      dispatch(resetPlayersReducer());
+    });
   };
 
   const { black, red } = checkForEnd(players).allAlivePlayers;
