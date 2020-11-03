@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Switch from 'react-ios-switch';
 
 import {
@@ -14,56 +14,23 @@ import { SettingsLine } from './style';
 
 const onColor = 'rgb(122, 156, 236)';
 
-const SettingsItem = props => {
-  const {
-    switchAppMusic,
-    switchTimerSounds,
-    switchMafiaTimer,
-    switchMultiplePlayerRemove,
-    switchSeatAllocator,
-    settings: { appMusic, timerSounds, mafiaTimer, multiplePlayerRemove, seatAllocator },
-  } = props;
-  let checked;
-  let func;
+export default ({ type, title }) => {
+  const dispatch = useDispatch();
+  const settings = useSelector(({ settings }) => settings);
 
-  switch (props.type) {
-    case 'appMusic':
-      checked = appMusic;
-      func = switchAppMusic;
-      break;
-    case 'timerSounds':
-      checked = timerSounds;
-      func = switchTimerSounds;
-      break;
-    case 'mafiaTimer':
-      checked = mafiaTimer;
-      func = switchMafiaTimer;
-      break;
-    case 'multiplePlayerRemove':
-      checked = multiplePlayerRemove;
-      func = switchMultiplePlayerRemove;
-      break;
-    case 'seatAllocator':
-      checked = seatAllocator;
-      func = switchSeatAllocator;
-      break;
-
-    default:
-      break;
-  }
+  const functions = {
+    appMusic: switchAppMusic(),
+    timerSounds: switchTimerSounds(),
+    mafiaTimer: switchMafiaTimer(),
+    multiplePlayerRemove: switchMultiplePlayerRemove(),
+    seatAllocator: switchSeatAllocator(),
+  };
 
   return (
     <SettingsLine>
-      <span>{props.title}</span>
-      <Switch onColor={onColor} checked={checked} onChange={() => func()} />
+      <span>{title}</span>
+
+      <Switch onColor={onColor} checked={settings[type]} onChange={() => dispatch(functions[type])} />
     </SettingsLine>
   );
 };
-
-export default connect(({ settings }) => ({ settings }), {
-  switchAppMusic,
-  switchTimerSounds,
-  switchMafiaTimer,
-  switchMultiplePlayerRemove,
-  switchSeatAllocator,
-})(SettingsItem);
