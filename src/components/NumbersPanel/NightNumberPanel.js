@@ -11,9 +11,8 @@ export default () => {
     },
   } = useSelector(state => state);
 
-  const aliveMafiaAmount = players.filter(
-    player => player.isAlive && (player.role === 'ДОН' || player.role === 'МАФИЯ')
-  ).length;
+  const aliveMafiaAmount = players.filter(({ isAlive, role }) => isAlive && (role === 'ДОН' || role === 'МАФИЯ'))
+    .length;
 
   return (
     <Panel color={phase}>
