@@ -29,9 +29,7 @@ const roleIcons = {
 
 export default ({ resetMode }) => {
   const dispatch = useDispatch();
-  const {
-    game: { selectedNumbers, lightMode },
-  } = useSelector(store => store);
+  const { selectedNumbers, lightMode } = useSelector(({ game }) => game);
   const [role, setRole] = useState(null);
 
   const playerNumber = selectedNumbers[0];

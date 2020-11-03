@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { killPlayer } from 'redux/actions/playersActions';
 import { ResetIcon } from 'icons/svgIcons';
@@ -10,113 +10,96 @@ import { PopUpLabel, PopUpButton } from '../styled-components';
 import PlayersLastMinute from './PlayersLastMinute';
 import ResetButton from './styled-components/ResetButton';
 
-class EndOfVoting extends Component {
-  state = { notification: true };
+export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
+  const dispatch = useDispatch();
+  const {
+    game: {
+      skipVoting,
+      selectedNumbers,
+      gameState: { dayNumber },
+    },
+    players,
+  } = useSelector(store => store);
 
-  killedOnLastMinute = Array(this.props.lastMinuteFor.length).fill(false);
+  const [notification, setNotification] = useState(true);
 
-  componentWillUnmount = () => this.props.clearSelectedNumbers();
+  useEffect(() => {
+    return () => dispatch(clearSelectedNumbers());
+  }, [dispatch]);
 
-  componentDidUpdate = () => {
-    this.killedOnLastMinute = this.props.lastMinuteFor.map(plNum => !this.props.players[plNum].isAlive);
-  };
+  const closeNotification = () => setNotification(false);
 
-  closeNotification = () => this.setState({ notification: false });
+  const goToNight = () => {
+    dispatch(clearSelectedNumbers());
+    votingSkipped && dispatch(skipVotingDec());
+    dispatch(changeGameState({ phase: 'Night' }));
 
-  goToNight = () => {
-    this.props.clearSelectedNumbers();
-    this.props.votingSkipped && this.props.skipVotingDec();
-    this.props.changeGameState({ phase: 'Night' });
-
-    this.props.lastMinuteFor.forEach(plNum => {
-      if (!this.props.players[plNum].isAlive) this.props.skipVotingDec();
-      this.props.killPlayer(plNum);
+    lastMinuteFor.forEach(plNum => {
+      if (!players[plNum].isAlive) dispatch(skipVotingDec());
+      dispatch(killPlayer(plNum));
     });
   };
 
-  render = () => {
-    const {
-      votingSkipped,
-      lastMinuteFor,
-      game: {
-        skipVoting,
-        selectedNumbers,
-        gameState: { dayNumber },
-      },
-    } = this.props;
-
-    if (votingSkipped)
-      return (
-        <>
-          <PopUpLabel className='h2'>Голосование не проводится</PopUpLabel>
-          {selectedNumbers.length === 1 && dayNumber === 1 ? (
-            <PopUpLabel light className='h3'>
-              Один игрок в первый день не голосуется
-            </PopUpLabel>
-          ) : (
-            skipVoting > 0 && (
-              <PopUpLabel light className='h3'>
-                Игрок получил 4-й фол
-              </PopUpLabel>
-            )
-          )}
-
-          <PopUpButton color='Voting' onClick={this.goToNight}>
-            Ночь
-          </PopUpButton>
-        </>
-      );
-
-    if (this.state.notification)
-      return (
-        <>
-          <ResetButton onClick={this.props.resetFn}>
-            <ResetIcon size='75%' />
-          </ResetButton>
-
-          {lastMinuteFor.length > 0 ? (
-            <>
-              <PopUpLabel className='h1'>Игру покидает</PopUpLabel>
-              <ResultsNumbers>
-                {lastMinuteFor.map(num => (
-                  <div key={num}>{num + 1}</div>
-                ))}
-              </ResultsNumbers>
-
-              <PopUpButton color='Voting' onClick={this.closeNotification}>
-                ОК
-              </PopUpButton>
-            </>
-          ) : (
-            <>
-              <PopUpLabel className='h1'>Никто не уходит</PopUpLabel>
-              <PopUpButton color='Voting' onClick={this.goToNight}>
-                Ночь
-              </PopUpButton>
-            </>
-          )}
-        </>
-      );
-
+  if (votingSkipped)
     return (
       <>
-        <ResetButton onClick={this.props.resetFn}>
+        <PopUpLabel className='h2'>Голосование не проводится</PopUpLabel>
+        {selectedNumbers.length === 1 && dayNumber === 1 ? (
+          <PopUpLabel light className='h3'>
+            Один игрок в первый день не голосуется
+          </PopUpLabel>
+        ) : (
+          skipVoting > 0 && (
+            <PopUpLabel light className='h3'>
+              Игрок получил 4-й фол
+            </PopUpLabel>
+          )
+        )}
+
+        <PopUpButton color='Voting' onClick={goToNight}>
+          Ночь
+        </PopUpButton>
+      </>
+    );
+
+  if (notification)
+    return (
+      <>
+        <ResetButton onClick={resetFn}>
           <ResetIcon size='75%' />
         </ResetButton>
 
-        <PlayersLastMinute
-          listOfPlayers={lastMinuteFor}
-          killedOnLastMinute={this.killedOnLastMinute}
-          goToNight={this.goToNight}
-        />
+        {lastMinuteFor.length > 0 ? (
+          <>
+            <PopUpLabel className='h1'>Игру покидает</PopUpLabel>
+            <ResultsNumbers>
+              {lastMinuteFor.map(num => (
+                <div key={num}>{num + 1}</div>
+              ))}
+            </ResultsNumbers>
+
+            <PopUpButton color='Voting' onClick={closeNotification}>
+              ОК
+            </PopUpButton>
+          </>
+        ) : (
+          <>
+            <PopUpLabel className='h1'>Никто не уходит</PopUpLabel>
+            <PopUpButton color='Voting' onClick={goToNight}>
+              Ночь
+            </PopUpButton>
+          </>
+        )}
       </>
     );
-  };
-}
 
-export default connect(({ game, players }) => ({ game, players }), {
-  killPlayer,
-  clearSelectedNumbers,
-  changeGameState,
-  skipVotingDec,
-})(EndOfVoting);
+  return (
+    <>
+      <ResetButton onClick={resetFn}>
+        <ResetIcon size='75%' />
+      </ResetButton>
+
+      <PlayersLastMinute listOfPlayers={lastMinuteFor} lastMinuteFor={lastMinuteFor} goToNight={goToNight} />
+    </>
+  );
+};

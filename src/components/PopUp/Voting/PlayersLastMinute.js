@@ -12,9 +12,10 @@ import { killPlayer } from 'redux/actions/playersActions';
 
 import { PopUpCircle, PopUpButton } from '../styled-components';
 
-export default ({ listOfPlayers, killedOnLastMinute, goToNight }) => {
+export default ({ listOfPlayers, lastMinuteFor, goToNight }) => {
   const dispatch = useDispatch();
   const players = useSelector(({ players }) => players);
+  const killedOnLastMinute = lastMinuteFor.map(plNum => !players[plNum].isAlive);
 
   const [currentPlayer, setCurrentPlayer] = useState(0);
 

@@ -47,12 +47,12 @@ export default ({ order, playerNumber }) => {
 
       if (checkForEnd(players).status) return dispatch(changeGameState({ phase: 'EndOfGame' }));
 
+      dispatch(skipVotingInc());
+
       if (phase === 'Day') {
         setLastFoulDeath(true);
         returnToLifeTimer.start();
       }
-
-      dispatch(skipVotingInc());
     },
   });
 
