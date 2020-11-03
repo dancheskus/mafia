@@ -20,13 +20,11 @@ export default ({ listOfPlayers, lastMinuteFor, goToNight }) => {
   const [currentPlayer, setCurrentPlayer] = useState(0);
 
   useEffect(() => {
-    return () => {
-      if (checkForEnd(players, listOfPlayers).status) {
-        listOfPlayers.map(plNum => dispatch(killPlayer(plNum)));
-        dispatch(changeGameState({ phase: 'EndOfGame' }));
-      }
-    };
-  }, [dispatch, listOfPlayers, players]);
+    if (checkForEnd(players, listOfPlayers).status) {
+      listOfPlayers.map(plNum => dispatch(killPlayer(plNum)));
+      dispatch(changeGameState({ phase: 'EndOfGame' }));
+    }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const nextPlayer = () => setCurrentPlayer(currentPlayer + 1);
 
