@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { killPlayer } from 'redux/actions/playersActions';
-import { ResetIcon } from 'icons/svgIcons';
 
 import { clearSelectedNumbers, changeGameState, skipVotingDec } from '../../../redux/actions/gameActions';
-import { ResultsNumbers } from './styled-components/Results';
+import { ResultsNumbers } from './style';
 import { PopUpLabel, PopUpButton } from '../styled-components';
 import PlayersLastMinute from './PlayersLastMinute';
-import ResetButton from './styled-components/ResetButton';
+import ResetButton from './ResetButton';
 
 export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
   const dispatch = useDispatch();
@@ -65,9 +64,7 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
   if (notification)
     return (
       <>
-        <ResetButton onClick={resetFn}>
-          <ResetIcon size='75%' />
-        </ResetButton>
+        <ResetButton onClick={resetFn} />
 
         {lastMinuteFor.length > 0 ? (
           <>
@@ -95,9 +92,7 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
 
   return (
     <>
-      <ResetButton onClick={resetFn}>
-        <ResetIcon size='75%' />
-      </ResetButton>
+      <ResetButton onClick={resetFn} />
 
       <PlayersLastMinute listOfPlayers={lastMinuteFor} lastMinuteFor={lastMinuteFor} goToNight={goToNight} />
     </>

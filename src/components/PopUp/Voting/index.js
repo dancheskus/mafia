@@ -1,27 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
 import { Howl } from 'howler';
 
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/VictimSelector';
-import { ResetIcon } from 'icons/svgIcons';
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
-import ResetButton from './styled-components/ResetButton';
-
-const BottomButtonGroup = styled.div`
-  flex-direction: row;
-
-  > :not(:last-child) {
-    margin-right: 20px;
-    background: ${({ buttonOncePressed }) => buttonOncePressed && 'darkred'};
-  }
-`;
+import ResetButton from './ResetButton';
+import { BottomButtonGroup } from './style';
 
 class Voting extends Component {
   initialState = {
@@ -234,9 +224,7 @@ class Voting extends Component {
     if (carCrash)
       return (
         <>
-          <ResetButton onClick={this.resetVoting}>
-            <ResetIcon size='75%' />
-          </ResetButton>
+          <ResetButton onClick={this.resetVoting} />
 
           <CarCrash
             closeCarCrash={this.closeCarCrash}
@@ -248,9 +236,7 @@ class Voting extends Component {
 
     return (
       <>
-        <ResetButton onClick={this.resetVoting}>
-          <ResetIcon size='75%' />
-        </ResetButton>
+        <ResetButton onClick={this.resetVoting} />
 
         {carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 

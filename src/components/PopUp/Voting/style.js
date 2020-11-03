@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 import colors from 'style/colors';
 
 export const ResultsNumbers = styled.div`
@@ -23,5 +24,14 @@ export const ResultsNumbers = styled.div`
 
   > div:not(:first-child) {
     margin-left: 10px;
+  }
+`;
+
+export const BottomButtonGroup = styled.div`
+  flex-direction: row;
+
+  > :not(:last-child) {
+    margin-right: 20px;
+    background: ${({ buttonOncePressed }) => buttonOncePressed && 'darkred'};
   }
 `;

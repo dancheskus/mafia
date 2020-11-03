@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { ResultsNumbers } from './styled-components/Results';
+import { ResultsNumbers } from './style';
 import { PopUpLabel, PopUpButton } from '../styled-components';
 
 export default ({ closeNotification }) => {
