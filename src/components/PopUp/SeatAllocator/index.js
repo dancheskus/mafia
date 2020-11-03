@@ -1,76 +1,100 @@
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import { shuffle, range, random } from 'lodash';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector, batch } from 'react-redux';
+import { useTimer } from 'use-timer';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
 
 import { PopUpButton } from '../styled-components';
 import { BigCircle } from './style';
 
-class SeatAllocator extends Component {
-  state = { randomNumber: null };
+const shuffleNumbers = () => shuffle(range(0, 10));
 
-  componentDidMount = () => {
-    this.props.clearSelectedNumbers();
+export default () => {
+  const dispatch = useDispatch();
+  const {
+    selectedNumbers,
+    gameState: { phase },
+  } = useSelector(({ game }) => game);
+
+  const [randomNumber, setRandomNumber] = useState(null);
+  const [seats, setSeats] = useState(shuffleNumbers());
+
+  const delayAfterResultTimer = useTimer({
+    initialTime: 1,
+    endTime: 0,
+    timerType: 'DECREMENTAL',
+    onTimeOver: () => setRandomNumber(seats.length ? null : randomNumber),
+  });
+
+  const randomAnimationTimer = useTimer({
+    initialTime: 20,
+    endTime: 0,
+    interval: 40,
+    timerType: 'DECREMENTAL',
+    onTimeOver: () => {
+      const _seats = seats;
+      const randomNumber = _seats.pop();
+
+      setSeats(_seats);
+      setRandomNumber(randomNumber + 1);
+
+      dispatch(addToSelectedNumbers(randomNumber));
+
+      delayAfterResultTimer.start();
+    },
+    onTimeUpdate: () => {
+      if (randomAnimationTimer.status === 'STOPPED') return;
+
+      // Just for animation. No real meaning of these numbers
+      setRandomNumber(random(1, 10));
+    },
+  });
+
+  const resetSeatAllocator = () => {
+    setSeats(shuffleNumbers());
+    setRandomNumber(null);
   };
 
-  seats = shuffle(range(0, 10));
+  useEffect(() => {
+    dispatch(clearSelectedNumbers());
+  }, [dispatch]);
 
-  componentWillUnmount = () => {
-    clearInterval(this.interval);
-    clearTimeout(this.timeout);
+  useEffect(() => {
+    // If "Start new game" was pressed before unmounting this component this should reset component state
+    if (selectedNumbers.length) return;
+
+    if (seats.length < 10 || !seats.length) resetSeatAllocator();
+  }, [selectedNumbers]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const startPlaying = () => {
+    batch(() => {
+      dispatch(changeGameState({ phase: 'RoleDealing' }));
+      dispatch(clearSelectedNumbers());
+    });
   };
 
-  stopInterval = () => {
-    clearInterval(this.interval);
-    this.interval = false;
-    const randomNumber = this.seats.pop();
-    this.setState({ randomNumber: randomNumber + 1 });
-    this.props.addToSelectedNumbers(randomNumber);
-    this.timeout = setTimeout(() => {
-      this.setState({ randomNumber: this.seats.length ? null : this.state.randomNumber });
-    }, 1000);
+  const randomClicked = () => {
+    const timersAreRunning = randomAnimationTimer.status === 'RUNNING' || delayAfterResultTimer.status === 'RUNNING';
+    if (timersAreRunning || !seats.length) return;
+
+    randomAnimationTimer.start();
   };
 
-  buttonClicked = () => {
-    this.props.changeGameState({ phase: 'RoleDealing' }) && this.props.clearSelectedNumbers();
-  };
+  return (
+    <>
+      <BigCircle
+        className='d-flex justify-content-center align-items-center seat-allocator-big-circle'
+        onClick={randomClicked}
+        number={randomNumber}
+        enabled={seats.length}
+      >
+        {randomNumber || 'нажми'}
+      </BigCircle>
 
-  randomClicked = () => {
-    if (!this.seats.length || this.interval) return;
-    clearTimeout(this.timeout);
-
-    let i = 0;
-    this.interval = setInterval(() => {
-      this.setState({ randomNumber: random(1, 10) });
-      ++i === 20 && this.stopInterval();
-    }, 40);
-  };
-
-  render = () => {
-    const { randomClicked, seats, buttonClicked } = this;
-    const { randomNumber } = this.state;
-    const { phase } = this.props.game.gameState;
-
-    return (
-      <>
-        <BigCircle
-          className='d-flex justify-content-center align-items-center seat-allocator-big-circle'
-          onClick={randomClicked}
-          number={randomNumber}
-          enabled={seats.length}
-        >
-          {randomNumber || 'нажми'}
-        </BigCircle>
-
-        <PopUpButton color={phase} onClick={buttonClicked} className='seat-allocator-popup-button'>
-          {seats.length ? 'пропустить' : 'играть'}
-        </PopUpButton>
-      </>
-    );
-  };
-}
-
-export default connect(({ game }) => ({ game }), { addToSelectedNumbers, clearSelectedNumbers, changeGameState })(
-  SeatAllocator
-);
+      <PopUpButton color={phase} onClick={startPlaying} className='seat-allocator-popup-button'>
+        {seats.length ? 'пропустить' : 'играть'}
+      </PopUpButton>
+    </>
+  );
+};
