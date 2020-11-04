@@ -32,7 +32,7 @@ export default ({ resetMode }) => {
   const { selectedNumbers, lightMode } = useSelector(({ game }) => game);
   const [role, setRole] = useState(null);
 
-  const playerNumber = selectedNumbers[0];
+  const [playerNumber] = selectedNumbers;
 
   const { start: startCardBlockingTimer, status: timerStatus } = useTimer({
     initialTime: 1,

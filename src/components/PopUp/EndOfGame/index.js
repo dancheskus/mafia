@@ -31,7 +31,7 @@ export default () => {
   };
 
   const { black, red } = checkForEnd(players).allAlivePlayers;
-  const justKilledPlayer = selectedNumbers[0];
+  const [justKilledPlayer] = selectedNumbers;
 
   return (
     <GameResult>

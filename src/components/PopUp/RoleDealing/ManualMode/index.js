@@ -41,7 +41,7 @@ export default ({ resetMode }) => {
     });
   }, [dispatch]);
 
-  const playerNumber = selectedNumbers[0];
+  const [playerNumber] = selectedNumbers;
 
   const changeSelection = (role, disabled) => {
     if (disabled) return;

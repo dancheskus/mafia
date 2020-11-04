@@ -43,6 +43,10 @@ export default () => {
     checkForEnd(players).status && dispatch(changeGameState({ phase: 'EndOfGame' }));
   });
 
+  useEffect(() => {
+    return () => dispatch(clearSelectedNumbers()); // Это нужно, чтобы не показывать кого убили, если конец игры, т.к это голосование.
+  }, [dispatch]);
+
   const getNewVotingList = () => {
     const largestNumber = Math.max(...votesPerPlayer); // Вычисляем максимальное кол-во проголосовавших в одного игрока
     const newVotingList = [];
