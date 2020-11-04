@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { killPlayer } from 'redux/actions/playersActions';
@@ -22,10 +22,6 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
 
   const [notification, setNotification] = useState(true);
 
-  useEffect(() => {
-    return () => dispatch(clearSelectedNumbers());
-  }, [dispatch]);
-
   const closeNotification = () => setNotification(false);
 
   const goToNight = () => {
@@ -45,6 +41,7 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
     return (
       <>
         <PopUpLabel className='h2'>Голосование не проводится</PopUpLabel>
+
         {selectedNumbers.length === 1 && dayNumber === 1 ? (
           <PopUpLabel light className='h3'>
             Один игрок в первый день не голосуется
@@ -71,6 +68,7 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
         {lastMinuteFor.length > 0 ? (
           <>
             <PopUpLabel className='h1'>Игру покидает</PopUpLabel>
+
             <ResultsNumbers>
               {lastMinuteFor.map(num => (
                 <div key={num}>{num + 1}</div>
@@ -84,6 +82,7 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
         ) : (
           <>
             <PopUpLabel className='h1'>Никто не уходит</PopUpLabel>
+
             <PopUpButton color='Voting' onClick={goToNight}>
               Ночь
             </PopUpButton>
