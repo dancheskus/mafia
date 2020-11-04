@@ -1,21 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
-import { Howl } from 'howler';
-import { useTimer } from 'use-timer';
 
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
-import VictimSelector from 'components/VictimSelector';
-import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import { useCustomRef } from 'helpers/useCustomRef';
 
-import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
 import ResetButton from './ResetButton';
-import { BottomButtonGroup } from './style';
-
-const stopVotingSound = new Howl({ src: `${secondsSoundFile}`, sprite: { oneSec: [0, 1020] } });
+import StandartVoting from './StandartVoting';
 
 export default () => {
   const dispatch = useDispatch();
@@ -28,46 +21,21 @@ export default () => {
     },
   } = useSelector(store => store);
 
-  const initialState = {
-    votesPerPlayer: Array(selectedNumbers.length).fill(0), // Кол-во проголосовавших за каждого игрока
-    avaliableVoters: 9 - players.filter(({ isAlive }) => !isAlive).length, // Кол-во живых и не проголосовавших
-    currentPlayer: 0, // За кого голосуют в данный момент (от 0 до кол-во выставленных)
-    carCrash: false, // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
-    carCrashClosed: false, // true, после первой автокатастрофы
-    endOfVoting: false,
-    lastMinuteFor: [], // Игрок(и), которых выводят из города
-    buttonOncePressed: false,
-  };
-
   const [initialSelectedNumbers] = useCustomRef(selectedNumbers);
 
-  const [votesPerPlayer, setVotesPerPlayer] = useState(initialState.votesPerPlayer);
-  const [avaliableVoters, setAvaliableVoters] = useState(initialState.avaliableVoters);
-  const [currentPlayer, setCurrentPlayer] = useState(initialState.currentPlayer);
-  const [carCrash, setCarCrash] = useState(initialState.carCrash);
-  const [carCrashClosed, setCarCrashClosed] = useState(initialState.carCrashClosed);
-  const [endOfVoting, setEndOfVoting] = useState(initialState.endOfVoting);
-  const [lastMinuteFor, setLastMinuteFor] = useState(initialState.lastMinuteFor);
-  const [buttonOncePressed, setButtonOncePressed] = useState(initialState.buttonOncePressed);
+  const [votesPerPlayer, setVotesPerPlayer] = useState(Array(selectedNumbers.length).fill(0)); // Кол-во проголосовавших за каждого игрока
+  const [carCrash, setCarCrash] = useState(false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
+  const [carCrashClosed, setCarCrashClosed] = useState(false); // true, после первой автокатастрофы
+  const [endOfVoting, setEndOfVoting] = useState(false);
+  const [lastMinuteFor, setLastMinuteFor] = useState([]); // Игрок(и), которых выводят из города
 
-  const resetState = stateToChange => {
-    setVotesPerPlayer(stateToChange?.votesPerPlayer ?? initialState.votesPerPlayer);
-    setAvaliableVoters(stateToChange?.avaliableVoters ?? initialState.avaliableVoters);
-    setCurrentPlayer(stateToChange?.currentPlayer ?? initialState.currentPlayer);
-    setCarCrash(stateToChange?.carCrash ?? initialState.carCrash);
-    setCarCrashClosed(stateToChange?.carCrashClosed ?? initialState.carCrashClosed);
-    setEndOfVoting(stateToChange?.endOfVoting ?? initialState.endOfVoting);
-    setLastMinuteFor(stateToChange?.lastMinuteFor ?? initialState.lastMinuteFor);
-    setButtonOncePressed(stateToChange?.buttonOncePressed ?? initialState.buttonOncePressed);
+  const resetState = replaceState => {
+    setVotesPerPlayer(Array(selectedNumbers.length).fill(0));
+    setCarCrash(false);
+    setCarCrashClosed(replaceState?.carCrashClosed ?? false);
+    setEndOfVoting(false);
+    setLastMinuteFor([]);
   };
-
-  const { start: startVotingTimer, status: timerStatus } = useTimer({
-    initialTime: 1,
-    endTime: 0,
-    timerType: 'DECREMENTAL',
-    interval: 2000,
-    onTimeOver: () => stopVotingSound.play('oneSec'),
-  });
 
   useEffect(() => {
     // При обновлении компонента, при необходимых условиях, завершаем игру
@@ -136,49 +104,6 @@ export default () => {
     };
   });
 
-  const onNumberSelected = num => {
-    const arr = [...votesPerPlayer];
-    arr[currentPlayer] = votesPerPlayer[currentPlayer] === num + 1 ? null : num + 1;
-    setVotesPerPlayer(arr);
-  };
-
-  const closeCarCrash = () => resetState({ carCrashClosed: true });
-
-  const countAvaliableVoters = () => {
-    const deadPlayers = players.filter(({ isAlive }) => !isAlive).length;
-    const avaliableVoters = votesPerPlayer.length >= 1 ? 9 - votesPerPlayer.reduce((a, b) => a + b) : 9;
-
-    setAvaliableVoters(avaliableVoters - deadPlayers);
-  };
-
-  const nextButtonClicked = () => {
-    const votingPlayersAmount = selectedNumbers.length;
-    const votersLeft = avaliableVoters - votesPerPlayer[currentPlayer] + 1;
-
-    countAvaliableVoters();
-    setButtonOncePressed(false);
-
-    if (currentPlayer < votingPlayersAmount - 1) {
-      // Если НЕ последний игрок, увеличиваем игрока на 1 и вычисляем оставшееся кол-во рук. Если руки закончились, завершаем голосование.
-      if (votersLeft === 0) return votingFinishedClicked();
-      setCurrentPlayer(currentPlayer + 1);
-    }
-
-    if (votingPlayersAmount - 2 === currentPlayer) {
-      // Если последний игрок, в него голосуют оставшиеся руки минус мертвые игроки
-      const arr = [...votesPerPlayer];
-      arr[currentPlayer + 1] = votersLeft;
-      setVotesPerPlayer(arr);
-    }
-  };
-
-  const timerClicked = () => {
-    if (timerStatus === 'RUNNING') return;
-
-    !buttonOncePressed && setButtonOncePressed(true);
-    startVotingTimer();
-  };
-
   const resetVoting = () => {
     if (window.confirm('Сбросить голосование?')) {
       resetState();
@@ -190,7 +115,7 @@ export default () => {
     }
   };
 
-  const lastPlayer = currentPlayer === selectedNumbers.length - 1;
+  const closeCarCrash = () => resetState({ carCrashClosed: true });
 
   if (endOfVoting || skipVoting)
     return (
@@ -215,29 +140,12 @@ export default () => {
     );
 
   return (
-    <>
-      <ResetButton onClick={resetVoting} />
-
-      {carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
-
-      <PopUpCircle mini={carCrashClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
-
-      <VictimSelector
-        lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке
-        votesLeft={avaliableVoters} // для disabled кнопки
-        key={currentPlayer} // чтобы перерендеривался каждый раз
-        onNumberSelected={onNumberSelected} // callback
-      />
-
-      <BottomButtonGroup buttonOncePressed={buttonOncePressed}>
-        <PopUpButton color='Voting' onClick={timerClicked}>
-          2 сек
-        </PopUpButton>
-
-        <PopUpButton color='Voting' onClick={lastPlayer ? votingFinishedClicked : nextButtonClicked}>
-          {lastPlayer ? 'Завершить' : 'Далее'}
-        </PopUpButton>
-      </BottomButtonGroup>
-    </>
+    <StandartVoting
+      votesPerPlayer={votesPerPlayer}
+      setVotesPerPlayer={setVotesPerPlayer}
+      votingFinishedClicked={votingFinishedClicked}
+      resetVoting={resetVoting}
+      carCrashClosed={carCrashClosed}
+    />
   );
 };
