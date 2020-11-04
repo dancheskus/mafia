@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { Howl } from 'howler';
 import { useTimer } from 'use-timer';
@@ -7,6 +7,7 @@ import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVoting
 import checkForEnd from 'helpers/checkForEnd';
 import VictimSelector from 'components/VictimSelector';
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
+import { useCustomRef } from 'helpers/useCustomRef';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import EndOfVoting from './EndOfVoting';
@@ -38,7 +39,7 @@ export default () => {
     buttonOncePressed: false,
   };
 
-  const { current: initialSelectedNumbers } = useRef(selectedNumbers);
+  const [initialSelectedNumbers] = useCustomRef(selectedNumbers);
 
   const [votesPerPlayer, setVotesPerPlayer] = useState(initialState.votesPerPlayer);
   const [avaliableVoters, setAvaliableVoters] = useState(initialState.avaliableVoters);
