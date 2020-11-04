@@ -22,15 +22,16 @@ export default () => {
   } = useSelector(store => store);
 
   const [initialSelectedNumbers] = useCustomRef(selectedNumbers);
+  const initialVotesPerPlayer = Array(selectedNumbers.length).fill(0);
 
-  const [votesPerPlayer, setVotesPerPlayer] = useState(Array(selectedNumbers.length).fill(0)); // Кол-во проголосовавших за каждого игрока
+  const [votesPerPlayer, setVotesPerPlayer] = useState(initialVotesPerPlayer); // Кол-во проголосовавших за каждого игрока
   const [carCrash, setCarCrash] = useState(false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
   const [carCrashClosed, setCarCrashClosed] = useState(false); // true, после первой автокатастрофы
   const [endOfVoting, setEndOfVoting] = useState(false);
   const [lastMinuteFor, setLastMinuteFor] = useState([]); // Игрок(и), которых выводят из города
 
   const resetState = replaceState => {
-    setVotesPerPlayer(Array(selectedNumbers.length).fill(0));
+    setVotesPerPlayer(initialVotesPerPlayer);
     setCarCrash(false);
     setCarCrashClosed(replaceState?.carCrashClosed ?? false);
     setEndOfVoting(false);
@@ -115,8 +116,6 @@ export default () => {
     }
   };
 
-  const closeCarCrash = () => resetState({ carCrashClosed: true });
-
   if (endOfVoting || skipVoting)
     return (
       <EndOfVoting
@@ -132,7 +131,7 @@ export default () => {
         <ResetButton onClick={resetVoting} />
 
         <CarCrash
-          closeCarCrash={closeCarCrash}
+          closeCarCrash={() => resetState({ carCrashClosed: true })}
           secondTime={carCrashClosed}
           votingFinishedClicked={votingFinishedClicked}
         />
