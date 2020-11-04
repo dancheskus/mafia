@@ -185,13 +185,21 @@ class Voting extends Component {
     if (window.confirm('Сбросить голосование?')) {
       this.setState({ ...this.initialState });
       clearSelectedNumbers();
-      this.initialSelectedNumbers.forEach(num => {
-        addToSelectedNumbers(num);
-      });
+      this.initialSelectedNumbers.forEach(num => addToSelectedNumbers(num));
     }
   };
 
   render = () => {
+    const {
+      props,
+      state,
+      resetVoting,
+      closeCarCrash,
+      votingFinishedClicked,
+      onNumberSelected,
+      timerClicked,
+      nextButtonClicked,
+    } = this;
     const {
       currentPlayer,
       lastMinuteFor,
@@ -201,19 +209,19 @@ class Voting extends Component {
       avaliableVoters,
       timerStopped,
       timerStarted,
-    } = this.state;
+    } = state;
     const {
       selectedNumbers,
       skipVoting,
       gameState: { dayNumber },
-    } = this.props.game;
+    } = props.game;
 
     const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 
     if (endOfVoting || skipVoting)
       return (
         <EndOfVoting
-          resetFn={this.resetVoting}
+          resetFn={resetVoting}
           votingSkipped={
             (skipVoting && lastMinuteFor.length === 0) || (dayNumber === 1 && selectedNumbers.length === 1)
           }
@@ -224,19 +232,19 @@ class Voting extends Component {
     if (carCrash)
       return (
         <>
-          <ResetButton onClick={this.resetVoting} />
+          <ResetButton onClick={resetVoting} />
 
           <CarCrash
-            closeCarCrash={this.closeCarCrash}
+            closeCarCrash={closeCarCrash}
             secondTime={carCrashClosed}
-            votingFinishedClicked={this.votingFinishedClicked}
+            votingFinishedClicked={votingFinishedClicked}
           />
         </>
       );
 
     return (
       <>
-        <ResetButton onClick={this.resetVoting} />
+        <ResetButton onClick={resetVoting} />
 
         {carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 
@@ -246,15 +254,15 @@ class Voting extends Component {
           lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке
           votesLeft={avaliableVoters} // для disabled кнопки
           key={currentPlayer} // чтобы перерендеривался каждый раз
-          onNumberSelected={this.onNumberSelected} // callback
+          onNumberSelected={onNumberSelected} // callback
         />
 
         <BottomButtonGroup buttonOncePressed={timerStopped || timerStarted}>
-          <PopUpButton color='Voting' onClick={this.timerClicked}>
+          <PopUpButton color='Voting' onClick={timerClicked}>
             2 сек
           </PopUpButton>
 
-          <PopUpButton color='Voting' onClick={lastPlayer ? this.votingFinishedClicked : this.nextButtonClicked}>
+          <PopUpButton color='Voting' onClick={lastPlayer ? votingFinishedClicked : nextButtonClicked}>
             {lastPlayer ? 'Завершить' : 'Далее'}
           </PopUpButton>
         </BottomButtonGroup>
