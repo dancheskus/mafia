@@ -13,6 +13,7 @@ import CarCrash from './CarCrash';
 import ResetButton from './ResetButton';
 import { BottomButtonGroup } from './style';
 
+const stopVotingSound = new Howl({ src: `${secondsSoundFile}`, sprite: { oneSec: [0, 1020] } });
 class Voting extends Component {
   initialState = {
     votesPerPlayer: Array(this.props.game.selectedNumbers.length).fill(0), // Кол-во проголосовавших за каждого игрока
@@ -46,11 +47,6 @@ class Voting extends Component {
     if (dayNumber > 1 && selectedNumbers.length === 1 && !skipVoting) this.votingFinishedClicked();
 
     if ((dayNumber === 1 && selectedNumbers.length === 1) || skipVoting) this.setState({ endOfVoting: true });
-
-    this.stopVotingSound = new Howl({
-      src: `${secondsSoundFile}`,
-      sprite: { oneSec: [0, 1020] },
-    });
   };
 
   componentWillUnmount = () => {
@@ -174,7 +170,7 @@ class Voting extends Component {
     this.setState({ timerStarted: true });
 
     this.timer = setTimeout(() => {
-      this.stopVotingSound.play('oneSec');
+      stopVotingSound.play('oneSec');
       this.setState({ timerStopped: true, timerStarted: false });
     }, 2000);
   };

@@ -12,6 +12,9 @@ import { NextIcon } from 'icons/svgIcons';
 import SettingsItem from './SettingsItem';
 import { AppSettings, BottomButton, BackButton, BottomButtonsGroup } from './style';
 
+const secondsSound = new Howl({ src: `${secondsSoundFile}`, sprite: { oneSec: [0, 1020] } });
+const countdownEndSound = new Howl({ src: `${countdownEndFile}` });
+
 export default ({ hide, onClose }) => {
   const dispatch = useDispatch();
   const { tutorialEnabled } = useSelector(({ settings }) => settings);
@@ -23,9 +26,6 @@ export default ({ hide, onClose }) => {
       dispatch(enableTutorial());
     });
   };
-
-  const secondsSound = new Howl({ src: `${secondsSoundFile}`, sprite: { oneSec: [0, 1020] } });
-  const countdownEndSound = new Howl({ src: `${countdownEndFile}` });
 
   const enableSounds = () => {
     secondsSound.play('oneSec');
