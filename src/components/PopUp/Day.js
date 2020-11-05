@@ -1,5 +1,6 @@
 import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import useOnMount from 'helpers/useOnMount';
 
 import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
@@ -7,7 +8,6 @@ import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
 import Timer from 'components/Timer';
 import { useCustomRef } from 'helpers/useCustomRef';
-import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
@@ -27,7 +27,7 @@ export default () => {
     selectedNumbers[0] >= 0 ? selectedNumbers[0] : Number(localStorage.killedPlayer)
   );
 
-  useOnComponentMount(() => {
+  useOnMount(() => {
     dispatch(clearSelectedNumbers());
 
     popupOpened && localStorage.setItem('killedPlayer', killedPlayerRef);

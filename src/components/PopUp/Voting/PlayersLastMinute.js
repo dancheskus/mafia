@@ -4,12 +4,12 @@
 
 import React, { useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import useOnMount from 'helpers/useOnMount';
 
 import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
-import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import { PopUpCircle, PopUpButton } from '../styled-components';
 
@@ -20,7 +20,7 @@ export default ({ listOfPlayers, lastMinuteFor, goToNight }) => {
 
   const [currentPlayer, setCurrentPlayer] = useState(0);
 
-  useOnComponentMount(() => {
+  useOnMount(() => {
     if (checkForEnd(players, listOfPlayers).status) {
       batch(() => {
         listOfPlayers.map(plNum => dispatch(killPlayer(plNum)));

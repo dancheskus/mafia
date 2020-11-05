@@ -1,10 +1,10 @@
 import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import useOnMount from 'helpers/useOnMount';
 
 import checkForEnd from 'helpers/checkForEnd';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
-import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import { PopUpButton } from '../styled-components';
 import { GameResult, KilledPlayer } from './style';
@@ -20,7 +20,7 @@ export default () => {
     players,
   } = useSelector(store => store);
 
-  useOnComponentMount(() => {
+  useOnMount(() => {
     popupMinimized && dispatch(minimizeMaximaizePopup());
   });
 

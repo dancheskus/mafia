@@ -4,12 +4,12 @@ import { shuffle } from 'lodash';
 import { useSelector } from 'react-redux';
 import RingLoader from 'react-spinners/RingLoader';
 import useSound from 'use-sound';
+import useOnMount from 'helpers/useOnMount';
 
 import { PlayIcon, PauseIcon, NextIcon } from 'icons/svgIcons';
 import NavBarCircleButton from 'components/styled-components/NavBarCircleButton';
 import usePreviousState from 'helpers/usePreviousState';
 import { useCustomRef } from 'helpers/useCustomRef';
-import useOnComponentMount from 'helpers/useOnComponentMount';
 
 const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
 
@@ -35,7 +35,7 @@ export default () => {
   const { phase } = useSelector(({ game }) => game.gameState);
   const nextTrackNumber = trackNumber !== undefined && (trackNumber + 1) % trackList.length;
 
-  useOnComponentMount(() => {
+  useOnMount(() => {
     // fetching tracklist
     axios
       .get(musicUrl)

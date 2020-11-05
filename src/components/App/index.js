@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
+import useOnMount from 'helpers/useOnMount';
 
 import NavBar from 'components/NavBar';
 import NumbersPanel from 'components/NumbersPanel';
@@ -15,7 +16,6 @@ import Day from 'components/PopUp/Day';
 import EndOfGame from 'components/PopUp/EndOfGame';
 import GuideWrapper from 'components/UserGuide';
 import { GuideOverlay } from 'components/UserGuide/style';
-import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import { AppWrapper, MainApp, MainContentWrapper, UnsupportedRes } from './style';
 
@@ -40,7 +40,7 @@ export default () => {
     }, 200);
   };
 
-  useOnComponentMount(() => {
+  useOnMount(() => {
     window.addEventListener('load', updateHeight);
     window.addEventListener('resize', updateHeight);
   });

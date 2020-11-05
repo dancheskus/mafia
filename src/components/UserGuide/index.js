@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import useOnMount from 'helpers/useOnMount';
 
 import { disableTutorial } from 'redux/actions/settingsActions';
 import {
@@ -10,7 +11,6 @@ import {
 } from 'redux/actions/gameActions';
 import { resetPlayersReducer, addRole } from 'redux/actions/playersActions';
 import usePreviousState from 'helpers/usePreviousState';
-import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import {
   GuideWrapperStyle,
@@ -36,7 +36,7 @@ export default ({ children }) => {
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  useOnComponentMount(() => {
+  useOnMount(() => {
     if (!tutorialEnabled) return;
 
     batch(() => {
