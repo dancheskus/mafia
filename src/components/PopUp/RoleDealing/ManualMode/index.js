@@ -13,6 +13,7 @@ import colors from 'style/colors';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import { PopUpButton } from 'components/PopUp/styled-components';
 import usePreviousState from 'helpers/usePreviousState';
+import useOnMount from 'helpers/useOnMount';
 
 import { Notification, RoleCard, RoleSelection, RoleSelectionWrapper } from './style';
 
@@ -34,12 +35,12 @@ export default ({ resetMode }) => {
     prevSelectedNumbersLength > 0 && !selectedNumbers.length && resetMode();
   });
 
-  useEffect(() => {
+  useOnMount(() => {
     batch(() => {
       dispatch(addToSelectedNumbers(0));
       dispatch(numbersPanelClickable());
     });
-  }, [dispatch]);
+  });
 
   const [playerNumber] = selectedNumbers;
 

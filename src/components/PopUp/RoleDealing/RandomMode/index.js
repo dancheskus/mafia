@@ -15,6 +15,7 @@ import colors from 'style/colors';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import usePreviousState from 'helpers/usePreviousState';
 import { useCustomRef } from 'helpers/useCustomRef';
+import useOnMount from 'helpers/useOnMount';
 
 import { PressText, RoleName, ScaledPopUpButton, Card } from './style';
 
@@ -50,9 +51,9 @@ export default ({ resetMode }) => {
 
   const [allRolesRef] = useCustomRef(shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН')));
 
-  useEffect(() => {
+  useOnMount(() => {
     dispatch(replaceSelectedNumbersWith(0));
-  }, [dispatch]);
+  });
 
   const prevSelectedNumbersLength = usePreviousState(selectedNumbers.length);
 

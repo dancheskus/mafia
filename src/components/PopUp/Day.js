@@ -8,6 +8,7 @@ import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
 import Timer from 'components/Timer';
 import { useCustomRef } from 'helpers/useCustomRef';
+import useOnUnmount from 'helpers/useOnUnmount';
 
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
@@ -33,11 +34,11 @@ export default () => {
     popupOpened && localStorage.setItem('killedPlayer', killedPlayerRef);
 
     dayNumber === 1 && dispatch(closePopup());
+  });
 
-    return () => {
-      localStorage.removeItem('killedPlayer');
-      dispatch(openPopup());
-    };
+  useOnUnmount(() => {
+    localStorage.removeItem('killedPlayer');
+    dispatch(openPopup());
   });
 
   const goToDay = () => {

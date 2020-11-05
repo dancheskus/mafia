@@ -5,6 +5,7 @@ import useOnMount from 'helpers/useOnMount';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
 import { useCustomRef } from 'helpers/useCustomRef';
+import useOnUnmount from 'helpers/useOnUnmount';
 
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
@@ -43,10 +44,6 @@ export default () => {
     // При обновлении компонента, при необходимых условиях, завершаем игру
     checkForEnd(players).status && dispatch(changeGameState({ phase: 'EndOfGame' }));
   });
-
-  useEffect(() => {
-    return () => dispatch(clearSelectedNumbers()); // Это нужно, чтобы не показывать кого убили, если конец игры, т.к это голосование.
-  }, [dispatch]);
 
   const getNewVotingList = () => {
     const largestNumber = Math.max(...votesPerPlayer); // Вычисляем максимальное кол-во проголосовавших в одного игрока
@@ -100,14 +97,14 @@ export default () => {
     if ((dayNumber === 1 && selectedNumbers.length === 1) || skipVoting) setEndOfVoting(true);
   });
 
-  useEffect(() => {
-    return () => {
-      const numberOfVotedOutPlayersWithFourthFoul = lastMinuteFor.filter(plNum => !players[plNum].isAlive).length;
+  useOnUnmount(() => {
+    dispatch(clearSelectedNumbers()); // Это нужно, чтобы не показывать кого убили, если конец игры, т.к это голосование.
 
-      if (skipVoting && lastMinuteFor.length !== 0) {
-        for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) dispatch(skipVotingDec());
-      }
-    };
+    const numberOfVotedOutPlayersWithFourthFoul = lastMinuteFor.filter(plNum => !players[plNum].isAlive).length;
+
+    if (skipVoting && lastMinuteFor.length !== 0) {
+      for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) dispatch(skipVotingDec());
+    }
   });
 
   const resetVoting = () => {

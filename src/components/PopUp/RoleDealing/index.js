@@ -3,6 +3,7 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
 import { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable } from 'redux/actions/gameActions';
+import useOnMount from 'helpers/useOnMount';
 
 import { PopUpButton } from '../styled-components';
 import RandomMode from './RandomMode';
@@ -24,13 +25,13 @@ export default () => {
   const [randomModeSelected, setRandomModeSelected] = useState(true);
   const [modeApproved, setModeApproved] = useState(false);
 
-  useEffect(() => {
+  useOnMount(() => {
     batch(() => {
       dispatch(numbersPanelNotClickable());
       dispatch(lightModeOff());
       dispatch(clearSelectedNumbers());
     });
-  }, [dispatch]);
+  });
 
   useEffect(() => {
     if (tutorialEnabled && modeApproved === false) {

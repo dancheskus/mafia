@@ -4,6 +4,7 @@ import { useDispatch, useSelector, batch } from 'react-redux';
 import { useTimer } from 'use-timer';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
+import useOnMount from 'helpers/useOnMount';
 
 import { PopUpButton } from '../styled-components';
 import { BigCircle } from './style';
@@ -56,9 +57,9 @@ export default () => {
     setRandomNumber(null);
   };
 
-  useEffect(() => {
+  useOnMount(() => {
     dispatch(clearSelectedNumbers());
-  }, [dispatch]);
+  });
 
   useEffect(() => {
     // If "Start new game" was pressed before unmounting this component this should reset component state
