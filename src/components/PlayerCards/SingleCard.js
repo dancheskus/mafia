@@ -6,19 +6,19 @@ import { MinimizeIcon, MaximizeIcon, NextIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul, returnPlayerToGame } from 'redux/actions/playersActions';
 import { changeGameState, skipVotingInc, skipVotingDec } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
+import { gameSelector, playersSelector } from 'redux/selectors';
 
 import { FoulContainer, PlayerNumber, CardContainer, Card, RemoveFoul, AddFoul, FoulIcon, BackButton } from './style';
 
 export default ({ order, playerNumber }) => {
   const dispatch = useDispatch();
+
   const {
-    players,
-    game: {
-      activePlayer,
-      opensTable,
-      gameState: { phase },
-    },
-  } = useSelector(store => store);
+    activePlayer,
+    opensTable,
+    gameState: { phase },
+  } = useSelector(gameSelector);
+  const players = useSelector(playersSelector);
 
   const {
     isAlive,

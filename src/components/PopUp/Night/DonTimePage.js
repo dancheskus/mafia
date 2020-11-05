@@ -2,12 +2,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { SheriffStarIcon, NextIcon } from 'icons/svgIcons';
+import { playersSelector } from 'redux/selectors';
 
 import { PopUpLabel, PopUpButton } from '../styled-components';
 import { BackButton, Sheriff } from './style';
 
 export default ({ setDonTime, setPlayerToKill, setSheriffTime }) => {
-  const players = useSelector(({ players }) => players);
+  const players = useSelector(playersSelector);
 
   return (
     <>

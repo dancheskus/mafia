@@ -14,19 +14,16 @@ import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/sv
 import { PopUpButton } from 'components/PopUp/styled-components';
 import usePreviousState from 'helpers/usePreviousState';
 import useOnMount from 'helpers/useOnMount';
+import { gameSelector, playersSelector } from 'redux/selectors';
 
 import { Notification, RoleCard, RoleSelection, RoleSelectionWrapper } from './style';
 
-const {
-  RoleDealing: { popupIconLight, popupIcon },
-} = colors;
+const { popupIconLight, popupIcon } = colors.RoleDealing;
 
 export default ({ resetMode }) => {
   const dispatch = useDispatch();
-  const {
-    game: { selectedNumbers },
-    players,
-  } = useSelector(store => store);
+  const players = useSelector(playersSelector);
+  const { selectedNumbers } = useSelector(gameSelector);
 
   const prevSelectedNumbersLength = usePreviousState(selectedNumbers.length);
 

@@ -11,6 +11,7 @@ import {
 } from 'redux/actions/gameActions';
 import { resetPlayersReducer, addRole } from 'redux/actions/playersActions';
 import usePreviousState from 'helpers/usePreviousState';
+import { gameSelector, settingsSelector } from 'redux/selectors';
 
 import {
   GuideWrapperStyle,
@@ -25,14 +26,12 @@ const splitLines = text => text.split('\n').map(i => <p key={i}>{i}</p>);
 
 export default ({ children }) => {
   const dispatch = useDispatch();
+  const { tutorialEnabled, appMusic, seatAllocator } = useSelector(settingsSelector);
   const {
-    game: {
-      gameState: { phase },
-      popupMinimized,
-      activePlayer,
-    },
-    settings: { tutorialEnabled, appMusic, seatAllocator },
-  } = useSelector(store => store);
+    gameState: { phase },
+    popupMinimized,
+    activePlayer,
+  } = useSelector(gameSelector);
 
   const [currentStep, setCurrentStep] = useState(0);
 

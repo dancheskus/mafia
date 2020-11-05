@@ -4,16 +4,15 @@ import { useSelector, useDispatch } from 'react-redux';
 import { changeGameState } from 'redux/actions/gameActions';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
 import Timer from 'components/Timer';
+import { playersSelector, settingsSelector } from 'redux/selectors';
 
 import { PopUpButton, PopUpLabel } from '../styled-components';
 import { Icon, TwoIcons } from './style';
 
 export default () => {
   const dispatch = useDispatch();
-  const {
-    players,
-    settings: { mafiaTimer, tutorialEnabled },
-  } = useSelector(store => store);
+  const { mafiaTimer, tutorialEnabled } = useSelector(settingsSelector);
+  const players = useSelector(playersSelector);
 
   const [dogovorka, setDogovorka] = useState(true);
 

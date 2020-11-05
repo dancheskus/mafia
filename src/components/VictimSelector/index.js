@@ -11,11 +11,13 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { range } from 'lodash';
 
+import { playersSelector } from 'redux/selectors';
+
 import { VotingSingleElement, VotingBlock } from './style';
 
 export default ({ lastPlayer, votesLeft, shooting, onNumberSelected }) => {
   const [selectedNumber, setSelectedNumber] = useState(null);
-  const players = useSelector(({ players }) => players);
+  const players = useSelector(playersSelector);
 
   const selectNumber = num => {
     if (lastPlayer) return; // Отключает возможность снять голос с последнего игрока

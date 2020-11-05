@@ -5,18 +5,15 @@ import { useSelector, useDispatch, batch } from 'react-redux';
 
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
+import { gameSelector, settingsSelector } from 'redux/selectors';
 
 import { StyledNavMenu, MenuItems } from './style';
 import Settings from './Settings';
 
 export default () => {
   const dispatch = useDispatch();
-  const {
-    game: {
-      gameState: { phase },
-    },
-    settings: { tutorialEnabled },
-  } = useSelector(store => store);
+  const { phase } = useSelector(gameSelector).gameState;
+  const { tutorialEnabled } = useSelector(settingsSelector);
 
   const [isChecked, setIsChecked] = useState(false);
   const [isSettingsPage, setIsSettingsPage] = useState(false);

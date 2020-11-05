@@ -5,20 +5,19 @@ import useOnMount from 'helpers/useOnMount';
 import checkForEnd from 'helpers/checkForEnd';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
+import { gameSelector, playersSelector } from 'redux/selectors';
 
 import { PopUpButton } from '../styled-components';
 import { GameResult, KilledPlayer } from './style';
 
 export default () => {
   const dispatch = useDispatch();
+  const players = useSelector(playersSelector);
   const {
-    game: {
-      popupMinimized,
-      selectedNumbers,
-      gameState: { phase },
-    },
-    players,
-  } = useSelector(store => store);
+    popupMinimized,
+    selectedNumbers,
+    gameState: { phase },
+  } = useSelector(gameSelector);
 
   useOnMount(() => {
     popupMinimized && dispatch(minimizeMaximaizePopup());

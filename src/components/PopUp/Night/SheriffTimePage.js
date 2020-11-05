@@ -5,18 +5,15 @@ import { TargetIcon, NextIcon } from 'icons/svgIcons';
 import { killPlayer } from 'redux/actions/playersActions';
 import { changeGameState, addToSelectedNumbers } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
+import { gameSelector, playersSelector } from 'redux/selectors';
 
 import { BackButton, BlackTeamPlayers, Target } from './style';
 import { PopUpButton, PopUpLabel } from '../styled-components';
 
 export default ({ setSheriffTime, playerToKill }) => {
   const dispatch = useDispatch();
-  const {
-    players,
-    game: {
-      gameState: { dayNumber },
-    },
-  } = useSelector(store => store);
+  const { dayNumber } = useSelector(gameSelector).gameState;
+  const players = useSelector(playersSelector);
 
   const goToDayPressed = () => {
     const gameEnded = checkForEnd(players, [playerToKill]).status;

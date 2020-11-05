@@ -1,11 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { playersSelector } from 'redux/selectors';
+
 import { CardsWrapper } from './style';
 import SingleCard from './SingleCard';
 
 export default () => {
-  const players = useSelector(({ players }) => players);
+  const players = useSelector(playersSelector);
 
   return (
     <CardsWrapper>

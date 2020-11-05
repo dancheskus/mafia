@@ -5,6 +5,7 @@ import { Howl } from 'howler';
 
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import VictimSelector from 'components/VictimSelector';
+import { gameSelector, playersSelector } from 'redux/selectors';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import { BottomButtonGroup } from './style';
@@ -13,10 +14,8 @@ import ResetButton from './ResetButton';
 const stopVotingSound = new Howl({ src: `${secondsSoundFile}`, sprite: { oneSec: [0, 1020] } });
 
 export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinishedClicked, carCrashClosed }) => {
-  const {
-    players,
-    game: { selectedNumbers },
-  } = useSelector(store => store);
+  const players = useSelector(playersSelector);
+  const { selectedNumbers } = useSelector(gameSelector);
 
   const deadPleayersAmount = players.filter(({ isAlive }) => !isAlive).length;
 

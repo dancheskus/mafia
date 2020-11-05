@@ -6,6 +6,7 @@ import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVoting
 import checkForEnd from 'helpers/checkForEnd';
 import { useCustomRef } from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
+import { gameSelector, playersSelector } from 'redux/selectors';
 
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
@@ -14,14 +15,12 @@ import StandartVoting from './StandartVoting';
 
 export default () => {
   const dispatch = useDispatch();
+  const players = useSelector(playersSelector);
   const {
-    players,
-    game: {
-      selectedNumbers,
-      skipVoting,
-      gameState: { dayNumber },
-    },
-  } = useSelector(store => store);
+    selectedNumbers,
+    skipVoting,
+    gameState: { dayNumber },
+  } = useSelector(gameSelector);
 
   const [initialSelectedNumbers] = useCustomRef(selectedNumbers);
   const initialVotesPerPlayer = Array(selectedNumbers.length).fill(0);

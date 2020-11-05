@@ -16,18 +16,17 @@ import Day from 'components/PopUp/Day';
 import EndOfGame from 'components/PopUp/EndOfGame';
 import GuideWrapper from 'components/UserGuide';
 import { GuideOverlay } from 'components/UserGuide/style';
+import { gameSelector, settingsSelector } from 'redux/selectors';
 
 import { AppWrapper, MainApp, MainContentWrapper, UnsupportedRes } from './style';
 
 export default () => {
   const {
-    settings: { tutorialEnabled },
-    game: {
-      gameState: { phase },
-      activePlayer,
-      popupOpened,
-    },
-  } = useSelector(store => store);
+    gameState: { phase },
+    activePlayer,
+    popupOpened,
+  } = useSelector(gameSelector);
+  const { tutorialEnabled } = useSelector(settingsSelector);
 
   const [appHeight, setAppHeight] = useState(document.documentElement.clientHeight);
 

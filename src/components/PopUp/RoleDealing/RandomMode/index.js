@@ -16,6 +16,7 @@ import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 
 import usePreviousState from 'helpers/usePreviousState';
 import { useCustomRef } from 'helpers/useCustomRef';
 import useOnMount from 'helpers/useOnMount';
+import { gameSelector } from 'redux/selectors';
 
 import { PressText, RoleName, ScaledPopUpButton, Card } from './style';
 
@@ -30,7 +31,7 @@ const roleIcons = {
 
 export default ({ resetMode }) => {
   const dispatch = useDispatch();
-  const { selectedNumbers, lightMode } = useSelector(({ game }) => game);
+  const { selectedNumbers, lightMode } = useSelector(gameSelector);
   const [role, setRole] = useState(null);
 
   const [playerNumber] = selectedNumbers;

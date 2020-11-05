@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { killPlayer } from 'redux/actions/playersActions';
+import { gameSelector, playersSelector } from 'redux/selectors';
+import { changeGameState, clearSelectedNumbers, skipVotingDec } from 'redux/actions/gameActions';
 
-import { clearSelectedNumbers, changeGameState, skipVotingDec } from '../../../redux/actions/gameActions';
 import { ResultsNumbers } from './style';
 import { PopUpLabel, PopUpButton } from '../styled-components';
 import PlayersLastMinute from './PlayersLastMinute';
@@ -11,14 +12,12 @@ import ResetButton from './ResetButton';
 
 export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
   const dispatch = useDispatch();
+  const players = useSelector(playersSelector);
   const {
-    game: {
-      skipVoting,
-      selectedNumbers,
-      gameState: { dayNumber },
-    },
-    players,
-  } = useSelector(store => store);
+    skipVoting,
+    selectedNumbers,
+    gameState: { dayNumber },
+  } = useSelector(gameSelector);
 
   const [notification, setNotification] = useState(true);
 

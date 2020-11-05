@@ -5,6 +5,7 @@ import { useTimer } from 'use-timer';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
 import useOnMount from 'helpers/useOnMount';
+import { gameSelector } from 'redux/selectors';
 
 import { PopUpButton } from '../styled-components';
 import { BigCircle } from './style';
@@ -16,7 +17,7 @@ export default () => {
   const {
     selectedNumbers,
     gameState: { phase },
-  } = useSelector(({ game }) => game);
+  } = useSelector(gameSelector);
 
   const [randomNumber, setRandomNumber] = useState(null);
   const [seats, setSeats] = useState(shuffleNumbers());

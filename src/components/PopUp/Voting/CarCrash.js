@@ -3,16 +3,15 @@ import { useSelector } from 'react-redux';
 
 import Timer from 'components/Timer';
 import VictimSelector from 'components/VictimSelector';
+import { gameSelector, playersSelector, settingsSelector } from 'redux/selectors';
 
 import CarCrashNotification from './CarCrashNotification';
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 
 export default ({ secondTime, closeCarCrash, votingFinishedClicked }) => {
-  const {
-    players,
-    game: { selectedNumbers },
-    settings: { multiplePlayerRemove },
-  } = useSelector(store => store);
+  const { multiplePlayerRemove } = useSelector(settingsSelector);
+  const { selectedNumbers } = useSelector(gameSelector);
+  const players = useSelector(playersSelector);
 
   const [selectedNumber, setSelectedNumber] = useState(null);
   const [notification, setNotification] = useState(true);

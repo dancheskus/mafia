@@ -11,6 +11,7 @@ import { disableTutorial } from 'redux/actions/settingsActions';
 import NavBarCircleButton from 'components/styled-components/NavBarCircleButton';
 import usePreviousState from 'helpers/usePreviousState';
 import Timer from 'components/Timer';
+import { gameSelector, playersSelector, settingsSelector } from 'redux/selectors';
 
 import AudioPlayer from './AudioPlayer';
 import { BackIcon, ButtonsWrapper, NavStateName, StyledNavigation } from './style';
@@ -19,16 +20,14 @@ const mod = (n, m) => ((n % m) + m) % m;
 
 export default () => {
   const dispatch = useDispatch();
+  const players = useSelector(playersSelector);
+  const { tutorialEnabled, appMusic } = useSelector(settingsSelector);
   const {
-    players,
-    game: {
-      gameState: { phase, dayNumber },
-      activePlayer,
-      opensTable,
-      selectedNumbers,
-    },
-    settings: { tutorialEnabled, appMusic },
-  } = useSelector(store => store);
+    gameState: { phase, dayNumber },
+    activePlayer,
+    opensTable,
+    selectedNumbers,
+  } = useSelector(gameSelector);
 
   const [stepBackAvaliable, setStepBackAvaliable] = useState(false);
 

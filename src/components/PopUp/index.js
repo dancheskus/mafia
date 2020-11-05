@@ -3,19 +3,18 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { MaximizeIcon, MinimizeIcon } from 'icons/svgIcons';
 import { minimizeMaximaizePopup } from 'redux/actions/gameActions';
+import { gameSelector, settingsSelector } from 'redux/selectors';
 
 import { StyledPopUp, MinimizeButton } from './style';
 
 export default ({ opened, PopupChild }) => {
   const dispatch = useDispatch();
+  const { tutorialEnabled } = useSelector(settingsSelector);
   const {
-    game: {
-      popupMinimized,
-      lightMode,
-      gameState: { phase },
-    },
-    settings: { tutorialEnabled },
-  } = useSelector(store => store);
+    popupMinimized,
+    lightMode,
+    gameState: { phase },
+  } = useSelector(gameSelector);
 
   return (
     <StyledPopUp

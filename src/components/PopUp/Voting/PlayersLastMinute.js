@@ -10,12 +10,13 @@ import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
+import { playersSelector } from 'redux/selectors';
 
 import { PopUpCircle, PopUpButton } from '../styled-components';
 
 export default ({ listOfPlayers, lastMinuteFor, goToNight }) => {
   const dispatch = useDispatch();
-  const players = useSelector(({ players }) => players);
+  const players = useSelector(playersSelector);
   const killedOnLastMinute = lastMinuteFor.map(plNum => !players[plNum].isAlive);
 
   const [currentPlayer, setCurrentPlayer] = useState(0);

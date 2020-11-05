@@ -8,6 +8,7 @@ import { resetPlayersReducer } from 'redux/actions/playersActions';
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import countdownEndFile from 'audio/Countdown_end.mp3';
 import { NextIcon } from 'icons/svgIcons';
+import { settingsSelector } from 'redux/selectors';
 
 import SettingsItem from './SettingsItem';
 import { AppSettings, BottomButton, BackButton, BottomButtonsGroup } from './style';
@@ -17,7 +18,7 @@ const countdownEndSound = new Howl({ src: `${countdownEndFile}` });
 
 export default ({ hide, onClose }) => {
   const dispatch = useDispatch();
-  const { tutorialEnabled } = useSelector(({ settings }) => settings);
+  const { tutorialEnabled } = useSelector(settingsSelector);
 
   const startTutorial = () => {
     batch(() => {

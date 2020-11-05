@@ -10,6 +10,7 @@ import { PlayIcon, PauseIcon, NextIcon } from 'icons/svgIcons';
 import NavBarCircleButton from 'components/styled-components/NavBarCircleButton';
 import usePreviousState from 'helpers/usePreviousState';
 import { useCustomRef } from 'helpers/useCustomRef';
+import { gameSelector } from 'redux/selectors';
 
 const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
 
@@ -32,7 +33,8 @@ export default () => {
   const soundUrl = trackList?.[trackNumber];
   const [nextSoundLoadedRef, setNextSoundLoadedRef] = useCustomRef();
 
-  const { phase } = useSelector(({ game }) => game.gameState);
+  const { phase } = useSelector(gameSelector).gameState;
+
   const nextTrackNumber = trackNumber !== undefined && (trackNumber + 1) % trackList.length;
 
   useOnMount(() => {
