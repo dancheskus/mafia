@@ -4,8 +4,8 @@ import { shuffle } from 'lodash';
 import { useSelector } from 'react-redux';
 import RingLoader from 'react-spinners/RingLoader';
 import useSound from 'use-sound';
-import useOnMount from 'helpers/useOnMount';
 
+import useOnMount from 'helpers/useOnMount';
 import { PlayIcon, PauseIcon, NextIcon } from 'icons/svgIcons';
 import NavBarCircleButton from 'components/styled-components/NavBarCircleButton';
 import usePreviousState from 'helpers/usePreviousState';

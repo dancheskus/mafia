@@ -4,8 +4,8 @@
 
 import React, { useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
-import useOnMount from 'helpers/useOnMount';
 
+import useOnMount from 'helpers/useOnMount';
 import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';

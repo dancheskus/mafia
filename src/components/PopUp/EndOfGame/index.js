@@ -1,7 +1,7 @@
 import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
-import useOnMount from 'helpers/useOnMount';
 
+import useOnMount from 'helpers/useOnMount';
 import checkForEnd from 'helpers/checkForEnd';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';

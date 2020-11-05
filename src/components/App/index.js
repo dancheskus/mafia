@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
-import useOnMount from 'helpers/useOnMount';
 
+import useOnMount from 'helpers/useOnMount';
 import NavBar from 'components/NavBar';
 import NumbersPanel from 'components/NumbersPanel';
 import PopUp from 'components/PopUp';

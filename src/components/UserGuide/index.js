@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
-import useOnMount from 'helpers/useOnMount';
 
+import useOnMount from 'helpers/useOnMount';
 import { disableTutorial } from 'redux/actions/settingsActions';
 import {
   resetGameReducer,
