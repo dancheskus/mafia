@@ -10,6 +10,7 @@ import {
 } from 'redux/actions/gameActions';
 import { resetPlayersReducer, addRole } from 'redux/actions/playersActions';
 import usePreviousState from 'helpers/usePreviousState';
+import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import {
   GuideWrapperStyle,
@@ -35,7 +36,7 @@ export default ({ children }) => {
 
   const [currentStep, setCurrentStep] = useState(0);
 
-  useEffect(() => {
+  useOnComponentMount(() => {
     if (!tutorialEnabled) return;
 
     batch(() => {
@@ -46,7 +47,7 @@ export default ({ children }) => {
     if (phase === 'RoleDealing' || !seatAllocator) setCurrentStep(3);
     if (phase === 'ZeroNight') setCurrentStep(5);
     if (phase === 'Day') setCurrentStep(7);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const prevCurrentStep = usePreviousState(currentStep);
 

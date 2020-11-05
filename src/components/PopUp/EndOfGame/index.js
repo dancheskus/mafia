@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import checkForEnd from 'helpers/checkForEnd';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
+import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import { PopUpButton } from '../styled-components';
 import { GameResult, KilledPlayer } from './style';
@@ -19,9 +20,9 @@ export default () => {
     players,
   } = useSelector(store => store);
 
-  useEffect(() => {
+  useOnComponentMount(() => {
     popupMinimized && dispatch(minimizeMaximaizePopup());
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const startNewGame = () => {
     batch(() => {

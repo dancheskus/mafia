@@ -4,9 +4,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './style/index.scss';
 import { Provider } from 'react-redux';
 import throttle from 'lodash/throttle';
-import { saveState } from 'redux/localStorage';
-import App from './components/App';
 
+import { saveState } from 'redux/localStorage';
+
+import App from './components/App';
 import configureStore from './redux/configureStore';
 
 // ----------- Отключение pullToRefresh и scroll в моб. браузерах --------------------

@@ -2,13 +2,14 @@
 // 1. список уходящих игроков
 // 2. коллбэк уводящий в ночь
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
+import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import { PopUpCircle, PopUpButton } from '../styled-components';
 
@@ -19,14 +20,14 @@ export default ({ listOfPlayers, lastMinuteFor, goToNight }) => {
 
   const [currentPlayer, setCurrentPlayer] = useState(0);
 
-  useEffect(() => {
+  useOnComponentMount(() => {
     if (checkForEnd(players, listOfPlayers).status) {
       batch(() => {
         listOfPlayers.map(plNum => dispatch(killPlayer(plNum)));
         dispatch(changeGameState({ phase: 'EndOfGame' }));
       });
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const nextPlayer = () => setCurrentPlayer(currentPlayer + 1);
 

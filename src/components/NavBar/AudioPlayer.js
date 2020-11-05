@@ -9,6 +9,7 @@ import { PlayIcon, PauseIcon, NextIcon } from 'icons/svgIcons';
 import NavBarCircleButton from 'components/styled-components/NavBarCircleButton';
 import usePreviousState from 'helpers/usePreviousState';
 import { useCustomRef } from 'helpers/useCustomRef';
+import useOnComponentMount from 'helpers/useOnComponentMount';
 
 const musicUrl = `https://${process.env.REACT_APP_DOMAIN}/music/`;
 
@@ -34,7 +35,7 @@ export default () => {
   const { phase } = useSelector(({ game }) => game.gameState);
   const nextTrackNumber = trackNumber !== undefined && (trackNumber + 1) % trackList.length;
 
-  useEffect(() => {
+  useOnComponentMount(() => {
     // fetching tracklist
     axios
       .get(musicUrl)
@@ -43,7 +44,7 @@ export default () => {
         setTrackNumber(0);
       })
       .catch(() => setTrackListLoadError(true));
-  }, []);
+  });
 
   const prevPhaseState = usePreviousState(phase);
   const musicAllowed = checkMusicAllowedByPhase(phase);

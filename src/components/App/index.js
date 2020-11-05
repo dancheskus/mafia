@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
 
@@ -15,6 +15,7 @@ import Day from 'components/PopUp/Day';
 import EndOfGame from 'components/PopUp/EndOfGame';
 import GuideWrapper from 'components/UserGuide';
 import { GuideOverlay } from 'components/UserGuide/style';
+import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import { AppWrapper, MainApp, MainContentWrapper, UnsupportedRes } from './style';
 
@@ -39,10 +40,10 @@ export default () => {
     }, 200);
   };
 
-  useEffect(() => {
+  useOnComponentMount(() => {
     window.addEventListener('load', updateHeight);
     window.addEventListener('resize', updateHeight);
-  }, []);
+  });
 
   const PopUpChildComponent = { SeatAllocator, RoleDealing, ZeroNight, Voting, Night, Day, EndOfGame }[phase];
 

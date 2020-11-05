@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 'redux/actions/gameActions';
@@ -7,6 +7,7 @@ import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
 import Timer from 'components/Timer';
 import { useCustomRef } from 'helpers/useCustomRef';
+import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
@@ -26,7 +27,7 @@ export default () => {
     selectedNumbers[0] >= 0 ? selectedNumbers[0] : Number(localStorage.killedPlayer)
   );
 
-  useEffect(() => {
+  useOnComponentMount(() => {
     dispatch(clearSelectedNumbers());
 
     popupOpened && localStorage.setItem('killedPlayer', killedPlayerRef);
@@ -37,7 +38,7 @@ export default () => {
       localStorage.removeItem('killedPlayer');
       dispatch(openPopup());
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const goToDay = () => {
     batch(() => {

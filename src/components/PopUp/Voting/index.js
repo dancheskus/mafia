@@ -4,6 +4,7 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
 import { useCustomRef } from 'helpers/useCustomRef';
+import useOnComponentMount from 'helpers/useOnComponentMount';
 
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
@@ -92,12 +93,12 @@ export default () => {
     }
   };
 
-  useEffect(() => {
+  useOnComponentMount(() => {
     // Если не 1-ый день и выставлен только 1 игрок и не пропускается голосование, заканчиваем голосование убивая единственного выставленного игрока
     if (dayNumber > 1 && selectedNumbers.length === 1 && !skipVoting) votingFinishedClicked();
 
     if ((dayNumber === 1 && selectedNumbers.length === 1) || skipVoting) setEndOfVoting(true);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   useEffect(() => {
     return () => {
