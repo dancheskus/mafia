@@ -10,13 +10,15 @@ import Timer from 'components/Timer';
 import checkForEnd from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
-import { playersSelector } from 'redux/selectors';
+import { gameSelector, playersSelector } from 'redux/selectors';
+import { PopUpButton, PopUpCircle } from 'components/PopUp/styled-components';
 
-import { PopUpCircle, PopUpButton } from '../styled-components';
+import ResetButton from '../ResetButton';
 
-export default ({ listOfPlayers, lastMinuteFor, goToNight }) => {
+export default ({ listOfPlayers, lastMinuteFor, goToNight, resetFn }) => {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
+  const { selectedNumbers } = useSelector(gameSelector);
   const killedOnLastMinute = lastMinuteFor.map(plNum => !players[plNum].isAlive);
 
   const [currentPlayer, setCurrentPlayer] = useState(0);
@@ -36,6 +38,8 @@ export default ({ listOfPlayers, lastMinuteFor, goToNight }) => {
 
   return (
     <>
+      {selectedNumbers.length > 1 && <ResetButton onClick={resetFn} />}
+
       <PopUpCircle>{listOfPlayers[currentPlayer] + 1}</PopUpCircle>
 
       <Timer
