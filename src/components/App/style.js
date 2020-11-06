@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const AppWrapper = styled.div`
   height: 100vh;
-  height: ${props => props.appHeight}px;
+  height: ${({ appHeight }) => appHeight}px;
   overflow: hidden;
 `;
 

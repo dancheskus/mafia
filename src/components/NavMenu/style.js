@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const menuColors = {
   primary: '#759EFF',
@@ -178,16 +178,16 @@ export const StyledNavMenu = styled.div`
 export const AppSettings = styled.div`
   ${({ hide, tutorialEnabled }) =>
     hide
-      ? `
-      left: -3000px;
-      opacity: 0;
-      z-index: 180;
-    `
-      : `
-      left: 50%;
-      opacity: 1;
-      z-index: ${tutorialEnabled ? 3700 : 400};
-    `}
+      ? css`
+          left: -3000px;
+          opacity: 0;
+          z-index: 180;
+        `
+      : css`
+          left: 50%;
+          opacity: 1;
+          z-index: ${tutorialEnabled ? 3700 : 400};
+        `}
 
   transition: opacity 0.5s;
   position: fixed;
@@ -258,7 +258,7 @@ export const BackButton = styled.div`
 `;
 
 export const MenuItems = styled.div`
-  opacity: ${props => (props.hide ? 0 : 1)};
+  opacity: ${({ hide }) => (hide ? 0 : 1)};
 `;
 
 export const BottomButtonsGroup = styled.div`

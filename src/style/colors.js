@@ -82,6 +82,7 @@ const colors = {
     addThirdFoulBackground: '#FB6F6F',
     popupBackground: '#6D80AB',
     popupButton: '#889DCE',
+    popupButtonLight: '#F28E0C',
     popupText: '#6D80AB',
     handsAmountBackground: '#fff',
     popupTextInverse: '#fff',

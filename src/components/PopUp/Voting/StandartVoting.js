@@ -35,7 +35,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
     initialTime: 1,
     endTime: 0,
     timerType: 'DECREMENTAL',
-    interval: 2000,
+    interval: 1400,
     onTimeOver: () => stopVotingSound.play('oneSec'),
   });
 
@@ -99,8 +99,8 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
       />
 
       <BottomButtonGroup buttonOncePressed={buttonOncePressed}>
-        <PopUpButton color='Voting' onClick={timerClicked}>
-          2 сек
+        <PopUpButton light color='Voting' onClick={timerClicked}>
+          таймер
         </PopUpButton>
 
         <PopUpButton color='Voting' onClick={lastPlayer ? votingFinishedClicked : nextButtonClicked}>

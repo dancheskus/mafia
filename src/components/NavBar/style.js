@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import colors from 'style/colors';
 import { NextIcon } from 'icons/svgIcons';
@@ -8,22 +8,24 @@ export const BackIcon = styled(NextIcon)`
 `;
 
 export const StyledNavigation = styled.div`
-  background: #46494e;
-  ${({ tutorialEnabled }) => !tutorialEnabled && 'z-index: 300'}
+  ${({ tutorialEnabled, color }) => css`
+    background: #46494e;
+    ${!tutorialEnabled && 'z-index: 300'}
 
-  .container > * {
-    padding: 10px;
-    color: ${props => colors[props.color].navBarText};
-    display: flex;
-    justify-content: center;
-    text-align: center;
-    align-items: center;
+    .container > * {
+      padding: 10px;
+      color: ${colors[color].navBarText};
+      display: flex;
+      justify-content: center;
+      text-align: center;
+      align-items: center;
 
-    &:not(:last-child) {
-      border-right: 2px solid #8f8f8f;
-      flex-grow: 1;
+      &:not(:last-child) {
+        border-right: 2px solid #8f8f8f;
+        flex-grow: 1;
+      }
     }
-  }
+  `}
 `;
 
 export const NavStateName = styled.h2`
