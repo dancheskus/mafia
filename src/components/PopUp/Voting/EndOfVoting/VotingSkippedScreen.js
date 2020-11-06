@@ -20,7 +20,7 @@ export default ({ goToNight }) => {
           Один игрок в первый день не голосуется
         </PopUpLabel>
       ) : (
-        skipVoting > 0 && (
+        skipVoting && (
           <PopUpLabel light className='h3'>
             Игрок получил 4-й фол
           </PopUpLabel>

@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import useOnMount from 'helpers/useOnMount';
-import { clearSelectedNumbers, addToSelectedNumbers, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
+import {
+  clearSelectedNumbers,
+  addToSelectedNumbers,
+  changeGameState,
+  skipVotingDisable,
+} from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
 import { useCustomRef } from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
@@ -102,7 +107,7 @@ export default () => {
     const numberOfVotedOutPlayersWithFourthFoul = lastMinuteFor.filter(plNum => !players[plNum].isAlive).length;
 
     if (skipVoting && lastMinuteFor.length !== 0) {
-      for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) dispatch(skipVotingDec());
+      for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) dispatch(skipVotingDisable());
     }
   });
 

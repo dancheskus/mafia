@@ -3,7 +3,7 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { killPlayer } from 'redux/actions/playersActions';
 import { playersSelector } from 'redux/selectors';
-import { changeGameState, clearSelectedNumbers, skipVotingDec } from 'redux/actions/gameActions';
+import { changeGameState, clearSelectedNumbers, skipVotingDisable } from 'redux/actions/gameActions';
 
 import PlayersLastMinute from './PlayersLastMinute';
 import VotingSkippedScreen from './VotingSkippedScreen';
@@ -18,11 +18,11 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }) => {
   const goToNight = () => {
     batch(() => {
       dispatch(clearSelectedNumbers());
-      votingSkipped && dispatch(skipVotingDec());
+      votingSkipped && dispatch(skipVotingDisable());
       dispatch(changeGameState({ phase: 'Night' }));
 
       lastMinuteFor.forEach(plNum => {
-        if (!players[plNum].isAlive) dispatch(skipVotingDec());
+        if (!players[plNum].isAlive) dispatch(skipVotingDisable());
         dispatch(killPlayer(plNum));
       });
     });

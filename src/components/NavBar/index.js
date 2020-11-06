@@ -4,7 +4,7 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import { countBy } from 'lodash';
 
 import NavMenu from 'components/NavMenu';
-import { changeActivePlayer, changeGameState, skipVotingDec } from 'redux/actions/gameActions';
+import { changeActivePlayer, changeGameState, skipVotingDisable } from 'redux/actions/gameActions';
 import { unmutePlayer } from 'redux/actions/playersActions';
 import { NextIcon, ThumbUpIcon, EyeIcon } from 'icons/svgIcons';
 import { disableTutorial } from 'redux/actions/settingsActions';
@@ -65,7 +65,7 @@ export default () => {
 
       if (selectedNumbers.length) return dispatch(changeGameState({ phase: 'Voting' }));
 
-      dispatch(skipVotingDec());
+      dispatch(skipVotingDisable());
       dispatch(changeGameState({ phase: 'Night' }));
     });
   };

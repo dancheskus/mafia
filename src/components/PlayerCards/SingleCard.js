@@ -4,7 +4,7 @@ import { useTimer } from 'use-timer';
 
 import { MinimizeIcon, MaximizeIcon, NextIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul, returnPlayerToGame } from 'redux/actions/playersActions';
-import { changeGameState, skipVotingInc, skipVotingDec } from 'redux/actions/gameActions';
+import { changeGameState, skipVotingEnable, skipVotingDisable } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
 import { gameSelector, playersSelector } from 'redux/selectors';
 
@@ -48,7 +48,7 @@ export default ({ order, playerNumber }) => {
 
         if (checkForEnd(players).status) return dispatch(changeGameState({ phase: 'EndOfGame' }));
 
-        dispatch(skipVotingInc());
+        dispatch(skipVotingEnable());
       });
 
       if (phase === 'Day') {
@@ -82,7 +82,7 @@ export default ({ order, playerNumber }) => {
     returnToLifeTimer.reset();
     batch(() => {
       dispatch(returnPlayerToGame(playerNumber));
-      dispatch(skipVotingDec());
+      dispatch(skipVotingDisable());
     });
     setFoulsAmount(3);
     setLastFoulDeath(false);

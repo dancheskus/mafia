@@ -88,12 +88,12 @@ export default (state = initialState, action, root) =>
         draft.popupMinimized = !draft.popupMinimized;
         return;
 
-      case 'SKIP_VOTING_INC':
-        draft.skipVoting++;
+      case 'SKIP_VOTING_ENABLE':
+        draft.skipVoting = true;
         return;
 
-      case 'SKIP_VOTING_DEC':
-        draft.skipVoting > 0 && draft.skipVoting--;
+      case 'SKIP_VOTING_DISABLE':
+        draft.skipVoting = false;
         return;
 
       case 'RESET_GAME_REDUCER':

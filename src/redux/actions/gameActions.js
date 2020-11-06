@@ -11,6 +11,6 @@ export const numbersPanelClickable = () => ({ type: 'NUMBERS_PANEL_CLICKABLE' })
 export const closePopup = () => ({ type: 'CLOSE_POPUP' });
 export const openPopup = () => ({ type: 'OPEN_POPUP' });
 export const minimizeMaximaizePopup = () => ({ type: 'MINIMIZE_MAXIMAIZE_POPUP' });
-export const skipVotingInc = () => ({ type: 'SKIP_VOTING_INC' });
-export const skipVotingDec = () => ({ type: 'SKIP_VOTING_DEC' });
+export const skipVotingEnable = () => ({ type: 'SKIP_VOTING_ENABLE' });
+export const skipVotingDisable = () => ({ type: 'SKIP_VOTING_DISABLE' });
 export const resetGameReducer = () => ({ type: 'RESET_GAME_REDUCER' });
