@@ -12,17 +12,12 @@ import checkForEnd from 'helpers/checkForEnd';
 import { useCustomRef } from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
 import { gameSelector, playersSelector } from 'redux/selectors';
+import getFromLocalStorage from 'helpers/getFromLocalStorage';
 
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
 import ResetButton from './ResetButton';
 import StandartVoting from './StandartVoting';
-
-const getFromLocalStorage = item => {
-  try {
-    return JSON.parse(localStorage[item]);
-  } catch (e) {} // eslint-disable-line no-empty
-};
 
 const getNewVotesArray = selectedNumbers => Array(selectedNumbers.length).fill(null);
 
@@ -38,7 +33,9 @@ export default () => {
   const [initialSelectedNumbers] = useCustomRef(getFromLocalStorage('initialSelectedNumbers') ?? selectedNumbers);
   const initialVotesPerPlayer = getNewVotesArray(initialSelectedNumbers);
 
-  const [votesPerPlayer, setVotesPerPlayer] = useState(getNewVotesArray(selectedNumbers)); // Кол-во проголосовавших за каждого игрока
+  const [votesPerPlayer, setVotesPerPlayer] = useState(
+    getFromLocalStorage('votesPerPlayer') ?? getNewVotesArray(selectedNumbers)
+  ); // Кол-во проголосовавших за каждого игрока
   const [carCrash, setCarCrash] = useState(getFromLocalStorage('carCrash') ?? false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
   const [carCrashClosed, setCarCrashClosed] = useState(getFromLocalStorage('carCrashClosed') ?? false); // true, после первой автокатастрофы
   const [endOfVoting, setEndOfVoting] = useState(false);
@@ -55,7 +52,8 @@ export default () => {
   useEffect(() => {
     localStorage.setItem('carCrashClosed', carCrashClosed);
     localStorage.setItem('carCrash', carCrash);
-  }, [carCrashClosed, carCrash]);
+    localStorage.setItem('votesPerPlayer', JSON.stringify(votesPerPlayer));
+  }, [carCrashClosed, carCrash, votesPerPlayer]);
 
   useEffect(() => {
     // При обновлении компонента, при необходимых условиях, завершаем игру
@@ -120,6 +118,7 @@ export default () => {
     localStorage.removeItem('initialSelectedNumbers');
     localStorage.removeItem('carCrashClosed');
     localStorage.removeItem('carCrash');
+    localStorage.removeItem('votesPerPlayer');
 
     dispatch(clearSelectedNumbers()); // Это нужно, чтобы не показывать кого убили, если конец игры, т.к это голосование.
 

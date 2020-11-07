@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTimer } from 'use-timer';
 import { Howl } from 'howler';
@@ -6,6 +6,7 @@ import { Howl } from 'howler';
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import VictimSelector from 'components/VictimSelector';
 import { gameSelector, playersSelector } from 'redux/selectors';
+import getFromLocalStorage from 'helpers/getFromLocalStorage';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import { BottomButtonGroup } from './style';
@@ -19,9 +20,21 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
 
   const deadPleayersAmount = players.filter(({ isAlive }) => !isAlive).length;
 
-  const [avaliableVoters, setAvaliableVoters] = useState(9 - deadPleayersAmount); // Кол-во живых и не проголосовавших
-  const [currentPlayer, setCurrentPlayer] = useState(0); // За кого голосуют в данный момент (от 0 до кол-во выставленных)
+  const [avaliableVoters, setAvaliableVoters] = useState(
+    getFromLocalStorage('avaliableVoters') ?? 9 - deadPleayersAmount
+  ); // Кол-во живых и не проголосовавших
+  const [currentPlayer, setCurrentPlayer] = useState(getFromLocalStorage('currentPlayer') ?? 0); // За кого голосуют в данный момент (от 0 до кол-во выставленных)
   const [buttonOncePressed, setButtonOncePressed] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('currentPlayer', currentPlayer);
+    localStorage.setItem('avaliableVoters', avaliableVoters);
+
+    return () => {
+      localStorage.removeItem('currentPlayer');
+      localStorage.removeItem('avaliableVoters');
+    };
+  }, [currentPlayer, avaliableVoters]);
 
   const resetState = () => {
     setAvaliableVoters(9 - deadPleayersAmount);
@@ -30,6 +43,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
   };
   const firstPlayer = selectedNumbers[currentPlayer] === selectedNumbers[0];
   const lastPlayer = currentPlayer === selectedNumbers.length - 1;
+  const votesAgainstCurrentPlayer = votesPerPlayer[currentPlayer];
 
   const { start: startVotingTimer, status: timerStatus } = useTimer({
     initialTime: 1,
@@ -41,7 +55,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
 
   const onNumberSelected = num => {
     const arr = [...votesPerPlayer];
-    arr[currentPlayer] = votesPerPlayer[currentPlayer] === num + 1 ? null : num + 1;
+    arr[currentPlayer] = votesAgainstCurrentPlayer === num + 1 ? null : num + 1;
     setVotesPerPlayer(arr);
   };
 
@@ -52,7 +66,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
 
   const nextButtonClicked = () => {
     const votingPlayersAmount = selectedNumbers.length;
-    const votersLeft = avaliableVoters - votesPerPlayer[currentPlayer] + 1;
+    const votersLeft = avaliableVoters - votesAgainstCurrentPlayer + 1;
 
     countAvaliableVoters();
     setButtonOncePressed(false);
@@ -98,6 +112,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
         votesLeft={avaliableVoters} // для disabled кнопки
         key={currentPlayer} // чтобы перерендеривался каждый раз
         onNumberSelected={onNumberSelected}
+        victimSelectedNumber={votesAgainstCurrentPlayer - 1}
       />
 
       <BottomButtonGroup buttonOncePressed={buttonOncePressed}>

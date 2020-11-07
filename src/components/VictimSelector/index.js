@@ -15,8 +15,10 @@ import { playersSelector } from 'redux/selectors';
 
 import { VotingSingleElement, VotingBlock } from './style';
 
-export default ({ lastPlayer, votesLeft, shooting, onNumberSelected }) => {
-  const [selectedNumber, setSelectedNumber] = useState(null);
+export default ({ lastPlayer, votesLeft, shooting, onNumberSelected, victimSelectedNumber }) => {
+  const [selectedNumber, setSelectedNumber] = useState(
+    Number.isInteger(victimSelectedNumber) ? victimSelectedNumber : null
+  );
   const players = useSelector(playersSelector);
 
   const selectNumber = num => {
