@@ -59,7 +59,7 @@ export default () => {
           <PanelItem
             color={phase}
             key={selNum}
-            pointer
+            pointer={lastAddedNumber}
             border={lastAddedNumber}
             onClick={() => deselectNumber(lastAddedNumber)}
             selected
