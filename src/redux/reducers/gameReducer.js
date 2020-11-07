@@ -13,6 +13,7 @@ export const initialState = {
   popupOpened: true,
   skipVoting: 0,
   playerAddedToVotingList: [],
+  killedAtNightPlayer: null,
   popupMinimized: false,
 };
 
@@ -94,6 +95,14 @@ export default (state = initialState, action, root) =>
 
       case 'SKIP_VOTING_DISABLE':
         draft.skipVoting = false;
+        return;
+      
+      case 'ADD_KILLED_AT_NIGHT_PLAYER':
+        draft.killedAtNightPlayer = action.playerNumber;
+        return;
+      
+      case 'REMOVE_KILLED_AT_NIGHT_PLAYER':
+        draft.killedAtNightPlayer = null;
         return;
 
       case 'RESET_GAME_REDUCER':

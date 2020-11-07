@@ -2,7 +2,7 @@ import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import useOnMount from 'helpers/useOnMount';
-import { clearSelectedNumbers, closePopup, openPopup, changeGameState } from 'redux/actions/gameActions';
+import { closePopup, openPopup, changeGameState, removeKilledAtNightPlayer } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
 import { CylinderIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
@@ -15,35 +15,35 @@ import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
 export default () => {
   const {
-    selectedNumbers,
     popupOpened,
     activePlayer,
+    killedAtNightPlayer,
     gameState: { dayNumber },
   } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
   const dispatch = useDispatch();
 
-  const [killedPlayerRef] = useCustomRef(
-    selectedNumbers[0] >= 0 ? selectedNumbers[0] : Number(localStorage.killedPlayer)
-  );
+  const [killedPlayerRef] = useCustomRef(killedAtNightPlayer ?? localStorage.killedAtNightPlayer);
+  const playerShouldBeKilled = Number.isInteger(killedPlayerRef);
 
   useOnMount(() => {
-    dispatch(clearSelectedNumbers());
-
-    popupOpened && localStorage.setItem('killedPlayer', killedPlayerRef);
+    popupOpened && playerShouldBeKilled && localStorage.setItem('killedAtNightPlayer', killedPlayerRef);
 
     dayNumber === 1 && dispatch(closePopup());
   });
 
   useOnUnmount(() => {
-    localStorage.removeItem('killedPlayer');
-    dispatch(openPopup());
+    localStorage.removeItem('killedAtNightPlayer');
+    batch(() => {
+      dispatch(removeKilledAtNightPlayer());
+      dispatch(openPopup());
+    });
   });
 
   const goToDay = () => {
     batch(() => {
       dispatch(closePopup());
-      killedPlayerRef >= 0 && dispatch(killPlayer(killedPlayerRef));
+      playerShouldBeKilled && dispatch(killPlayer(killedPlayerRef));
       if (killedPlayerRef === activePlayer) dispatch(changeGameState({ phase: 'Day', dayNumber }));
     });
     // В данном случае changeGameState используется только для вызова смены активного и открывающего игроков на +1.
@@ -53,7 +53,7 @@ export default () => {
 
   return (
     <>
-      {killedPlayerRef >= 0 ? (
+      {playerShouldBeKilled ? (
         <>
           <PopUpLabel className='h1'>Убит</PopUpLabel>
 

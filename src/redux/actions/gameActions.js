@@ -14,3 +14,5 @@ export const minimizeMaximaizePopup = () => ({ type: 'MINIMIZE_MAXIMAIZE_POPUP' 
 export const skipVotingEnable = () => ({ type: 'SKIP_VOTING_ENABLE' });
 export const skipVotingDisable = () => ({ type: 'SKIP_VOTING_DISABLE' });
 export const resetGameReducer = () => ({ type: 'RESET_GAME_REDUCER' });
+export const addKilledAtNightPlayer = playerNumber => ({ type: 'ADD_KILLED_AT_NIGHT_PLAYER', playerNumber });
+export const removeKilledAtNightPlayer = playerNumber => ({ type: 'REMOVE_KILLED_AT_NIGHT_PLAYER', playerNumber });

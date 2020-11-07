@@ -28,7 +28,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
     setCurrentPlayer(0);
     setButtonOncePressed(false);
   };
-
+  const firstPlayer = selectedNumbers[currentPlayer] === selectedNumbers[0];
   const lastPlayer = currentPlayer === selectedNumbers.length - 1;
 
   const { start: startVotingTimer, status: timerStatus } = useTimer({
@@ -80,12 +80,14 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
 
   return (
     <>
-      <ResetButton
-        onClick={() => {
-          resetState();
-          resetVoting();
-        }}
-      />
+      {(!firstPlayer || carCrashClosed) && (
+        <ResetButton
+          onClick={() => {
+            resetState();
+            resetVoting();
+          }}
+        />
+      )}
 
       {carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 

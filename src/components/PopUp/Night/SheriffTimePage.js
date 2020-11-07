@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { TargetIcon, NextIcon } from 'icons/svgIcons';
 import { killPlayer } from 'redux/actions/playersActions';
-import { changeGameState, addToSelectedNumbers } from 'redux/actions/gameActions';
+import { changeGameState, addKilledAtNightPlayer } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
 import { gameSelector, playersSelector } from 'redux/selectors';
 
@@ -18,7 +18,7 @@ export default ({ setSheriffTime, playerToKill }) => {
   const goToDayPressed = () => {
     const gameEnded = checkForEnd(players, [playerToKill]).status;
 
-    playerToKill >= 0 && dispatch(addToSelectedNumbers(playerToKill));
+    playerToKill >= 0 && dispatch(addKilledAtNightPlayer(playerToKill));
 
     if (gameEnded) {
       // Если мы сейчас перейдем на окончание игры, то убиваем игрока перед последним экраном

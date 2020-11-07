@@ -27,12 +27,16 @@ export default () => {
     gameState: { dayNumber },
   } = useSelector(gameSelector);
 
-  const [initialSelectedNumbers] = useCustomRef(selectedNumbers);
-  const initialVotesPerPlayer = Array(selectedNumbers.length).fill(0);
+  const [initialSelectedNumbers] = useCustomRef(
+    localStorage.initialSelectedNumbers ? JSON.parse(localStorage.initialSelectedNumbers) : selectedNumbers
+  );
+  const initialVotesPerPlayer = Array(initialSelectedNumbers.length).fill(0);
 
   const [votesPerPlayer, setVotesPerPlayer] = useState(initialVotesPerPlayer); // Кол-во проголосовавших за каждого игрока
-  const [carCrash, setCarCrash] = useState(false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
-  const [carCrashClosed, setCarCrashClosed] = useState(false); // true, после первой автокатастрофы
+  const [carCrash, setCarCrash] = useState((localStorage.carCrash && JSON.parse(localStorage.carCrash)) ?? false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
+  const [carCrashClosed, setCarCrashClosed] = useState(
+    (localStorage.carCrashClosed && JSON.parse(localStorage.carCrashClosed)) ?? false
+  ); // true, после первой автокатастрофы
   const [endOfVoting, setEndOfVoting] = useState(false);
   const [lastMinuteFor, setLastMinuteFor] = useState([]); // Игрок(и), которых выводят из города
 
@@ -43,6 +47,11 @@ export default () => {
     setEndOfVoting(false);
     setLastMinuteFor([]);
   };
+
+  useEffect(() => {
+    localStorage.setItem('carCrashClosed', carCrashClosed);
+    localStorage.setItem('carCrash', carCrash);
+  }, [carCrashClosed, carCrash]);
 
   useEffect(() => {
     // При обновлении компонента, при необходимых условиях, завершаем игру
@@ -95,6 +104,8 @@ export default () => {
   };
 
   useOnMount(() => {
+    localStorage.setItem('initialSelectedNumbers', JSON.stringify(initialSelectedNumbers));
+
     // Если не 1-ый день и выставлен только 1 игрок и не пропускается голосование, заканчиваем голосование убивая единственного выставленного игрока
     if (dayNumber > 1 && selectedNumbers.length === 1 && !skipVoting) votingFinishedClicked();
 
@@ -102,6 +113,10 @@ export default () => {
   });
 
   useOnUnmount(() => {
+    localStorage.removeItem('initialSelectedNumbers');
+    localStorage.removeItem('carCrashClosed');
+    localStorage.removeItem('carCrash');
+
     dispatch(clearSelectedNumbers()); // Это нужно, чтобы не показывать кого убили, если конец игры, т.к это голосование.
 
     const numberOfVotedOutPlayersWithFourthFoul = lastMinuteFor.filter(plNum => !players[plNum].isAlive).length;
