@@ -110,15 +110,15 @@ export default ({ children }) => {
         <GuideStepContentStyle>{splitLines(content)}</GuideStepContentStyle>
       </GuideStepWrapperStyle>
 
-      <GuideButton guideNextStep onClick={guideStepsAvaliable ? nextStep : endGuide}>
-        {guideStepsAvaliable ? 'Далее' : 'Завершить'}
-      </GuideButton>
-
       {guideStepsAvaliable && (
-        <GuideButton skipGuide onClick={endGuide}>
+        <GuideButton light skipGuide onClick={endGuide}>
           Завершить
         </GuideButton>
       )}
+
+      <GuideButton guideNextStep onClick={guideStepsAvaliable ? nextStep : endGuide}>
+        {guideStepsAvaliable ? 'Далее' : 'Завершить'}
+      </GuideButton>
 
       {children}
     </GuideWrapperStyle>

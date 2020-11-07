@@ -1,25 +1,24 @@
 import styled, { css } from 'styled-components';
 
 export const GuideButton = styled.div`
-  z-index: 3500;
-  background: rgba(0, 0, 0, 0.164);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
-  transition: background 0.3s;
-  text-transform: uppercase;
-  cursor: pointer;
-  position: fixed;
-  bottom: 20px;
+  ${({ guideNextStep, skipGuide, light }) => css`
+    z-index: 3500;
+    background: rgba(0, 0, 0, ${light ? '0.124' : '0.400'});
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    transition: background 0.3s;
+    text-transform: uppercase;
+    cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    ${guideNextStep && `right: 20px`};
+    ${skipGuide && `left: 20px`};
 
-  ${({ guideNextStep, skipGuide }) => {
-    if (guideNextStep) return `right: 20px;`;
-    if (skipGuide) return `left: 20px;`;
-  }}
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.464);
-  }
+    &:hover {
+      background: rgba(0, 0, 0, 0.464);
+    }
+  `}
 `;
 
 export const GuideOverlay = styled.div`
