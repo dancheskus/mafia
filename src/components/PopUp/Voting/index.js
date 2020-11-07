@@ -2,13 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import useOnMount from 'helpers/useOnMount';
-import {
-  clearSelectedNumbers,
-  addToSelectedNumbers,
-  changeGameState,
-  skipVotingDisable,
-} from 'redux/actions/gameActions';
-import checkForEnd from 'helpers/checkForEnd';
+import { clearSelectedNumbers, addToSelectedNumbers, skipVotingDisable } from 'redux/actions/gameActions';
+import { useCheckForEnd } from 'helpers/checkForEnd';
 import { useCustomRef } from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
 import { gameSelector, playersSelector } from 'redux/selectors';
@@ -65,10 +60,7 @@ export default () => {
     };
   }, [carCrashClosed, carCrash, votesPerPlayer, endOfVoting, lastMinuteFor]);
 
-  useEffect(() => {
-    // При обновлении компонента, при необходимых условиях, завершаем игру
-    checkForEnd(players).status && dispatch(changeGameState({ phase: 'EndOfGame' }));
-  });
+  useCheckForEnd();
 
   const getNewVotingList = () => {
     const largestNumber = Math.max(...votesPerPlayer); // Вычисляем максимальное кол-во проголосовавших в одного игрока

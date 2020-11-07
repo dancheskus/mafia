@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { useTimer } from 'use-timer';
 
 import { MinimizeIcon, MaximizeIcon, NextIcon } from 'icons/svgIcons';
 import { addFoul, removeFoul, returnPlayerToGame } from 'redux/actions/playersActions';
-import { changeGameState, skipVotingEnable, skipVotingDisable } from 'redux/actions/gameActions';
-import checkForEnd from 'helpers/checkForEnd';
+import { skipVotingEnable, skipVotingDisable } from 'redux/actions/gameActions';
 import { gameSelector, playersSelector } from 'redux/selectors';
+import { useCheckForEnd } from 'helpers/checkForEnd';
 
 import { FoulContainer, PlayerNumber, CardContainer, Card, RemoveFoul, AddFoul, FoulIcon, BackButton } from './style';
 
@@ -37,9 +37,7 @@ export default ({ order, playerNumber }) => {
     onTimeOver: () => setLastFoulDeath(false),
   });
 
-  useEffect(() => {
-    if (checkForEnd(players).status) dispatch(changeGameState({ phase: 'EndOfGame' }));
-  }, [checkForEnd(players).status]);
+  useCheckForEnd();
 
   const addFourthFoulTimer = useTimer({
     initialTime: 1,
@@ -49,9 +47,6 @@ export default ({ order, playerNumber }) => {
     onTimeOver: () => {
       batch(() => {
         dispatch(addFoul(playerNumber));
-
-        // if (checkForEnd(players).status) return dispatch(changeGameState({ phase: 'EndOfGame' }));
-
         dispatch(skipVotingEnable());
       });
 

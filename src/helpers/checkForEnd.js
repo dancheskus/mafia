@@ -1,6 +1,11 @@
 import { countBy } from 'lodash';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default (players, lastRemovedPlayer) => {
+import { changeGameState } from 'redux/actions/gameActions';
+import { playersSelector } from 'redux/selectors';
+
+const checkForEnd = (players, lastRemovedPlayer) => {
   const allAlivePlayers = countBy(
     players.map(({ isAlive, role }) => isAlive && (role === 'ДОН' || role === 'МАФИЯ' ? 'black' : 'red'))
   );
@@ -15,3 +20,14 @@ export default (players, lastRemovedPlayer) => {
 
   return { status: allAlivePlayers.red <= allAlivePlayers.black || !allAlivePlayers.black, allAlivePlayers };
 };
+
+export const useCheckForEnd = () => {
+  const players = useSelector(playersSelector);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (checkForEnd(players).status) dispatch(changeGameState({ phase: 'EndOfGame' }));
+  }, [players, dispatch]);
+};
+
+export default checkForEnd;
