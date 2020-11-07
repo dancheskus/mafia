@@ -55,7 +55,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
 
   const onNumberSelected = num => {
     const arr = [...votesPerPlayer];
-    arr[currentPlayer] = votesAgainstCurrentPlayer === num + 1 ? null : num + 1;
+    arr[currentPlayer] = votesAgainstCurrentPlayer === num + 1 ? 0 : num + 1;
     setVotesPerPlayer(arr);
   };
 

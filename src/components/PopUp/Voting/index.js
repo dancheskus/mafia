@@ -19,7 +19,7 @@ import CarCrash from './CarCrash';
 import ResetButton from './ResetButton';
 import StandartVoting from './StandartVoting';
 
-const getNewVotesArray = selectedNumbers => Array(selectedNumbers.length).fill(null);
+const getNewVotesArray = selectedNumbers => Array(selectedNumbers.length).fill(0);
 
 export default () => {
   const dispatch = useDispatch();
@@ -85,7 +85,7 @@ export default () => {
     if (newVotingList.length === 1) {
       // Если остался 1 игрок, то он умирает
       setEndOfVoting(true);
-      setLastMinuteFor(lastMinuteFor.concat(newVotingList[0]));
+      !lastMinuteFor.length && setLastMinuteFor(lastMinuteFor.concat(newVotingList[0]));
     }
 
     // УБИЙСТВО ВСЕХ ПОСЛЕ АВТОКАТАСТРОФЫ

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { useTimer } from 'use-timer';
 
@@ -37,7 +37,11 @@ export default ({ order, playerNumber }) => {
     onTimeOver: () => setLastFoulDeath(false),
   });
 
-  const addFoulTimer = useTimer({
+  useEffect(() => {
+    if (checkForEnd(players).status) dispatch(changeGameState({ phase: 'EndOfGame' }));
+  }, [checkForEnd(players).status]);
+
+  const addFourthFoulTimer = useTimer({
     initialTime: 1,
     endTime: 0,
     timerType: 'DECREMENTAL',
@@ -46,7 +50,7 @@ export default ({ order, playerNumber }) => {
       batch(() => {
         dispatch(addFoul(playerNumber));
 
-        if (checkForEnd(players).status) return dispatch(changeGameState({ phase: 'EndOfGame' }));
+        // if (checkForEnd(players).status) return dispatch(changeGameState({ phase: 'EndOfGame' }));
 
         dispatch(skipVotingEnable());
       });
@@ -63,7 +67,7 @@ export default ({ order, playerNumber }) => {
 
     setFoulsAmount(foulsAmount + 1);
     if (foulsAmount !== 3) return dispatch(addFoul(playerNumber));
-    addFoulTimer.start();
+    addFourthFoulTimer.start();
   };
 
   const removeFoulClicked = () => {
@@ -72,7 +76,7 @@ export default ({ order, playerNumber }) => {
     setFoulsAmount(foulsAmount - 1);
 
     if (foulsAmount === 4) {
-      addFoulTimer.reset();
+      addFourthFoulTimer.reset();
     } else {
       dispatch(removeFoul(playerNumber));
     }
