@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container } from 'reactstrap';
 import { batch, useDispatch, useSelector } from 'react-redux';
-import { countBy } from 'lodash';
 
 import NavMenu from 'components/NavMenu';
 import { changeActivePlayer, changeGameState, skipVotingDisable } from 'redux/actions/gameActions';
@@ -12,6 +11,7 @@ import NavBarCircleButton from 'components/styled-components/NavBarCircleButton'
 import usePreviousState from 'helpers/usePreviousState';
 import Timer from 'components/Timer';
 import { gameSelector, playersSelector, settingsSelector } from 'redux/selectors';
+import { getAllAlivePlayers } from 'helpers/roleHelpers';
 
 import AudioPlayer from './AudioPlayer';
 import { BackIcon, ButtonsWrapper, NavStateName, StyledNavigation } from './style';
@@ -39,8 +39,9 @@ export default () => {
     if (prevPhaseState !== 'Day' && stepBackAvaliable) setStepBackAvaliable(false);
 
     // Если стало меньше живых игроков, выключить кнопку "назад"
-    const prevAllAlivePlayers = countBy(prevPlayersState?.map(({ isAlive }) => isAlive)).true;
-    const allAlivePlayers = countBy(players.map(({ isAlive }) => isAlive)).true;
+    const prevAllAlivePlayers = getAllAlivePlayers(prevPlayersState)?.length;
+    const allAlivePlayers = getAllAlivePlayers(players).length;
+
     if (prevAllAlivePlayers !== allAlivePlayers) setStepBackAvaliable(false);
   });
 

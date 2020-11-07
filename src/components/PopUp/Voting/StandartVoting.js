@@ -7,6 +7,7 @@ import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import VictimSelector from 'components/VictimSelector';
 import { gameSelector, playersSelector } from 'redux/selectors';
 import getFromLocalStorage from 'helpers/getFromLocalStorage';
+import { getAllDeadPlayers } from 'helpers/roleHelpers';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 import { BottomButtonGroup } from './style';
@@ -18,7 +19,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
 
-  const deadPleayersAmount = players.filter(({ isAlive }) => !isAlive).length;
+  const deadPleayersAmount = getAllDeadPlayers(players).length;
 
   const [avaliableVoters, setAvaliableVoters] = useState(
     getFromLocalStorage('avaliableVoters') ?? 9 - deadPleayersAmount

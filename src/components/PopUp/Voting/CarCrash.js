@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Timer from 'components/Timer';
 import VictimSelector from 'components/VictimSelector';
 import { gameSelector, playersSelector, settingsSelector } from 'redux/selectors';
+import { getAllAlivePlayers, getAllDeadPlayers } from 'helpers/roleHelpers';
 
 import CarCrashNotification from './CarCrashNotification';
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
@@ -17,18 +18,18 @@ export default ({ secondTime, closeCarCrash, votingFinishedClicked }) => {
   const [notification, setNotification] = useState(true);
   const [currentPlayer, setCurrentPlayer] = useState(0);
 
-  const stopVoting = useCallback(() => {
-    const alivePlayers = players.filter(({ isAlive }) => isAlive).length;
+  const alivePlayers = getAllAlivePlayers(players).length;
+  const deadPlayers = getAllDeadPlayers(players).length;
 
+  const stopVoting = useCallback(() => {
     votingFinishedClicked(selectedNumber > alivePlayers / 2);
-  }, [players, selectedNumber, votingFinishedClicked]);
+  }, [selectedNumber, votingFinishedClicked, alivePlayers]);
 
   useEffect(() => {
     if (secondTime && !multiplePlayerRemove) stopVoting();
   }, [secondTime, multiplePlayerRemove, stopVoting]);
 
   const onNumberSelected = num => setSelectedNumber(num + 1 === selectedNumber ? null : num + 1);
-  const deadPlayers = players.filter(player => !player.isAlive).length;
 
   if (secondTime)
     return (

@@ -5,23 +5,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { changeGameState } from 'redux/actions/gameActions';
 import { playersSelector } from 'redux/selectors';
 
-import { playerIsBlack } from './roleHelpers';
+import { getAllAlivePlayers, playerIsBlack } from './roleHelpers';
 
 const checkForEnd = (players, lastRemovedPlayer) => {
-  const allAlivePlayers = countBy(
-    players.map(({ isAlive, role }) => isAlive && (playerIsBlack(role) ? 'black' : 'red'))
-  );
-  // console.log(allAlivePlayers);
+  const allAlivePlayers = countBy(getAllAlivePlayers(players), ({ role }) => (playerIsBlack(role) ? 'black' : 'red'));
 
   if (lastRemovedPlayer?.[0] >= 0) {
     lastRemovedPlayer.forEach(playerNumber => {
-      const { role } = players[playerNumber];
-      playerIsBlack(role) ? (allAlivePlayers.black -= 1) : (allAlivePlayers.red -= 1);
-      allAlivePlayers.false += 1;
+      playerIsBlack(players[playerNumber].role) ? allAlivePlayers.black-- : allAlivePlayers.red--;
     });
   }
 
-  return { status: allAlivePlayers.red <= allAlivePlayers.black || !allAlivePlayers.black, allAlivePlayers };
+  const status = allAlivePlayers.red <= allAlivePlayers.black || !allAlivePlayers.black;
+
+  return { status, allAlivePlayers };
 };
 
 export const useCheckForEnd = () => {
