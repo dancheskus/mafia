@@ -8,6 +8,7 @@ import {
   changeGameState,
   minimizeMaximaizePopup,
   changeActivePlayer,
+  clearSelectedNumbers,
 } from 'redux/actions/gameActions';
 import { resetPlayersReducer, addRole } from 'redux/actions/playersActions';
 import usePreviousState from 'helpers/usePreviousState';
@@ -70,7 +71,12 @@ export default ({ children }) => {
 
           for (let i = 5; i <= 9; i++) dispatch(addRole({ playerNumber: i, role: 'МИРНЫЙ' }));
         }
-        if (currentStep === 7) dispatch(changeGameState({ phase: 'Day', dayNumber: 1 }));
+        if (currentStep === 7) {
+          batch(() => {
+            dispatch(clearSelectedNumbers());
+            dispatch(changeGameState({ phase: 'Day', dayNumber: 1 }));
+          });
+        }
       });
     }
 
