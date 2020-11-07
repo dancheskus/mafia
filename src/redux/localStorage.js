@@ -1,3 +1,5 @@
+import getFromLocalStorage from 'helpers/getFromLocalStorage';
+
 import { initialState } from './reducers/gameReducer';
 
 const compareKeys = (a, b) => {
@@ -7,17 +9,11 @@ const compareKeys = (a, b) => {
 };
 
 export const loadState = () => {
-  try {
-    const serializedState = localStorage.state;
-    if (serializedState === null) return undefined;
+  const state = getFromLocalStorage('state');
 
-    // Если добавлен новый элемент в gameState, то состояние сбрасывается, а не берется из localStorage
-    if (!compareKeys(initialState, JSON.parse(serializedState).game)) return undefined;
-
-    return JSON.parse(serializedState);
-  } catch (err) {
-    return undefined;
-  }
+  // Если добавлен новый элемент в gameState, то состояние сбрасывается, а не берется из localStorage
+  if (!compareKeys(initialState, state.game)) return localStorage.clear();
+  return state;
 };
 
 export const saveState = state => {
