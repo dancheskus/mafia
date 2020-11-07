@@ -24,6 +24,8 @@ const getFromLocalStorage = item => {
   } catch (e) {} // eslint-disable-line no-empty
 };
 
+const getNewVotesArray = selectedNumbers => Array(selectedNumbers.length).fill(null);
+
 export default () => {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
@@ -34,9 +36,9 @@ export default () => {
   } = useSelector(gameSelector);
 
   const [initialSelectedNumbers] = useCustomRef(getFromLocalStorage('initialSelectedNumbers') ?? selectedNumbers);
-  const initialVotesPerPlayer = Array(initialSelectedNumbers.length).fill(0);
+  const initialVotesPerPlayer = getNewVotesArray(initialSelectedNumbers);
 
-  const [votesPerPlayer, setVotesPerPlayer] = useState(initialVotesPerPlayer); // Кол-во проголосовавших за каждого игрока
+  const [votesPerPlayer, setVotesPerPlayer] = useState(getNewVotesArray(selectedNumbers)); // Кол-во проголосовавших за каждого игрока
   const [carCrash, setCarCrash] = useState(getFromLocalStorage('carCrash') ?? false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
   const [carCrashClosed, setCarCrashClosed] = useState(getFromLocalStorage('carCrashClosed') ?? false); // true, после первой автокатастрофы
   const [endOfVoting, setEndOfVoting] = useState(false);
@@ -154,7 +156,10 @@ export default () => {
         <ResetButton onClick={resetVoting} />
 
         <CarCrash
-          closeCarCrash={() => resetState({ carCrashClosed: true })}
+          closeCarCrash={() => {
+            resetState({ carCrashClosed: true });
+            setVotesPerPlayer(getNewVotesArray(selectedNumbers));
+          }}
           secondTime={carCrashClosed}
           votingFinishedClicked={votingFinishedClicked}
         />
