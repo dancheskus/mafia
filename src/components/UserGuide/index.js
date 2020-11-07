@@ -32,6 +32,7 @@ export default ({ children }) => {
     gameState: { phase },
     popupMinimized,
     activePlayer,
+    selectedNumbers,
   } = useSelector(gameSelector);
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -58,6 +59,8 @@ export default ({ children }) => {
     const stepChanged = prevCurrentStep !== currentStep;
 
     if ((phase === 'RoleDealing' || !seatAllocator) && currentStep === 0) setCurrentStep(3);
+
+    if (currentStep === 1 && selectedNumbers.length === 3) setCurrentStep(2);
 
     if (stepChanged) {
       batch(() => {
