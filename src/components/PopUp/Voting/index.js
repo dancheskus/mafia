@@ -38,8 +38,8 @@ export default () => {
   ); // Кол-во проголосовавших за каждого игрока
   const [carCrash, setCarCrash] = useState(getFromLocalStorage('carCrash') ?? false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
   const [carCrashClosed, setCarCrashClosed] = useState(getFromLocalStorage('carCrashClosed') ?? false); // true, после первой автокатастрофы
-  const [endOfVoting, setEndOfVoting] = useState(false);
-  const [lastMinuteFor, setLastMinuteFor] = useState([]); // Игрок(и), которых выводят из города
+  const [endOfVoting, setEndOfVoting] = useState(getFromLocalStorage('endOfVoting') ?? false);
+  const [lastMinuteFor, setLastMinuteFor] = useState(getFromLocalStorage('lastMinuteFor') ?? []); // Игрок(и), которых выводят из города
 
   const resetState = replaceState => {
     setVotesPerPlayer(initialVotesPerPlayer);
@@ -53,7 +53,17 @@ export default () => {
     localStorage.setItem('carCrashClosed', carCrashClosed);
     localStorage.setItem('carCrash', carCrash);
     localStorage.setItem('votesPerPlayer', JSON.stringify(votesPerPlayer));
-  }, [carCrashClosed, carCrash, votesPerPlayer]);
+    localStorage.setItem('endOfVoting', endOfVoting);
+    localStorage.setItem('lastMinuteFor', JSON.stringify(lastMinuteFor));
+
+    return () => {
+      localStorage.removeItem('carCrashClosed');
+      localStorage.removeItem('carCrash');
+      localStorage.removeItem('votesPerPlayer');
+      localStorage.removeItem('endOfVoting');
+      localStorage.removeItem('lastMinuteFor');
+    };
+  }, [carCrashClosed, carCrash, votesPerPlayer, endOfVoting, lastMinuteFor]);
 
   useEffect(() => {
     // При обновлении компонента, при необходимых условиях, завершаем игру
@@ -116,9 +126,6 @@ export default () => {
 
   useOnUnmount(() => {
     localStorage.removeItem('initialSelectedNumbers');
-    localStorage.removeItem('carCrashClosed');
-    localStorage.removeItem('carCrash');
-    localStorage.removeItem('votesPerPlayer');
 
     dispatch(clearSelectedNumbers()); // Это нужно, чтобы не показывать кого убили, если конец игры, т.к это голосование.
 
