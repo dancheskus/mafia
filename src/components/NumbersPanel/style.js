@@ -3,9 +3,9 @@ import styled, { css } from 'styled-components';
 import colors from 'style/colors';
 
 export const Panel = styled.div`
-  ${({ itemsCentered, color, flash }) => css`
+  ${({ itemsCentered, color, flash, skipVoting }) => css`
     position: relative;
-    background: ${colors[color].numbersPanel};
+    background: ${skipVoting ? colors[color].playerCardNumber : colors[color].numbersPanel};
     padding: 10px;
     border-radius: 15px;
     margin-bottom: 15px;

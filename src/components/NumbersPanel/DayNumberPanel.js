@@ -14,6 +14,7 @@ export default () => {
     gameState: { phase },
     selectedNumbers,
     playerAddedToVotingList,
+    skipVoting,
   } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ export default () => {
   const notSelectedNumbers = useNotSelectedNumbers();
 
   return (
-    <Panel color={phase} className='day-panel' flash={isCurrentPlayerMuted}>
+    <Panel skipVoting={skipVoting} color={phase} className='day-panel' flash={isCurrentPlayerMuted}>
       {selectedNumbers.map(selNum => {
         const lastAddedNumber = selNum === last(selectedNumbers) && playerAddedNumber;
 

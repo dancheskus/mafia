@@ -11,7 +11,7 @@ export const initialState = {
   selectedNumbers: [],
   numbersPanelClickable: false,
   popupOpened: true,
-  skipVoting: 0,
+  skipVoting: false,
   playerAddedToVotingList: [],
   killedAtNightPlayer: null,
   popupMinimized: false,
