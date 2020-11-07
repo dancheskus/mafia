@@ -7,6 +7,7 @@ import { PauseIcon, ResetIcon, PlayIcon, MutedIcon } from 'icons/svgIcons';
 import colors from 'style/colors';
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import countdownEndFile from 'audio/Countdown_end.mp3';
+import { gameSelector, playersSelector, settingsSelector } from 'redux/selectors';
 
 import NavBarCircleButton from '../styled-components/NavBarCircleButton';
 import { MutedWrapper, StartStopButton, TimeAndPlayWrapper } from './style';
@@ -15,11 +16,12 @@ const secondsSound = new Howl({ src: `${secondsSoundFile}`, sprite: { oneSec: [0
 const countdownEndSound = new Howl({ src: `${countdownEndFile}` });
 
 export default ({ mini, time: initialTime, killedOnLastMinute, autostart }) => {
-  const { players, settings, game } = useSelector(state => state);
+  const players = useSelector(playersSelector);
+  const settings = useSelector(settingsSelector);
   const {
     activePlayer,
     gameState: { phase },
-  } = game;
+  } = useSelector(gameSelector);
 
   const {
     isAlive,

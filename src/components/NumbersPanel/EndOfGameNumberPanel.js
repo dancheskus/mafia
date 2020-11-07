@@ -1,15 +1,13 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { gameSelector, playersSelector } from 'redux/selectors';
+
 import { Panel, PanelItem } from './style';
 
 export default () => {
-  const {
-    players,
-    game: {
-      gameState: { phase },
-    },
-  } = useSelector(state => state);
+  const { phase } = useSelector(gameSelector).gameState;
+  const players = useSelector(playersSelector);
 
   return (
     <Panel color={phase}>

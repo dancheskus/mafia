@@ -3,18 +3,17 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 import { range } from 'lodash';
 
 import { addToSelectedNumbers, clearSelectedNumbers } from 'redux/actions/gameActions';
+import { gameSelector, playersSelector } from 'redux/selectors';
 
 import { Panel, PanelItem } from './style';
 
 export default () => {
   const {
-    players,
-    game: {
-      gameState: { phase },
-      numbersPanelClickable,
-      selectedNumbers,
-    },
-  } = useSelector(state => state);
+    gameState: { phase },
+    numbersPanelClickable,
+    selectedNumbers,
+  } = useSelector(gameSelector);
+  const players = useSelector(playersSelector);
   const dispatch = useDispatch();
 
   const selectPlayer = playerNumber => {

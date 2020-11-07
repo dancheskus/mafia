@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
+import { gameSelector } from 'redux/selectors';
+
 import SeatAllocatorNumberPanel from './SeatAllocatorNumberPanel';
 import DayNumberPanel from './DayNumberPanel';
 import VotingNumberPanel from './VotingNumberPanel';
@@ -10,11 +12,9 @@ import RoleDealingNumberPanel from './RoleDealingNumberPanel';
 
 export default () => {
   const {
-    game: {
-      gameState: { phase },
-      selectedNumbers,
-    },
-  } = useSelector(state => state);
+    gameState: { phase },
+    selectedNumbers,
+  } = useSelector(gameSelector);
 
   if (phase === 'SeatAllocator') return <SeatAllocatorNumberPanel />;
   if (phase === 'Day') return <DayNumberPanel />;

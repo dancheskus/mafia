@@ -9,19 +9,18 @@ import colors from 'style/colors';
 import Timer from 'components/Timer';
 import { useCustomRef } from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
+import { gameSelector, playersSelector } from 'redux/selectors';
 
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
 export default () => {
   const {
-    players,
-    game: {
-      selectedNumbers,
-      popupOpened,
-      activePlayer,
-      gameState: { dayNumber },
-    },
-  } = useSelector(state => state);
+    selectedNumbers,
+    popupOpened,
+    activePlayer,
+    gameState: { dayNumber },
+  } = useSelector(gameSelector);
+  const players = useSelector(playersSelector);
   const dispatch = useDispatch();
 
   const [killedPlayerRef] = useCustomRef(
