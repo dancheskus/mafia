@@ -18,6 +18,12 @@ import CarCrash from './CarCrash';
 import ResetButton from './ResetButton';
 import StandartVoting from './StandartVoting';
 
+const getFromLocalStorage = item => {
+  try {
+    return JSON.parse(localStorage[item]);
+  } catch (e) {} // eslint-disable-line no-empty
+};
+
 export default () => {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
@@ -27,16 +33,12 @@ export default () => {
     gameState: { dayNumber },
   } = useSelector(gameSelector);
 
-  const [initialSelectedNumbers] = useCustomRef(
-    localStorage.initialSelectedNumbers ? JSON.parse(localStorage.initialSelectedNumbers) : selectedNumbers
-  );
+  const [initialSelectedNumbers] = useCustomRef(getFromLocalStorage('initialSelectedNumbers') ?? selectedNumbers);
   const initialVotesPerPlayer = Array(initialSelectedNumbers.length).fill(0);
 
   const [votesPerPlayer, setVotesPerPlayer] = useState(initialVotesPerPlayer); // Кол-во проголосовавших за каждого игрока
-  const [carCrash, setCarCrash] = useState((localStorage.carCrash && JSON.parse(localStorage.carCrash)) ?? false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
-  const [carCrashClosed, setCarCrashClosed] = useState(
-    (localStorage.carCrashClosed && JSON.parse(localStorage.carCrashClosed)) ?? false
-  ); // true, после первой автокатастрофы
+  const [carCrash, setCarCrash] = useState(getFromLocalStorage('carCrash') ?? false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
+  const [carCrashClosed, setCarCrashClosed] = useState(getFromLocalStorage('carCrashClosed') ?? false); // true, после первой автокатастрофы
   const [endOfVoting, setEndOfVoting] = useState(false);
   const [lastMinuteFor, setLastMinuteFor] = useState([]); // Игрок(и), которых выводят из города
 
