@@ -10,9 +10,8 @@ const compareKeys = (a, b) => {
 
 export const loadState = () => {
   const state = getFromLocalStorage('state');
-
   // Если добавлен новый элемент в gameState, то состояние сбрасывается, а не берется из localStorage
-  if (!compareKeys(initialState, state.game)) return localStorage.clear();
+  if (!state || !compareKeys(initialState, state.game)) return localStorage.clear();
   return state;
 };
 

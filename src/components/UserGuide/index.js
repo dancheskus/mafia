@@ -64,12 +64,7 @@ export default ({ children }) => {
         if (currentStep === 3) dispatch(changeGameState({ phase: 'RoleDealing' }));
         if (currentStep === 5) {
           dispatch(changeGameState({ phase: 'ZeroNight' }));
-          dispatch(addRole({ playerNumber: 1, role: 'МАФИЯ' }));
-          dispatch(addRole({ playerNumber: 2, role: 'МАФИЯ' }));
-          dispatch(addRole({ playerNumber: 3, role: 'ДОН' }));
-          dispatch(addRole({ playerNumber: 4, role: 'ШЕРИФ' }));
-
-          for (let i = 5; i <= 9; i++) dispatch(addRole({ playerNumber: i, role: 'МИРНЫЙ' }));
+          ['МАФИЯ', 'МАФИЯ', 'ДОН', 'ШЕРИФ'].forEach((role, playerNumber) => dispatch(addRole({ playerNumber, role })));
         }
         if (currentStep === 7) {
           dispatch(clearSelectedNumbers());
