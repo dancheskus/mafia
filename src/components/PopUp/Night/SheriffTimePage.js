@@ -6,6 +6,7 @@ import { killPlayer } from 'redux/actions/playersActions';
 import { changeGameState, addKilledAtNightPlayer } from 'redux/actions/gameActions';
 import checkForEnd from 'helpers/checkForEnd';
 import { gameSelector, playersSelector } from 'redux/selectors';
+import { playerIsBlack } from 'helpers/roleHelpers';
 
 import { BackButton, BlackTeamPlayers, Target } from './style';
 import { PopUpButton, PopUpLabel } from '../styled-components';
@@ -31,7 +32,7 @@ export default ({ setSheriffTime, playerToKill }) => {
     }
   };
 
-  const allBlackPlayerNumbers = players.flatMap(({ role }, i) => (role === 'МАФИЯ' || role === 'ДОН' ? i : []));
+  const allBlackPlayerNumbers = players.flatMap(({ role }, i) => (playerIsBlack(role) ? i : []));
 
   return (
     <>
