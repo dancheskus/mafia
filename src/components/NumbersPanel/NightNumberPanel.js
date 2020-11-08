@@ -10,10 +10,12 @@ export default () => {
   const { phase } = useSelector(gameSelector).gameState;
 
   const aliveMafiaAmount = useGetAlivePlayersAmountByColor('black');
+  const aliveRedAmount = useGetAlivePlayersAmountByColor('red');
 
   return (
     <Panel color={phase}>
       <PanelText>Живых мафов: {aliveMafiaAmount}</PanelText>
+      <PanelText>Живых мирных: {aliveRedAmount}</PanelText>
     </Panel>
   );
 };
