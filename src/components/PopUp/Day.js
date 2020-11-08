@@ -28,8 +28,6 @@ export default () => {
 
   useOnMount(() => {
     popupOpened && playerShouldBeKilled && localStorage.setItem('killedAtNightPlayer', killedPlayerRef);
-
-    dayNumber === 1 && dispatch(closePopup());
   });
 
   useOnUnmount(() => {
@@ -48,8 +46,6 @@ export default () => {
     });
     // В данном случае changeGameState используется только для вызова смены активного и открывающего игроков на +1.
   };
-
-  if (dayNumber === 1) return null;
 
   return (
     <>

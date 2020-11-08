@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { changeGameState } from 'redux/actions/gameActions';
+import { changeGameState, closePopup } from 'redux/actions/gameActions';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
 import Timer from 'components/Timer';
 import { playersSelector, settingsSelector } from 'redux/selectors';
+import useOnUnmount from 'helpers/useOnUnmount';
 
 import { PopUpButton, PopUpLabel } from '../styled-components';
 import { Icon, TwoIcons } from './style';
@@ -19,6 +20,8 @@ export default () => {
   const startGame = () => dispatch(changeGameState({ phase: 'Day', dayNumber: 1 }));
 
   const findPlayerNumber = role => players.findIndex(player => player.role === role) + 1;
+
+  useOnUnmount(() => dispatch(closePopup()));
 
   return dogovorka ? (
     <>
