@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { shuffle, concat, fill } from 'lodash';
 import { useSelector, useDispatch, batch } from 'react-redux';
 import { useTimer } from 'use-timer';
 
-import {
-  lightModeOff,
-  lightModeOn,
-  clearSelectedNumbers,
-  changeGameState,
-  replaceSelectedNumbersWith,
-} from 'redux/actions/gameActions';
+import { lightModeOff, lightModeOn, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
 import { addRole } from 'redux/actions/playersActions';
 import colors from 'style/colors';
 import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
-import usePreviousState from 'helpers/usePreviousState';
-import { useCustomRef } from 'helpers/useCustomRef';
 import useOnMount from 'helpers/useOnMount';
-import { gameSelector } from 'redux/selectors';
+import { gameSelector, playersSelector } from 'redux/selectors';
+import useOnUnmount from 'helpers/useOnUnmount';
+import { playerIsRed, useGetAlivePlayersAmountByColor } from 'helpers/roleHelpers';
+import getFromLocalStorage from 'helpers/getFromLocalStorage';
 
 import { PressText, RoleName, ScaledPopUpButton, Card } from './style';
+import useResetMode from '../useResetMode';
+import startGame from '../startGame';
 
 const { popupIcon, popupIconLight } = colors.RoleDealing;
 
@@ -32,7 +29,11 @@ const roleIcons = {
 export default ({ resetMode }) => {
   const dispatch = useDispatch();
   const { selectedNumbers, lightMode } = useSelector(gameSelector);
-  const [role, setRole] = useState(null);
+  const players = useSelector(playersSelector);
+  const [showRoleOnCard, setShowRoleOnCard] = useState(null);
+
+  const lastCardRevealed = getFromLocalStorage('lastCardRevealed') ?? false;
+  const allAliveRedPlayers = useGetAlivePlayersAmountByColor('red');
 
   const [playerNumber] = selectedNumbers;
 
@@ -42,48 +43,46 @@ export default ({ resetMode }) => {
     timerType: 'DECREMENTAL',
     interval: 1800,
     onTimeOver: () => {
-      setRole(null);
+      playerNumber === players.length - 1 && localStorage.setItem('lastCardRevealed', true);
+      const nextPlayerNumber = playerNumber + 1;
+      setShowRoleOnCard(null);
       batch(() => {
         dispatch(lightModeOff());
-        dispatch(replaceSelectedNumbersWith(playerNumber + 1 <= 9 ? playerNumber + 1 : 9));
+        dispatch(replaceSelectedNumbersWith(nextPlayerNumber <= 9 ? nextPlayerNumber : 9));
       });
     },
   });
 
-  const [allRolesRef] = useCustomRef(shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН')));
+  useResetMode(resetMode);
 
   useOnMount(() => {
-    dispatch(replaceSelectedNumbersWith(0));
+    batch(() => {
+      if (allAliveRedPlayers === 10) {
+        const shuffledRoles = shuffle(concat(fill(Array(6), 'МИРНЫЙ'), 'ШЕРИФ', 'МАФИЯ', 'МАФИЯ', 'ДОН'));
+        shuffledRoles.forEach((role, playerNumber) => dispatch(addRole({ playerNumber, role })));
+      }
+      dispatch(replaceSelectedNumbersWith(selectedNumbers[0] ?? 0));
+    });
   });
 
-  const prevSelectedNumbersLength = usePreviousState(selectedNumbers.length);
-
-  useEffect(() => {
-    // Возвращаемся на пред. страницу при "Новой игре", если выключена раздача номеров
-    prevSelectedNumbersLength > 0 && !selectedNumbers.length && resetMode();
+  useOnUnmount(() => {
+    localStorage.removeItem('lastCardRevealed');
+    dispatch(lightModeOff());
   });
 
   const showRole = () => {
-    if (timerStatus === 'RUNNING' || !allRolesRef.length) return;
+    if (timerStatus === 'RUNNING' || lastCardRevealed) return;
 
-    const newRole = allRolesRef.pop();
-    dispatch(addRole({ playerNumber, role: newRole }));
-    setRole(newRole);
-    if (newRole === 'МИРНЫЙ' || newRole === 'ШЕРИФ') dispatch(lightModeOn());
+    const { role } = players[playerNumber];
+    setShowRoleOnCard(role);
+    playerIsRed(role) && dispatch(lightModeOn());
 
     startCardBlockingTimer();
   };
 
-  const startGame = () => {
-    batch(() => {
-      dispatch(clearSelectedNumbers());
-      dispatch(changeGameState({ phase: 'ZeroNight' }));
-    });
-  };
-
   return (
     <Card onClick={showRole}>
-      {!role && !!allRolesRef.length && (
+      {!showRoleOnCard && !lastCardRevealed && (
         <>
           <EyeIcon size='40%' fill={popupIcon} />
 
@@ -91,16 +90,17 @@ export default ({ resetMode }) => {
         </>
       )}
 
-      {!role && !allRolesRef.length && (
-        <ScaledPopUpButton onClick={startGame} color='RoleDealing'>
+      {!showRoleOnCard && lastCardRevealed && (
+        <ScaledPopUpButton onClick={() => startGame(dispatch)} color='RoleDealing'>
           Играть
         </ScaledPopUpButton>
       )}
 
-      {role && (
+      {showRoleOnCard && (
         <>
-          {roleIcons[role]}
-          <RoleName light={lightMode}>{role}</RoleName>
+          {roleIcons[showRoleOnCard]}
+
+          <RoleName light={lightMode}>{showRoleOnCard}</RoleName>
         </>
       )}
     </Card>

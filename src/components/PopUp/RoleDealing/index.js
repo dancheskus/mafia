@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { batch, useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
-import { clearSelectedNumbers, lightModeOff, numbersPanelNotClickable } from 'redux/actions/gameActions';
-import useOnMount from 'helpers/useOnMount';
 import { gameSelector, settingsSelector } from 'redux/selectors';
+import getFromLocalStorage from 'helpers/getFromLocalStorage';
 
 import { PopUpButton } from '../styled-components';
 import RandomMode from './RandomMode';
@@ -15,22 +14,20 @@ const svgClassName = 'flex-grow-1 d-flex align-items-center justify-content-cent
 
 export default () => {
   const { tutorialEnabled } = useSelector(settingsSelector);
-  const {
-    lightMode,
-    gameState: { phase },
-  } = useSelector(gameSelector);
-  const dispatch = useDispatch();
+  const { phase } = useSelector(gameSelector).gameState;
 
-  const [randomModeSelected, setRandomModeSelected] = useState(true);
-  const [modeApproved, setModeApproved] = useState(false);
+  const [randomModeSelected, setRandomModeSelected] = useState(getFromLocalStorage('randomModeSelected') ?? true);
+  const [modeApproved, setModeApproved] = useState(getFromLocalStorage('modeApproved') ?? false);
 
-  useOnMount(() => {
-    batch(() => {
-      dispatch(numbersPanelNotClickable());
-      dispatch(lightModeOff());
-      dispatch(clearSelectedNumbers());
-    });
-  });
+  useEffect(() => {
+    localStorage.setItem('randomModeSelected', randomModeSelected);
+    localStorage.setItem('modeApproved', modeApproved);
+
+    return () => {
+      localStorage.removeItem('randomModeSelected');
+      localStorage.removeItem('modeApproved');
+    };
+  }, [randomModeSelected, modeApproved]);
 
   useEffect(() => {
     if (tutorialEnabled && modeApproved === false) {
@@ -57,7 +54,7 @@ export default () => {
       </SvgWrapper>
 
       <div className='flex-grow-1 d-flex align-items-center'>
-        <PopUpButton color={phase} light={lightMode} onClick={() => setModeApproved(true)}>
+        <PopUpButton color={phase} onClick={() => setModeApproved(true)}>
           {randomModeSelected ? 'автоматически' : 'вручную'}
         </PopUpButton>
       </div>

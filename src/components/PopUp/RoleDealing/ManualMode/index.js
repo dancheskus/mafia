@@ -1,22 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useSelector, useDispatch, batch } from 'react-redux';
 import { countBy } from 'lodash';
 
 import { addRole } from 'redux/actions/playersActions';
-import {
-  changeGameState,
-  numbersPanelClickable,
-  addToSelectedNumbers,
-  clearSelectedNumbers,
-} from 'redux/actions/gameActions';
+import { numbersPanelClickable, addToSelectedNumbers } from 'redux/actions/gameActions';
 import colors from 'style/colors';
 import { ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 'icons/svgIcons';
 import { PopUpButton } from 'components/PopUp/styled-components';
-import usePreviousState from 'helpers/usePreviousState';
 import useOnMount from 'helpers/useOnMount';
 import { gameSelector, playersSelector } from 'redux/selectors';
 
 import { Notification, RoleCard, RoleSelection, RoleSelectionWrapper } from './style';
+import useResetMode from '../useResetMode';
+import startGame from '../startGame';
 
 const { popupIconLight, popupIcon } = colors.RoleDealing;
 
@@ -25,12 +21,7 @@ export default ({ resetMode }) => {
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
 
-  const prevSelectedNumbersLength = usePreviousState(selectedNumbers.length);
-
-  useEffect(() => {
-    // Возвращаемся на пред. страницу при "Новой игре", если выключена раздача номеров
-    prevSelectedNumbersLength > 0 && !selectedNumbers.length && resetMode();
-  });
+  useResetMode(resetMode);
 
   useOnMount(() => {
     batch(() => {
@@ -45,13 +36,6 @@ export default ({ resetMode }) => {
     if (disabled) return;
 
     dispatch(addRole({ playerNumber, role }));
-  };
-
-  const startGameClicked = () => {
-    batch(() => {
-      dispatch(clearSelectedNumbers());
-      dispatch(changeGameState({ phase: 'ZeroNight' }));
-    });
   };
 
   const currentPlayerRole = players[playerNumber]?.role || null;
@@ -102,7 +86,7 @@ export default ({ resetMode }) => {
       <Notification disabled={isButtonDisabled}>Выберите все функциональные роли (2 Мафии, Дон и Шериф)</Notification>
 
       <div className='flex-grow-1 d-flex align-items-center'>
-        <PopUpButton onClick={startGameClicked} color='RoleDealing' disabled={isButtonDisabled}>
+        <PopUpButton onClick={() => startGame(dispatch)} color='RoleDealing' disabled={isButtonDisabled}>
           Играть
         </PopUpButton>
       </div>
