@@ -17,6 +17,7 @@ import EndOfGame from 'components/PopUp/EndOfGame';
 import GuideWrapper from 'components/UserGuide';
 import { GuideOverlay } from 'components/UserGuide/style';
 import { gameSelector, settingsSelector } from 'redux/selectors';
+import GlobalStyle from 'style/GlobalStyle';
 
 import { AppWrapper, MainApp, MainContentWrapper, UnsupportedRes } from './style';
 
@@ -48,6 +49,8 @@ export default () => {
 
   return (
     <>
+      <GlobalStyle />
+
       {appHeight < 535 && (
         <UnsupportedRes>
           <h3>Это разрешение не поддерживается</h3>
