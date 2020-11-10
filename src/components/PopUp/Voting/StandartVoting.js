@@ -113,7 +113,7 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
         votesLeft={avaliableVoters} // для disabled кнопки
         key={currentPlayer} // чтобы перерендеривался каждый раз
         onNumberSelected={onNumberSelected}
-        victimSelectedNumber={votesAgainstCurrentPlayer - 1}
+        selectedNumber={votesAgainstCurrentPlayer - 1}
       />
 
       <BottomButtonGroup buttonOncePressed={buttonOncePressed}>
