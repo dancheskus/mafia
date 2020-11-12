@@ -66,7 +66,7 @@ export default () => {
           <MainApp className='d-flex'>
             {/* {window.innerHeight} {window.innerWidth} */}
             <Container className='d-flex flex-column justify-content-between'>
-              {phase !== 'startScreen' && <NumbersPanel key={activePlayer} />}
+              <NumbersPanel key={activePlayer} />
 
               <MainContentWrapper>
                 {<PopUp key={phase + 1} opened={popupOpened} PopupChild={PopUpChildComponent} />}
