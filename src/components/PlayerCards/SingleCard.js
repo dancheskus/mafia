@@ -7,7 +7,6 @@ import { addFoul, removeFoul, returnPlayerToGame } from 'redux/actions/playersAc
 import { skipVotingEnable, skipVotingDisable } from 'redux/actions/gameActions';
 import { gameSelector, playersSelector } from 'redux/selectors';
 import { useCheckForEnd } from 'helpers/checkForEnd';
-import { playerIsBlack } from 'helpers/roleHelpers';
 
 import { FoulContainer, PlayerNumber, CardContainer, Card, RemoveFoul, AddFoul, FoulIcon, BackButton } from './style';
 
@@ -92,7 +91,6 @@ export default ({ order, playerNumber }) => {
     <CardContainer order={order}>
       <Card isAlive={isAlive} activePlayer={phase === 'Day' && activePlayer === playerNumber}>
         <PlayerNumber
-          darkSide={playerIsBlack(role)}
           role={role}
           isMuted={muted}
           isAlive={isAlive}
