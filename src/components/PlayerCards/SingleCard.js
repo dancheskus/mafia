@@ -106,13 +106,13 @@ export default ({ order, playerNumber }) => {
         </PlayerNumber>
 
         <FoulContainer isAlive={isAlive}>
-          <RemoveFoul onClick={removeFoulClicked} className={playerNumber === 7 && 'remove-foul'}>
+          <RemoveFoul onClick={removeFoulClicked} {...(playerNumber === 7 && { className: 'remove-foul' })}>
             <FoulIcon remove>
               <MinimizeIcon size='50%' />
             </FoulIcon>
           </RemoveFoul>
 
-          <AddFoul amount={foulsAmount} onClick={addFoulClicked} className={playerNumber === 7 && 'add-foul'}>
+          <AddFoul amount={foulsAmount} onClick={addFoulClicked} {...(playerNumber === 7 && { className: 'add-foul' })}>
             {foulsAmount ? (
               '!'.repeat(foulsAmount)
             ) : (

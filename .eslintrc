@@ -56,7 +56,8 @@
         ["parent", "sibling"]
       ],
       "newlines-between": "always" // Separate all groups with new line
-    }]
+    }],
+    "react/jsx-props-no-spreading": 0 // Allow to use e.g. {...(condition && { className: 'example' })} in JSX element
   },
   "plugins": ["react", "react-hooks", "prettier"],
   "env": { "browser": true, "jest": true }
