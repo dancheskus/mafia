@@ -20,18 +20,18 @@ export default ({ type, title }) => {
   const settings = useSelector(settingsSelector);
 
   const functions = {
-    appMusic: switchAppMusic(),
-    timerSounds: switchTimerSounds(),
-    mafiaTimer: switchMafiaTimer(),
-    multiplePlayerRemove: switchMultiplePlayerRemove(),
-    seatAllocator: switchSeatAllocator(),
+    appMusic: switchAppMusic,
+    timerSounds: switchTimerSounds,
+    mafiaTimer: switchMafiaTimer,
+    multiplePlayerRemove: switchMultiplePlayerRemove,
+    seatAllocator: switchSeatAllocator,
   };
 
   return (
     <SettingsLine>
       <span>{title}</span>
 
-      <Switch onColor={onColor} checked={settings[type]} onChange={() => dispatch(functions[type])} />
+      <Switch onColor={onColor} checked={settings[type]} onChange={() => dispatch(functions[type]())} />
     </SettingsLine>
   );
 };
