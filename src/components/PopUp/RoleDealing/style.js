@@ -2,9 +2,7 @@ import styled from 'styled-components';
 
 import colors from 'style/colors';
 
-const {
-  RoleDealing: { dealingMode, dealingModeSelected },
-} = colors;
+const { dealingMode, dealingModeSelected } = colors.RoleDealing;
 
 export const SvgWrapper = styled.div`
   display: flex;
@@ -18,7 +16,7 @@ export const SvgWrapper = styled.div`
   }
 
   path {
-    fill: ${({ selected }) => (selected ? dealingModeSelected : dealingMode)};
+    fill: ${dealingMode};
     transition: fill 0.3s;
   }
 
