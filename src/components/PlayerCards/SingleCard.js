@@ -89,7 +89,7 @@ export default ({ order, playerNumber }) => {
 
   return (
     <CardContainer order={order}>
-      <Card isAlive={isAlive} activePlayer={phase === 'Day' && activePlayer === playerNumber}>
+      <Card activePlayer={phase === 'Day' && activePlayer === playerNumber}>
         <PlayerNumber
           role={role}
           isMuted={muted}
