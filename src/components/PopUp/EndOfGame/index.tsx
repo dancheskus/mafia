@@ -10,7 +10,7 @@ import { gameSelector, playersSelector } from 'redux/selectors';
 import { PopUpButton } from '../styled-components';
 import { GameResult, KilledPlayer } from './style';
 
-export default () => {
+export default function EndOfGame() {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
   const {
@@ -42,4 +42,4 @@ export default () => {
       </PopUpButton>
     </GameResult>
   );
-};
+}

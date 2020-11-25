@@ -6,7 +6,7 @@ import { playersSelector } from 'redux/selectors';
 import { CardsWrapper } from './style';
 import SingleCard from './SingleCard';
 
-export default () => {
+export default function PlayerCards() {
   const players = useSelector(playersSelector);
 
   return (
@@ -17,4 +17,4 @@ export default () => {
       ))}
     </CardsWrapper>
   );
-};
+}

@@ -6,7 +6,7 @@ import { gameSelector } from 'redux/selectors';
 
 import { Panel, PanelText } from './style';
 
-export default () => {
+export default function NightNumberPanel() {
   const { phase } = useSelector(gameSelector).gameState;
 
   const aliveMafiaAmount = useGetAlivePlayersAmountByColor('black');
@@ -18,4 +18,4 @@ export default () => {
       <PanelText>Живых мирных: {aliveRedAmount}</PanelText>
     </Panel>
   );
-};
+}

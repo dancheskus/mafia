@@ -24,7 +24,7 @@ const useUnloadSoundOnUnmount = (sound: any) => {
   }, [sound]);
 };
 
-export default () => {
+export default function AudioPlayer() {
   const [bufferSoundUrl, setBufferSoundUrl] = useState<string>();
   const [soundLoaded, setSoundLoaded] = useState(false);
   const [isPlayingVisualStatus, setIsPlayingVisualStatus] = useState(true);
@@ -133,4 +133,4 @@ export default () => {
       </>
     );
   return null;
-};
+}

@@ -13,7 +13,7 @@ import PHASE from 'common/phaseEnums';
 import { StyledNavMenu, MenuItems } from './style';
 import Settings from './Settings';
 
-export default () => {
+export default function NavMenu() {
   const dispatch = useDispatch();
   const { phase } = useSelector(gameSelector).gameState;
   const { tutorialEnabled } = useSelector(settingsSelector);
@@ -82,4 +82,4 @@ export default () => {
       </div>
     </StyledNavMenu>
   );
-};
+}

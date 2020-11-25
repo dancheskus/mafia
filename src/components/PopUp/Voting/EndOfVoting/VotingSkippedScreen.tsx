@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { PopUpButton, PopUpLabel } from 'components/PopUp/styled-components';
 import { gameSelector } from 'redux/selectors';
 
-export default ({ goToNight }: { goToNight: () => void }) => {
+export default function VotingSkippedScreen({ goToNight }: { goToNight: () => void }) {
   const {
     skipVoting,
     selectedNumbers,
@@ -32,4 +32,4 @@ export default ({ goToNight }: { goToNight: () => void }) => {
       </PopUpButton>
     </>
   );
-};
+}

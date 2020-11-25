@@ -21,7 +21,7 @@ interface Props {
   title: string;
 }
 
-export default ({ type, title }: Props) => {
+export default function SettingsItem({ type, title }: Props) {
   const dispatch = useDispatch();
   const settings = useSelector(settingsSelector);
 
@@ -40,4 +40,4 @@ export default ({ type, title }: Props) => {
       <Switch onColor={onColor} checked={settings[type]} onChange={() => dispatch(functions[type]!())} />
     </SettingsLine>
   );
-};
+}

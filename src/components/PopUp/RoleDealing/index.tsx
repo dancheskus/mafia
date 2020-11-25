@@ -15,7 +15,7 @@ import SvgWrapper from './SvgWrapper';
 
 const svgClassName = 'flex-grow-1 d-flex align-items-center justify-content-center';
 
-export default () => {
+export default function RoleDealing() {
   const { tutorialEnabled } = useSelector(settingsSelector);
   const { phase } = useSelector(gameSelector).gameState;
 
@@ -63,4 +63,4 @@ export default () => {
       </div>
     </>
   );
-};
+}

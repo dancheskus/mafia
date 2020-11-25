@@ -16,7 +16,7 @@ interface Props {
   playerNumber: number;
 }
 
-export default ({ order, playerNumber }: Props) => {
+export default function SingleCard({ order, playerNumber }: Props) {
   const dispatch = useDispatch();
 
   const {
@@ -131,4 +131,4 @@ export default ({ order, playerNumber }: Props) => {
       </Card>
     </CardContainer>
   );
-};
+}

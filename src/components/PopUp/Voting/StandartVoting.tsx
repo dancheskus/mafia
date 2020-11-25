@@ -24,7 +24,13 @@ interface Props {
   carCrashClosed: boolean;
 }
 
-export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinishedClicked, carCrashClosed }: Props) => {
+export default function StandartVoting({
+  resetVoting,
+  votesPerPlayer,
+  setVotesPerPlayer,
+  votingFinishedClicked,
+  carCrashClosed,
+}: Props) {
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
 
@@ -136,4 +142,4 @@ export default ({ resetVoting, votesPerPlayer, setVotesPerPlayer, votingFinished
       </BottomButtonGroup>
     </>
   );
-};
+}

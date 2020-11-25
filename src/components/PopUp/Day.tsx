@@ -14,7 +14,7 @@ import PHASE from 'common/phaseEnums';
 
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
-export default () => {
+export default function Day() {
   const {
     popupOpened,
     activePlayer,
@@ -76,4 +76,4 @@ export default () => {
       </PopUpButton>
     </>
   );
-};
+}

@@ -13,7 +13,7 @@ import BigCircle from './style';
 
 const shuffleNumbers = () => shuffle(range(0, 10));
 
-export default () => {
+export default function SeatAllocator() {
   const dispatch = useDispatch();
   const {
     selectedNumbers,
@@ -100,4 +100,4 @@ export default () => {
       </PopUpButton>
     </>
   );
-};
+}

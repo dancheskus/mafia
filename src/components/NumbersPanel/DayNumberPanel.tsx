@@ -8,7 +8,7 @@ import { gameSelector, playersSelector } from 'redux/selectors';
 import useNotSelectedNumbers from './useNotSelectedNumbers';
 import { Panel, PanelItem } from './style';
 
-export default () => {
+export default function DayNumberPanel() {
   const {
     activePlayer,
     gameState: { phase },
@@ -86,4 +86,4 @@ export default () => {
       )}
     </Panel>
   );
-};
+}

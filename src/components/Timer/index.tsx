@@ -25,7 +25,7 @@ interface Props {
   autostart?: boolean;
 }
 
-export default ({ mini, time: initialTime, killedOnLastMinute, autostart }: Props) => {
+export default function Timer({ mini, time: initialTime, killedOnLastMinute, autostart }: Props) {
   const players = useSelector(playersSelector);
   const settings = useSelector(settingsSelector);
   const {
@@ -118,4 +118,4 @@ export default ({ mini, time: initialTime, killedOnLastMinute, autostart }: Prop
       )}
     </>
   );
-};
+}

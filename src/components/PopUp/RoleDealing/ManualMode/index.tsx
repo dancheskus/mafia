@@ -17,7 +17,7 @@ import startGame from '../startGame';
 
 const { popupIconLight, popupIcon } = colors.RoleDealing;
 
-export default ({ resetMode }: { resetMode: () => void }) => {
+export default function ManualMode({ resetMode }: { resetMode: () => void }) {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
@@ -93,4 +93,4 @@ export default ({ resetMode }: { resetMode: () => void }) => {
       </div>
     </>
   );
-};
+}

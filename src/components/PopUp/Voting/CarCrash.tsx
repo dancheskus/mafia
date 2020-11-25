@@ -15,7 +15,7 @@ interface Props {
   votingFinishedClicked: (killAll: boolean) => void;
 }
 
-export default ({ secondTime, closeCarCrash, votingFinishedClicked }: Props) => {
+export default function CarCrash({ secondTime, closeCarCrash, votingFinishedClicked }: Props) {
   const { multiplePlayerRemove } = useSelector(settingsSelector);
   const { selectedNumbers } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
@@ -66,4 +66,4 @@ export default ({ secondTime, closeCarCrash, votingFinishedClicked }: Props) => 
       </PopUpButton>
     </>
   );
-};
+}

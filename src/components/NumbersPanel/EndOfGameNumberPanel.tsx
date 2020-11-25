@@ -7,7 +7,7 @@ import ROLE from 'common/playerEnums';
 
 import { Panel, PanelItem } from './style';
 
-export default () => {
+export default function EndOfGameNumberPanel() {
   const { phase } = useSelector(gameSelector).gameState;
   const players = useSelector(playersSelector);
 
@@ -21,4 +21,4 @@ export default () => {
       ))}
     </Panel>
   );
-};
+}

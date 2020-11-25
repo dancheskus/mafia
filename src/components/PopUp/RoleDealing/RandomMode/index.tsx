@@ -34,7 +34,7 @@ const roleIcons: IRoleIcons = {
   ШЕРИФ: <SheriffOkIcon size='30%' fill={popupIconLight} />,
 };
 
-export default ({ resetMode }: { resetMode: () => void }) => {
+export default function RandomMode({ resetMode }: { resetMode: () => void }) {
   const dispatch = useDispatch();
   const { selectedNumbers, lightMode } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
@@ -115,4 +115,4 @@ export default ({ resetMode }: { resetMode: () => void }) => {
       )}
     </Card>
   );
-};
+}

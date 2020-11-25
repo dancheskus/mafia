@@ -6,7 +6,7 @@ import { gameSelector } from 'redux/selectors';
 import useNotSelectedNumbers from './useNotSelectedNumbers';
 import { Panel, PanelItem } from './style';
 
-export default () => {
+export default function SeatAllocatorNumberPanel() {
   const {
     gameState: { phase },
     selectedNumbers,
@@ -27,4 +27,4 @@ export default () => {
       ))}
     </Panel>
   );
-};
+}

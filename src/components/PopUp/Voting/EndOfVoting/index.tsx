@@ -16,7 +16,7 @@ interface Props {
   resetFn: () => void;
 }
 
-export default ({ lastMinuteFor, resetFn, votingSkipped }: Props) => {
+export default function EndOfVoting({ lastMinuteFor, resetFn, votingSkipped }: Props) {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
 
@@ -55,4 +55,4 @@ export default ({ lastMinuteFor, resetFn, votingSkipped }: Props) => {
       resetFn={resetFn}
     />
   );
-};
+}

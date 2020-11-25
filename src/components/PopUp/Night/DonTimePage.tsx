@@ -14,7 +14,7 @@ interface Props {
   setSheriffTime: Dispatch<SetStateAction<boolean>>;
 }
 
-export default ({ setDonTime, setPlayerToKill, setSheriffTime }: Props) => {
+export default function DonTimePage({ setDonTime, setPlayerToKill, setSheriffTime }: Props) {
   const players = useSelector(playersSelector);
 
   return (
@@ -43,4 +43,4 @@ export default ({ setDonTime, setPlayerToKill, setSheriffTime }: Props) => {
       </PopUpButton>
     </>
   );
-};
+}

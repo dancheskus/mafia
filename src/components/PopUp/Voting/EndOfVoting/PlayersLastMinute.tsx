@@ -23,7 +23,7 @@ interface Props {
   resetFn: () => void;
 }
 
-export default ({ listOfPlayers, lastMinuteFor, goToNight, resetFn }: Props) => {
+export default function PlayersLastMinute({ listOfPlayers, lastMinuteFor, goToNight, resetFn }: Props) {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
@@ -61,4 +61,4 @@ export default ({ listOfPlayers, lastMinuteFor, goToNight, resetFn }: Props) => 
       </PopUpButton>
     </>
   );
-};
+}

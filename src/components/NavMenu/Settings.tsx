@@ -23,7 +23,7 @@ interface Props {
   onClose: () => void;
 }
 
-export default ({ hide, onClose }: Props) => {
+export default function Settings({ hide, onClose }: Props) {
   const dispatch = useDispatch();
   const { tutorialEnabled } = useSelector(settingsSelector);
 
@@ -59,4 +59,4 @@ export default ({ hide, onClose }: Props) => {
       </BottomButtonsGroup>
     </AppSettings>
   );
-};
+}

@@ -13,7 +13,7 @@ interface Props {
   PopupChild: () => JSX.Element;
 }
 
-export default ({ opened, PopupChild }: Props) => {
+export default function PopUp({ opened, PopupChild }: Props) {
   const dispatch = useDispatch();
   const { tutorialEnabled } = useSelector(settingsSelector);
   const {
@@ -46,4 +46,4 @@ export default ({ opened, PopupChild }: Props) => {
       <PopupChild />
     </StyledPopUp>
   );
-};
+}

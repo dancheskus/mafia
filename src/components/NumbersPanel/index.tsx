@@ -11,7 +11,7 @@ import NightNumberPanel from './NightNumberPanel';
 import EndOfGameNumberPanel from './EndOfGameNumberPanel';
 import RoleDealingNumberPanel from './RoleDealingNumberPanel';
 
-export default () => {
+export default function NumbersPanel() {
   const {
     gameState: { phase },
     selectedNumbers,
@@ -24,4 +24,4 @@ export default () => {
   if (phase === PHASE.ENDOFGAME) return <EndOfGameNumberPanel />;
   if (phase === PHASE.ROLEDEALING && selectedNumbers.length > 0) return <RoleDealingNumberPanel />;
   return null;
-};
+}

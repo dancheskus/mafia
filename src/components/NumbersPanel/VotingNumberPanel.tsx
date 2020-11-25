@@ -5,7 +5,7 @@ import { gameSelector } from 'redux/selectors';
 
 import { Panel, PanelItem } from './style';
 
-export default () => {
+export default function VotingNumberPanel() {
   const {
     gameState: { phase },
     selectedNumbers,
@@ -20,4 +20,4 @@ export default () => {
       ))}
     </Panel>
   );
-};
+}

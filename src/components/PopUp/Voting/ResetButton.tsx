@@ -24,8 +24,10 @@ const ResetButtonStyle = styled.div`
   }
 `;
 
-export default ({ onClick }: { onClick: () => void }) => (
-  <ResetButtonStyle onClick={onClick}>
-    <ResetIcon size='75%' />
-  </ResetButtonStyle>
-);
+export default function ResetButton({ onClick }: { onClick: () => void }) {
+  return (
+    <ResetButtonStyle onClick={onClick}>
+      <ResetIcon size='75%' />
+    </ResetButtonStyle>
+  );
+}

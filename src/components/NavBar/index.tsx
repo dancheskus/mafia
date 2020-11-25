@@ -19,7 +19,7 @@ import { BackIcon, ButtonsWrapper, NavStateName, StyledNavigation } from './styl
 
 const mod = (n: number, m: number) => ((n % m) + m) % m;
 
-export default () => {
+export default function NavBar() {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
   const { tutorialEnabled, appMusic } = useSelector(settingsSelector);
@@ -145,4 +145,4 @@ export default () => {
       </Container>
     </StyledNavigation>
   );
-};
+}

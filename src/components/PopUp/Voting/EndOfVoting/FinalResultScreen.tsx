@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux';
 import { PopUpButton, PopUpLabel } from 'components/PopUp/styled-components';
 import { gameSelector } from 'redux/selectors';
 
-import ResetButton from '../ResetButton';
 import { ResultsNumbers } from '../style';
+import ResetButton from '../ResetButton';
 
 interface Props {
   setFinalResultVisible: Dispatch<SetStateAction<boolean>>;
@@ -14,7 +14,7 @@ interface Props {
   resetFn: () => void;
 }
 
-export default ({ lastMinuteFor, goToNight, resetFn, setFinalResultVisible }: Props) => {
+export default function FinalResultScreen({ lastMinuteFor, goToNight, resetFn, setFinalResultVisible }: Props) {
   const { selectedNumbers } = useSelector(gameSelector);
 
   return (
@@ -46,4 +46,4 @@ export default ({ lastMinuteFor, goToNight, resetFn, setFinalResultVisible }: Pr
       )}
     </>
   );
-};
+}

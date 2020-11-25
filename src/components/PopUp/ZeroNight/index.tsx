@@ -11,7 +11,7 @@ import PHASE from 'common/phaseEnums';
 import { PopUpButton, PopUpLabel } from '../styled-components';
 import { Icon, TwoIcons } from './style';
 
-export default () => {
+export default function ZeroNight() {
   const dispatch = useDispatch();
   const { mafiaTimer, tutorialEnabled } = useSelector(settingsSelector);
   const players = useSelector(playersSelector);
@@ -64,4 +64,4 @@ export default () => {
       </PopUpButton>
     </>
   );
-};
+}

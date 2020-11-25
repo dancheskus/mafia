@@ -6,7 +6,7 @@ import { PopUpLabel, PopUpButton } from '../styled-components';
 import SheriffTimePage from './SheriffTimePage';
 import DonTimePage from './DonTimePage';
 
-export default () => {
+export default function Night() {
   const [playerToKill, setPlayerToKill] = useState<number>();
   const [donTime, setDonTime] = useState(false);
   const [sheriffTime, setSheriffTime] = useState(false);
@@ -31,4 +31,4 @@ export default () => {
       </PopUpButton>
     </>
   );
-};
+}

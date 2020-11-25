@@ -17,7 +17,7 @@ interface Props {
   playerToKill: number | undefined;
 }
 
-export default ({ setSheriffTime, playerToKill }: Props) => {
+export default function SheriffTimePage({ setSheriffTime, playerToKill }: Props) {
   const dispatch = useDispatch();
   const { dayNumber } = useSelector(gameSelector).gameState;
   const players = useSelector(playersSelector);
@@ -65,4 +65,4 @@ export default ({ setSheriffTime, playerToKill }: Props) => {
       </PopUpButton>
     </>
   );
-};
+}

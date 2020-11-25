@@ -8,7 +8,7 @@ import ROLE from 'common/playerEnums';
 
 import { Panel, PanelItem } from './style';
 
-export default () => {
+export default function RoleDealingNumberPanel() {
   const {
     gameState: { phase },
     numbersPanelClickable,
@@ -45,4 +45,4 @@ export default () => {
       ))}
     </Panel>
   );
-};
+}

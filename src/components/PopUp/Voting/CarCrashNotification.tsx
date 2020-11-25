@@ -6,7 +6,7 @@ import { gameSelector } from 'redux/selectors';
 import { ResultsNumbers } from './style';
 import { PopUpLabel, PopUpButton } from '../styled-components';
 
-export default ({ closeNotification }: { closeNotification: () => void }) => {
+export default function CarCrashNotification({ closeNotification }: { closeNotification: () => void }) {
   const { selectedNumbers } = useSelector(gameSelector);
 
   return (
@@ -24,4 +24,4 @@ export default ({ closeNotification }: { closeNotification: () => void }) => {
       </PopUpButton>
     </>
   );
-};
+}

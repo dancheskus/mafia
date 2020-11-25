@@ -16,7 +16,7 @@ import StandartVoting from './StandartVoting';
 
 const getNewVotesArray = (selectedNumbers: number[]) => Array(selectedNumbers.length).fill(0);
 
-export default () => {
+export default function Voting() {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
   const {
@@ -176,4 +176,4 @@ export default () => {
       carCrashClosed={carCrashClosed}
     />
   );
-};
+}
