@@ -1,0 +1,58 @@
+import React, { useState } from 'react';
+import { batch, useDispatch, useSelector } from 'react-redux';
+
+import { killPlayer } from 'redux/actions/playersActions';
+import { playersSelector } from 'redux/selectors';
+import { changeGameState, clearSelectedNumbers, skipVotingDisable } from 'redux/actions/gameActions';
+import PHASE from 'common/phaseEnums';
+
+import PlayersLastMinute from './PlayersLastMinute';
+import VotingSkippedScreen from './VotingSkippedScreen';
+import FinalResultScreen from './FinalResultScreen';
+
+interface Props {
+  votingSkipped: boolean;
+  lastMinuteFor: number[];
+  resetFn: () => void;
+}
+
+export default ({ lastMinuteFor, resetFn, votingSkipped }: Props) => {
+  const dispatch = useDispatch();
+  const players = useSelector(playersSelector);
+
+  const [finalResultVisible, setFinalResultVisible] = useState(true);
+
+  const goToNight = () => {
+    batch(() => {
+      dispatch(clearSelectedNumbers());
+      votingSkipped && dispatch(skipVotingDisable());
+      dispatch(changeGameState({ phase: PHASE.NIGHT }));
+
+      lastMinuteFor.forEach(plNum => {
+        if (!players[plNum].isAlive) dispatch(skipVotingDisable());
+        dispatch(killPlayer(plNum));
+      });
+    });
+  };
+
+  if (votingSkipped) return <VotingSkippedScreen goToNight={goToNight} />;
+
+  if (finalResultVisible)
+    return (
+      <FinalResultScreen
+        lastMinuteFor={lastMinuteFor}
+        goToNight={goToNight}
+        resetFn={resetFn}
+        setFinalResultVisible={setFinalResultVisible}
+      />
+    );
+
+  return (
+    <PlayersLastMinute
+      listOfPlayers={lastMinuteFor}
+      lastMinuteFor={lastMinuteFor}
+      goToNight={goToNight}
+      resetFn={resetFn}
+    />
+  );
+};

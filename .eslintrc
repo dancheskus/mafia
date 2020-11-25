@@ -1,54 +1,26 @@
 {
-  "parser": "babel-eslint",
-  "extends": ["airbnb", "prettier", "plugin:import/errors", "plugin:import/warnings"],
+  "plugins": [ "prettier" ],
+  "extends": [ "airbnb-typescript", "react-app", "react-app/jest", "prettier" ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": { "project": "./tsconfig.json" },
   "settings": {
-    "import/resolver": {
-      "node": {
-        "moduleDirectory": ["node_modules", "src/"]
-      }
-    }
+    "import/resolver": { "typescript": { "alwaysTryTypes": true } }
   },
   "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": true,
-        "trailingComma": "es5",
-        "jsxSingleQuote": true,
-        "printWidth": 120,
-        "arrowParens": "avoid"
-      }
-    ],
-    "no-unused-vars": [
-      "error",
-      {
-        "vars": "local",
-        "args": "after-used",
-        "ignoreRestSiblings": true
-      }
-    ],
-    "no-unused-expressions": [
-      "error",
-      {
-        "allowTernary": true,
-        "allowShortCircuit": true
-      }
-    ],
-    "react/jsx-one-expression-per-line": "off",
-    "react/jsx-filename-extension": 0,
-    "react/prop-types": 0,
-    "react/no-array-index-key": 1,
-    "import/prefer-default-export": 0,
-    "no-shadow": 0,
-    "no-plusplus": 0,
-    "no-underscore-dangle": 0,
-    "react/button-has-type": 0,
-    "no-nested-ternary": 0,
-    "one-var": 0,
-    "jsx-a11y/click-events-have-key-events": 0,
-    "jsx-a11y/no-static-element-interactions": 0,
-    "consistent-return": 0,
-    "no-alert": 0,
+    "prettier/prettier": ["warn", {
+      "trailingComma": "all",
+      "singleQuote": true,
+      "jsxSingleQuote": true,
+      "printWidth": 120,
+      "arrowParens": "avoid" // Allow single argument without parentheses in arrow functions
+    }],
+    "import/no-anonymous-default-export": 0, // Allow "export default"
+    "react/jsx-one-expression-per-line": 0,
+    "@typescript-eslint/no-unused-vars": ["warn", {
+      "vars": "local",
+      "args": "after-used",
+      "ignoreRestSiblings": true
+    }],
     "import/order": ["error", {
       "groups": [
         "external", // node_modules
@@ -57,8 +29,11 @@
       ],
       "newlines-between": "always" // Separate all groups with new line
     }],
-    "react/jsx-props-no-spreading": 0 // Allow to use e.g. {...(condition && { className: 'example' })} in JSX element
-  },
-  "plugins": ["react", "react-hooks", "prettier"],
-  "env": { "browser": true, "jest": true }
+    "no-plusplus": 0,
+    "consistent-return": 0, // returning value is not required in arrow functions
+    "@typescript-eslint/indent": 0,
+    "no-nested-ternary": 0,
+    "react/require-default-props": 0,
+    "@typescript-eslint/no-shadow": 0 // Allow using same variable name in outer and function scopes
+  }
 }
