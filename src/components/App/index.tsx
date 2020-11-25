@@ -22,7 +22,7 @@ import PHASE from 'common/phaseEnums';
 
 import { AppWrapper, MainApp, MainContentWrapper, UnsupportedRes } from './style';
 
-export default () => {
+const App = () => {
   const {
     gameState: { phase },
     activePlayer,
@@ -84,3 +84,5 @@ export default () => {
     </>
   );
 };
+
+export default App;
