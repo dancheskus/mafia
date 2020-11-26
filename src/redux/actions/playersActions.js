@@ -1,7 +1,0 @@
-export const addRole = payload => ({ type: 'ADD_ROLE', payload });
-export const killPlayer = playerNumber => ({ type: 'KILL_PLAYER', playerNumber });
-export const returnPlayerToGame = playerNumber => ({ type: 'RETURN_PLAYER_TO_GAME', playerNumber });
-export const addFoul = playerNumber => ({ type: 'ADD_FOUL', playerNumber });
-export const removeFoul = playerNumber => ({ type: 'REMOVE_FOUL', playerNumber });
-export const unmutePlayer = playerNumber => ({ type: 'UNMUTE_PLAYER', playerNumber });
-export const resetPlayersReducer = () => ({ type: 'RESET_PLAYERS_REDUCER' });
