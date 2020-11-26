@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { render as rtlRender } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -7,6 +8,7 @@ import gameReducer from 'redux/reducers/gameReducer';
 import playersReducer from 'redux/reducers/playersReducer';
 import settingsReducer from 'redux/reducers/settingsReducer';
 
+// @ts-ignore
 export default function render(ui, options = {}) {
   // @ts-ignore
   const { initialGameState, initialPlayersState, initialSettingsState, ...rtlOptions } = options;
@@ -19,6 +21,8 @@ export default function render(ui, options = {}) {
     return { game, players: initialPlayersState || players, settings };
   });
 
+  // @ts-ignore
   const Wrapper = ({ children }) => <Provider store={store}>{children}</Provider>;
+  // @ts-ignore
   return { ...rtlRender(ui, { wrapper: Wrapper, ...rtlOptions }), store };
 }

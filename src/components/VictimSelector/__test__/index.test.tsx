@@ -9,7 +9,7 @@ import VictimSelector from '..';
 
 const onNumberSelected = jest.fn();
 
-const props = { lastPlayer: false, votesLeft: 10, onNumberSelected };
+const props = { votesLeft: 9, onNumberSelected };
 
 describe('<VictimSelector />', () => {
   it('should change clicked button classNames and call callback function onClick', () => {
@@ -60,8 +60,31 @@ describe('<VictimSelector />', () => {
     buttons.forEach(button => user.click(button));
     expect(onNumberSelected).toHaveBeenCalledTimes(8);
   });
-});
 
-// днем, если 5 игроков убито, при голосовании 5 кнопок должно быть disabled
-// Если голосуют за последнюю кандидатуру (lastPlayer), голос нельзя снять. Все остальные кнопки disabled
-// Если передан selectedNumber, он должен быть активен.
+  it('should render 2 disabled buttons at Day if players are dead', () => {
+    render(<VictimSelector onNumberSelected={onNumberSelected} votesLeft={7} />);
+    const buttons = screen.getAllByRole('button');
+    buttons.forEach(button => user.click(button));
+    expect(onNumberSelected).toHaveBeenCalledTimes(8);
+  });
+
+  it('should render all disabled buttons with one button not clickable if last player is voting', () => {
+    render(<VictimSelector onNumberSelected={onNumberSelected} votesLeft={7} lastPlayer />);
+    const buttons = screen.getAllByRole('button');
+    const activeButton = screen.getByRole('button', { name: /8/i });
+    const disabledButton = screen.getByRole('button', { name: /7/i });
+    expect(activeButton.selected).toBeTruthy();
+    expect(disabledButton.selected).toBeFalsy();
+    buttons.forEach(button => user.click(button));
+    expect(onNumberSelected).toHaveBeenCalledTimes(0);
+  });
+
+  it('should render passed activeNumber as active button', () => {
+    render(<VictimSelector {...props} selectedNumber={3} />);
+
+    const activeButton = screen.getByRole('button', { name: /4/i });
+    const disabledButton = screen.getByRole('button', { name: /3/i });
+    expect(activeButton.selected).toBeTruthy();
+    expect(disabledButton.selected).toBeFalsy();
+  });
+});
