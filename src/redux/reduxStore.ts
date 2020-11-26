@@ -6,7 +6,7 @@ import gameReducer from './reducers/gameReducer';
 import playersReducer from './reducers/playersReducer';
 import settingsReducer from './reducers/settingsReducer';
 
-export default () =>
+const configStore = () =>
   createStore(
     (state: any = {}, action: any) => ({
       game: gameReducer(state.game, action, state),
@@ -18,3 +18,6 @@ export default () =>
     // eslint-disable-next-line
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   );
+
+const store = configStore();
+export default store;
