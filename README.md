@@ -13,8 +13,6 @@
 **Адрес проекта** [mafia-city.ml](https://mafia-city.ml/)
 
 ## Production
-> Проект работает на node v10.15.0
-
 - Скопировать проект:  `git clone https://github.com/dancheskus/mafia.git`
 - Установка: `yarn` или `npm install`
 - Запуск: `yarn start` или `npm start`
