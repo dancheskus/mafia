@@ -35,15 +35,33 @@ describe('<VictimSelector />', () => {
   });
 
   it('should render 5 disabled (not clickable) buttons if votesLeft=4', () => {
-    const initialGameState = { opensTable: 5 };
-    render(<VictimSelector {...props} votesLeft={4} />, { initialGameState });
+    render(<VictimSelector {...props} votesLeft={4} />);
 
     const buttons = screen.getAllByRole('button');
     buttons.forEach(button => user.click(button));
     expect(onNumberSelected).toHaveBeenCalledTimes(5);
   });
+
+  it('should render 2 disabled buttons at Night if players are dead', () => {
+    const initialPlayersState = [
+      { isAlive: true },
+      { isAlive: false },
+      { isAlive: true },
+      { isAlive: true },
+      { isAlive: true },
+      { isAlive: false },
+      { isAlive: true },
+      { isAlive: true },
+      { isAlive: true },
+      { isAlive: true },
+    ];
+    render(<VictimSelector onNumberSelected={onNumberSelected} shooting />, { initialPlayersState });
+    const buttons = screen.getAllByRole('button');
+    buttons.forEach(button => user.click(button));
+    expect(onNumberSelected).toHaveBeenCalledTimes(8);
+  });
 });
 
-// ночью, если игрок убит, его номер не активен
+// днем, если 5 игроков убито, при голосовании 5 кнопок должно быть disabled
 // Если голосуют за последнюю кандидатуру (lastPlayer), голос нельзя снять. Все остальные кнопки disabled
 // Если передан selectedNumber, он должен быть активен.

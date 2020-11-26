@@ -13,10 +13,10 @@ export default function render(ui, options = {}) {
 
   const store = createStore((state: any = {}, action: any) => {
     const game = { ...gameReducer(state.game, action, state), ...initialGameState };
-    const players = { ...playersReducer(state.players, action), ...initialPlayersState };
+    const players = playersReducer(state.players, action);
     const settings = { ...settingsReducer(state.settings, action), ...initialSettingsState };
 
-    return { game, players, settings };
+    return { game, players: initialPlayersState || players, settings };
   });
 
   const Wrapper = ({ children }) => <Provider store={store}>{children}</Provider>;
