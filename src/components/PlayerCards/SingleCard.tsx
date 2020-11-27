@@ -97,6 +97,7 @@ export default function SingleCard({ order, playerNumber }: Props) {
     <CardContainer order={order}>
       <Card activePlayer={phase === PHASE.DAY && activePlayer === playerNumber}>
         <PlayerNumber
+          data-testid='playerNumber'
           role={role}
           isMuted={muted}
           isAlive={isAlive}
@@ -111,14 +112,23 @@ export default function SingleCard({ order, playerNumber }: Props) {
           <div className='number'>{playerNumber + 1}</div>
         </PlayerNumber>
 
-        <FoulContainer isAlive={isAlive}>
-          <RemoveFoul onClick={removeFoulClicked} className={playerNumber === 7 ? 'remove-foul' : ''}>
+        <FoulContainer data-testid='foulContainer' isAlive={isAlive}>
+          <RemoveFoul
+            data-testid='removeFoul'
+            onClick={removeFoulClicked}
+            className={playerNumber === 7 ? 'remove-foul' : ''}
+          >
             <FoulIcon remove>
               <MinimizeIcon size='50%' />
             </FoulIcon>
           </RemoveFoul>
 
-          <AddFoul amount={foulsAmount} onClick={addFoulClicked} className={playerNumber === 7 ? 'add-foul' : ''}>
+          <AddFoul
+            data-testid='addFoul'
+            amount={foulsAmount}
+            onClick={addFoulClicked}
+            className={playerNumber === 7 ? 'add-foul' : ''}
+          >
             {foulsAmount ? (
               '!'.repeat(foulsAmount)
             ) : (

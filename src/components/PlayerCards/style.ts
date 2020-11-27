@@ -36,17 +36,20 @@ export const PlayerNumber = styled.div<IPlayerNumber>`
       : colors.Day.playerCardNumber};
     position: relative;
 
-    ::before {
-      content: '';
-      width: 13px;
-      height: 13px;
-      border-radius: 50%;
-      background: ${opensTable && colors.Day.playerOpensTable};
-      opacity: 0.7;
-      position: absolute;
-      top: 7px;
-      left: 7px;
-    }
+    ${opensTable &&
+    css`
+      ::before {
+        content: '';
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: ${colors.Day.playerOpensTable};
+        opacity: 0.7;
+        position: absolute;
+        top: 7px;
+        left: 7px;
+      }
+    `};
   `};
 `;
 
