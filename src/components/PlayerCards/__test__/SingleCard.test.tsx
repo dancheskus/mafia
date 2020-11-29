@@ -1,7 +1,6 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
 
-import render from 'helpers/testing/render';
+import { render, screen } from 'helpers/test-utils';
 
 import SingleCard from '../SingleCard';
 
@@ -25,7 +24,14 @@ describe('<SingleCard />', () => {
       { isAlive: false, fouls: { amount: 0, muted: false } },
     ];
     const initialGameState = { gameState: { phase: 'Day', dayNumber: 1 } };
-    render(<SingleCard order={0} playerNumber={0} />, { initialPlayersState, initialGameState });
+    const { rerender, store } = render(<SingleCard order={0} playerNumber={0} />, {
+      initialPlayersState,
+      initialGameState,
+    });
+    console.log(store.getState().players);
+    rerender(<SingleCard order={0} playerNumber={0} />, { initialPlayersState, initialGameState });
+    console.log(store.getState().players);
+
     const playerNumber = screen.getByTestId(/playerNumber/i);
 
     expect(playerNumber).toHaveStyleRule('background', '#8A8A8A', {
@@ -38,11 +44,9 @@ describe('<SingleCard />', () => {
 // Активный игрок - кружок слева
 // Есть как номер игрока, так и панель фолов
 // При нажатии на "+" увеличиваем фолы. !!!. "+" исчезает. Стили меняются (серый, желтый, красный)
-// При получении 3-го фола mute игрока. Смена стяля на красный. Как номера, так и поля "+"
+// При получении 3-го фола mute игрока. Смена стиля на красный. Как номера, так и поля "+"
 // При получении 4-го фола запускается таймер, по прошествии которого удаляется поле фолов. Добавляется кнопка назад и запускается новый таймер
 // При нажатии на "-" уменьшаем фолы. !!. Если фолов 0, не уменьшаем.
-// При получении 3-го фола mute игрока. Смена стяля на красный. Как номера, так и поля "+"
-// При получении 4-го фола запускается таймер, по прошествии которого удаляется поле фолов. Добавляется кнопка назад и запускается новый таймер
 
 // --------------------- ЕСЛИ МЕРТВ: --------------------
 // только номер игрока. Стиль черный

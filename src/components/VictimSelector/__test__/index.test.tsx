@@ -1,9 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import { screen } from '@testing-library/react';
 import user from '@testing-library/user-event';
 
-import render from 'helpers/testing/render';
+import { render, screen } from 'helpers/test-utils';
 
 import VictimSelector from '..';
 
@@ -38,8 +37,8 @@ describe('<VictimSelector />', () => {
     render(<VictimSelector {...props} votesLeft={4} />);
 
     const buttons = screen.getAllByRole('button');
-    buttons.forEach(button => user.click(button));
-    expect(onNumberSelected).toHaveBeenCalledTimes(5);
+    [1, 2, 3, 4, 5].forEach(button => expect(buttons[button - 1]).not.toBeDisabled());
+    [6, 7, 8, 9, 10].forEach(button => expect(buttons[button - 1]).toBeDisabled());
   });
 
   it('should render 2 disabled buttons at Night if players are dead', () => {
@@ -58,7 +57,8 @@ describe('<VictimSelector />', () => {
     render(<VictimSelector onNumberSelected={onNumberSelected} shooting />, { initialPlayersState });
     const buttons = screen.getAllByRole('button');
     buttons.forEach(button => user.click(button));
-    expect(onNumberSelected).toHaveBeenCalledTimes(8);
+    [1, 3, 4, 5, 7, 8, 9, 10].forEach(button => expect(buttons[button - 1]).not.toBeDisabled());
+    [2, 6].forEach(button => expect(buttons[button - 1]).toBeDisabled());
   });
 
   it('should render 2 disabled buttons at Day if players are dead', () => {
@@ -86,5 +86,6 @@ describe('<VictimSelector />', () => {
     const disabledButton = screen.getByRole('button', { name: /3/i });
     expect(activeButton.selected).toBeTruthy();
     expect(disabledButton.selected).toBeFalsy();
+    // Использовать expect по стилям
   });
 });
