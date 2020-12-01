@@ -2,7 +2,7 @@
 import React from 'react';
 import user from '@testing-library/user-event';
 
-import { render, screen } from 'helpers/test-utils';
+import { render, screen } from 'helpers/testingHelpers/test-utils';
 
 import VictimSelector from '..';
 

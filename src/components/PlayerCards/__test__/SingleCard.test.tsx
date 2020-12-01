@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { render, screen } from 'helpers/test-utils';
+import { render, screen } from 'helpers/testingHelpers/test-utils';
+import { allAlivePlayers } from 'helpers/testingHelpers/testingPlayersStates';
 
 import SingleCard from '../SingleCard';
 
@@ -19,24 +20,19 @@ describe('<SingleCard />', () => {
   });
 
   it('should show indicator in top left corner if player opens table', () => {
-    const initialPlayersState = [
-      { isAlive: false, fouls: { amount: 0, muted: false } },
-      { isAlive: false, fouls: { amount: 0, muted: false } },
-    ];
     const initialGameState = { gameState: { phase: 'Day', dayNumber: 1 } };
-    const { rerender, store } = render(<SingleCard order={0} playerNumber={0} />, {
-      initialPlayersState,
+    const { rerender } = render(<SingleCard order={0} playerNumber={0} />, {
+      initialPlayersState: allAlivePlayers,
       initialGameState,
     });
-    console.log(store.getState().players);
-    rerender(<SingleCard order={0} playerNumber={0} />, { initialPlayersState, initialGameState });
-    console.log(store.getState().players);
 
     const playerNumber = screen.getByTestId(/playerNumber/i);
 
-    expect(playerNumber).toHaveStyleRule('background', '#8A8A8A', {
-      modifier: '::before',
-    });
+    expect(playerNumber).toHaveStyleRule('background', '#8A8A8A', { modifier: '::before' });
+
+    rerender(<SingleCard order={0} playerNumber={1} />);
+
+    expect(playerNumber).not.toHaveStyleRule('background', '#8A8A8A', { modifier: '::before' });
   });
 });
 

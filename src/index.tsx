@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import throttle from 'lodash/throttle';
 
 import { saveState } from 'redux/localStorage';
-import store from 'redux/reduxStore';
 import App from 'components/App';
+import createStore from 'redux/reduxStore';
 
 // ----------- Отключение pullToRefresh и scroll в моб. браузерах --------------------
 
@@ -30,6 +30,8 @@ element.addEventListener('touchmove', (e: any) => {
 });
 
 // ------------------------------------------------------------------------------------
+
+const store = createStore();
 
 store.subscribe(
   throttle(() => {

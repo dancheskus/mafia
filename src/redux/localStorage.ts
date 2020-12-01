@@ -1,6 +1,6 @@
 import getFromLocalStorage from 'helpers/getFromLocalStorage';
 
-import { initialState } from './reducers/gameReducer';
+import { gameInitialState } from './reducers/gameReducer';
 
 const compareKeys = (a: any, b: any) => {
   const aKeys = Object.keys(a).sort();
@@ -11,7 +11,7 @@ const compareKeys = (a: any, b: any) => {
 export const loadState = () => {
   const state = getFromLocalStorage('state');
   // Если добавлен новый элемент в gameState, то состояние сбрасывается, а не берется из localStorage
-  if (!state || !compareKeys(initialState, state.game)) return localStorage.clear();
+  if (!state || !compareKeys(gameInitialState, state.game)) return localStorage.clear();
   return state;
 };
 

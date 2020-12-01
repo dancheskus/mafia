@@ -1,23 +1,21 @@
-import { createStore } from 'redux';
+import { createStore as reduxCreateStore } from 'redux';
 
 import { loadState } from 'redux/localStorage';
 
 import gameReducer from './reducers/gameReducer';
 import playersReducer from './reducers/playersReducer';
 import settingsReducer from './reducers/settingsReducer';
+import { TCombinedReducers } from './reducers/types';
 
-const configStore = () =>
-  createStore(
+export default (initialState: TCombinedReducers = loadState()) =>
+  reduxCreateStore(
     (state: any = {}, action: any) => ({
       game: gameReducer(state.game, action, state),
       players: playersReducer(state.players, action),
       settings: settingsReducer(state.settings, action),
     }),
-    loadState(),
+    initialState,
     // @ts-expect-error
     // eslint-disable-next-line
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   );
-
-const store = configStore();
-export default store;

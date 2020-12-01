@@ -7,7 +7,7 @@ import PHASE from 'common/phaseEnums';
 
 import { TGameState, TCombinedReducers } from './types';
 
-export const initialState: TGameState = {
+export const gameInitialState: TGameState = {
   opensTable: 0,
   activePlayer: 0,
   gameState: { phase: PHASE.SEATALLOCATOR, dayNumber: 0 },
@@ -28,7 +28,7 @@ interface IAction {
   payload: { phase: PHASE; dayNumber: number };
 }
 
-export default (state = initialState, action: IAction, root: TCombinedReducers) =>
+export default (state = gameInitialState, action: IAction, root: TCombinedReducers) =>
   produce(state, draft => {
     switch (action.type) {
       case 'CHANGE_ACTIVE_PLAYER':
@@ -118,7 +118,7 @@ export default (state = initialState, action: IAction, root: TCombinedReducers) 
 
       case 'RESET_GAME_REDUCER':
         return {
-          ...initialState,
+          ...gameInitialState,
           gameState: { phase: root.settings.seatAllocator ? PHASE.SEATALLOCATOR : PHASE.ROLEDEALING },
         };
     }

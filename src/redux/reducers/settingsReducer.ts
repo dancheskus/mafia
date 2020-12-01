@@ -5,7 +5,7 @@ import { TSettingsState } from './types';
 
 const savedSettings = localStorage.settings ? JSON.parse(localStorage.settings) : {};
 
-const initialState: TSettingsState = {
+export const settingsInitialState: TSettingsState = {
   appMusic: savedSettings.appMusic ?? true,
   timerSounds: savedSettings.timerSounds ?? true,
   mafiaTimer: savedSettings.mafiaTimer ?? true,
@@ -14,7 +14,7 @@ const initialState: TSettingsState = {
   tutorialEnabled: savedSettings.tutorialEnabled ?? true,
 };
 
-export default (state = initialState, action: { type: string }) => {
+export default (state = settingsInitialState, action: { type: string }) => {
   const newState = produce(state, draft => {
     switch (action.type) {
       case 'SWITCH_APP_MUSIC':
