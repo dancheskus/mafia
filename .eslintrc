@@ -21,7 +21,7 @@
       "args": "after-used",
       "ignoreRestSiblings": true
     }],
-    "import/order": ["error", {
+    "import/order": ["warn", {
       "groups": [
         "external", // node_modules
         "internal", // src folder
