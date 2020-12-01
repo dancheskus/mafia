@@ -3,6 +3,7 @@ import React from 'react';
 import user from '@testing-library/user-event';
 
 import { render, screen } from 'helpers/testingHelpers/test-utils';
+import colors from 'style/colors';
 
 import VictimSelector from '..';
 
@@ -65,27 +66,31 @@ describe('<VictimSelector />', () => {
     render(<VictimSelector onNumberSelected={onNumberSelected} votesLeft={7} />);
     const buttons = screen.getAllByRole('button');
     buttons.forEach(button => user.click(button));
-    expect(onNumberSelected).toHaveBeenCalledTimes(8);
+    [1, 2, 3, 4, 5, 6, 7, 8].forEach(button => expect(buttons[button - 1]).not.toBeDisabled());
+    [9, 10].forEach(button => expect(buttons[button - 1]).toBeDisabled());
   });
 
   it('should render all disabled buttons with one button not clickable if last player is voting', () => {
     render(<VictimSelector onNumberSelected={onNumberSelected} votesLeft={7} lastPlayer />);
     const buttons = screen.getAllByRole('button');
+    [1, 2, 3, 4, 5, 6, 7, 9, 10].forEach(button => expect(buttons[button - 1]).toBeDisabled());
+
     const activeButton = screen.getByRole('button', { name: /8/i });
-    const disabledButton = screen.getByRole('button', { name: /7/i });
-    expect(activeButton.selected).toBeTruthy();
-    expect(disabledButton.selected).toBeFalsy();
-    buttons.forEach(button => user.click(button));
+    user.click(activeButton);
     expect(onNumberSelected).toHaveBeenCalledTimes(0);
   });
 
-  it('should render passed activeNumber as active button', () => {
+  it('should render passed selectedNumber as active button', () => {
     render(<VictimSelector {...props} selectedNumber={3} />);
 
+    const buttons = screen.getAllByRole('button');
     const activeButton = screen.getByRole('button', { name: /4/i });
-    const disabledButton = screen.getByRole('button', { name: /3/i });
-    expect(activeButton.selected).toBeTruthy();
-    expect(disabledButton.selected).toBeFalsy();
-    // Использовать expect по стилям
+    expect(activeButton).toHaveStyleRule('background', colors.Voting.handsAmountSelectedBackground);
+    expect(activeButton).toHaveStyleRule('color', colors.Voting.popupTextInverse);
+
+    [1, 2, 3, 5, 6, 7, 8, 9, 10].forEach(button => {
+      expect(buttons[button - 1]).not.toHaveStyleRule('background', colors.Voting.handsAmountSelectedBackground);
+      expect(buttons[button - 1]).not.toHaveStyleRule('color', colors.Voting.popupTextInverse);
+    });
   });
 });
