@@ -6,13 +6,13 @@ import ROLE from 'common/playerEnums';
 
 import { TPlayersState, TPlayersAction } from './types';
 
-const initialState: TPlayersState = Array(10).fill({
+export const playersInitialState: TPlayersState = Array(10).fill({
   role: ROLE.MIRNIJ,
   isAlive: true,
   fouls: { amount: 0, muted: false },
 });
 
-export default (state = initialState, action: TPlayersAction) =>
+export default (state = playersInitialState, action: TPlayersAction) =>
   produce(state, draft => {
     switch (action.type) {
       case 'ADD_ROLE':
@@ -48,6 +48,6 @@ export default (state = initialState, action: TPlayersAction) =>
       }
 
       case 'RESET_PLAYERS_REDUCER':
-        return initialState;
+        return playersInitialState;
     }
   });

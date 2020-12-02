@@ -2,7 +2,8 @@ import React from 'react';
 import user from '@testing-library/user-event';
 
 import { render, screen } from 'helpers/testingHelpers/test-utils';
-import { allAlivePlayers } from 'helpers/testingHelpers/testingPlayersStates';
+import basicPlayersState from 'helpers/testingHelpers/basicPlayersState';
+import PHASE from 'common/phaseEnums';
 
 import SingleCard from '../SingleCard';
 
@@ -15,17 +16,16 @@ const mockSetInterval = () => jest.spyOn(window, 'setInterval').mockImplementati
 
 describe('<SingleCard />', () => {
   it('should not show foulContainer if player is dead', () => {
-    const initialPlayersState = [{ isAlive: false, fouls: { amount: 0, muted: false } }];
-    render(<SingleCard order={0} playerNumber={0} />, { initialPlayersState });
+    render(<SingleCard order={0} playerNumber={0} />, { changePlayersState: [{ isAlive: false }] });
 
     const foulContainer = screen.getByTestId(/foulContainer/i);
     expect(foulContainer).not.toBeVisible();
   });
 
   it('should show indicator in top left corner if player opens table', () => {
-    const initialGameState = { gameState: { phase: 'Day', dayNumber: 1 } };
+    const initialGameState = { gameState: { phase: PHASE.DAY, dayNumber: 1 } };
     const { rerender } = render(<SingleCard order={0} playerNumber={0} />, {
-      initialPlayersState: allAlivePlayers,
+      initialPlayersState: basicPlayersState,
       initialGameState,
     });
 
@@ -39,9 +39,9 @@ describe('<SingleCard />', () => {
   });
 
   it('should kill player after 4th foul', () => {
-    const initialGameState = { gameState: { phase: 'Day', dayNumber: 1 } };
+    const initialGameState = { gameState: { phase: PHASE.DAY, dayNumber: 1 } };
     const { getState } = render(<SingleCard order={0} playerNumber={0} />, {
-      initialPlayersState: allAlivePlayers,
+      initialPlayersState: basicPlayersState,
       initialGameState,
     });
 
@@ -70,9 +70,9 @@ describe('<SingleCard />', () => {
   });
 
   it('should not kill player if back button was clicked after 4th foul. And kill player after 4th foul is clicked again', () => {
-    const initialGameState = { gameState: { phase: 'Day', dayNumber: 1 } };
+    const initialGameState = { gameState: { phase: PHASE.DAY, dayNumber: 1 } };
     const { getState } = render(<SingleCard order={0} playerNumber={0} />, {
-      initialPlayersState: allAlivePlayers,
+      initialPlayersState: basicPlayersState,
       initialGameState,
     });
 
