@@ -16,11 +16,6 @@
     }],
     "import/no-anonymous-default-export": 0, // Allow "export default"
     "react/jsx-one-expression-per-line": 0,
-    "@typescript-eslint/no-unused-vars": ["warn", {
-      "vars": "local",
-      "args": "after-used",
-      "ignoreRestSiblings": true
-    }],
     "import/order": ["warn", {
       "groups": [
         "external", // node_modules
@@ -28,12 +23,18 @@
         ["parent", "sibling"]
       ],
       "newlines-between": "always" // Separate all groups with new line
-    }],
-    "no-plusplus": 0,
-    "consistent-return": 0, // returning value is not required in arrow functions
-    "@typescript-eslint/indent": 0,
-    "no-nested-ternary": 0,
-    "react/require-default-props": 0,
-    "@typescript-eslint/no-shadow": 0 // Allow using same variable name in outer and function scopes
+      }],
+      "no-plusplus": 0,
+      "consistent-return": 0, // returning value is not required in arrow functions
+      "no-nested-ternary": 0,
+      "react/require-default-props": 0,
+      "@typescript-eslint/indent": 0,
+      "@typescript-eslint/comma-dangle": 0,
+      "@typescript-eslint/no-shadow": 0, // Allow using same variable name in outer and function scopes
+      "@typescript-eslint/no-unused-vars": ["warn", {
+        "vars": "local",
+        "args": "after-used",
+        "ignoreRestSiblings": true
+      }]
   }
 }

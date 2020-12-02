@@ -1,4 +1,5 @@
 import React from 'react';
+import user from '@testing-library/user-event';
 
 import { render, screen } from 'helpers/testingHelpers/test-utils';
 import { allAlivePlayers } from 'helpers/testingHelpers/testingPlayersStates';
@@ -9,6 +10,8 @@ import SingleCard from '../SingleCard';
 // const foulContainer = screen.getByTestId(/foulContainer/i);
 // const removeFoul = screen.getByTestId(/removeFoul/i);
 // const addFoul = screen.getByTestId(/addFoul/i);
+
+const mockSetInterval = () => jest.spyOn(window, 'setInterval').mockImplementationOnce(callback => callback());
 
 describe('<SingleCard />', () => {
   it('should not show foulContainer if player is dead', () => {
@@ -33,6 +36,75 @@ describe('<SingleCard />', () => {
     rerender(<SingleCard order={0} playerNumber={1} />);
 
     expect(playerNumber).not.toHaveStyleRule('background', '#8A8A8A', { modifier: '::before' });
+  });
+
+  it('should kill player after 4th foul', () => {
+    const initialGameState = { gameState: { phase: 'Day', dayNumber: 1 } };
+    const { getState } = render(<SingleCard order={0} playerNumber={0} />, {
+      initialPlayersState: allAlivePlayers,
+      initialGameState,
+    });
+
+    mockSetInterval();
+
+    // Player number "0" should be alive
+    expect(getState().players[0].isAlive).toBe(true);
+
+    // Killing player with 4th foul
+    const addFoul = screen.getByTestId(/addFoul/i);
+    user.click(addFoul);
+    user.click(addFoul);
+    user.click(addFoul);
+    user.click(addFoul);
+
+    // Foul container should be hidden
+    const foulContainer = screen.getByTestId(/foulContainer/i);
+    expect(foulContainer).not.toBeVisible();
+
+    // Player number "0" should be killed
+    expect(getState().players[0].isAlive).toBe(false);
+
+    expect(setInterval).toHaveBeenCalledTimes(3);
+
+    // Перезаписать только часть игроков
+  });
+
+  it('should not kill player if back button was clicked after 4th foul. And kill player after 4th foul is clicked again', () => {
+    const initialGameState = { gameState: { phase: 'Day', dayNumber: 1 } };
+    const { getState } = render(<SingleCard order={0} playerNumber={0} />, {
+      initialPlayersState: allAlivePlayers,
+      initialGameState,
+    });
+
+    mockSetInterval();
+
+    // Player number "0" should be alive
+    expect(getState().players[0].isAlive).toBe(true);
+
+    // Killing player with 4th foul
+    const addFoul = screen.getByTestId(/addFoul/i);
+    user.click(addFoul);
+    user.click(addFoul);
+    user.click(addFoul);
+    user.click(addFoul);
+
+    // Returning player to life
+    const backButton = screen.getByTestId(/backButton/i);
+    user.click(backButton);
+
+    // Foul container should be visible
+    const foulContainer = screen.getByTestId(/foulContainer/i);
+    expect(foulContainer).toBeVisible();
+
+    // Player number "0" should be killed
+    expect(getState().players[0].isAlive).toBe(true);
+
+    expect(setInterval).toHaveBeenCalledTimes(3);
+
+    // Killing again to validate killing function is still accessible
+    user.click(addFoul);
+
+    expect(setInterval).toHaveBeenCalledTimes(4);
   });
 });
 

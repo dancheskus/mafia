@@ -104,7 +104,7 @@ export default function SingleCard({ order, playerNumber }: Props) {
           opensTable={phase === PHASE.DAY && opensTable === playerNumber}
         >
           {lastFoulDeath && (
-            <BackButton onClick={backToLife}>
+            <BackButton data-testid='backButton' onClick={backToLife}>
               <NextIcon fill='lightgrey' />
             </BackButton>
           )}
