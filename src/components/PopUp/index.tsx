@@ -33,6 +33,7 @@ export default function PopUp({ opened, PopupChild }: Props) {
     >
       {phase !== PHASE.SEATALLOCATOR && phase !== PHASE.ROLEDEALING && phase !== PHASE.ENDOFGAME && (
         <MinimizeButton
+          data-testid='minimizeButton'
           tutorialEnabled={tutorialEnabled}
           className='minimize-button'
           color={phase}
