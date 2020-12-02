@@ -103,6 +103,10 @@ describe('<SingleCard />', () => {
     const addFoul = screen.getByTestId(/addFoul/i);
     const playerNumber = screen.getByTestId(/playerNumber/i);
 
+    // Checking that foul amount is not going negative
+    user.click(removeFoul);
+    expect(screen.queryByText(/!/)).not.toBeInTheDocument();
+
     expect(screen.queryByText(/!/)).not.toBeInTheDocument();
     expect(addFoul).toHaveStyleRule('background', colors.Day.addFoulBackground);
 
@@ -123,12 +127,25 @@ describe('<SingleCard />', () => {
     user.dblClick(removeFoul);
     expect(addFoul).toHaveTextContent('!');
   });
+
+  it('should mute player on 3d foul and unmute him if foul decreased', () => {
+    const playerNumber = 3;
+    const { getState } = render(<SingleCard order={0} playerNumber={playerNumber} />, {
+      initialGameState,
+      changePlayersState,
+    });
+
+    const addFoul = screen.getByTestId(/addFoul/i);
+    const removeFoul = screen.getByTestId(/removeFoul/i);
+
+    user.click(addFoul);
+    user.click(addFoul);
+
+    expect(getState().players[playerNumber].fouls.muted).toBe(false);
+    user.click(addFoul);
+    expect(getState().players[playerNumber].fouls.muted).toBe(true);
+
+    user.click(removeFoul);
+    expect(getState().players[playerNumber].fouls.muted).toBe(false);
+  });
 });
-
-// --------------------- ЕСЛИ ЖИВ: ----------------------
-// При получении 3-го фола mute игрока. Смена стиля на красный. Как номера, так и поля "+"
-// При получении 4-го фола запускается таймер, по прошествии которого удаляется поле фолов. Добавляется кнопка назад и запускается новый таймер
-// При нажатии на "-" уменьшаем фолы. !!. Если фолов 0, не уменьшаем.
-
-// --------------------- ЕСЛИ МЕРТВ: --------------------
-// только номер игрока. Стиль черный
