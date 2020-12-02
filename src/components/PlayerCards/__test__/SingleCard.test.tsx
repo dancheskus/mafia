@@ -9,11 +9,6 @@ import colors from 'style/colors';
 
 import SingleCard from '../SingleCard';
 
-// const playerNumber = screen.getByTestId(/playerNumber/i);
-// const foulContainer = screen.getByTestId(/foulContainer/i);
-// const removeFoul = screen.getByTestId(/removeFoul/i);
-// const addFoul = screen.getByTestId(/addFoul/i);
-
 const mockSetInterval = () => jest.spyOn(window, 'setInterval').mockImplementationOnce(callback => callback());
 const initialGameState = { gameState: { phase: PHASE.DAY, dayNumber: 1 } };
 const changePlayersState = [{ fouls: { amount: 3 } }, { role: ROLE.MAFIA }];
