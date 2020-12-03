@@ -45,7 +45,7 @@ export default function ZeroNight() {
         <Icon>
           <SheriffStarIcon size='86%' />
 
-          <span>{findPlayerNumber(ROLE.SHERIF)}</span>
+          <span data-testid='shariffPlayerNumber'>{findPlayerNumber(ROLE.SHERIF)}</span>
 
           <div className='label'>ШЕРИФ</div>
         </Icon>
@@ -53,7 +53,7 @@ export default function ZeroNight() {
         <Icon>
           <TargetIcon />
 
-          <span>{findPlayerNumber(ROLE.DON)}</span>
+          <span data-testid='donPlayerNumber'>{findPlayerNumber(ROLE.DON)}</span>
 
           <div className='label'>ДОН</div>
         </Icon>

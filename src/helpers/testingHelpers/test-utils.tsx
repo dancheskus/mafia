@@ -14,7 +14,7 @@ interface IChangePlayersState extends DeepPartial<TPlayer> {
   playerNumber?: number;
 }
 
-interface IOptions {
+export interface IOptions {
   changePlayersState?: IChangePlayersState[];
   initialPlayersState?: DeepPartial<TPlayer[]>;
   initialGameState?: Partial<TGameState>;
