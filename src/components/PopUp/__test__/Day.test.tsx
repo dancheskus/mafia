@@ -1,7 +1,6 @@
 import React from 'react';
-import user from '@testing-library/user-event';
 
-import { render, screen } from 'helpers/testingHelpers/test-utils';
+import { render, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 
 import Day from '../Day';

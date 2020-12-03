@@ -1,8 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import user from '@testing-library/user-event';
 
-import { render, screen } from 'helpers/testingHelpers/test-utils';
+import { render, screen, user } from 'helpers/testingHelpers/test-utils';
 import colors from 'style/colors';
 
 import VictimSelector from '..';

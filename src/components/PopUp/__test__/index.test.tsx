@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { render, screen } from 'helpers/testingHelpers/test-utils';
+import { render, screen, user } from 'helpers/testingHelpers/test-utils';
 import { changeGameState } from 'redux/actions/gameActions';
 import PHASE from 'common/phaseEnums';
 
@@ -33,5 +33,19 @@ describe('<PopUp />', () => {
       dispatch(changeGameState({ phase }));
       expect(screen.getByTestId(buttonId)).toBeInTheDocument();
     });
+  });
+
+  it('should minimize and maximize popup', () => {
+    const { getState } = render(<PopUp PopupChild={PopupChild} opened />, {
+      initialGameState: { gameState: { phase: PHASE.DAY, dayNumber: 2 } },
+    });
+
+    const minimizeIcon = screen.getByTestId(/minimizeIcon/i);
+    user.click(minimizeIcon);
+    expect(getState().game.popupMinimized).toBe(true);
+
+    const maximizeIcon = screen.getByTestId(/maximizeIcon/i);
+    user.click(maximizeIcon);
+    expect(getState().game.popupMinimized).toBe(false);
   });
 });

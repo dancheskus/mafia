@@ -114,7 +114,7 @@ export const ListIcon = ({ fill = '#fff', size = '100%', className }: IProps) =>
 );
 
 export const MaximizeIcon = ({ fill = '#fff', size = '100%', className }: IProps) => (
-  <svg width={size} height={size} viewBox='0 0 16 16' className={className}>
+  <svg data-testid='maximizeIcon' width={size} height={size} viewBox='0 0 16 16' className={className}>
     <path
       fill={fill}
       d=' M 6.40 0.00 L 9.41 0.00 C 9.41 2.13 9.41 4.26 9.41 6.39 C 11.61 6.40 13.81 6.42 16.00 6.49 L 16.00 9.35 C 13.80 9.40 11.61 9.41 9.41 9.42 C 9.41 11.61 9.40 13.81 9.36 16.00 L 6.50 16.00 C 6.41 13.81 6.39 11.62 6.40 9.42 C 4.26 9.41 2.13 9.41 0.00 9.40 L 0.00 6.40 C 2.13 6.40 4.27 6.40 6.40 6.40 C 6.40 4.27 6.40 2.13 6.40 0.00 Z'
@@ -123,7 +123,7 @@ export const MaximizeIcon = ({ fill = '#fff', size = '100%', className }: IProps
 );
 
 export const MinimizeIcon = ({ fill = '#fff', size = '100%', className }: IProps) => (
-  <svg width={size} height={size} viewBox='0 0 16 3' className={className}>
+  <svg data-testid='minimizeIcon' width={size} height={size} viewBox='0 0 16 3' className={className}>
     <path fill={fill} d=' M 0.00 0.00 L 16.00 0.00 L 16.00 3.00 L 0.00 3.00 L 0.00 0.00 Z' />
   </svg>
 );

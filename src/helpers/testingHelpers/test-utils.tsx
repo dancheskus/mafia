@@ -1,6 +1,7 @@
 import React, { FC, ReactElement } from 'react';
 import { render as rtlRender } from '@testing-library/react';
 import { Provider } from 'react-redux';
+import user from '@testing-library/user-event';
 
 import createStore from 'redux/reduxStore';
 import { gameInitialState } from 'redux/reducers/gameReducer';
@@ -57,4 +58,4 @@ const render = (ui: ReactElement, options: Partial<IOptions> = {}) => {
 export * from '@testing-library/react';
 
 // override render method
-export { render };
+export { render, user };
