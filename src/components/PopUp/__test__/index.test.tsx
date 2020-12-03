@@ -1,5 +1,4 @@
 import React from 'react';
-import user from '@testing-library/user-event';
 
 import { render, screen } from 'helpers/testingHelpers/test-utils';
 import { changeGameState } from 'redux/actions/gameActions';

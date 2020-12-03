@@ -16,7 +16,6 @@ import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
 export default function Day() {
   const {
-    popupOpened,
     activePlayer,
     killedAtNightPlayer,
     gameState: { dayNumber },
@@ -28,7 +27,7 @@ export default function Day() {
   const playerShouldBeKilled = Number.isInteger(killedPlayerRef);
 
   useOnMount(() => {
-    popupOpened && playerShouldBeKilled && localStorage.setItem('killedAtNightPlayer', killedPlayerRef);
+    playerShouldBeKilled && localStorage.setItem('killedAtNightPlayer', killedPlayerRef);
   });
 
   useOnUnmount(() => {
@@ -37,6 +36,8 @@ export default function Day() {
       dispatch(removeKilledAtNightPlayer());
       dispatch(openPopup());
     });
+
+    // Component is unmounting when Day ended and Night is activated
   });
 
   const goToDay = () => {
@@ -58,8 +59,7 @@ export default function Day() {
             {killedPlayerRef + 1}
           </PopUpCircle>
 
-          {/* @ts-expect-error */}
-          <Timer killedOnLastMinute={!players[killedPlayerRef].isAlive} key={popupOpened} />
+          <Timer killedOnLastMinute={!players[killedPlayerRef].isAlive} />
         </>
       ) : (
         <>
