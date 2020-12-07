@@ -4,15 +4,20 @@ import colors from 'style/colors';
 
 const { popupText, popupCircleBackground } = colors.SeatAllocator;
 
-export default styled.div<{ enabled?: boolean; number?: boolean }>`
-  ${({ enabled, number }) => css`
+export default styled.button<{ disabled?: boolean; number?: boolean }>`
+  ${({ number, disabled }) => css`
     width: 220px;
     height: 220px;
     border-radius: 50%;
     font-weight: 600;
     text-transform: uppercase;
 
-    ${enabled && 'cursor: pointer'};
+    :focus {
+      outline: none;
+    }
+    border-style: none;
+
+    ${!disabled && 'cursor: pointer'};
 
     ${number
       ? css`

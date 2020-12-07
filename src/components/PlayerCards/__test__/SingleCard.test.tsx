@@ -5,10 +5,10 @@ import basicPlayersState from 'helpers/testingHelpers/basicPlayersState';
 import PHASE from 'common/phaseEnums';
 import ROLE from 'common/playerEnums';
 import colors from 'style/colors';
+import { mockSetIntervalOnce } from 'helpers/testingHelpers/mockTimers';
 
 import SingleCard from '../SingleCard';
 
-const mockSetInterval = () => jest.spyOn(window, 'setInterval').mockImplementationOnce(callback => callback());
 const initialGameState = { gameState: { phase: PHASE.DAY, dayNumber: 1 } };
 const changePlayersState = [{ fouls: { amount: 3 } }, { role: ROLE.MAFIA }];
 
@@ -38,7 +38,7 @@ describe('<SingleCard />', () => {
   it('should kill player after 4th foul', () => {
     const { getState } = render(<SingleCard order={0} playerNumber={0} />, { initialGameState, changePlayersState });
 
-    mockSetInterval();
+    mockSetIntervalOnce();
 
     // Player number "0" should be alive
     expect(getState().players[0].isAlive).toBe(true);
@@ -62,7 +62,7 @@ describe('<SingleCard />', () => {
   it('should not kill player if back button was clicked after 4th foul. And kill player after 4th foul is clicked again', () => {
     const { getState } = render(<SingleCard order={0} playerNumber={0} />, { initialGameState, changePlayersState });
 
-    mockSetInterval();
+    mockSetIntervalOnce();
 
     // Player number "0" should be alive
     expect(getState().players[0].isAlive).toBe(true);

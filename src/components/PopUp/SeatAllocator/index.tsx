@@ -11,7 +11,7 @@ import PHASE from 'common/phaseEnums';
 import { PopUpButton } from '../styled-components';
 import BigCircle from './style';
 
-const shuffleNumbers = () => shuffle(range(0, 10));
+const getShuffledNumbers = () => shuffle(range(0, 10));
 
 export default function SeatAllocator() {
   const dispatch = useDispatch();
@@ -21,7 +21,7 @@ export default function SeatAllocator() {
   } = useSelector(gameSelector);
 
   const [randomNumber, setRandomNumber] = useState<number | null>(null);
-  const [seats, setSeats] = useState(shuffleNumbers());
+  const [seats, setSeats] = useState(getShuffledNumbers());
 
   const delayAfterResultTimer = useTimer({
     initialTime: 1,
@@ -55,13 +55,11 @@ export default function SeatAllocator() {
   });
 
   const resetSeatAllocator = () => {
-    setSeats(shuffleNumbers());
+    setSeats(getShuffledNumbers());
     setRandomNumber(null);
   };
 
-  useOnMount(() => {
-    dispatch(clearSelectedNumbers());
-  });
+  useOnMount(() => dispatch(clearSelectedNumbers()));
 
   useEffect(() => {
     // If "Start new game" was pressed before unmounting this component this should reset component state
@@ -77,20 +75,16 @@ export default function SeatAllocator() {
     });
   };
 
-  const randomClicked = () => {
-    const timersAreRunning = randomAnimationTimer.status === 'RUNNING' || delayAfterResultTimer.status === 'RUNNING';
-    if (timersAreRunning || !seats.length) return;
-
-    randomAnimationTimer.start();
-  };
+  const timersAreRunning = randomAnimationTimer.status === 'RUNNING' || delayAfterResultTimer.status === 'RUNNING';
 
   return (
     <>
       <BigCircle
+        data-testid='randomNumberButton'
         className='d-flex justify-content-center align-items-center seat-allocator-big-circle'
-        onClick={randomClicked}
+        onClick={randomAnimationTimer.start}
         number={!!randomNumber}
-        enabled={!!seats.length}
+        disabled={timersAreRunning || !seats.length}
       >
         {randomNumber || 'нажми'}
       </BigCircle>
