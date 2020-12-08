@@ -4,18 +4,15 @@ import { last } from 'lodash';
 
 import { addToSelectedNumbers, removeLastSelectedNumber } from 'redux/actions/gameActions';
 import { gameSelector, playersSelector } from 'redux/selectors';
+import PHASE from 'common/phaseEnums';
 
 import useNotSelectedNumbers from './useNotSelectedNumbers';
 import { Panel, PanelItem } from './style';
 
+const phase = PHASE.DAY;
+
 export default function DayNumberPanel() {
-  const {
-    activePlayer,
-    gameState: { phase },
-    selectedNumbers,
-    playerAddedToVotingList,
-    skipVoting,
-  } = useSelector(gameSelector);
+  const { activePlayer, selectedNumbers, playerAddedToVotingList, skipVoting } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
   const dispatch = useDispatch();
 

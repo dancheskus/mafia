@@ -15,10 +15,7 @@ const getShuffledNumbers = () => shuffle(range(0, 10));
 
 export default function SeatAllocator() {
   const dispatch = useDispatch();
-  const {
-    selectedNumbers,
-    gameState: { phase },
-  } = useSelector(gameSelector);
+  const { selectedNumbers } = useSelector(gameSelector);
 
   const [randomNumber, setRandomNumber] = useState<number | null>(null);
   const [seats, setSeats] = useState(getShuffledNumbers());
@@ -89,7 +86,7 @@ export default function SeatAllocator() {
         {randomNumber || 'нажми'}
       </BigCircle>
 
-      <PopUpButton color={phase} onClick={startPlaying} className='seat-allocator-popup-button'>
+      <PopUpButton color={PHASE.SEATALLOCATOR} onClick={startPlaying} className='seat-allocator-popup-button'>
         {seats.length ? 'пропустить' : 'играть'}
       </PopUpButton>
     </>

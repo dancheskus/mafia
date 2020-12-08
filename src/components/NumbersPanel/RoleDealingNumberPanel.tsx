@@ -5,15 +5,14 @@ import { range } from 'lodash';
 import { addToSelectedNumbers, clearSelectedNumbers } from 'redux/actions/gameActions';
 import { gameSelector, playersSelector } from 'redux/selectors';
 import ROLE from 'common/playerEnums';
+import PHASE from 'common/phaseEnums';
 
 import { Panel, PanelItem } from './style';
 
+const phase = PHASE.ROLEDEALING;
+
 export default function RoleDealingNumberPanel() {
-  const {
-    gameState: { phase },
-    numbersPanelClickable,
-    selectedNumbers,
-  } = useSelector(gameSelector);
+  const { numbersPanelClickable, selectedNumbers } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
   const dispatch = useDispatch();
 

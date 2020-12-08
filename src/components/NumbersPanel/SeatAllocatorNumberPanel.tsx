@@ -2,15 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { gameSelector } from 'redux/selectors';
+import PHASE from 'common/phaseEnums';
 
 import useNotSelectedNumbers from './useNotSelectedNumbers';
 import { Panel, PanelItem } from './style';
 
+const phase = PHASE.SEATALLOCATOR;
+
 export default function SeatAllocatorNumberPanel() {
-  const {
-    gameState: { phase },
-    selectedNumbers,
-  } = useSelector(gameSelector);
+  const { selectedNumbers } = useSelector(gameSelector);
 
   const notSelectedNumbers = useNotSelectedNumbers();
 

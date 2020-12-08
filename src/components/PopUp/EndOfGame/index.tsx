@@ -6,18 +6,17 @@ import checkForEnd from 'helpers/checkForEnd';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { gameSelector, playersSelector } from 'redux/selectors';
+import PHASE from 'common/phaseEnums';
 
 import { PopUpButton } from '../styled-components';
 import { GameResult, KilledPlayer } from './style';
 
+const phase = PHASE.ENDOFGAME;
+
 export default function EndOfGame() {
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
-  const {
-    popupMinimized,
-    selectedNumbers,
-    gameState: { phase },
-  } = useSelector(gameSelector);
+  const { popupMinimized, selectedNumbers } = useSelector(gameSelector);
 
   useOnMount(() => {
     popupMinimized && dispatch(minimizeMaximaizePopup());

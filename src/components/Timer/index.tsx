@@ -102,7 +102,7 @@ export default function Timer({ mini, time: initialTime, killedOnLastMinute, aut
               <>
                 {`${minutes}:${seconds < 10 ? `0${seconds}` : seconds}`}
 
-                <StartStopButton mini={mini} color={phase} onClick={!mini ? toggleTimer : undefined}>
+                <StartStopButton mini={mini} onClick={!mini ? toggleTimer : undefined}>
                   {timerWorking ? <PauseIcon fill={playPauseIconColor} /> : <PlayIcon fill={playPauseIconColor} />}
                 </StartStopButton>
               </>

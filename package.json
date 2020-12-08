@@ -26,7 +26,6 @@
     "styled-components": "^5.2.1",
     "typescript": "^4.0.5",
     "use-sound": "^2.0.1",
-    "jest-styled-components": "^7.0.3",
     "use-timer": "^2.0.1",
     "web-vitals": "^1.0.1"
   },
@@ -60,6 +59,8 @@
     "eslint-config-prettier": "^6.15.0",
     "eslint-import-resolver-typescript": "^2.3.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "jest-localstorage-mock": "^2.4.3",
+    "jest-styled-components": "^7.0.3",
     "prettier": "^2.2.1"
   }
 }

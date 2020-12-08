@@ -2,13 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { playerIsBlack } from 'helpers/roleHelpers';
-import { gameSelector, playersSelector } from 'redux/selectors';
+import { playersSelector } from 'redux/selectors';
 import ROLE from 'common/playerEnums';
+import PHASE from 'common/phaseEnums';
 
 import { Panel, PanelItem } from './style';
 
+const phase = PHASE.ENDOFGAME;
+
 export default function EndOfGameNumberPanel() {
-  const { phase } = useSelector(gameSelector).gameState;
   const players = useSelector(playersSelector);
 
   return (
