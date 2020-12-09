@@ -51,13 +51,12 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
     <>
       <RoleSelectionWrapper className='role-selection-wrapper'>
         <RoleSelection>
-          <RoleCard mirnij onClick={() => changeSelection(ROLE.MIRNIJ)} selected={currentPlayerRole === ROLE.MIRNIJ}>
+          <RoleCard onClick={() => changeSelection(ROLE.MIRNIJ)} selected={currentPlayerRole === ROLE.MIRNIJ}>
             <ThumbUpIcon size='60%' fill={popupIconLight} />
           </RoleCard>
 
           <RoleCard
             disabled={isDonDisabled}
-            don
             onClick={() => changeSelection(ROLE.DON, isDonDisabled)}
             selected={currentPlayerRole === ROLE.DON}
           >
@@ -66,7 +65,6 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
 
           <RoleCard
             disabled={isMafiaDisabled}
-            mafia
             onClick={() => changeSelection(ROLE.MAFIA, isMafiaDisabled)}
             selected={currentPlayerRole === ROLE.MAFIA}
           >
@@ -75,7 +73,6 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
 
           <RoleCard
             disabled={isSherifDisabled}
-            sherif
             onClick={() => changeSelection(ROLE.SHERIF, isSherifDisabled)}
             selected={currentPlayerRole === ROLE.SHERIF}
           >

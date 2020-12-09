@@ -16,16 +16,6 @@ export const RoleSelection = styled.div`
   display: flex;
   flex-wrap: wrap;
 
-  > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid transparent;
-    transition: border 0.1s;
-    width: 50%;
-    height: 50%;
-  }
-
   @media (max-width: 991px) {
     width: 60%;
   }
@@ -35,48 +25,58 @@ export const RoleSelection = styled.div`
 `;
 
 interface IRoleCard {
-  mafia?: boolean;
-  don?: boolean;
-  sherif?: boolean;
-  mirnij?: boolean;
   disabled?: boolean;
   selected: boolean;
 }
 
-export const RoleCard = styled.div<IRoleCard>`
-  ${({ mafia, don, sherif, mirnij, selected, disabled }) => css`
-    border: ${selected ? '2px solid white' : null} !important;
+const { popupButton, popupBackgroundLight } = colors.RoleDealing;
 
-    ${() => {
-      const { popupButton, popupBackgroundLight } = colors.RoleDealing;
+export const RoleCard = styled.button<IRoleCard>`
+  ${({ selected, disabled }) => css`
+    width: 50%;
+    height: 50%;
 
-      if (mafia)
-        return css`
-          border-radius: 0 0 0 10px;
+    > svg {
+      transition: all 0.1s;
+
+      ${selected &&
+      css`
+        margin-top: -20px;
+        filter: drop-shadow(0 30px 7px rgba(0, 0, 0, 0.3));
+      `}
+    }
+
+    :nth-child(1) {
+      border-radius: 10px 0 0 0;
+    }
+
+    :nth-child(2) {
+      border-radius: 0 10px 0 0;
+    }
+
+    :nth-child(3) {
+      border-radius: 0 0 0 10px;
+    }
+
+    :nth-child(4) {
+      border-radius: 0 0 10px 0;
+    }
+
+    ${disabled
+      ? css`
+          background: #525252;
+
+          > svg {
+            opacity: 35%;
+          }
+        `
+      : css`
           background: ${popupButton};
-        `;
-      if (don)
-        return css`
-          border-radius: 0 10px 0 0;
-          background: ${popupButton};
-        `;
-      if (sherif)
-        return css`
-          background: ${popupBackgroundLight};
-          border-radius: 0 0 10px 0;
-        `;
-      if (mirnij)
-        return css`
-          background: ${popupBackgroundLight};
-          border-radius: 10px 0 0 0;
-        `;
-    }}
 
-    ${disabled &&
-    css`
-      background: grey;
-      filter: brightness(25%) grayscale(100%);
-    `}
+          :nth-child(3n + 1) {
+            background: ${popupBackgroundLight};
+          }
+        `}
   `}
 `;
 
