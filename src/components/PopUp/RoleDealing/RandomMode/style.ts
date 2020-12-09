@@ -5,7 +5,7 @@ import { PopUpButton } from 'components/PopUp/styled-components';
 
 const { popupIcon, popupTextLight, popupText } = colors.RoleDealing;
 
-export const Card = styled.div`
+export const Card = styled.button`
   flex-grow: 1;
   width: 100%;
   display: flex;

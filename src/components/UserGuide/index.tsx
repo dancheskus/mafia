@@ -15,6 +15,7 @@ import usePreviousState from 'helpers/usePreviousState';
 import { gameSelector, settingsSelector } from 'redux/selectors';
 import ROLE from 'common/playerEnums';
 import PHASE from 'common/phaseEnums';
+import { cleanRoleDealingLocalStorage } from 'components/PopUp/RoleDealing';
 
 import {
   GuideWrapperStyle,
@@ -101,6 +102,8 @@ const UserGuide = ({ children }: { children: ReactNode }) => {
       dispatch(resetGameReducer());
       dispatch(resetPlayersReducer());
     });
+
+    cleanRoleDealingLocalStorage();
   };
 
   const guideStepsAvaliable = currentStep < stepDescription.length - 1;

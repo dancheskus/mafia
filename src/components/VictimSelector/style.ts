@@ -12,12 +12,6 @@ interface IVotingSingleElement {
 
 export const VotingSingleElement = styled.button<IVotingSingleElement>`
   ${({ shooting, selected, disabled }) => css`
-    :hover,
-    :focus,
-    :active {
-      outline: none;
-    }
-
     position: relative;
 
     .number {
@@ -26,8 +20,6 @@ export const VotingSingleElement = styled.button<IVotingSingleElement>`
       left: 50%;
       transform: translate(-50%, -50%);
     }
-
-    border: none;
 
     ${shooting
       ? css`

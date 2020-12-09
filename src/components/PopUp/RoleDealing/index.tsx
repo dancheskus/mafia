@@ -16,6 +16,11 @@ import SvgWrapper from './SvgWrapper';
 
 const svgClassName = 'flex-grow-1 d-flex align-items-center justify-content-center';
 
+export const cleanRoleDealingLocalStorage = () => {
+  localStorage.removeItem('randomModeSelected');
+  localStorage.removeItem('modeApproved');
+};
+
 export default function RoleDealing() {
   const { tutorialEnabled } = useSelector(settingsSelector);
 
@@ -27,10 +32,7 @@ export default function RoleDealing() {
     localStorage.setItem('modeApproved', modeApproved);
   }, [randomModeSelected, modeApproved]);
 
-  useOnUnmount(() => {
-    localStorage.removeItem('randomModeSelected');
-    localStorage.removeItem('modeApproved');
-  });
+  useOnUnmount(cleanRoleDealingLocalStorage);
 
   useEffect(() => {
     if (tutorialEnabled && modeApproved === false) {

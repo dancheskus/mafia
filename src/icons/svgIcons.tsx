@@ -7,7 +7,7 @@ interface IProps {
 }
 
 export const EyeIcon = ({ fill = '#fff', size = '100%', className }: IProps) => (
-  <svg width={size} height={size} viewBox='0 0 1115.9 738.5' className={className}>
+  <svg data-testid='eyeIcon' width={size} height={size} viewBox='0 0 1115.9 738.5' className={className}>
     <path
       fill={fill}
       d='M450.8,11.5c128.6-26.2,265.9-7.2,382.3,53.4c124.6,63.3,223.6,174.2,274.1,304.2 c-27,69.3-67.3,133.4-118.5,187.3c-49.9,52.5-109.3,96.2-175.1,126.6c-31.3,14.2-63.3,27.3-96.8,35.4 c-80.6,21.2-165.8,26.3-248.1,11.8c-122-19.9-237.1-79.9-322.5-169.4c-53-55.1-95-120.6-122.8-191.8 C71.2,244.3,164.7,138.2,281.2,73.3C333.9,43.7,391.6,23.3,450.8,11.5 M547.9,123.6c-40.3,2.4-79.7,15.6-114.3,36.4 c-28.6,18.2-54,41.9-72.7,70.3c-38.1,56.1-50.4,128-35.8,193.9c13.1,59.7,49.4,114.1,100.1,148.2c34.2,23.6,74.6,38.2,116,41.4 c40.7,4.5,82.2-2.5,120.2-17.3c33.8-14.3,64.7-36,88.9-63.6c26.8-30.2,45.8-67.4,54.8-106.8c9.7-41,8.1-84.5-3.1-125 c-17.8-66.4-65.7-123.7-127.5-153.4C635.6,128.3,591.2,121.1,547.9,123.6z'
@@ -29,7 +29,7 @@ export const EyeIconCrossed = ({ fill = '#fff', size = '100%', className }: IPro
 );
 
 export const DonRingIcon = ({ fill = '#fff', size = '100%', className }: IProps) => (
-  <svg width={size} height={size} viewBox='0 0 120.771 162.202' className={className}>
+  <svg data-testid='donRingIcon' width={size} height={size} viewBox='0 0 120.771 162.202' className={className}>
     <g transform='translate(-51.974 -49.152)'>
       <path
         fill={fill}
@@ -41,7 +41,7 @@ export const DonRingIcon = ({ fill = '#fff', size = '100%', className }: IProps)
 );
 
 export const SheriffOkIcon = ({ fill = '#fff', size = '100%', className }: IProps) => (
-  <svg width={size} height={size} viewBox='0 0 140.71 211.786' className={className}>
+  <svg data-testid='sheriffOkIcon' width={size} height={size} viewBox='0 0 140.71 211.786' className={className}>
     <g transform='translate(-136.646 -196.214)'>
       <path
         fill={fill}
@@ -70,7 +70,7 @@ export const SheriffStarIcon = ({ fill = '#fff', size = '100%', className }: IPr
 );
 
 export const ThumbUpIcon = ({ fill = '#fff', size = '100%', className }: IProps) => (
-  <svg width={size} height={size} viewBox='0 0 172.626 206.896' className={className}>
+  <svg data-testid='thumbUpIcon' width={size} height={size} viewBox='0 0 172.626 206.896' className={className}>
     <g transform='translate(-121.001 -200)'>
       <path
         fill={fill}
@@ -82,7 +82,7 @@ export const ThumbUpIcon = ({ fill = '#fff', size = '100%', className }: IProps)
 );
 
 export const ThumbDownIcon = ({ fill = '#fff', size = '100%', className }: IProps) => (
-  <svg width={size} height={size} viewBox='0 0 172.626 206.896' className={className}>
+  <svg data-testid='thumbDownIcon' width={size} height={size} viewBox='0 0 172.626 206.896' className={className}>
     <g transform='translate(-121 -200)'>
       <path
         fill={fill}

@@ -7,7 +7,6 @@ export const PopUpButton = styled.button<{ light?: boolean; color: keyof IColors
   ${({ light, color, disabled }) => css`
     background: ${light ? colors[color].popupButtonLight : colors[color].popupButton};
     padding: 10px 25px;
-    border: none;
     color: white;
     border-radius: 30px;
     font-size: 1.1rem;
@@ -26,9 +25,5 @@ export const PopUpButton = styled.button<{ light?: boolean; color: keyof IColors
             filter: brightness(110%);
           }
         `}
-
-    &:focus {
-      outline: none;
-    }
   `};
 `;

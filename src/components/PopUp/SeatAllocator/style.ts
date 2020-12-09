@@ -12,11 +12,6 @@ export default styled.button<{ disabled?: boolean; number?: boolean }>`
     font-weight: 600;
     text-transform: uppercase;
 
-    :focus {
-      outline: none;
-    }
-    border-style: none;
-
     ${!disabled && 'cursor: pointer'};
 
     ${number

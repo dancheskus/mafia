@@ -5,4 +5,12 @@ export default createGlobalStyle`
     font-family: 'Exo 2', sans-serif;
     user-select: none;
   }
+
+  button {
+    background: none;
+    border: none;
+    :focus {
+      outline: none;
+    }
+  }
 `;

@@ -36,6 +36,7 @@
         "vars": "local",
         "args": "after-used",
         "ignoreRestSiblings": true
-      }]
+      }],
+      "no-underscore-dangle": ["error", { "allow": ["__STORE__"] }]
   }
 }

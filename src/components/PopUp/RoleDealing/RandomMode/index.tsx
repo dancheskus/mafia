@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { shuffle, concat, fill } from 'lodash';
+import { shuffle, concat, fill, clamp } from 'lodash';
 import { useSelector, useDispatch, batch } from 'react-redux';
 import { useTimer } from 'use-timer';
 
@@ -38,12 +38,13 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
   const dispatch = useDispatch();
   const { selectedNumbers, lightMode } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
-  const [showRoleOnCard, setShowRoleOnCard] = useState<keyof IRoleIcons | null>(null);
+  const [cardOpened, setCardOpened] = useState(false);
 
   const lastCardRevealed = getFromLocalStorage('lastCardRevealed') ?? false;
   const allAliveRedPlayers = useGetAlivePlayersAmountByColor('red');
 
   const [playerNumber] = selectedNumbers;
+  const role = players[playerNumber]?.role;
 
   const { start: startCardBlockingTimer, status: timerStatus } = useTimer({
     initialTime: 1,
@@ -53,10 +54,10 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
     onTimeOver: () => {
       playerNumber === players.length - 1 && localStorage.setItem('lastCardRevealed', 'true');
       const nextPlayerNumber = playerNumber + 1;
-      setShowRoleOnCard(null);
+      setCardOpened(false);
       batch(() => {
         dispatch(lightModeOff());
-        dispatch(replaceSelectedNumbersWith(nextPlayerNumber <= 9 ? nextPlayerNumber : 9));
+        dispatch(replaceSelectedNumbersWith(clamp(nextPlayerNumber, 0, 9)));
       });
     },
   });
@@ -81,38 +82,35 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
   });
 
   const showRole = () => {
-    if (timerStatus === 'RUNNING' || lastCardRevealed) return;
-
-    const { role } = players[playerNumber];
-    setShowRoleOnCard(role);
+    setCardOpened(true);
     playerIsRed(role) && dispatch(lightModeOn());
 
     startCardBlockingTimer();
   };
 
   return (
-    <Card onClick={showRole}>
-      {!showRoleOnCard && !lastCardRevealed && (
-        <>
-          <EyeIcon size='40%' fill={popupIcon} />
+    <>
+      {!lastCardRevealed ? (
+        <Card disabled={timerStatus === 'RUNNING'} onClick={showRole}>
+          {!cardOpened ? (
+            <>
+              <EyeIcon size='40%' fill={popupIcon} />
 
-          <PressText>Нажми</PressText>
-        </>
-      )}
+              <PressText>Нажми</PressText>
+            </>
+          ) : (
+            <>
+              {roleIcons[role]}
 
-      {!showRoleOnCard && lastCardRevealed && (
+              <RoleName light={lightMode}>{role}</RoleName>
+            </>
+          )}
+        </Card>
+      ) : (
         <ScaledPopUpButton onClick={() => startGame(dispatch)} color='RoleDealing'>
           Играть
         </ScaledPopUpButton>
       )}
-
-      {showRoleOnCard && (
-        <>
-          {roleIcons[showRoleOnCard]}
-
-          <RoleName light={lightMode}>{showRoleOnCard}</RoleName>
-        </>
-      )}
-    </Card>
+    </>
   );
 }
