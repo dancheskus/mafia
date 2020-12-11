@@ -66,8 +66,8 @@ export const RoleCard = styled.button<IRoleCard>`
       ? css`
           background: #525252;
 
-          > svg {
-            opacity: 35%;
+          path {
+            fill: rgba(0, 0, 0, 0.1);
           }
         `
       : css`

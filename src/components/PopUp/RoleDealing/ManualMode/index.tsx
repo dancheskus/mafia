@@ -33,11 +33,7 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
 
   const [playerNumber] = selectedNumbers;
 
-  const changeSelection = (role: ROLE, disabled?: boolean) => {
-    if (disabled) return;
-
-    dispatch(addRole({ playerNumber, role }));
-  };
+  const changeSelection = (role: ROLE) => dispatch(addRole({ playerNumber, role }));
 
   const currentPlayerRole = players[playerNumber]?.role || null;
 
@@ -51,37 +47,46 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
     <>
       <RoleSelectionWrapper className='role-selection-wrapper'>
         <RoleSelection>
-          <RoleCard onClick={() => changeSelection(ROLE.MIRNIJ)} selected={currentPlayerRole === ROLE.MIRNIJ}>
+          <RoleCard
+            data-testid='mirnijButton'
+            onClick={() => changeSelection(ROLE.MIRNIJ)}
+            selected={currentPlayerRole === ROLE.MIRNIJ}
+          >
             <ThumbUpIcon size='60%' fill={popupIconLight} />
           </RoleCard>
 
           <RoleCard
+            data-testid='donButton'
             disabled={isDonDisabled}
-            onClick={() => changeSelection(ROLE.DON, isDonDisabled)}
+            onClick={() => changeSelection(ROLE.DON)}
             selected={currentPlayerRole === ROLE.DON}
           >
             <DonRingIcon size='60%' fill={popupIcon} />
           </RoleCard>
 
           <RoleCard
+            data-testid='mafiaButton'
             disabled={isMafiaDisabled}
-            onClick={() => changeSelection(ROLE.MAFIA, isMafiaDisabled)}
+            onClick={() => changeSelection(ROLE.MAFIA)}
             selected={currentPlayerRole === ROLE.MAFIA}
           >
             <ThumbDownIcon size='60%' fill={popupIcon} />
           </RoleCard>
 
           <RoleCard
+            data-testid='sheriffButton'
             disabled={isSherifDisabled}
-            onClick={() => changeSelection(ROLE.SHERIF, isSherifDisabled)}
+            onClick={() => changeSelection(ROLE.SHERIF)}
             selected={currentPlayerRole === ROLE.SHERIF}
           >
-            <SheriffOkIcon size='60%' fill={isSherifDisabled ? popupIcon : popupIconLight} />
+            <SheriffOkIcon size='60%' fill={popupIconLight} />
           </RoleCard>
         </RoleSelection>
       </RoleSelectionWrapper>
 
-      <Notification disabled={isButtonDisabled}>Выберите все функциональные роли (2 Мафии, Дон и Шериф)</Notification>
+      <Notification data-testid='roleNotification' disabled={isButtonDisabled}>
+        Выберите все функциональные роли (2 Мафии, Дон и Шериф)
+      </Notification>
 
       <div className='flex-grow-1 d-flex align-items-center'>
         <PopUpButton onClick={() => startGame(dispatch)} color='RoleDealing' disabled={isButtonDisabled}>
