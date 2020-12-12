@@ -3,7 +3,7 @@ import { render as rtlRender } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import user from '@testing-library/user-event';
 
-import createStore from 'redux/reduxStore';
+import createStore, { store } from 'redux/reduxStore';
 import { gameInitialState } from 'redux/reducers/gameReducer';
 import { settingsInitialState } from 'redux/reducers/settingsReducer';
 import { playersInitialState } from 'redux/reducers/playersReducer';
@@ -20,6 +20,16 @@ export interface IOptions {
   initialGameState?: Partial<TGameState>;
   initialSettingsState?: Partial<TSettingsState>;
 }
+
+export const getRenderer = <T extends (...args: any[]) => JSX.Element>(Component: T, props: Parameters<T>[0]) => (
+  overrideProps?: Partial<Parameters<T>[0]>,
+) =>
+  rtlRender(
+    <Provider store={store}>
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <Component {...props} {...overrideProps} />
+    </Provider>,
+  );
 
 const render = (ui: ReactElement, options: Partial<IOptions> = {}) => {
   const { changePlayersState, initialPlayersState, initialGameState, initialSettingsState, ...rtlOptions } = options;
