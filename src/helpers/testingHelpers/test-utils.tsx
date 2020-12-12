@@ -23,13 +23,22 @@ export interface IOptions {
 
 export const getRenderer = <T extends (...args: any[]) => JSX.Element>(Component: T, props: Parameters<T>[0]) => (
   overrideProps?: Partial<Parameters<T>[0]>,
-) =>
-  rtlRender(
+) => {
+  const RenderComponent = ({ overrideProps }: { overrideProps: Partial<Parameters<T>>[0] }) => (
     <Provider store={store}>
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Component {...props} {...overrideProps} />
-    </Provider>,
+    </Provider>
   );
+
+  const helpers = rtlRender(<RenderComponent overrideProps={overrideProps} />);
+
+  return {
+    ...helpers,
+    rerender: (rerenderOverrideProps: Partial<Parameters<T>[0]>) =>
+      helpers.rerender(<RenderComponent overrideProps={rerenderOverrideProps} />),
+  };
+};
 
 const render = (ui: ReactElement, options: Partial<IOptions> = {}) => {
   const { changePlayersState, initialPlayersState, initialGameState, initialSettingsState, ...rtlOptions } = options;
