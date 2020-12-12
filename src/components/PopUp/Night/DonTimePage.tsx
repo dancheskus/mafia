@@ -20,6 +20,7 @@ export default function DonTimePage({ setDonTime, setPlayerToKill, setSheriffTim
   return (
     <>
       <BackButton
+        data-testid='backToShootingButton'
         onClick={() => {
           setDonTime(false);
           setPlayerToKill(undefined);

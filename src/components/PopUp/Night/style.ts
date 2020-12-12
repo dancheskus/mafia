@@ -67,7 +67,7 @@ export const Target = styled.div`
   }
 `;
 
-export const BackButton = styled.div`
+export const BackButton = styled.button`
   width: 40px;
   height: 40px;
   border-radius: 50%;

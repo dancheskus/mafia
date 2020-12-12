@@ -42,7 +42,7 @@ export default function SheriffTimePage({ setSheriffTime, playerToKill }: Props)
 
   return (
     <>
-      <BackButton onClick={() => setSheriffTime(false)}>
+      <BackButton data-testid='backToDonTimeButton' onClick={() => setSheriffTime(false)}>
         <NextIcon />
       </BackButton>
 
