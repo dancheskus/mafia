@@ -1,18 +1,32 @@
 import React from 'react';
 
-import { render, screen, user, act } from 'helpers/testingHelpers/test-utils';
+import { getRenderer, screen, user, act } from 'helpers/testingHelpers/test-utils';
 import { mockSetInterval, mockSetIntervalOnce } from 'helpers/testingHelpers/mockTimers';
 import repeat from 'helpers/repeat';
-import { resetGameReducer } from 'redux/actions/gameActions';
+import {
+  addToSelectedNumbers,
+  changeGameState,
+  clearSelectedNumbers,
+  resetGameReducer,
+} from 'redux/actions/gameActions';
 import PHASE from 'common/phaseEnums';
+import testStore, { TestStore } from 'test/TestStore';
 
 import SeatAllocator from '..';
+
+let store: TestStore;
+
+beforeEach(() => {
+  store = testStore();
+});
+
+const render = getRenderer(SeatAllocator);
 
 const getTextOrNumber = (val: string) => +val || val;
 
 describe('<SeatAllocator />', () => {
   it('should render "НАЖМИ" button if it was not clicked, and random number if button clicked.', () => {
-    render(<SeatAllocator />);
+    render();
 
     mockSetIntervalOnce();
 
@@ -24,7 +38,7 @@ describe('<SeatAllocator />', () => {
   });
 
   it('should render 10 different numbers', () => {
-    const { getState } = render(<SeatAllocator />);
+    render();
 
     mockSetInterval();
 
@@ -32,11 +46,11 @@ describe('<SeatAllocator />', () => {
 
     repeat(() => user.click(randomNumberButton), 10);
 
-    expect([...getState().game.selectedNumbers].sort()).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect([...store.state.game.selectedNumbers].sort()).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   it('should disable button after 10 clicks and show last number instead of "НАЖМИ"', () => {
-    const { getState } = render(<SeatAllocator />);
+    render();
 
     mockSetInterval();
 
@@ -46,13 +60,13 @@ describe('<SeatAllocator />', () => {
 
     expect(randomNumberButton).toBeDisabled();
 
-    const { selectedNumbers } = getState().game;
+    const { selectedNumbers } = store.state.game;
     const expectedNumber = selectedNumbers[selectedNumbers.length - 1] + 1;
     expect(randomNumberButton).toHaveTextContent(String(expectedNumber));
   });
 
   it('should be disabled if animation is working', () => {
-    render(<SeatAllocator />);
+    render();
 
     const randomNumberButton = screen.getByTestId(/randomNumberButton/i);
 
@@ -61,7 +75,7 @@ describe('<SeatAllocator />', () => {
   });
 
   it('should render "ПРОПУСТИТЬ" button, or "ИГРАТЬ" if all numbers received', () => {
-    render(<SeatAllocator />);
+    render();
     const randomNumberButton = screen.getByTestId(/randomNumberButton/i);
 
     mockSetInterval();
@@ -76,7 +90,7 @@ describe('<SeatAllocator />', () => {
   });
 
   it('should reset component state if "Start new game" was pressed before unmounting this component', () => {
-    const { dispatch } = render(<SeatAllocator />);
+    render();
     const randomNumberButton = screen.getByTestId(/randomNumberButton/i);
 
     mockSetInterval();
@@ -86,7 +100,7 @@ describe('<SeatAllocator />', () => {
     expect(getTextOrNumber(randomNumberButton.textContent!)).toEqual(expect.any(Number));
 
     act(() => {
-      dispatch(resetGameReducer());
+      store.dispatch(resetGameReducer());
     });
 
     expect(randomNumberButton).toHaveTextContent(/нажми/i);
@@ -94,13 +108,14 @@ describe('<SeatAllocator />', () => {
   });
 
   it('should clearSelectedNumbers on mount', () => {
-    const { getState } = render(<SeatAllocator />, { initialGameState: { selectedNumbers: [1, 2, 3] } });
+    repeat(i => store.dispatch(addToSelectedNumbers(i + 1)), 3);
+    render();
 
-    expect(getState().game.selectedNumbers).toEqual([]);
+    expect(store.state.game.selectedNumbers).toEqual([]);
   });
 
   it('should change game phase to "ROLEDEALING" and clearSelectedNumbers when next button is clicked', () => {
-    const { getState } = render(<SeatAllocator />);
+    render();
     const randomNumberButton = screen.getByTestId(/randomNumberButton/i);
 
     mockSetInterval();
@@ -108,7 +123,7 @@ describe('<SeatAllocator />', () => {
 
     user.click(screen.getByRole('button', { name: /играть/i }));
 
-    expect(getState().game.selectedNumbers).toEqual([]);
-    expect(getState().game.gameState.phase).toBe(PHASE.ROLEDEALING);
+    expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
+    expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ROLEDEALING }));
   });
 });

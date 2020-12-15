@@ -21,7 +21,7 @@ export interface IOptions {
   initialSettingsState?: Partial<TSettingsState>;
 }
 
-export const getRenderer = <T extends (...args: any[]) => JSX.Element>(Component: T, props: Parameters<T>[0]) => (
+export const getRenderer = <T extends (...args: any[]) => JSX.Element>(Component: T, props: Parameters<T>[0] = {}) => (
   overrideProps?: Partial<Parameters<T>[0]>,
 ) => {
   const RenderComponent = ({ overrideProps }: { overrideProps: Partial<Parameters<T>>[0] }) => (

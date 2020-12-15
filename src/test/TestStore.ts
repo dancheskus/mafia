@@ -1,7 +1,7 @@
 import { killPlayer } from 'redux/actions/playersActions';
 import * as StoreBuilder from 'redux/reduxStore';
 
-const mockStore = () => {
+const testStore = () => {
   const store = StoreBuilder.createStoreInstance();
   const { dispatch } = store;
 
@@ -9,7 +9,7 @@ const mockStore = () => {
 
   const dispatchSpy = jest.spyOn(store, 'dispatch');
 
-  const testStore = {
+  const localTestStore = {
     dispatch,
     dispatchSpy,
 
@@ -29,13 +29,13 @@ const mockStore = () => {
       dispatch(killPlayer(9));
       dispatch(killPlayer(0));
 
-      return testStore;
+      return localTestStore;
     },
   };
 
-  return testStore;
+  return localTestStore;
 };
 
-export type MockStore = ReturnType<typeof mockStore>;
+export type TestStore = ReturnType<typeof testStore>;
 
-export default mockStore;
+export default testStore;

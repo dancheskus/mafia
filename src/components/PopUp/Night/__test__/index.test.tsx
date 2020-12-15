@@ -1,12 +1,19 @@
-import React from 'react';
-
-import { render, screen, user } from 'helpers/testingHelpers/test-utils';
+import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import testStore, { TestStore } from 'test/TestStore';
 
 import Night from '..';
 
+let store: TestStore;
+
+beforeEach(() => {
+  store = testStore();
+});
+
+const render = getRenderer(Night);
+
 describe('<Night />', () => {
   it('should render shooting stage. Next button should navigate to don and sheriff stage. Back button goes back', () => {
-    render(<Night />);
+    render();
 
     expect(screen.getByText(/в кого стреляет мафия/i)).toBeInTheDocument();
 

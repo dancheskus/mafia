@@ -1,22 +1,26 @@
-import React from 'react';
-
-import { IOptions, render, screen, user } from 'helpers/testingHelpers/test-utils';
+import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
-import { switchMafiaTimer } from 'redux/actions/settingsActions';
+import { disableTutorial, enableTutorial, switchMafiaTimer } from 'redux/actions/settingsActions';
 import ROLE from 'common/playerEnums';
+import testStore, { TestStore } from 'test/TestStore';
+import { changeGameState, closePopup } from 'redux/actions/gameActions';
+import { addRole } from 'redux/actions/playersActions';
 
 import ZeroNight from '..';
 
-const setup = (reduxSettings?: Partial<IOptions>) =>
-  render(<ZeroNight />, {
-    initialSettingsState: { tutorialEnabled: false, ...reduxSettings?.initialSettingsState },
-    initialGameState: { gameState: { phase: PHASE.ZERONIGHT, dayNumber: 0 }, ...reduxSettings?.initialGameState },
-    changePlayersState: reduxSettings?.changePlayersState,
-  });
+let store: TestStore;
+
+beforeEach(() => {
+  store = testStore();
+  store.dispatch(disableTutorial());
+  store.dispatch(changeGameState({ phase: PHASE.ZERONIGHT, dayNumber: 0 }));
+});
+
+const render = getRenderer(ZeroNight);
 
 describe('<ZeroNight />', () => {
   it('should render "Договорка" screen. And should not if next button is clicked', () => {
-    setup();
+    render();
 
     expect(screen.getByText(/договорка/i)).toBeInTheDocument();
     user.click(screen.getByRole('button', { name: /далее/i }));
@@ -24,7 +28,8 @@ describe('<ZeroNight />', () => {
   });
 
   it('should not click on next button if tutorialEnabled = true', () => {
-    setup({ initialSettingsState: { tutorialEnabled: true } });
+    store.dispatch(enableTutorial());
+    render();
 
     expect(screen.getByText(/договорка/i)).toBeInTheDocument();
     user.click(screen.getByRole('button', { name: /далее/i }));
@@ -32,15 +37,18 @@ describe('<ZeroNight />', () => {
   });
 
   it('should render timer if mafiaTimer enabled', () => {
-    const { dispatch } = setup();
+    render();
 
     expect(screen.getByText(/1:00/i)).toBeInTheDocument();
-    dispatch(switchMafiaTimer());
+    store.dispatch(switchMafiaTimer());
     expect(screen.queryByText(/1:00/i)).not.toBeInTheDocument();
   });
 
   it('should show correct Sheriff and Don player numbers', () => {
-    setup({ changePlayersState: [{ role: ROLE.DON }, { role: ROLE.SHERIF }] });
+    store.dispatch(addRole({ playerNumber: 0, role: ROLE.DON }));
+    store.dispatch(addRole({ playerNumber: 1, role: ROLE.SHERIF }));
+
+    render();
 
     user.click(screen.getByRole('button', { name: /далее/i }));
 
@@ -49,12 +57,12 @@ describe('<ZeroNight />', () => {
   });
 
   it('should closePopup and set phase to Day and dayNumber to 1', () => {
-    const { getState } = setup();
+    render();
 
     user.click(screen.getByRole('button', { name: /далее/i }));
     user.click(screen.getByRole('button', { name: /день/i }));
 
-    expect(getState().game.popupOpened).toBe(false);
-    expect(getState().game.gameState).toEqual({ phase: PHASE.DAY, dayNumber: 1 });
+    expect(store.dispatchSpy).toHaveBeenCalledWith(closePopup());
+    expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ dayNumber: 1, phase: PHASE.DAY }));
   });
 });

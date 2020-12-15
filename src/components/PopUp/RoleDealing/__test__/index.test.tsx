@@ -1,18 +1,23 @@
-import React from 'react';
-
-import { render, screen, user } from 'helpers/testingHelpers/test-utils';
+import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import testStore, { TestStore } from 'test/TestStore';
+import { disableTutorial } from 'redux/actions/settingsActions';
 
 import RoleDealing from '..';
 
-const setup = () => render(<RoleDealing />, { initialSettingsState: { tutorialEnabled: false } });
+let store: TestStore;
 
 beforeEach(() => {
+  store = testStore();
+  store.dispatch(disableTutorial());
+
   localStorage.clear();
 });
 
+const render = getRenderer(RoleDealing);
+
 describe('<RoleDealing />', () => {
   it('should render with randomModeSelected by default. Changing mode should also change next button text.', () => {
-    setup();
+    render();
 
     const randomIcon = screen.getByTestId(/randomCubeIcon/i);
     const listIcon = screen.getByTestId(/listIcon/i);
@@ -28,7 +33,7 @@ describe('<RoleDealing />', () => {
   });
 
   it('should clear localStorage on unmount', () => {
-    const { unmount } = setup();
+    const { unmount } = render();
 
     unmount();
 
@@ -38,7 +43,7 @@ describe('<RoleDealing />', () => {
   });
 
   it('should update localStorage if randomModeSelected or modeApproved changed', () => {
-    setup();
+    render();
 
     expect(localStorage.setItem).toHaveBeenCalledWith('randomModeSelected', true);
     expect(localStorage.setItem).toHaveBeenCalledWith('modeApproved', false);

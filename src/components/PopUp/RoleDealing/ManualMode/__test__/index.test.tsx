@@ -1,22 +1,23 @@
-import React from 'react';
-
-import { render, screen, user } from 'helpers/testingHelpers/test-utils';
+import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import ROLE from 'common/playerEnums';
-import { addToSelectedNumbers, clearSelectedNumbers } from 'redux/actions/gameActions';
+import { changeGameState, clearSelectedNumbers, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
+import testStore, { TestStore } from 'test/TestStore';
+import { addRole } from 'redux/actions/playersActions';
 
 import ManualMode from '..';
 
-const resetMode = jest.fn();
+let store: TestStore;
 
-const selectPlayer = (dispatch: any, playerNumber: number) => {
-  dispatch(clearSelectedNumbers());
-  dispatch(addToSelectedNumbers(playerNumber));
-};
+beforeEach(() => {
+  store = testStore();
+});
+
+const render = getRenderer(ManualMode, { resetMode: jest.fn() });
 
 describe('<ManualMode />', () => {
   it('should show notification about role selection and disable "ИГРАТЬ" button until required roles selected.', () => {
-    const { dispatch } = render(<ManualMode resetMode={resetMode} />);
+    render();
 
     const nextButton = screen.getByRole('button', { name: /играть/i });
     const notification = screen.getByTestId(/roleNotification/i);
@@ -29,7 +30,7 @@ describe('<ManualMode />', () => {
       expect(nextButton).toBeDisabled();
       expect(notification).not.toHaveStyleRule('color', 'transparent');
 
-      selectPlayer(dispatch, i + 1);
+      store.dispatch(replaceSelectedNumbersWith(i + 1));
     });
 
     user.click(screen.getByTestId(/mafiaButton/i));
@@ -38,7 +39,7 @@ describe('<ManualMode />', () => {
   });
 
   it('should disable role button if other player has this role', () => {
-    const { dispatch } = render(<ManualMode resetMode={resetMode} />);
+    render();
 
     const mafiaButton = screen.getByTestId(/mafiaButton/i);
     const donButton = screen.getByTestId(/donButton/i);
@@ -49,44 +50,46 @@ describe('<ManualMode />', () => {
     expect(sheriffButton).toBeEnabled();
 
     user.click(mafiaButton);
-    selectPlayer(dispatch, 1);
+    store.dispatch(replaceSelectedNumbersWith(1));
     user.click(mafiaButton);
-    selectPlayer(dispatch, 2);
+    store.dispatch(replaceSelectedNumbersWith(2));
 
     expect(mafiaButton).toBeDisabled();
 
     user.click(donButton);
-    selectPlayer(dispatch, 3);
+    store.dispatch(replaceSelectedNumbersWith(3));
 
     expect(donButton).toBeDisabled();
 
     user.click(sheriffButton);
-    selectPlayer(dispatch, 4);
+    store.dispatch(replaceSelectedNumbersWith(4));
 
     expect(sheriffButton).toBeDisabled();
   });
 
   it('should remember role if selectedPlayer changed', () => {
-    const { dispatch } = render(<ManualMode resetMode={resetMode} />);
+    render();
 
     const donButton = screen.getByTestId(/donButton/i);
 
     user.click(donButton);
-    selectPlayer(dispatch, 1);
+    store.dispatch(replaceSelectedNumbersWith(1));
 
     expect(donButton).toBeDisabled();
-    selectPlayer(dispatch, 0);
+    store.dispatch(replaceSelectedNumbersWith(0));
     expect(donButton).toBeEnabled();
   });
 
   it('should change selectedNumbers and PHASE when "ИГРАТЬ" button clicked', () => {
-    const { getState } = render(<ManualMode resetMode={resetMode} />, {
-      changePlayersState: [{ role: ROLE.DON }, { role: ROLE.MAFIA }, { role: ROLE.MAFIA }, { role: ROLE.SHERIF }],
-    });
+    store.dispatch(addRole({ playerNumber: 0, role: ROLE.DON }));
+    store.dispatch(addRole({ playerNumber: 1, role: ROLE.MAFIA }));
+    store.dispatch(addRole({ playerNumber: 2, role: ROLE.MAFIA }));
+    store.dispatch(addRole({ playerNumber: 3, role: ROLE.SHERIF }));
+    render();
 
     user.click(screen.getByRole('button', { name: /играть/i }));
 
-    expect(getState().game.selectedNumbers).toEqual([]);
-    expect(getState().game.gameState.phase).toBe(PHASE.ZERONIGHT);
+    expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
+    expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ZERONIGHT }));
   });
 });
