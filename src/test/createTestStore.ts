@@ -1,3 +1,4 @@
+import repeat from 'helpers/repeat';
 import { killPlayer } from 'redux/actions/playersActions';
 import * as storeBuilder from 'redux/reduxStore';
 
@@ -18,16 +19,7 @@ const createTestStore = () => {
     },
 
     killAllPlayers: () => {
-      dispatch(killPlayer(0));
-      dispatch(killPlayer(1));
-      dispatch(killPlayer(2));
-      dispatch(killPlayer(3));
-      dispatch(killPlayer(4));
-      dispatch(killPlayer(5));
-      dispatch(killPlayer(6));
-      dispatch(killPlayer(7));
-      dispatch(killPlayer(8));
-      dispatch(killPlayer(9));
+      repeat(i => dispatch(killPlayer(i)), 10);
 
       return testStore;
     },
