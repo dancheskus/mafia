@@ -117,9 +117,7 @@ export default (state = gameInitialState, action: IAction, root: TCombinedReduce
         return;
 
       case 'RESET_GAME_REDUCER':
-        return {
-          ...gameInitialState,
-          gameState: { phase: root.settings.seatAllocator ? PHASE.SEATALLOCATOR : PHASE.ROLEDEALING },
-        };
+        Object.assign(draft, gameInitialState);
+        draft.gameState.phase = root.settings.seatAllocator ? PHASE.SEATALLOCATOR : PHASE.ROLEDEALING;
     }
   });

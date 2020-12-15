@@ -1,4 +1,3 @@
-import { TPlayersState, TGameState, TSettingsState } from './reducers/types';
 import { TState } from './reduxStore';
 
 export const playersSelector = ({ players }: TState) => players;
