@@ -5,3 +5,6 @@
 import '@testing-library/jest-dom';
 import 'jest-styled-components';
 import 'jest-localstorage-mock';
+import { setAutoFreeze } from 'immer';
+
+setAutoFreeze(false);

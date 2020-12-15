@@ -1,75 +1,84 @@
-import React from 'react';
-
-import { render, screen, user } from 'helpers/testingHelpers/test-utils';
-import basicPlayersState from 'helpers/testingHelpers/basicPlayersState';
+import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import ROLE from 'common/playerEnums';
 import colors from 'style/colors';
 import { mockSetIntervalOnce } from 'helpers/testingHelpers/mockTimers';
+import testStore, { TestStore } from 'test/TestStore';
+import { changeGameState } from 'redux/actions/gameActions';
+import { addFoul, addRole, killPlayer } from 'redux/actions/playersActions';
+import repeat from 'helpers/repeat';
 
 import SingleCard from '../SingleCard';
 
-const initialGameState = { gameState: { phase: PHASE.DAY, dayNumber: 1 } };
-const changePlayersState = [{ fouls: { amount: 3 } }, { role: ROLE.MAFIA }];
+const render = getRenderer(SingleCard, { order: 0, playerNumber: 0 });
+
+let store: TestStore;
+
+beforeEach(() => {
+  store = testStore();
+  store.dispatch(changeGameState({ phase: PHASE.DAY, dayNumber: 1 }));
+  store.dispatch(addRole({ playerNumber: 1, role: ROLE.MAFIA }));
+});
 
 describe('<SingleCard />', () => {
   it('should not show foulContainer if player is dead', () => {
-    render(<SingleCard order={0} playerNumber={0} />, { changePlayersState: [{ isAlive: false }] });
+    store.dispatch(killPlayer(0));
+
+    render();
 
     const foulContainer = screen.getByTestId(/foulContainer/i);
     expect(foulContainer).not.toBeVisible();
   });
 
   it('should show indicator in top left corner if player opens table', () => {
-    const { rerender } = render(<SingleCard order={0} playerNumber={0} />, {
-      initialGameState,
-      initialPlayersState: basicPlayersState,
-    });
+    const { rerender } = render({ playerNumber: 0 });
 
     const playerNumber = screen.getByTestId(/playerNumber/i);
 
     expect(playerNumber).toHaveStyleRule('background', '#8A8A8A', { modifier: '::before' });
 
-    rerender(<SingleCard order={0} playerNumber={1} />);
+    rerender({ playerNumber: 1 });
 
     expect(playerNumber).not.toHaveStyleRule('background', '#8A8A8A', { modifier: '::before' });
   });
 
   it('should kill player after 4th foul', () => {
-    const { getState } = render(<SingleCard order={0} playerNumber={0} />, { initialGameState, changePlayersState });
+    repeat(() => store.dispatch(addFoul(0)), 3);
+
+    render();
 
     mockSetIntervalOnce();
 
     // Player number "0" should be alive
-    expect(getState().players[0].isAlive).toBe(true);
+    expect(store.state.players[0].isAlive).toBe(true);
 
     // Killing player with 4th foul
-    const addFoul = screen.getByTestId(/addFoul/i);
-    user.click(addFoul);
+    const addFoulButton = screen.getByTestId(/addFoul/i);
+    user.click(addFoulButton);
 
     // Foul container should be hidden
     const foulContainer = screen.getByTestId(/foulContainer/i);
     expect(foulContainer).not.toBeVisible();
 
     // Player number "0" should be killed
-    expect(getState().players[0].isAlive).toBe(false);
+    expect(store.state.players[0].isAlive).toBe(false);
 
     expect(setInterval).toHaveBeenCalledTimes(3);
-
-    // Перезаписать только часть игроков
   });
 
   it('should not kill player if back button was clicked after 4th foul. And kill player after 4th foul is clicked again', () => {
-    const { getState } = render(<SingleCard order={0} playerNumber={0} />, { initialGameState, changePlayersState });
+    repeat(() => store.dispatch(addFoul(0)), 3);
+
+    render();
 
     mockSetIntervalOnce();
 
     // Player number "0" should be alive
-    expect(getState().players[0].isAlive).toBe(true);
+    expect(store.state.players[0].isAlive).toBe(true);
 
     // Killing player with 4th foul
-    const addFoul = screen.getByTestId(/addFoul/i);
-    user.click(addFoul);
+    const addFoulButton = screen.getByTestId(/addFoul/i);
+    user.click(addFoulButton);
 
     // Returning player to life
     const backButton = screen.getByTestId(/backButton/i);
@@ -80,18 +89,18 @@ describe('<SingleCard />', () => {
     expect(foulContainer).toBeVisible();
 
     // Player number "0" should be killed
-    expect(getState().players[0].isAlive).toBe(true);
+    expect(store.state.players[0].isAlive).toBe(true);
 
     expect(setInterval).toHaveBeenCalledTimes(3);
 
     // Killing again to validate killing function is still accessible
-    user.click(addFoul);
+    user.click(addFoulButton);
 
     expect(setInterval).toHaveBeenCalledTimes(4);
   });
 
   it('should increase and decrease amount of fouls and change styles according to amount of fouls', () => {
-    render(<SingleCard order={0} playerNumber={3} />, { initialGameState, changePlayersState });
+    render();
 
     const removeFoul = screen.getByTestId(/removeFoul/i);
     const addFoul = screen.getByTestId(/addFoul/i);
@@ -124,10 +133,7 @@ describe('<SingleCard />', () => {
 
   it('should mute player on 3d foul and unmute him if foul decreased', () => {
     const playerNumber = 3;
-    const { getState } = render(<SingleCard order={0} playerNumber={playerNumber} />, {
-      initialGameState,
-      changePlayersState,
-    });
+    render({ playerNumber });
 
     const addFoul = screen.getByTestId(/addFoul/i);
     const removeFoul = screen.getByTestId(/removeFoul/i);
@@ -135,11 +141,11 @@ describe('<SingleCard />', () => {
     user.click(addFoul);
     user.click(addFoul);
 
-    expect(getState().players[playerNumber].fouls.muted).toBe(false);
+    expect(store.state.players[playerNumber].fouls.muted).toBe(false);
     user.click(addFoul);
-    expect(getState().players[playerNumber].fouls.muted).toBe(true);
+    expect(store.state.players[playerNumber].fouls.muted).toBe(true);
 
     user.click(removeFoul);
-    expect(getState().players[playerNumber].fouls.muted).toBe(false);
+    expect(store.state.players[playerNumber].fouls.muted).toBe(false);
   });
 });

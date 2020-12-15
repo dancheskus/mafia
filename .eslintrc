@@ -37,6 +37,6 @@
         "args": "after-used",
         "ignoreRestSiblings": true
       }],
-      "no-underscore-dangle": ["error", { "allow": ["__STORE__"] }]
+      "no-underscore-dangle": ["error", { "allow": ["__STORE__", "__REDUX_DEVTOOLS_EXTENSION__"] }]
   }
 }

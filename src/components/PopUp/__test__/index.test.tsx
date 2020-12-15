@@ -1,51 +1,62 @@
 import React from 'react';
 
-import { render, screen, user } from 'helpers/testingHelpers/test-utils';
-import { changeGameState } from 'redux/actions/gameActions';
+import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { changeGameState, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import PHASE from 'common/phaseEnums';
+import testStore, { TestStore } from 'test/TestStore';
 
 import PopUp from '..';
 
 const PopupChild = () => <div>1</div>;
 
+let store: TestStore;
+
+beforeEach(() => {
+  store = testStore();
+});
+
+const render = getRenderer(PopUp, { PopupChild, opened: true });
+
 describe('<PopUp />', () => {
   it('should render PopupChild if popup is opened', () => {
-    const { rerender } = render(<PopUp PopupChild={PopupChild} opened />);
+    const { rerender } = render();
 
     const childNode = screen.getByText('1');
 
     expect(childNode).toBeVisible();
 
-    rerender(<PopUp PopupChild={PopupChild} opened={false} />);
+    rerender({ opened: false });
     expect(childNode).not.toBeVisible();
   });
 
   it('should render minimize button if phase is not SEATALLOCATOR, ROLEDEALING or ENDOFGAME', () => {
-    const { dispatch } = render(<PopUp PopupChild={PopupChild} opened />);
+    render();
     const buttonId = 'minimizeButton';
 
     [PHASE.SEATALLOCATOR, PHASE.ROLEDEALING, PHASE.ENDOFGAME].forEach(phase => {
-      dispatch(changeGameState({ phase }));
+      store.dispatch(changeGameState({ phase }));
       expect(screen.queryByTestId(buttonId)).not.toBeInTheDocument();
     });
 
     [(PHASE.ZERONIGHT, PHASE.DAY, PHASE.NIGHT, PHASE.VOTING)].forEach(phase => {
-      dispatch(changeGameState({ phase }));
+      store.dispatch(changeGameState({ phase }));
       expect(screen.getByTestId(buttonId)).toBeInTheDocument();
     });
   });
 
   it('should minimize and maximize popup', () => {
-    const { getState } = render(<PopUp PopupChild={PopupChild} opened />, {
-      initialGameState: { gameState: { phase: PHASE.DAY, dayNumber: 2 } },
-    });
+    store.dispatch(changeGameState({ phase: PHASE.DAY, dayNumber: 2 }));
+
+    render({ opened: false });
 
     const minimizeIcon = screen.getByTestId(/minimizeIcon/i);
     user.click(minimizeIcon);
-    expect(getState().game.popupMinimized).toBe(true);
+
+    expect(store.dispatchSpy).toHaveBeenNthCalledWith(1, minimizeMaximaizePopup());
 
     const maximizeIcon = screen.getByTestId(/maximizeIcon/i);
     user.click(maximizeIcon);
-    expect(getState().game.popupMinimized).toBe(false);
+
+    expect(store.dispatchSpy).toHaveBeenNthCalledWith(2, minimizeMaximaizePopup());
   });
 });

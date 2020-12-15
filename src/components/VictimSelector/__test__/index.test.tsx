@@ -1,18 +1,23 @@
-/* eslint-disable react/jsx-props-no-spreading */
-import React from 'react';
-
-import { render, screen, user } from 'helpers/testingHelpers/test-utils';
+import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import colors from 'style/colors';
+import testStore, { TestStore } from 'test/TestStore';
+import { killPlayer } from 'redux/actions/playersActions';
 
 import VictimSelector from '..';
 
+let store: TestStore;
+
+beforeEach(() => {
+  store = testStore();
+});
+
 const onNumberSelected = jest.fn();
 
-const props = { votesLeft: 9, onNumberSelected };
+const render = getRenderer(VictimSelector, { votesLeft: 9, onNumberSelected });
 
 describe('<VictimSelector />', () => {
   it('should change clicked button classNames and call callback function onClick', () => {
-    render(<VictimSelector {...props} />);
+    render();
 
     const buttonNumber = 4;
     const secondButton = screen.getByRole('button', { name: buttonNumber.toString() });
@@ -27,14 +32,14 @@ describe('<VictimSelector />', () => {
   });
 
   it('should render 10 buttons with player numbers', () => {
-    render(<VictimSelector {...props} />);
+    render();
 
     const buttons = screen.getAllByRole('button');
     expect(buttons).toHaveLength(10);
   });
 
   it('should render 5 disabled (not clickable) buttons if votesLeft=4', () => {
-    render(<VictimSelector {...props} votesLeft={4} />);
+    render({ votesLeft: 4 });
 
     const buttons = screen.getAllByRole('button');
     [1, 2, 3, 4, 5].forEach(button => expect(buttons[button - 1]).not.toBeDisabled());
@@ -42,19 +47,10 @@ describe('<VictimSelector />', () => {
   });
 
   it('should render 2 disabled buttons at Night if players are dead', () => {
-    const initialPlayersState = [
-      { isAlive: true },
-      { isAlive: false },
-      { isAlive: true },
-      { isAlive: true },
-      { isAlive: true },
-      { isAlive: false },
-      { isAlive: true },
-      { isAlive: true },
-      { isAlive: true },
-      { isAlive: true },
-    ];
-    render(<VictimSelector onNumberSelected={onNumberSelected} shooting />, { initialPlayersState });
+    store.dispatch(killPlayer(1));
+    store.dispatch(killPlayer(5));
+
+    render({ shooting: true });
     const buttons = screen.getAllByRole('button');
     buttons.forEach(button => user.click(button));
     [1, 3, 4, 5, 7, 8, 9, 10].forEach(button => expect(buttons[button - 1]).not.toBeDisabled());
@@ -62,7 +58,7 @@ describe('<VictimSelector />', () => {
   });
 
   it('should render 2 disabled buttons at Day if players are dead', () => {
-    render(<VictimSelector onNumberSelected={onNumberSelected} votesLeft={7} />);
+    render({ votesLeft: 7 });
     const buttons = screen.getAllByRole('button');
     buttons.forEach(button => user.click(button));
     [1, 2, 3, 4, 5, 6, 7, 8].forEach(button => expect(buttons[button - 1]).not.toBeDisabled());
@@ -70,7 +66,7 @@ describe('<VictimSelector />', () => {
   });
 
   it('should render all disabled buttons with one button not clickable if last player is voting', () => {
-    render(<VictimSelector onNumberSelected={onNumberSelected} votesLeft={7} lastPlayer />);
+    render({ votesLeft: 7, lastPlayer: true });
     const buttons = screen.getAllByRole('button');
     [1, 2, 3, 4, 5, 6, 7, 9, 10].forEach(button => expect(buttons[button - 1]).toBeDisabled());
 
@@ -80,7 +76,7 @@ describe('<VictimSelector />', () => {
   });
 
   it('should render passed selectedNumber as active button', () => {
-    render(<VictimSelector {...props} selectedNumber={3} />);
+    render({ selectedNumber: 3 });
 
     const buttons = screen.getAllByRole('button');
     const activeButton = screen.getByRole('button', { name: /4/i });
