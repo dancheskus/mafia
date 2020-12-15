@@ -1,6 +1,6 @@
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
-import testStore, { TestStore } from 'test/TestStore';
+import createTestStore, { TestStore } from 'test/createTestStore';
 import {
   addKilledAtNightPlayer,
   changeActivePlayer,
@@ -16,7 +16,7 @@ import Day from '../Day';
 let store: TestStore;
 
 beforeEach(() => {
-  store = testStore();
+  store = createTestStore();
 });
 
 const playerNumber = 4;

@@ -1,4 +1,4 @@
-import testStore, { TestStore } from 'test/TestStore';
+import createTestStore, { TestStore } from 'test/createTestStore';
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import { playersInitialState } from 'redux/reducers/playersReducer';
 import ROLE from 'common/playerEnums';
@@ -13,7 +13,7 @@ import RandomMode from '..';
 let store: TestStore;
 
 beforeEach(() => {
-  store = testStore();
+  store = createTestStore();
 });
 
 const render = getRenderer(RandomMode, { resetMode: jest.fn() });

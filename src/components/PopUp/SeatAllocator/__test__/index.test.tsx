@@ -10,14 +10,14 @@ import {
   resetGameReducer,
 } from 'redux/actions/gameActions';
 import PHASE from 'common/phaseEnums';
-import testStore, { TestStore } from 'test/TestStore';
+import createTestStore, { TestStore } from 'test/createTestStore';
 
 import SeatAllocator from '..';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = testStore();
+  store = createTestStore();
 });
 
 const render = getRenderer(SeatAllocator);

@@ -1,6 +1,6 @@
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import colors from 'style/colors';
-import testStore, { TestStore } from 'test/TestStore';
+import createTestStore, { TestStore } from 'test/createTestStore';
 import { killPlayer } from 'redux/actions/playersActions';
 
 import VictimSelector from '..';
@@ -8,7 +8,7 @@ import VictimSelector from '..';
 let store: TestStore;
 
 beforeEach(() => {
-  store = testStore();
+  store = createTestStore();
 });
 
 const onNumberSelected = jest.fn();

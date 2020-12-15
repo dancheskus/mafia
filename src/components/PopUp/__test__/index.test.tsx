@@ -3,7 +3,7 @@ import React from 'react';
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import { changeGameState, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import PHASE from 'common/phaseEnums';
-import testStore, { TestStore } from 'test/TestStore';
+import createTestStore, { TestStore } from 'test/createTestStore';
 
 import PopUp from '..';
 
@@ -12,7 +12,7 @@ const PopupChild = () => <div>1</div>;
 let store: TestStore;
 
 beforeEach(() => {
-  store = testStore();
+  store = createTestStore();
 });
 
 const render = getRenderer(PopUp, { PopupChild, opened: true });
