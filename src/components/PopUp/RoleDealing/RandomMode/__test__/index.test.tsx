@@ -42,8 +42,8 @@ describe('<RandomMode />', () => {
   `(
     'should show correct role, role icon and lightMode for $roleText on card clicked',
     ({ changePlayersState, roleText, roleIcon, isLightMode }) => {
-      store.dispatch(addRole({ playerNumber: 0, role: changePlayersState[0] }));
-      changePlayersState[1] && store.dispatch(addRole({ playerNumber: 1, role: changePlayersState[1] }));
+      store.changeRoles({ role: changePlayersState[0] });
+      changePlayersState[1] && store.changeRoles({ playerNumber: 1, role: changePlayersState[1] });
 
       render();
 

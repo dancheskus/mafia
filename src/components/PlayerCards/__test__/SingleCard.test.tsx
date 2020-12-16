@@ -4,7 +4,7 @@ import ROLE from 'common/playerEnums';
 import colors from 'style/colors';
 import { mockSetIntervalOnce } from 'helpers/testingHelpers/mockTimers';
 import { changeGameState } from 'redux/actions/gameActions';
-import { addFoul, addRole, killPlayer } from 'redux/actions/playersActions';
+import { addFoul, killPlayer } from 'redux/actions/playersActions';
 import repeat from 'helpers/repeat';
 import TestStore from 'test/TestStore';
 
@@ -17,7 +17,7 @@ let store: TestStore;
 beforeEach(() => {
   store = new TestStore();
   store.dispatch(changeGameState({ phase: PHASE.DAY, dayNumber: 1 }));
-  store.dispatch(addRole({ playerNumber: 1, role: ROLE.MAFIA }));
+  store.changeRoles({ playerNumber: 1, role: ROLE.MAFIA });
 });
 
 describe('<SingleCard />', () => {

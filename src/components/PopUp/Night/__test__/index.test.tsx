@@ -1,5 +1,4 @@
 import { clickButton, clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
-import { killPlayer } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
 
 import Night from '..';
@@ -29,13 +28,5 @@ describe('<Night />', () => {
 
     clickByTestId(/backToShootingButton/i);
     expect(screen.getByText(/в кого стреляет мафия/i)).toBeInTheDocument();
-  });
-
-  it('should kill "playerToKill" after "День" is pressed if checkForEnd.status is true', () => {
-    render();
-
-    clickButton([/2/i, /далее/i, /далее/i, /день/i]);
-
-    expect(store.dispatchSpy).toHaveBeenCalledWith(killPlayer(1));
   });
 });

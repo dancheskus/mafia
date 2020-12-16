@@ -1,8 +1,6 @@
 import { clickButton, clickByTestId, getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
-import ROLE from 'common/playerEnums';
 import { changeGameState, clearSelectedNumbers, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
-import { addRole } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
 
 import ManualMode from '..';
@@ -81,10 +79,7 @@ describe('<ManualMode />', () => {
   });
 
   it('should change selectedNumbers and PHASE when "ИГРАТЬ" button clicked', () => {
-    store.dispatch(addRole({ playerNumber: 0, role: ROLE.DON }));
-    store.dispatch(addRole({ playerNumber: 1, role: ROLE.MAFIA }));
-    store.dispatch(addRole({ playerNumber: 2, role: ROLE.MAFIA }));
-    store.dispatch(addRole({ playerNumber: 3, role: ROLE.SHERIF }));
+    store.defaultTestRoles();
     render();
 
     clickButton(/играть/i);

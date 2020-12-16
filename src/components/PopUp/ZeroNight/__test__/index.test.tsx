@@ -1,9 +1,7 @@
 import { clickButton, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import { disableTutorial, enableTutorial, switchMafiaTimer } from 'redux/actions/settingsActions';
-import ROLE from 'common/playerEnums';
 import { changeGameState, closePopup } from 'redux/actions/gameActions';
-import { addRole } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
 
 import ZeroNight from '..';
@@ -45,15 +43,14 @@ describe('<ZeroNight />', () => {
   });
 
   it('should show correct Sheriff and Don player numbers', () => {
-    store.dispatch(addRole({ playerNumber: 0, role: ROLE.DON }));
-    store.dispatch(addRole({ playerNumber: 1, role: ROLE.SHERIF }));
+    store.defaultTestRoles();
 
     render();
 
     clickButton(/далее/i);
 
-    expect(screen.getByTestId(/donPlayerNumber/i)).toHaveTextContent('1');
-    expect(screen.getByTestId(/shariffPlayerNumber/i)).toHaveTextContent('2');
+    expect(screen.getByTestId(/donPlayerNumber/i)).toHaveTextContent('3');
+    expect(screen.getByTestId(/shariffPlayerNumber/i)).toHaveTextContent('4');
   });
 
   it('should closePopup and set phase to Day and dayNumber to 1', () => {
