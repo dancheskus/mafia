@@ -1,13 +1,6 @@
 import { clickButton, clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
-import TestStore from 'test/TestStore';
 
 import Night from '..';
-
-let store: TestStore;
-
-beforeEach(() => {
-  store = new TestStore();
-});
 
 const render = getRenderer(Night);
 

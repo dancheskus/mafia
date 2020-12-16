@@ -1,5 +1,4 @@
 import PHASE from 'common/phaseEnums';
-import ROLE from 'common/playerEnums';
 import { clickByText, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import { changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';

@@ -5,7 +5,6 @@ import { mockSetInterval } from 'helpers/testingHelpers/mockTimers';
 import repeat from 'helpers/repeat';
 import PHASE from 'common/phaseEnums';
 import { changeGameState, clearSelectedNumbers, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
-import { addRole } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
 
 import RandomMode from '..';
