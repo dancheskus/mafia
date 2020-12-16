@@ -1,4 +1,4 @@
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickButton, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import { playersInitialState } from 'redux/reducers/playersReducer';
 import ROLE from 'common/playerEnums';
 import { mockSetInterval } from 'helpers/testingHelpers/mockTimers';
@@ -47,7 +47,7 @@ describe('<RandomMode />', () => {
 
       render();
 
-      user.click(screen.getByRole('button', { name: /нажми/i }));
+      clickButton(/нажми/i);
       expect(store.state.game.lightMode).toBe(isLightMode);
       expect(screen.getByText(roleText)).toBeInTheDocument();
       expect(screen.getByTestId(roleIcon)).toBeInTheDocument();
@@ -63,8 +63,7 @@ describe('<RandomMode />', () => {
 
     fakeTimerEnabled && mockSetInterval();
 
-    const button = screen.getByRole('button', { name: /нажми/i });
-    user.click(button);
+    clickButton(/нажми/i);
 
     if (cardShouldBeClosed) {
       expect(screen.queryByText(/нажми/i)).toBeInTheDocument();
@@ -75,18 +74,17 @@ describe('<RandomMode />', () => {
 
   it('should change selectedNumbers to correct player number. Should stop increasing number after 9th', () => {
     render();
-    const button = screen.getByRole('button', { name: /нажми/i });
 
     mockSetInterval();
 
     expect(store.state.game.selectedNumbers[0]).toBe(0);
 
     repeat(i => {
-      user.click(button);
+      clickButton(/нажми/i);
       expect(store.state.game.selectedNumbers[0]).toBe(i + 1);
     }, 9);
 
-    user.click(button);
+    clickButton(/нажми/i);
     expect(store.state.game.selectedNumbers[0]).toBe(9);
   });
 
@@ -94,7 +92,7 @@ describe('<RandomMode />', () => {
     localStorage.__STORE__.lastCardRevealed = true;
     render();
 
-    user.click(screen.getByRole('button', { name: /играть/i }));
+    clickButton(/играть/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ZERONIGHT }));

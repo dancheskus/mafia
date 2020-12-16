@@ -1,7 +1,8 @@
 import React from 'react';
-import { render as rtlRender } from '@testing-library/react';
+import { render as rtlRender, screen as rtlScreen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import user from '@testing-library/user-event';
+import { castArray } from 'lodash';
 
 import { store } from 'redux/reduxStore';
 
@@ -24,7 +25,13 @@ const getRenderer = <T extends (...args: any[]) => JSX.Element>(Component: T, pr
   };
 };
 
+const clickButton = (name: RegExp | RegExp[]) => {
+  castArray(name).forEach(name => user.click(rtlScreen.getByRole('button', { name })));
+};
+const clickByTestId = (testId: RegExp) => user.click(rtlScreen.getByTestId(testId));
+const clickByText = (text: RegExp) => user.click(rtlScreen.getByText(text));
+
 // re-export everything
 export * from '@testing-library/react';
 
-export { user, getRenderer };
+export { user, getRenderer, clickButton, clickByTestId, clickByText };

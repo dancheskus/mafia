@@ -1,4 +1,4 @@
-import { getRenderer, screen, user, act } from 'helpers/testingHelpers/test-utils';
+import { getRenderer, screen, user, act, clickByTestId, clickButton } from 'helpers/testingHelpers/test-utils';
 import { mockSetInterval, mockSetIntervalOnce } from 'helpers/testingHelpers/mockTimers';
 import repeat from 'helpers/repeat';
 import {
@@ -40,9 +40,7 @@ describe('<SeatAllocator />', () => {
 
     mockSetInterval();
 
-    const randomNumberButton = screen.getByTestId(/randomNumberButton/i);
-
-    repeat(() => user.click(randomNumberButton), 10);
+    repeat(() => clickByTestId(/randomNumberButton/i), 10);
 
     expect([...store.state.game.selectedNumbers].sort()).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
@@ -114,12 +112,11 @@ describe('<SeatAllocator />', () => {
 
   it('should change game phase to "ROLEDEALING" and clearSelectedNumbers when next button is clicked', () => {
     render();
-    const randomNumberButton = screen.getByTestId(/randomNumberButton/i);
 
     mockSetInterval();
-    repeat(() => user.click(randomNumberButton), 10);
+    repeat(() => clickByTestId(/randomNumberButton/i), 10);
 
-    user.click(screen.getByRole('button', { name: /играть/i }));
+    clickButton(/играть/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ROLEDEALING }));

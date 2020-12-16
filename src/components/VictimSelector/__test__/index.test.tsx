@@ -1,4 +1,4 @@
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickButton, getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import colors from 'style/colors';
 import { killPlayer } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
@@ -70,8 +70,7 @@ describe('<VictimSelector />', () => {
     const buttons = screen.getAllByRole('button');
     [1, 2, 3, 4, 5, 6, 7, 9, 10].forEach(button => expect(buttons[button - 1]).toBeDisabled());
 
-    const activeButton = screen.getByRole('button', { name: /8/i });
-    user.click(activeButton);
+    clickButton(/8/i);
     expect(onNumberSelected).toHaveBeenCalledTimes(0);
   });
 

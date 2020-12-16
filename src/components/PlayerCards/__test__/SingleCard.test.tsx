@@ -1,4 +1,4 @@
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickByTestId, getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import ROLE from 'common/playerEnums';
 import colors from 'style/colors';
@@ -53,8 +53,7 @@ describe('<SingleCard />', () => {
     expect(store.state.players[0].isAlive).toBe(true);
 
     // Killing player with 4th foul
-    const addFoulButton = screen.getByTestId(/addFoul/i);
-    user.click(addFoulButton);
+    clickByTestId(/addFoul/i);
 
     // Foul container should be hidden
     const foulContainer = screen.getByTestId(/foulContainer/i);
@@ -77,12 +76,10 @@ describe('<SingleCard />', () => {
     expect(store.state.players[0].isAlive).toBe(true);
 
     // Killing player with 4th foul
-    const addFoulButton = screen.getByTestId(/addFoul/i);
-    user.click(addFoulButton);
+    clickByTestId(/addFoul/i);
 
     // Returning player to life
-    const backButton = screen.getByTestId(/backButton/i);
-    user.click(backButton);
+    clickByTestId(/backButton/i);
 
     // Foul container should be visible
     const foulContainer = screen.getByTestId(/foulContainer/i);
@@ -94,7 +91,7 @@ describe('<SingleCard />', () => {
     expect(setInterval).toHaveBeenCalledTimes(3);
 
     // Killing again to validate killing function is still accessible
-    user.click(addFoulButton);
+    clickByTestId(/addFoul/i);
 
     expect(setInterval).toHaveBeenCalledTimes(4);
   });

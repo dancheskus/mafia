@@ -1,4 +1,4 @@
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { getRenderer, screen, clickByText } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import {
   addKilledAtNightPlayer,
@@ -22,6 +22,7 @@ beforeEach(() => {
 const playerNumber = 4;
 
 const render = getRenderer(Day);
+
 describe('PopUp - <Day />', () => {
   it('should show "НЕСОСТРЕЛ" if no player were killed after night', () => {
     render();
@@ -53,7 +54,7 @@ describe('PopUp - <Day />', () => {
 
     expect(store.state.players[playerNumber].isAlive).toBe(true);
 
-    user.click(screen.getByText(/закрыть/i));
+    clickByText(/закрыть/i);
     expect(store.dispatchSpy).toHaveBeenCalledWith(closePopup());
     expect(store.dispatchSpy).toHaveBeenCalledWith(killPlayer(playerNumber));
   });
@@ -69,7 +70,7 @@ describe('PopUp - <Day />', () => {
     expect(store.state.game.opensTable).toBe(playerNumber);
     expect(store.state.game.activePlayer).toBe(playerNumber);
 
-    user.click(screen.getByText(/закрыть/i));
+    clickByText(/закрыть/i);
     expect(store.state.game.opensTable).toBe(playerNumber + 1);
     expect(store.state.game.activePlayer).toBe(playerNumber + 1);
   });

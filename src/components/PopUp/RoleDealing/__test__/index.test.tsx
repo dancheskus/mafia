@@ -1,4 +1,4 @@
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickByTestId, getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import { disableTutorial } from 'redux/actions/settingsActions';
 import TestStore from 'test/TestStore';
 
@@ -48,13 +48,10 @@ describe('<RoleDealing />', () => {
     expect(localStorage.setItem).toHaveBeenCalledWith('randomModeSelected', true);
     expect(localStorage.setItem).toHaveBeenCalledWith('modeApproved', false);
 
-    const listIcon = screen.getByTestId(/listIcon/i);
-    const nextButton = screen.getByTestId(/nextButton/i);
-
-    user.click(listIcon);
+    clickByTestId(/listIcon/i);
     expect(localStorage.setItem).toHaveBeenCalledWith('randomModeSelected', false);
 
-    user.click(nextButton);
+    clickByTestId(/nextButton/i);
     expect(localStorage.setItem).toHaveBeenCalledWith('modeApproved', true);
   });
 });

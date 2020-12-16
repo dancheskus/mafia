@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import { changeGameState, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import PHASE from 'common/phaseEnums';
 import TestStore from 'test/TestStore';
@@ -49,13 +49,11 @@ describe('<PopUp />', () => {
 
     render({ opened: false });
 
-    const minimizeIcon = screen.getByTestId(/minimizeIcon/i);
-    user.click(minimizeIcon);
+    clickByTestId(/minimizeIcon/i); // mIn
 
     expect(store.dispatchSpy).toHaveBeenNthCalledWith(1, minimizeMaximaizePopup());
 
-    const maximizeIcon = screen.getByTestId(/maximizeIcon/i);
-    user.click(maximizeIcon);
+    clickByTestId(/maximizeIcon/i); // mAx
 
     expect(store.dispatchSpy).toHaveBeenNthCalledWith(2, minimizeMaximaizePopup());
   });

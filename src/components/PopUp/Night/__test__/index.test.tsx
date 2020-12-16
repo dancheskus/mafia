@@ -1,4 +1,5 @@
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickButton, clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
+import { killPlayer } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
 
 import Night from '..';
@@ -17,18 +18,24 @@ describe('<Night />', () => {
 
     expect(screen.getByText(/в кого стреляет мафия/i)).toBeInTheDocument();
 
-    user.click(screen.getByRole('button', { name: /далее/i }));
+    clickButton(/далее/i);
     expect(screen.getByText(/дон ищет шерифа/i)).toBeInTheDocument();
 
-    user.click(screen.getByRole('button', { name: /далее/i }));
+    clickButton(/далее/i);
     expect(screen.getByText(/шериф ищет черных игроков/i)).toBeInTheDocument();
 
-    user.click(screen.getByTestId(/backToDonTimeButton/i));
+    clickByTestId(/backToDonTimeButton/i);
     expect(screen.getByText(/дон ищет шерифа/i)).toBeInTheDocument();
 
-    user.click(screen.getByTestId(/backToShootingButton/i));
+    clickByTestId(/backToShootingButton/i);
     expect(screen.getByText(/в кого стреляет мафия/i)).toBeInTheDocument();
   });
 
-  it('should kill "playerToKill" after "День" is pressed if checkForEnd.status is true', () => {});
+  it('should kill "playerToKill" after "День" is pressed if checkForEnd.status is true', () => {
+    render();
+
+    clickButton([/2/i, /далее/i, /далее/i, /день/i]);
+
+    expect(store.dispatchSpy).toHaveBeenCalledWith(killPlayer(1));
+  });
 });

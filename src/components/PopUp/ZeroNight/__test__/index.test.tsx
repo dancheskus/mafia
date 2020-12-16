@@ -1,4 +1,4 @@
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickButton, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import { disableTutorial, enableTutorial, switchMafiaTimer } from 'redux/actions/settingsActions';
 import ROLE from 'common/playerEnums';
@@ -23,7 +23,7 @@ describe('<ZeroNight />', () => {
     render();
 
     expect(screen.getByText(/договорка/i)).toBeInTheDocument();
-    user.click(screen.getByRole('button', { name: /далее/i }));
+    clickButton(/далее/i);
     expect(screen.queryByText(/договорка/i)).not.toBeInTheDocument();
   });
 
@@ -32,7 +32,7 @@ describe('<ZeroNight />', () => {
     render();
 
     expect(screen.getByText(/договорка/i)).toBeInTheDocument();
-    user.click(screen.getByRole('button', { name: /далее/i }));
+    clickButton(/далее/i);
     expect(screen.getByText(/договорка/i)).toBeInTheDocument();
   });
 
@@ -50,7 +50,7 @@ describe('<ZeroNight />', () => {
 
     render();
 
-    user.click(screen.getByRole('button', { name: /далее/i }));
+    clickButton(/далее/i);
 
     expect(screen.getByTestId(/donPlayerNumber/i)).toHaveTextContent('1');
     expect(screen.getByTestId(/shariffPlayerNumber/i)).toHaveTextContent('2');
@@ -59,8 +59,8 @@ describe('<ZeroNight />', () => {
   it('should closePopup and set phase to Day and dayNumber to 1', () => {
     render();
 
-    user.click(screen.getByRole('button', { name: /далее/i }));
-    user.click(screen.getByRole('button', { name: /день/i }));
+    clickButton(/далее/i);
+    clickButton(/день/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(closePopup());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ dayNumber: 1, phase: PHASE.DAY }));

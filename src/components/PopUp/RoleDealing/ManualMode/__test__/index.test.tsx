@@ -1,4 +1,4 @@
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickButton, clickByTestId, getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import ROLE from 'common/playerEnums';
 import { changeGameState, clearSelectedNumbers, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
@@ -26,14 +26,14 @@ describe('<ManualMode />', () => {
     expect(notification).not.toHaveStyleRule('color', 'transparent');
 
     [/donButton/i, /mafiaButton/i, /sheriffButton/i].forEach((roleIcon, i) => {
-      user.click(screen.getByTestId(roleIcon));
+      clickByTestId(roleIcon);
       expect(nextButton).toBeDisabled();
       expect(notification).not.toHaveStyleRule('color', 'transparent');
 
       store.dispatch(replaceSelectedNumbersWith(i + 1));
     });
 
-    user.click(screen.getByTestId(/mafiaButton/i));
+    clickByTestId(/mafiaButton/i);
     expect(nextButton).toBeEnabled();
     expect(notification).toHaveStyleRule('color', 'transparent');
   });
@@ -87,7 +87,7 @@ describe('<ManualMode />', () => {
     store.dispatch(addRole({ playerNumber: 3, role: ROLE.SHERIF }));
     render();
 
-    user.click(screen.getByRole('button', { name: /играть/i }));
+    clickButton(/играть/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ZERONIGHT }));
