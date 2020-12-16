@@ -1,6 +1,5 @@
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
-import createTestStore, { TestStore } from 'test/createTestStore';
 import {
   addKilledAtNightPlayer,
   changeActivePlayer,
@@ -10,13 +9,14 @@ import {
   removeKilledAtNightPlayer,
 } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
+import TestStore from 'test/TestStore';
 
 import Day from '../Day';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = createTestStore();
+  store = new TestStore();
 });
 
 const playerNumber = 4;

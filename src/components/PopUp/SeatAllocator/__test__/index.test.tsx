@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { getRenderer, screen, user, act } from 'helpers/testingHelpers/test-utils';
 import { mockSetInterval, mockSetIntervalOnce } from 'helpers/testingHelpers/mockTimers';
 import repeat from 'helpers/repeat';
@@ -10,14 +8,14 @@ import {
   resetGameReducer,
 } from 'redux/actions/gameActions';
 import PHASE from 'common/phaseEnums';
-import createTestStore, { TestStore } from 'test/createTestStore';
+import TestStore from 'test/TestStore';
 
 import SeatAllocator from '..';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = createTestStore();
+  store = new TestStore();
 });
 
 const render = getRenderer(SeatAllocator);

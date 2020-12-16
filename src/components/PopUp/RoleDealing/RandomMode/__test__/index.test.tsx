@@ -1,4 +1,3 @@
-import createTestStore, { TestStore } from 'test/createTestStore';
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import { playersInitialState } from 'redux/reducers/playersReducer';
 import ROLE from 'common/playerEnums';
@@ -7,13 +6,14 @@ import repeat from 'helpers/repeat';
 import PHASE from 'common/phaseEnums';
 import { changeGameState, clearSelectedNumbers, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
 import { addRole } from 'redux/actions/playersActions';
+import TestStore from 'test/TestStore';
 
 import RandomMode from '..';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = createTestStore();
+  store = new TestStore();
 });
 
 const render = getRenderer(RandomMode, { resetMode: jest.fn() });

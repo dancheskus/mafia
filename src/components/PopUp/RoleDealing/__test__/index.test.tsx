@@ -1,13 +1,13 @@
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
-import createTestStore, { TestStore } from 'test/createTestStore';
 import { disableTutorial } from 'redux/actions/settingsActions';
+import TestStore from 'test/TestStore';
 
 import RoleDealing from '..';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = createTestStore();
+  store = new TestStore();
   store.dispatch(disableTutorial());
 
   localStorage.clear();

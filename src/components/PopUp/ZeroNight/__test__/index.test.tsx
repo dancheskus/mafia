@@ -2,16 +2,16 @@ import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import { disableTutorial, enableTutorial, switchMafiaTimer } from 'redux/actions/settingsActions';
 import ROLE from 'common/playerEnums';
-import createTestStore, { TestStore } from 'test/createTestStore';
 import { changeGameState, closePopup } from 'redux/actions/gameActions';
 import { addRole } from 'redux/actions/playersActions';
+import TestStore from 'test/TestStore';
 
 import ZeroNight from '..';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = createTestStore();
+  store = new TestStore();
   store.dispatch(disableTutorial());
   store.dispatch(changeGameState({ phase: PHASE.ZERONIGHT, dayNumber: 0 }));
 });

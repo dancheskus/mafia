@@ -1,12 +1,12 @@
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
-import createTestStore, { TestStore } from 'test/createTestStore';
+import TestStore from 'test/TestStore';
 
 import Night from '..';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = createTestStore();
+  store = new TestStore();
 });
 
 const render = getRenderer(Night);

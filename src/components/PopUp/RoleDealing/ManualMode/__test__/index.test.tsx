@@ -2,15 +2,15 @@ import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import PHASE from 'common/phaseEnums';
 import ROLE from 'common/playerEnums';
 import { changeGameState, clearSelectedNumbers, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
-import createTestStore, { TestStore } from 'test/createTestStore';
 import { addRole } from 'redux/actions/playersActions';
+import TestStore from 'test/TestStore';
 
 import ManualMode from '..';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = createTestStore();
+  store = new TestStore();
 });
 
 const render = getRenderer(ManualMode, { resetMode: jest.fn() });
