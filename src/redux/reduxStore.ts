@@ -22,4 +22,6 @@ export const createStoreInstance = (initialState: TCombinedReducers = loadState(
 
 export const store = createStoreInstance();
 
+export type Store = typeof store;
+
 export type TState = ReturnType<typeof store['getState']>;

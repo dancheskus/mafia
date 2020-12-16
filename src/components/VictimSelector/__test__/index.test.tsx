@@ -1,14 +1,14 @@
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
 import colors from 'style/colors';
-import createTestStore, { TestStore } from 'test/createTestStore';
 import { killPlayer } from 'redux/actions/playersActions';
+import TestStore from 'test/TestStore';
 
 import VictimSelector from '..';
 
 let store: TestStore;
 
 beforeEach(() => {
-  store = createTestStore();
+  store = new TestStore();
 });
 
 const onNumberSelected = jest.fn();
