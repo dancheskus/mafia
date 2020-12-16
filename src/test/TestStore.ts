@@ -4,6 +4,7 @@ import ROLE from 'common/playerEnums';
 import { addRole, killPlayer } from 'redux/actions/playersActions';
 import * as storeBuilder from 'redux/reduxStore';
 import AbstractTestStore from 'test/AbstractTestStore';
+import repeat from 'helpers/repeat';
 
 type TChangeRoles = { playerNumber?: number; role: ROLE };
 
@@ -31,6 +32,13 @@ class TestStore extends AbstractTestStore<storeBuilder.Store> {
   defaultTestRoles = () => {
     return this.update(() => {
       this.changeRoles([{ role: ROLE.MAFIA }, { role: ROLE.MAFIA }, { role: ROLE.DON }, { role: ROLE.SHERIF }]);
+    });
+  };
+
+  setEqualPlayersInTeam = () => {
+    return this.update(dispatch => {
+      this.changeRoles([{ role: ROLE.MAFIA }, { role: ROLE.MAFIA }, { role: ROLE.DON }]);
+      repeat(i => dispatch(killPlayer(i + 6)), 4);
     });
   };
 }

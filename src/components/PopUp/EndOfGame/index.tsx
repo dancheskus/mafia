@@ -30,6 +30,7 @@ export default function EndOfGame() {
   };
 
   const { black, red } = checkForEnd(players).allAlivePlayers;
+
   const [justKilledPlayer] = selectedNumbers;
 
   return (
