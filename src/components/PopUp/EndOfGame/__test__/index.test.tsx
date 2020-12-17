@@ -1,4 +1,4 @@
-import { clickButton, getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { clickButton, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import { addToSelectedNumbers, minimizeMaximaizePopup, resetGameReducer } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
