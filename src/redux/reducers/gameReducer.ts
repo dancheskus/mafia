@@ -31,8 +31,6 @@ interface IAction {
 
 export default (state = gameInitialState, action: IAction, root: TCombinedReducers) =>
   produce(state, draft => {
-    let test: any;
-
     switch (action.type) {
       case 'CHANGE_ACTIVE_PLAYER':
         draft.activePlayer = action.playerNumber;
