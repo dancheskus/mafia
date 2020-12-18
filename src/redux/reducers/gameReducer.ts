@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
+import { merge } from 'lodash';
 
 import PHASE from 'common/phaseEnums';
 
@@ -30,6 +31,8 @@ interface IAction {
 
 export default (state = gameInitialState, action: IAction, root: TCombinedReducers) =>
   produce(state, draft => {
+    let test: any;
+
     switch (action.type) {
       case 'CHANGE_ACTIVE_PLAYER':
         draft.activePlayer = action.playerNumber;
@@ -117,7 +120,8 @@ export default (state = gameInitialState, action: IAction, root: TCombinedReduce
         return;
 
       case 'RESET_GAME_REDUCER':
-        Object.assign(draft, gameInitialState);
-        draft.gameState.phase = root.settings.seatAllocator ? PHASE.SEATALLOCATOR : PHASE.ROLEDEALING;
+        return merge({}, gameInitialState, {
+          gameState: { phase: root.settings.seatAllocator ? PHASE.SEATALLOCATOR : PHASE.ROLEDEALING },
+        });
     }
   });

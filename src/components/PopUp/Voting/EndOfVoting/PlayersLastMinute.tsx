@@ -7,7 +7,7 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 
 import useOnMount from 'helpers/useOnMount';
 import Timer from 'components/Timer';
-import checkForEnd from 'helpers/checkForEnd';
+import { checkForEnd } from 'helpers/checkForEnd';
 import { changeGameState } from 'redux/actions/gameActions';
 import { killPlayer } from 'redux/actions/playersActions';
 import { gameSelector, playersSelector } from 'redux/selectors';
@@ -32,7 +32,7 @@ export default function PlayersLastMinute({ listOfPlayers, lastMinuteFor, goToNi
   const [currentPlayer, setCurrentPlayer] = useState(0);
 
   useOnMount(() => {
-    if (checkForEnd(players, listOfPlayers).status) {
+    if (checkForEnd(players, listOfPlayers)) {
       batch(() => {
         listOfPlayers.map((plNum: number) => dispatch(killPlayer(plNum)));
         dispatch(changeGameState({ phase: PHASE.ENDOFGAME }));

@@ -2,11 +2,11 @@ import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import useOnMount from 'helpers/useOnMount';
-import checkForEnd from 'helpers/checkForEnd';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
-import { gameSelector, playersSelector } from 'redux/selectors';
+import { gameSelector } from 'redux/selectors';
 import PHASE from 'common/phaseEnums';
+import { useGetAlivePlayersAmountByTeam } from 'helpers/roleHelpers';
 
 import { PopUpButton } from '../styled-components';
 import { GameResult, KilledPlayer } from './style';
@@ -15,7 +15,6 @@ const phase = PHASE.ENDOFGAME;
 
 export default function EndOfGame() {
   const dispatch = useDispatch();
-  const players = useSelector(playersSelector);
   const { popupMinimized, selectedNumbers } = useSelector(gameSelector);
 
   useOnMount(() => {
@@ -29,7 +28,7 @@ export default function EndOfGame() {
     });
   };
 
-  const { black, red } = checkForEnd(players).allAlivePlayers;
+  const { red, black } = useGetAlivePlayersAmountByTeam('all');
 
   const [justKilledPlayer] = selectedNumbers;
 

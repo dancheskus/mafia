@@ -10,7 +10,7 @@ import { EyeIcon, ThumbDownIcon, DonRingIcon, ThumbUpIcon, SheriffOkIcon } from 
 import useOnMount from 'helpers/useOnMount';
 import { gameSelector, playersSelector } from 'redux/selectors';
 import useOnUnmount from 'helpers/useOnUnmount';
-import { playerIsRed, useGetAlivePlayersAmountByColor } from 'helpers/roleHelpers';
+import { playerIsRed, useGetAlivePlayersAmountByTeam } from 'helpers/roleHelpers';
 import getFromLocalStorage from 'helpers/getFromLocalStorage';
 import ROLE from 'common/playerEnums';
 
@@ -41,7 +41,7 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
   const [cardOpened, setCardOpened] = useState(false);
 
   const lastCardRevealed = getFromLocalStorage('lastCardRevealed') ?? false;
-  const allAliveRedPlayers = useGetAlivePlayersAmountByColor('red');
+  const allAliveRedPlayers = useGetAlivePlayersAmountByTeam('red');
 
   const [playerNumber] = selectedNumbers;
   const role = players[playerNumber]?.role;

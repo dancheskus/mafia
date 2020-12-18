@@ -1,4 +1,4 @@
-import { countBy } from 'lodash';
+import { castArray } from 'lodash';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -7,20 +7,14 @@ import { changeGameState } from 'redux/actions/gameActions';
 import { TPlayersState } from 'redux/reducers/types';
 import { playersSelector } from 'redux/selectors';
 
-import { getAllAlivePlayers, playerIsBlack } from './roleHelpers';
+import { getAllAlivePlayers, getAllAlivePlayersByTeam } from './roleHelpers';
 
-const checkForEnd = (players: TPlayersState, lastRemovedPlayer?: number[]) => {
-  const allAlivePlayers = countBy(getAllAlivePlayers(players), ({ role }) => (playerIsBlack(role) ? 'black' : 'red'));
+export const checkForEnd = (players: TPlayersState, lastRemovedPlayer?: number[] | number) => {
+  const allAlivePlayers = getAllAlivePlayers(players).filter((_, i) => !castArray(lastRemovedPlayer)?.includes(i));
 
-  if (lastRemovedPlayer && lastRemovedPlayer[0] >= 0) {
-    lastRemovedPlayer.forEach(playerNumber => {
-      playerIsBlack(players[playerNumber].role) ? allAlivePlayers.black-- : allAlivePlayers.red--;
-    });
-  }
+  const alivePlayersAmountByTeam = getAllAlivePlayersByTeam(allAlivePlayers);
 
-  const status = allAlivePlayers.red <= allAlivePlayers.black || !allAlivePlayers.black;
-
-  return { status, allAlivePlayers };
+  return alivePlayersAmountByTeam.red <= alivePlayersAmountByTeam.black || !alivePlayersAmountByTeam.black;
 };
 
 export const useCheckForEnd = () => {
@@ -28,8 +22,6 @@ export const useCheckForEnd = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (checkForEnd(players).status) dispatch(changeGameState({ phase: PHASE.ENDOFGAME }));
+    if (checkForEnd(players)) dispatch(changeGameState({ phase: PHASE.ENDOFGAME }));
   }, [players, dispatch]);
 };
-
-export default checkForEnd;
