@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
+import { addToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from 'helpers/localStorageHelpers';
 import useOnMount from 'helpers/useOnMount';
 import { clearSelectedNumbers, addToSelectedNumbers, skipVotingDisable } from 'redux/actions/gameActions';
 import { useCheckForEnd } from 'helpers/checkForEnd';
 import useCustomRef from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
 import { gameSelector, playersSelector } from 'redux/selectors';
-import getFromLocalStorage from 'helpers/getFromLocalStorage';
 
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
@@ -47,18 +47,10 @@ export default function Voting() {
   };
 
   useEffect(() => {
-    localStorage.setItem('carCrashClosed', JSON.stringify(carCrashClosed));
-    localStorage.setItem('carCrash', JSON.stringify(carCrash));
-    localStorage.setItem('votesPerPlayer', JSON.stringify(votesPerPlayer));
-    localStorage.setItem('endOfVoting', JSON.stringify(endOfVoting));
-    localStorage.setItem('lastMinuteFor', JSON.stringify(lastMinuteFor));
+    addToLocalStorage({ carCrashClosed, carCrash, votesPerPlayer, endOfVoting, lastMinuteFor });
 
     return () => {
-      localStorage.removeItem('carCrashClosed');
-      localStorage.removeItem('carCrash');
-      localStorage.removeItem('votesPerPlayer');
-      localStorage.removeItem('endOfVoting');
-      localStorage.removeItem('lastMinuteFor');
+      removeFromLocalStorage(['carCrashClosed', 'carCrash', 'votesPerPlayer', 'endOfVoting', 'lastMinuteFor']);
     };
   }, [carCrashClosed, carCrash, votesPerPlayer, endOfVoting, lastMinuteFor]);
 
@@ -110,7 +102,7 @@ export default function Voting() {
   };
 
   useOnMount(() => {
-    localStorage.setItem('initialSelectedNumbers', JSON.stringify(initialSelectedNumbers));
+    addToLocalStorage({ initialSelectedNumbers });
 
     // Если не 1-ый день и выставлен только 1 игрок и не пропускается голосование, заканчиваем голосование убивая единственного выставленного игрока
     if (dayNumber > 1 && selectedNumbers.length === 1 && !skipVoting) votingFinishedClicked();
@@ -119,7 +111,7 @@ export default function Voting() {
   });
 
   useOnUnmount(() => {
-    localStorage.removeItem('initialSelectedNumbers');
+    removeFromLocalStorage('initialSelectedNumbers');
 
     dispatch(clearSelectedNumbers()); // Это нужно, чтобы не показывать кого убили, если конец игры, т.к это голосование.
 

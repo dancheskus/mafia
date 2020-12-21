@@ -45,13 +45,13 @@ describe('<RoleDealing />', () => {
   it('should update localStorage if randomModeSelected or modeApproved changed', () => {
     render();
 
-    expect(localStorage.setItem).toHaveBeenCalledWith('randomModeSelected', true);
-    expect(localStorage.setItem).toHaveBeenCalledWith('modeApproved', false);
+    expect(localStorage.setItem).toHaveBeenCalledWith('randomModeSelected', 'true');
+    expect(localStorage.setItem).toHaveBeenCalledWith('modeApproved', 'false');
 
     clickByTestId(/listIcon/i);
-    expect(localStorage.setItem).toHaveBeenCalledWith('randomModeSelected', false);
+    expect(localStorage.setItem).toHaveBeenCalledWith('randomModeSelected', 'false');
 
     clickByTestId(/nextButton/i);
-    expect(localStorage.setItem).toHaveBeenCalledWith('modeApproved', true);
+    expect(localStorage.setItem).toHaveBeenCalledWith('modeApproved', 'true');
   });
 });

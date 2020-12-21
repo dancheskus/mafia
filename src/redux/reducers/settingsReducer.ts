@@ -1,6 +1,8 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
 
+import { addToLocalStorage } from 'helpers/localStorageHelpers';
+
 import { TSettingsState } from './types';
 
 const savedSettings = localStorage.settings ? JSON.parse(localStorage.settings) : {};
@@ -39,6 +41,6 @@ export default (state = settingsInitialState, action: { type: string }) => {
         draft.tutorialEnabled = true;
     }
   });
-  localStorage.setItem('settings', JSON.stringify(newState));
+  addToLocalStorage({ settings: newState });
   return newState;
 };

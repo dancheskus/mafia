@@ -1,4 +1,4 @@
-import getFromLocalStorage from 'helpers/getFromLocalStorage';
+import { addToLocalStorage, getFromLocalStorage } from 'helpers/localStorageHelpers';
 
 import { gameInitialState } from './reducers/gameReducer';
 
@@ -15,7 +15,4 @@ export const loadState = () => {
   return state;
 };
 
-export const saveState = (state: any) => {
-  const serializedState = JSON.stringify(state);
-  localStorage.setItem('state', serializedState);
-};
+export const saveState = (state: any) => addToLocalStorage({ state });

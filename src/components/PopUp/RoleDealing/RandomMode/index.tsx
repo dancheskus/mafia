@@ -11,7 +11,7 @@ import useOnMount from 'helpers/useOnMount';
 import { gameSelector, playersSelector } from 'redux/selectors';
 import useOnUnmount from 'helpers/useOnUnmount';
 import { playerIsRed, useGetAlivePlayersAmountByTeam } from 'helpers/roleHelpers';
-import getFromLocalStorage from 'helpers/getFromLocalStorage';
+import { addToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from 'helpers/localStorageHelpers';
 import ROLE from 'common/playerEnums';
 
 import { PressText, RoleName, ScaledPopUpButton, Card } from './style';
@@ -52,7 +52,7 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
     timerType: 'DECREMENTAL',
     interval: 1800,
     onTimeOver: () => {
-      playerNumber === players.length - 1 && localStorage.setItem('lastCardRevealed', 'true');
+      playerNumber === players.length - 1 && addToLocalStorage({ lastCardRevealed: true });
       const nextPlayerNumber = playerNumber + 1;
       setCardOpened(false);
       batch(() => {
@@ -77,7 +77,7 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
   });
 
   useOnUnmount(() => {
-    localStorage.removeItem('lastCardRevealed');
+    removeFromLocalStorage('lastCardRevealed');
     dispatch(lightModeOff());
   });
 

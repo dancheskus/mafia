@@ -3,11 +3,11 @@ import { useSelector } from 'react-redux';
 import { useTimer } from 'use-timer';
 import { Howl } from 'howler';
 
+import { addToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from 'helpers/localStorageHelpers';
 // @ts-expect-error
 import secondsSoundFile from 'audio/Countdown_10sec_effects.mp3';
 import VictimSelector from 'components/VictimSelector';
 import { gameSelector, playersSelector } from 'redux/selectors';
-import getFromLocalStorage from 'helpers/getFromLocalStorage';
 import { getAllDeadPlayers } from 'helpers/roleHelpers';
 
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
@@ -43,12 +43,11 @@ export default function StandartVoting({
   const [buttonOncePressed, setButtonOncePressed] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('currentPlayer', currentPlayer);
-    localStorage.setItem('avaliableVoters', avaliableVoters);
+    addToLocalStorage({ currentPlayer });
+    addToLocalStorage({ avaliableVoters });
 
     return () => {
-      localStorage.removeItem('currentPlayer');
-      localStorage.removeItem('avaliableVoters');
+      removeFromLocalStorage(['currentPlayer', 'avaliableVoters']);
     };
   }, [currentPlayer, avaliableVoters]);
 

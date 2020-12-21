@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
 import { settingsSelector } from 'redux/selectors';
-import getFromLocalStorage from 'helpers/getFromLocalStorage';
+import { addToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from 'helpers/localStorageHelpers';
 import useOnUnmount from 'helpers/useOnUnmount';
 import PHASE from 'common/phaseEnums';
 
@@ -16,10 +16,7 @@ import SvgWrapper from './SvgWrapper';
 
 const svgClassName = 'flex-grow-1 d-flex align-items-center justify-content-center';
 
-export const cleanRoleDealingLocalStorage = () => {
-  localStorage.removeItem('randomModeSelected');
-  localStorage.removeItem('modeApproved');
-};
+export const cleanRoleDealingLocalStorage = () => removeFromLocalStorage(['randomModeSelected', 'modeApproved']);
 
 export default function RoleDealing() {
   const { tutorialEnabled } = useSelector(settingsSelector);
@@ -28,8 +25,8 @@ export default function RoleDealing() {
   const [modeApproved, setModeApproved] = useState(getFromLocalStorage('modeApproved') ?? false);
 
   useEffect(() => {
-    localStorage.setItem('randomModeSelected', randomModeSelected);
-    localStorage.setItem('modeApproved', modeApproved);
+    addToLocalStorage({ randomModeSelected });
+    addToLocalStorage({ modeApproved });
   }, [randomModeSelected, modeApproved]);
 
   useOnUnmount(cleanRoleDealingLocalStorage);

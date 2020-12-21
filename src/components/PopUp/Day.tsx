@@ -11,6 +11,7 @@ import useCustomRef from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
 import { gameSelector, playersSelector } from 'redux/selectors';
 import PHASE from 'common/phaseEnums';
+import { addToLocalStorage, removeFromLocalStorage } from 'helpers/localStorageHelpers';
 
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
@@ -27,11 +28,11 @@ export default function Day() {
   const playerShouldBeKilled = Number.isInteger(killedPlayerRef);
 
   useOnMount(() => {
-    playerShouldBeKilled && localStorage.setItem('killedAtNightPlayer', killedPlayerRef);
+    playerShouldBeKilled && addToLocalStorage({ killedPlayerRef });
   });
 
   useOnUnmount(() => {
-    localStorage.removeItem('killedAtNightPlayer');
+    removeFromLocalStorage('killedAtNightPlayer');
     batch(() => {
       dispatch(removeKilledAtNightPlayer());
       dispatch(openPopup());
