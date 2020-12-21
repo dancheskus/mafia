@@ -7,10 +7,9 @@ export const getFromLocalStorage = (item: string) => {
 };
 
 export const addToLocalStorage = (obj: { [key: string]: any }) => {
-  Object.keys(obj).forEach(key => {
-    const value = typeof obj[key] === 'string' ? obj[key] : JSON.stringify(obj[key]);
-    localStorage.setItem(key, value);
-  });
+  for (const [key, value] of Object.entries(obj)) {
+    localStorage.setItem(key, typeof value === 'string' ? value : JSON.stringify(value));
+  }
 };
 
 export const removeFromLocalStorage = (keys: string | string[]) => {
