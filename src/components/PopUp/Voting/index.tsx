@@ -75,13 +75,13 @@ export default function Voting() {
     }
 
     // УБИЙСТВО ВСЕХ ПОСЛЕ АВТОКАТАСТРОФЫ
-    if (killAll === true) {
+    if (killAll) {
       setEndOfVoting(true);
       setLastMinuteFor(lastMinuteFor.concat(selectedNumbers));
     }
 
     // УБИЙСТВО НИКОГО ПОСЛЕ АВТОКАТАСТРОФЫ
-    if (killAll === false) {
+    if (!killAll) {
       setEndOfVoting(true);
       setLastMinuteFor([]);
       return;
