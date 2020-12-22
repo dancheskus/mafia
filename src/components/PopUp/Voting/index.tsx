@@ -92,14 +92,11 @@ export default function Voting() {
       setLastMinuteFor(lastMinuteFor.concat(selectedNumbers));
     }
 
-    // console.log('before');
     // УБИЙСТВО НИКОГО ПОСЛЕ АВТОКАТАСТРОФЫ
     if (killAll === false) {
       setIsEndOfVoting(true);
       setLastMinuteFor([]);
-      // return;
     }
-    // console.log('after');
 
     // ВКЛЮЧЕНИЕ АВТОКАТАСТРОФЫ
     if (newVotingList.length > 1) enableCarCrash(newVotingList);
