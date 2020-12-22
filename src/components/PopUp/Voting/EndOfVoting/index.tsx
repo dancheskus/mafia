@@ -20,7 +20,7 @@ export default function EndOfVoting({ lastMinuteFor, resetFn, votingSkipped }: P
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
 
-  const [finalResultVisible, setFinalResultVisible] = useState(true);
+  const [isFinalResultVisible, setIsFinalResultVisible] = useState(true);
 
   const goToNight = () => {
     batch(() => {
@@ -37,13 +37,13 @@ export default function EndOfVoting({ lastMinuteFor, resetFn, votingSkipped }: P
 
   if (votingSkipped) return <VotingSkippedScreen goToNight={goToNight} />;
 
-  if (finalResultVisible)
+  if (isFinalResultVisible)
     return (
       <FinalResultScreen
         lastMinuteFor={lastMinuteFor}
         goToNight={goToNight}
         resetFn={resetFn}
-        setFinalResultVisible={setFinalResultVisible}
+        setIsFinalResultVisible={setIsFinalResultVisible}
       />
     );
 

@@ -38,10 +38,10 @@ export default function Voting() {
   const [isEndOfVoting, setIsEndOfVoting] = useState<boolean>(getFromLocalStorage('isEndOfVoting') ?? false);
   const [lastMinuteFor, setLastMinuteFor] = useState<number[]>(getFromLocalStorage('lastMinuteFor') ?? []); // Игрок(и), которых выводят из города
 
-  const resetState = (replaceState?: { carCrashClosed: boolean }) => {
+  const resetState = (replaceState?: { isCarCrashClosed: boolean }) => {
     setVotesPerPlayer(initialVotesPerPlayer);
     setIsCarCrash(false);
-    setIsCarCrashClosed(replaceState?.carCrashClosed ?? false);
+    setIsCarCrashClosed(replaceState?.isCarCrashClosed ?? false);
     setIsEndOfVoting(false);
     setLastMinuteFor([]);
   };
@@ -87,17 +87,19 @@ export default function Voting() {
     }
 
     // УБИЙСТВО ВСЕХ ПОСЛЕ АВТОКАТАСТРОФЫ
-    if (killAll) {
+    if (killAll === true) {
       setIsEndOfVoting(true);
       setLastMinuteFor(lastMinuteFor.concat(selectedNumbers));
     }
 
+    // console.log('before');
     // УБИЙСТВО НИКОГО ПОСЛЕ АВТОКАТАСТРОФЫ
-    if (!killAll) {
+    if (killAll === false) {
       setIsEndOfVoting(true);
       setLastMinuteFor([]);
-      return;
+      // return;
     }
+    // console.log('after');
 
     // ВКЛЮЧЕНИЕ АВТОКАТАСТРОФЫ
     if (newVotingList.length > 1) enableCarCrash(newVotingList);
@@ -152,10 +154,10 @@ export default function Voting() {
 
         <CarCrash
           closeCarCrash={() => {
-            resetState({ carCrashClosed: true });
+            resetState({ isCarCrashClosed: true });
             setVotesPerPlayer(getNewVotesArray(selectedNumbers));
           }}
-          secondTime={isCarCrashClosed}
+          isSecondTime={isCarCrashClosed}
           endVoting={endVoting}
         />
       </>

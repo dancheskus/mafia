@@ -10,12 +10,12 @@ import CarCrashNotification from './CarCrashNotification';
 import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 
 interface Props {
-  secondTime: boolean;
+  isSecondTime: boolean;
   closeCarCrash: () => void;
   endVoting: (killAll: boolean) => void;
 }
 
-export default function CarCrash({ secondTime, closeCarCrash, endVoting }: Props) {
+export default function CarCrash({ isSecondTime, closeCarCrash, endVoting }: Props) {
   const { multiplePlayerRemove } = useSelector(settingsSelector);
   const { selectedNumbers } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
@@ -32,12 +32,12 @@ export default function CarCrash({ secondTime, closeCarCrash, endVoting }: Props
   }, [selectedNumber, endVoting, alivePlayers]);
 
   useEffect(() => {
-    if (secondTime && !multiplePlayerRemove) stopVoting();
-  }, [secondTime, multiplePlayerRemove, stopVoting]);
+    if (isSecondTime && !multiplePlayerRemove) stopVoting();
+  }, [isSecondTime, multiplePlayerRemove, stopVoting]);
 
   const onNumberSelected = (num: number) => setSelectedNumber(num + 1 === selectedNumber ? null : num + 1);
 
-  if (secondTime)
+  if (isSecondTime)
     return (
       <>
         <PopUpLabel className='h2 text-warning'>Вывести всех выставленных?</PopUpLabel>
