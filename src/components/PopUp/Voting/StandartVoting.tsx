@@ -20,16 +20,16 @@ interface Props {
   resetVoting: () => void;
   votesPerPlayer: number[];
   setVotesPerPlayer: Dispatch<any>;
-  votingFinishedClicked: () => void;
-  carCrashClosed: boolean;
+  endVoting: () => void;
+  isCarCrashClosed: boolean;
 }
 
 export default function StandartVoting({
   resetVoting,
   votesPerPlayer,
   setVotesPerPlayer,
-  votingFinishedClicked,
-  carCrashClosed,
+  endVoting,
+  isCarCrashClosed,
 }: Props) {
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
@@ -88,7 +88,7 @@ export default function StandartVoting({
 
     if (currentPlayer < votingPlayersAmount - 1) {
       // Если НЕ последний игрок, увеличиваем игрока на 1 и вычисляем оставшееся кол-во рук. Если руки закончились, завершаем голосование.
-      if (votersLeft === 0) return votingFinishedClicked();
+      if (votersLeft === 0) return endVoting();
       setCurrentPlayer(currentPlayer + 1);
     }
 
@@ -109,7 +109,7 @@ export default function StandartVoting({
 
   return (
     <>
-      {(!firstPlayer || carCrashClosed) && (
+      {(!firstPlayer || isCarCrashClosed) && (
         <ResetButton
           onClick={() => {
             resetState();
@@ -118,9 +118,9 @@ export default function StandartVoting({
         />
       )}
 
-      {carCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
+      {isCarCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 
-      <PopUpCircle mini={carCrashClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
+      <PopUpCircle mini={isCarCrashClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
 
       <VictimSelector
         lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке
@@ -135,7 +135,7 @@ export default function StandartVoting({
           таймер
         </PopUpButton>
 
-        <PopUpButton color='Voting' onClick={lastPlayer ? votingFinishedClicked : nextButtonClicked}>
+        <PopUpButton color='Voting' onClick={lastPlayer ? endVoting : nextButtonClicked}>
           {lastPlayer ? 'Завершить' : 'Далее'}
         </PopUpButton>
       </BottomButtonGroup>

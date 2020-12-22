@@ -12,10 +12,10 @@ import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 interface Props {
   secondTime: boolean;
   closeCarCrash: () => void;
-  votingFinishedClicked: (killAll: boolean) => void;
+  endVoting: (killAll: boolean) => void;
 }
 
-export default function CarCrash({ secondTime, closeCarCrash, votingFinishedClicked }: Props) {
+export default function CarCrash({ secondTime, closeCarCrash, endVoting }: Props) {
   const { multiplePlayerRemove } = useSelector(settingsSelector);
   const { selectedNumbers } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
@@ -28,8 +28,8 @@ export default function CarCrash({ secondTime, closeCarCrash, votingFinishedClic
   const deadPlayers = getAllDeadPlayers(players).length;
 
   const stopVoting = useCallback(() => {
-    votingFinishedClicked(selectedNumber! > alivePlayers / 2);
-  }, [selectedNumber, votingFinishedClicked, alivePlayers]);
+    endVoting(selectedNumber! > alivePlayers / 2);
+  }, [selectedNumber, endVoting, alivePlayers]);
 
   useEffect(() => {
     if (secondTime && !multiplePlayerRemove) stopVoting();
