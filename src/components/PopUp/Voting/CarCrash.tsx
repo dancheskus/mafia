@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import Timer from 'components/Timer';
 import VictimSelector from 'components/VictimSelector';
-import { gameSelector, playersSelector, settingsSelector } from 'redux/selectors';
+import { gameSelector, playersSelector } from 'redux/selectors';
 import { getAllAlivePlayers, getAllDeadPlayers } from 'helpers/roleHelpers';
 
 import CarCrashNotification from './CarCrashNotification';
@@ -12,11 +12,10 @@ import { PopUpButton, PopUpCircle, PopUpLabel } from '../styled-components';
 interface Props {
   isSecondTime: boolean;
   closeCarCrash: () => void;
-  endVoting: (killAll: boolean) => void;
+  endCarCrash: (killAll: boolean) => void;
 }
 
-export default function CarCrash({ isSecondTime, closeCarCrash, endVoting }: Props) {
-  const { multiplePlayerRemove } = useSelector(settingsSelector);
+export default function CarCrash({ isSecondTime, closeCarCrash, endCarCrash }: Props) {
   const { selectedNumbers } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
 
@@ -27,14 +26,6 @@ export default function CarCrash({ isSecondTime, closeCarCrash, endVoting }: Pro
   const alivePlayers = getAllAlivePlayers(players).length;
   const deadPlayers = getAllDeadPlayers(players).length;
 
-  const stopVoting = useCallback(() => {
-    endVoting(selectedNumber! > alivePlayers / 2);
-  }, [selectedNumber, endVoting, alivePlayers]);
-
-  useEffect(() => {
-    if (isSecondTime && !multiplePlayerRemove) stopVoting();
-  }, [isSecondTime, multiplePlayerRemove, stopVoting]);
-
   const onNumberSelected = (num: number) => setSelectedNumber(num + 1 === selectedNumber ? null : num + 1);
 
   if (isSecondTime)
@@ -44,7 +35,7 @@ export default function CarCrash({ isSecondTime, closeCarCrash, endVoting }: Pro
 
         <VictimSelector onNumberSelected={onNumberSelected} votesLeft={9 - deadPlayers} />
 
-        <PopUpButton color='Voting' onClick={stopVoting}>
+        <PopUpButton color='Voting' onClick={() => endCarCrash(selectedNumber! > alivePlayers / 2)}>
           Завершить
         </PopUpButton>
       </>
@@ -52,8 +43,8 @@ export default function CarCrash({ isSecondTime, closeCarCrash, endVoting }: Pro
 
   if (notification) return <CarCrashNotification closeNotification={() => setNotification(false)} />;
 
-  const nextPlayer = () => setCurrentPlayer(currentPlayer + 1);
   const lastPlayer = currentPlayer === selectedNumbers.length - 1;
+  const nextPlayer = () => setCurrentPlayer(currentPlayer + 1);
 
   return (
     <>

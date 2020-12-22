@@ -21,7 +21,7 @@ interface Props {
   votesPerPlayer: number[];
   setVotesPerPlayer: Dispatch<any>;
   endVoting: () => void;
-  isCarCrashClosed: boolean;
+  isCarCrashOnceClosed: boolean;
 }
 
 export default function StandartVoting({
@@ -29,7 +29,7 @@ export default function StandartVoting({
   votesPerPlayer,
   setVotesPerPlayer,
   endVoting,
-  isCarCrashClosed,
+  isCarCrashOnceClosed,
 }: Props) {
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
@@ -109,7 +109,7 @@ export default function StandartVoting({
 
   return (
     <>
-      {(!firstPlayer || isCarCrashClosed) && (
+      {(!firstPlayer || isCarCrashOnceClosed) && (
         <ResetButton
           onClick={() => {
             resetState();
@@ -118,9 +118,9 @@ export default function StandartVoting({
         />
       )}
 
-      {isCarCrashClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
+      {isCarCrashOnceClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 
-      <PopUpCircle mini={isCarCrashClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
+      <PopUpCircle mini={isCarCrashOnceClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
 
       <VictimSelector
         lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке

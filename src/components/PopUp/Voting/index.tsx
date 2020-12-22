@@ -7,7 +7,7 @@ import { clearSelectedNumbers, addToSelectedNumbers, skipVotingDisable } from 'r
 import { useCheckForEnd } from 'helpers/checkForEnd';
 import useCustomRef from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
-import { gameSelector, playersSelector } from 'redux/selectors';
+import { gameSelector, playersSelector, settingsSelector } from 'redux/selectors';
 
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
@@ -18,6 +18,7 @@ const getNewVotesArray = (selectedNumbers: number[]) => Array(selectedNumbers.le
 
 export default function Voting() {
   const dispatch = useDispatch();
+  const { multiplePlayerRemove } = useSelector(settingsSelector);
   const players = useSelector(playersSelector);
   const {
     selectedNumbers,
@@ -34,73 +35,33 @@ export default function Voting() {
     getFromLocalStorage('votesPerPlayer') ?? getNewVotesArray(selectedNumbers),
   ); // Кол-во проголосовавших за каждого игрока
   const [isCarCrash, setIsCarCrash] = useState<boolean>(getFromLocalStorage('isCarCrash') ?? false); // Стадия автокатастрофы. 0 - нет. 1 - переголосовка. 2 - Повторная ничья. НУЖНО ПРОВЕРИТЬ, ИСПОЛЬЗУЕТСЯ ЛИ 2 УРОВЕНЬ.
-  const [isCarCrashClosed, setIsCarCrashClosed] = useState<boolean>(getFromLocalStorage('isCarCrashClosed') ?? false); // true, после первой автокатастрофы
+  const [isCarCrashOnceClosed, setIsCarCrashOnceClosed] = useState<boolean>(
+    getFromLocalStorage('isCarCrashOnceClosed') ?? false,
+  ); // true, после первой автокатастрофы
   const [isEndOfVoting, setIsEndOfVoting] = useState<boolean>(getFromLocalStorage('isEndOfVoting') ?? false);
   const [lastMinuteFor, setLastMinuteFor] = useState<number[]>(getFromLocalStorage('lastMinuteFor') ?? []); // Игрок(и), которых выводят из города
 
-  const resetState = (replaceState?: { isCarCrashClosed: boolean }) => {
+  const resetState = (replaceState?: { isCarCrashOnceClosed: boolean }) => {
     setVotesPerPlayer(initialVotesPerPlayer);
     setIsCarCrash(false);
-    setIsCarCrashClosed(replaceState?.isCarCrashClosed ?? false);
+    setIsCarCrashOnceClosed(replaceState?.isCarCrashOnceClosed ?? false);
     setIsEndOfVoting(false);
     setLastMinuteFor([]);
   };
 
   useEffect(() => {
-    addToLocalStorage({ isCarCrashClosed, isCarCrash, votesPerPlayer, isEndOfVoting, lastMinuteFor });
+    addToLocalStorage({ isCarCrashOnceClosed, isCarCrash, votesPerPlayer, isEndOfVoting, lastMinuteFor });
 
     return () => {
-      removeFromLocalStorage(['isCarCrashClosed', 'isCarCrash', 'votesPerPlayer', 'isEndOfVoting', 'lastMinuteFor']);
+      removeFromLocalStorage([
+        'isCarCrashOnceClosed',
+        'isCarCrash',
+        'votesPerPlayer',
+        'isEndOfVoting',
+        'lastMinuteFor',
+      ]);
     };
-  }, [isCarCrashClosed, isCarCrash, votesPerPlayer, isEndOfVoting, lastMinuteFor]);
-
-  useCheckForEnd();
-
-  const getNewVotingList = () => {
-    const largestNumber = Math.max(...votesPerPlayer); // Вычисляем максимальное кол-во проголосовавших в одного игрока
-    const newVotingList: number[] = [];
-    votesPerPlayer.filter((el, i) => el === largestNumber && newVotingList.push(selectedNumbers[i]));
-    // Если макс. число одно, то в новом списке будет 1 игрок, которого и выгонят. Если будет больше, то в массив будут добавлятся игроки с одинаковым кол-вом голосов
-
-    return newVotingList;
-  };
-
-  const enableCarCrash = (listOfPlayers: number[]) => {
-    // Если выставлено больше 2 игроков
-    if (!isCarCrashClosed) {
-      batch(() => {
-        // Первый раз одинаковое кол-во голосов
-        dispatch(clearSelectedNumbers());
-        listOfPlayers.map(num => dispatch(addToSelectedNumbers(num)));
-      });
-    }
-    setIsCarCrash(true);
-  };
-
-  const endVoting = (killAll?: boolean) => {
-    const newVotingList = getNewVotingList();
-
-    if (newVotingList.length === 1) {
-      // Если остался 1 игрок, то он умирает
-      setIsEndOfVoting(true);
-      !lastMinuteFor.length && setLastMinuteFor(lastMinuteFor.concat(newVotingList[0]));
-    }
-
-    // УБИЙСТВО ВСЕХ ПОСЛЕ АВТОКАТАСТРОФЫ
-    if (killAll === true) {
-      setIsEndOfVoting(true);
-      setLastMinuteFor(lastMinuteFor.concat(selectedNumbers));
-    }
-
-    // УБИЙСТВО НИКОГО ПОСЛЕ АВТОКАТАСТРОФЫ
-    if (killAll === false) {
-      setIsEndOfVoting(true);
-      setLastMinuteFor([]);
-    }
-
-    // ВКЛЮЧЕНИЕ АВТОКАТАСТРОФЫ
-    if (newVotingList.length > 1) enableCarCrash(newVotingList);
-  };
+  }, [isCarCrashOnceClosed, isCarCrash, votesPerPlayer, isEndOfVoting, lastMinuteFor]);
 
   useOnMount(() => {
     addToLocalStorage({ initialSelectedNumbers });
@@ -122,6 +83,48 @@ export default function Voting() {
       for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) dispatch(skipVotingDisable());
     }
   });
+
+  useCheckForEnd();
+
+  const enableCarCrash = (newVotingList: number[]) => {
+    setIsCarCrash(true);
+
+    if (isCarCrashOnceClosed) return; // Если CarCrash уже выполнялся и был закрыт, дальнейшее не выполнять
+
+    batch(() => {
+      dispatch(clearSelectedNumbers());
+      newVotingList.map(num => dispatch(addToSelectedNumbers(num)));
+    });
+  };
+
+  const endCarCrash = (killAll: boolean) => {
+    // убийство ВСЕХ или НИКОГО после автокатастрофы
+    setLastMinuteFor(killAll ? lastMinuteFor.concat(selectedNumbers) : []);
+    setIsEndOfVoting(true);
+  };
+
+  const getNewVotingList = () => {
+    const largestNumber = Math.max(...votesPerPlayer); // Вычисляем максимальное кол-во проголосовавших в одного игрока
+    const newVotingList: number[] = [];
+    votesPerPlayer.filter((el, i) => el === largestNumber && newVotingList.push(selectedNumbers[i]));
+    // Если макс. число одно, то в новом списке будет 1 игрок, которого и выгонят. Если будет больше, то в массив будут добавлятся игроки с одинаковым кол-вом голосов
+
+    return newVotingList;
+  };
+
+  const endVoting = () => {
+    const newVotingList = getNewVotingList();
+
+    if (newVotingList.length === 1) {
+      // При старте или после голосования остался 1 кандидат
+      setIsEndOfVoting(true);
+      !lastMinuteFor.length && setLastMinuteFor(lastMinuteFor.concat(newVotingList[0]));
+    } else {
+      // Если выставлено больше 2 кандидатов, включаем автокатастрофу
+      if (isCarCrashOnceClosed && !multiplePlayerRemove) return setIsEndOfVoting(true);
+      enableCarCrash(newVotingList);
+    }
+  };
 
   const resetVoting = () => {
     // eslint-disable-next-line no-alert
@@ -151,11 +154,11 @@ export default function Voting() {
 
         <CarCrash
           closeCarCrash={() => {
-            resetState({ isCarCrashClosed: true });
+            resetState({ isCarCrashOnceClosed: true });
             setVotesPerPlayer(getNewVotesArray(selectedNumbers));
           }}
-          isSecondTime={isCarCrashClosed}
-          endVoting={endVoting}
+          isSecondTime={isCarCrashOnceClosed}
+          endCarCrash={endCarCrash}
         />
       </>
     );
@@ -166,7 +169,7 @@ export default function Voting() {
       setVotesPerPlayer={setVotesPerPlayer}
       endVoting={endVoting}
       resetVoting={resetVoting}
-      isCarCrashClosed={isCarCrashClosed}
+      isCarCrashOnceClosed={isCarCrashOnceClosed}
     />
   );
 }
