@@ -30,22 +30,22 @@ describe('checkForEnd', () => {
   });
 
   it('should return "true" if "black = red"', () => {
-    store.defaultTestRoles().killPlayer(9).killPlayer(8).killPlayer(7).killPlayer(6);
+    store.defaultTestRoles().killPlayers([9, 8, 7, 6]);
     expect(checkForEnd(store.state.players)).toBe(true);
   });
 
   it('should return "true" if "black > red"', () => {
-    store.defaultTestRoles().killPlayer(9).killPlayer(8).killPlayer(7).killPlayer(6).killPlayer(5);
+    store.defaultTestRoles().killPlayers([9, 8, 7, 6, 5]);
     expect(checkForEnd(store.state.players)).toBe(true);
   });
 
   it('should return "true" if "black = 3 && red = 5 && lastRemovedPlayers is array of 2 alive red players"', () => {
-    store.defaultTestRoles().killPlayer(9).killPlayer(8).killPlayer(7);
+    store.defaultTestRoles().killPlayers([9, 8, 7]);
     expect(checkForEnd(store.state.players, [6, 5])).toBe(true);
   });
 
   it('should return "true" if "black = 3 && red = 4 && lastRemovedPlayers is number of 1 alive red player"', () => {
-    store.defaultTestRoles().killPlayer(9).killPlayer(8).killPlayer(7).killPlayer(6);
+    store.defaultTestRoles().killPlayers([9, 8, 7, 6]);
     expect(checkForEnd(store.state.players, 5)).toBe(true);
   });
 
@@ -80,13 +80,13 @@ describe('useCheckForEnd', () => {
     repeat(i => {
       // killing last 3 players to make 3 black and 4 red players
       act(() => {
-        store.killPlayer(i + 7);
+        store.killPlayers(i + 7);
       });
       expect(store.dispatchSpy).toHaveBeenCalledTimes(0);
     }, 3);
 
     act(() => {
-      store.killPlayer(6);
+      store.killPlayers(6);
     });
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ENDOFGAME }));
@@ -96,13 +96,13 @@ describe('useCheckForEnd', () => {
     render();
 
     act(() => {
-      store.killPlayer(0).killPlayer(1);
+      store.killPlayers(0).killPlayers(1);
     });
 
     expect(store.dispatchSpy).toHaveBeenCalledTimes(0);
 
     act(() => {
-      store.killPlayer(2);
+      store.killPlayers(2);
     });
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ENDOFGAME }));

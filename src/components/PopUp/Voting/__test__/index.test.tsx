@@ -1,7 +1,7 @@
-import ROLE from 'common/playerEnums';
+import PHASE from 'common/phaseEnums';
 import repeat from 'helpers/repeat';
-import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
-import { addToSelectedNumbers } from 'redux/actions/gameActions';
+import { clickButton, clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
+import { changeGameState, skipVotingEnable } from 'redux/actions/gameActions';
 import TestStore from 'test/TestStore';
 
 import Voting from '..';
@@ -10,6 +10,8 @@ let store: TestStore;
 
 beforeEach(() => {
   store = new TestStore();
+  store.defaultTestRoles();
+  store.dispatch(changeGameState({ phase: PHASE.VOTING, dayNumber: 2 }));
 });
 
 const render = getRenderer(Voting);
@@ -23,7 +25,7 @@ describe('<Voting />', () => {
   `(
     'should render correct amount of active buttons depend on alive players amount',
     ({ killedPlayers }: { killedPlayers: number[] }) => {
-      killedPlayers.forEach(plNum => store.killPlayer(plNum));
+      store.killPlayers(killedPlayers);
       render();
 
       const buttons = screen.getAllByTestId('votingSingleElement');
@@ -37,17 +39,38 @@ describe('<Voting />', () => {
   );
 
   it('should exit to EndOfGame if voting result makes "red <= black"', () => {
-    store.defaultTestRoles();
-    store.dispatch(addToSelectedNumbers(0));
-    store.killPlayer(1).killPlayer(2).killPlayer(3).killPlayer(4).killPlayer(5);
+    store.setSelectedNumbers(9).killPlayers([3, 4, 5]);
     render();
 
-    screen.debug();
+    clickButton(/ок/i);
+
+    expect(screen.getByText(/10/i)).toBeInTheDocument();
+
+    clickButton(/ночь/i);
+    expect(store.dispatchSpy).toHaveBeenLastCalledWith(changeGameState({ phase: PHASE.ENDOFGAME }));
   });
 
-  it('should not render reset voting button on first player, but should render it on next stages', () => {});
+  it('should not render reset voting button on first player, but should render it on next stages', () => {
+    store.setSelectedNumbers([0, 1, 2]);
+    render();
 
-  it('should reset voting to initial state W/O car crash', () => {});
+    expect(screen.queryByTestId(/resetButton/i)).not.toBeInTheDocument();
+
+    repeat(() => {
+      clickButton(/далее/i);
+      expect(screen.getByTestId(/resetButton/i)).toBeInTheDocument();
+    }, 2);
+
+    expect(screen.getByText(/завершить/i)).toBeInTheDocument();
+  });
+
+  fit('should reset voting to initial state W/O car crash', () => {
+    // store.setSelectedNumbers([0, 1, 2]);
+    // render();
+    // clickButton(/далее/i);
+    // clickByTestId(/resetButton/i);
+    // screen.debug();
+  });
 
   it('should reset voting to initial state W/ car crash', () => {});
 
@@ -57,9 +80,28 @@ describe('<Voting />', () => {
 
   it('should remove initialSelectedNumbers from localStorage on unmount', () => {});
 
-  it('should skip voting if this IS 1st day and only 1 selectedNumber', () => {});
+  it('should skip voting if this IS 1st day and only 1 selectedNumber', () => {
+    store.setSelectedNumbers(9).dispatch(changeGameState({ phase: PHASE.VOTING, dayNumber: 1 }));
+    render();
 
-  it('should skip voting if this is NOT 1st day and skipVoting was enabled', () => {});
+    expect(screen.getByText(/голосование не проводится/i)).toBeInTheDocument();
+
+    clickButton(/ночь/i);
+
+    expect(store.dispatchSpy).toHaveBeenLastCalledWith(changeGameState({ phase: PHASE.NIGHT }));
+  });
+
+  it('should skip voting if this is NOT 1st day and skipVoting was enabled', () => {
+    store.setSelectedNumbers([9, 4]);
+    store.dispatch(skipVotingEnable());
+    render();
+
+    expect(screen.getByText(/голосование не проводится/i)).toBeInTheDocument();
+
+    clickButton(/ночь/i);
+
+    expect(store.dispatchSpy).toHaveBeenLastCalledWith(changeGameState({ phase: PHASE.NIGHT }));
+  });
 
   it('should render EndOfVoting if voting ended or voting skipped', () => {});
 
