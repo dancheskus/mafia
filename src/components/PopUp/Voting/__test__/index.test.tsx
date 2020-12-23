@@ -1,3 +1,5 @@
+import { act } from 'react-dom/test-utils';
+
 import PHASE from 'common/phaseEnums';
 import repeat from 'helpers/repeat';
 import { clickButton, clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
@@ -5,8 +7,10 @@ import {
   addToSelectedNumbers,
   changeGameState,
   clearSelectedNumbers,
+  skipVotingDisable,
   skipVotingEnable,
 } from 'redux/actions/gameActions';
+import { addFoul, killPlayer } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
 
 import Voting from '..';
@@ -98,9 +102,7 @@ describe('<Voting />', () => {
     store.setSelectedNumbers(selectedNumbers);
     render();
 
-    clickButton(/5/i);
-    repeat(() => clickButton(/далее/i), 2);
-    clickButton(/завершить/i);
+    clickButton([/5/i, /далее/i, /далее/i, /завершить/i]);
 
     expect(screen.getByText(/переголосовка/i)).toBeInTheDocument();
     checkSelectedNumbersResetted([0, 2]);
@@ -113,8 +115,7 @@ describe('<Voting />', () => {
   });
 
   it('should render correct player nubmer in big circle', () => {
-    const selectedNumbers = [7, 0, 3];
-    store.setSelectedNumbers(selectedNumbers);
+    store.setSelectedNumbers([7, 0, 3]);
     render();
 
     const сircle = screen.getByTestId(/votingForPlayerCircle/i);
@@ -143,8 +144,7 @@ describe('<Voting />', () => {
   });
 
   it('should remove initialSelectedNumbers from localStorage on unmount', () => {
-    const selectedNumbers = [0, 1, 2];
-    store.setSelectedNumbers(selectedNumbers);
+    store.setSelectedNumbers([0, 1, 2]);
     const { unmount } = render();
     unmount();
 
@@ -175,33 +175,82 @@ describe('<Voting />', () => {
   });
 
   it('should render EndOfVoting if voting ended', () => {
-    const selectedNumbers = [0, 1];
-    store.setSelectedNumbers(selectedNumbers);
+    store.setSelectedNumbers([0, 1]);
     render();
 
-    clickButton(/далее/i);
-    clickButton(/завершить/i);
+    clickButton([/далее/i, /завершить/i]);
 
     expect(screen.getByText(/игру покидает/i)).toBeInTheDocument();
   });
 
   it('should render EndOfVoting if voting skipped', () => {
-    const selectedNumbers = [0, 1];
-    store.setSelectedNumbers(selectedNumbers).dispatch(skipVotingEnable());
+    store.setSelectedNumbers([0, 1]).dispatch(skipVotingEnable());
     render();
 
     expect(screen.getByText(/голосование не проводится/i)).toBeInTheDocument();
   });
 
-  it('should render CarCrash if carCrash enabled', () => {});
+  it.each`
+    votesForKillingAll | shouldKillPlayers
+    ${/4/i}            | ${false}
+    ${/5/i}            | ${false}
+    ${/6/i}            | ${true}
+  `('should render CarCrash. And test killAll argument', ({ votesForKillingAll, shouldKillPlayers }) => {
+    store.setSelectedNumbers([0, 1, 2]);
+    render();
 
-  it('should exit CarCrash if carCrash ended', () => {});
+    clickButton([/5/i, /далее/i, /далее/i, /завершить/i]);
 
-  it('should create new voting list on carCrash exit', () => {});
+    expect(screen.getByText(/переголосовка/i)).toBeInTheDocument();
+    clickButton([/ок/i, /далее/i, /завершить/i, /5/i, /далее/i, /завершить/i]);
 
-  it('should render car crash 2d time differently', () => {});
+    expect(screen.getByText(/вывести всех выставленных/i)).toBeInTheDocument();
+    shouldKillPlayers && clickButton([votesForKillingAll, /завершить/i, /ок/i, /далее/i, /ночь/i]);
+    !shouldKillPlayers && clickButton([votesForKillingAll, /завершить/i, /ночь/i]);
 
-  it('should kill all selected players if killAll was selected', () => {});
+    shouldKillPlayers && [0, 2].forEach(num => expect(store.dispatchSpy).toHaveBeenCalledWith(killPlayer(num)));
+    !shouldKillPlayers && [0, 2].forEach(num => expect(store.dispatchSpy).not.toHaveBeenCalledWith(killPlayer(num)));
+  });
 
-  it('should kill player immediately if only 1 player in voting list', () => {});
+  it('should kill player immediately if only 1 player in voting list', () => {
+    store.setSelectedNumbers(4);
+    render();
+
+    expect(screen.getByText(/игру покидает/i)).toBeInTheDocument();
+    expect(screen.getByText(/5/i)).toBeInTheDocument();
+
+    clickButton([/ок/i, /ночь/i]);
+    expect(store.dispatchSpy).toHaveBeenCalledWith(killPlayer(4));
+  });
+
+  // it('should leave "skipVoting" after component unmount', () => {
+  //   store.setSelectedNumbers([0, 1]);
+  //   const { unmount } = render();
+
+  //   clickButton([/далее/i, /завершить/i]);
+
+  //   repeat(() => store.dispatch(addFoul(7)), 4);
+  //   store.dispatch(skipVotingEnable());
+
+  //   unmount();
+  // });
+
+  // fit('should disable "skipVoting" after component unmount', () => {
+  //   store.setSelectedNumbers([0, 1]);
+  //   const { unmount } = render();
+
+  //   clickButton([/далее/i, /завершить/i, /ок/i, /ночь/i]);
+
+  //   repeat(() => store.dispatch(addFoul(1)), 4);
+  //   act(() => {
+  //     store.dispatch(skipVotingEnable());
+  //   });
+
+  //   console.log(store.state.game.skipVoting);
+
+  //   // screen.debug();
+  //   // unmount();
+  //   // expect(store.dispatchSpy).toHaveBeenCalledWith(skipVotingDisable());
+  //   // console.log(store.state.game.skipVoting);
+  // });
 });
