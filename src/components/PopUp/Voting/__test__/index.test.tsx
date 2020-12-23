@@ -1,7 +1,12 @@
 import PHASE from 'common/phaseEnums';
 import repeat from 'helpers/repeat';
 import { clickButton, clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
-import { changeGameState, skipVotingEnable } from 'redux/actions/gameActions';
+import {
+  addToSelectedNumbers,
+  changeGameState,
+  clearSelectedNumbers,
+  skipVotingEnable,
+} from 'redux/actions/gameActions';
 import TestStore from 'test/TestStore';
 
 import Voting from '..';
@@ -14,7 +19,19 @@ beforeEach(() => {
   store.dispatch(changeGameState({ phase: PHASE.VOTING, dayNumber: 2 }));
 });
 
-const render = getRenderer(Voting);
+const VotingWithPortal = () => (
+  <>
+    <div id='portal' />
+    <Voting />
+  </>
+);
+
+const checkSelectedNumbersResetted = (newSelectedNumbers: number[]) => {
+  expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
+  newSelectedNumbers.forEach(num => expect(store.dispatchSpy).toHaveBeenCalledWith(addToSelectedNumbers(num)));
+};
+
+const render = getRenderer(VotingWithPortal);
 
 describe('<Voting />', () => {
   it.each`
@@ -64,17 +81,36 @@ describe('<Voting />', () => {
     expect(screen.getByText(/завершить/i)).toBeInTheDocument();
   });
 
-  fit('should reset voting to initial state W/O car crash', () => {
-    store.setSelectedNumbers([0, 1, 2]);
+  it('should reset voting to initial state W/O car crash', () => {
+    const selectedNumbers = [0, 1, 2];
+    store.setSelectedNumbers(selectedNumbers);
     render();
 
     clickButton(/далее/i);
     clickByTestId(/resetButton/i);
+    clickButton(/ок/i);
 
-    screen.debug();
+    checkSelectedNumbersResetted(selectedNumbers);
   });
 
-  it('should reset voting to initial state W/ car crash', () => {});
+  it('should reset voting to initial state W/ car crash', () => {
+    const selectedNumbers = [0, 1, 2];
+    store.setSelectedNumbers(selectedNumbers);
+    render();
+
+    clickButton(/5/i);
+    repeat(() => clickButton(/далее/i), 2);
+    clickButton(/завершить/i);
+
+    expect(screen.getByText(/переголосовка/i)).toBeInTheDocument();
+    checkSelectedNumbersResetted([0, 2]);
+    clickButton(/ок/i);
+
+    clickByTestId(/resetButton/i);
+    clickButton(/ок/i);
+
+    checkSelectedNumbersResetted(selectedNumbers);
+  });
 
   it('should render correct player nubmer in big circle', () => {});
 
