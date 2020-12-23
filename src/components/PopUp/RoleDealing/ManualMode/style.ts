@@ -33,8 +33,9 @@ const { popupButton, popupBackgroundLight } = colors.RoleDealing;
 
 export const RoleCard = styled.button<IRoleCard>`
   ${({ selected, disabled }) => css`
-    width: 50%;
-    height: 50%;
+    flex-basis: 50%;
+    max-height: 50%;
+    min-height: 50%;
 
     > svg {
       transition: all 0.1s;

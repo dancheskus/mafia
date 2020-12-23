@@ -51,7 +51,7 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
             onClick={() => changeSelection(ROLE.MIRNIJ)}
             selected={currentPlayerRole === ROLE.MIRNIJ}
           >
-            <ThumbUpIcon size='60%' fill={popupIconLight} />
+            <ThumbUpIcon size='45%' fill={popupIconLight} />
           </RoleCard>
 
           <RoleCard
@@ -60,7 +60,7 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
             onClick={() => changeSelection(ROLE.DON)}
             selected={currentPlayerRole === ROLE.DON}
           >
-            <DonRingIcon size='60%' fill={popupIcon} />
+            <DonRingIcon size='45%' fill={popupIcon} />
           </RoleCard>
 
           <RoleCard
@@ -69,7 +69,7 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
             onClick={() => changeSelection(ROLE.MAFIA)}
             selected={currentPlayerRole === ROLE.MAFIA}
           >
-            <ThumbDownIcon size='60%' fill={popupIcon} />
+            <ThumbDownIcon size='45%' fill={popupIcon} />
           </RoleCard>
 
           <RoleCard
@@ -78,7 +78,7 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
             onClick={() => changeSelection(ROLE.SHERIF)}
             selected={currentPlayerRole === ROLE.SHERIF}
           >
-            <SheriffOkIcon size='60%' fill={popupIconLight} />
+            <SheriffOkIcon size='45%' fill={popupIconLight} />
           </RoleCard>
         </RoleSelection>
       </RoleSelectionWrapper>
