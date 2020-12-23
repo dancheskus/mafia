@@ -39,6 +39,7 @@ const VictimSelector = ({
     <VotingBlock className='col-10 col-md-8 col-lg-6'>
       {range(0, 10).map(num => (
         <VotingSingleElement
+          data-testid='votingSingleElement'
           shooting={shooting}
           selected={lastPlayer ? num === votesLeft : selectedNumber === num}
           disabled={

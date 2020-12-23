@@ -1,4 +1,7 @@
+import ROLE from 'common/playerEnums';
+import repeat from 'helpers/repeat';
 import { getRenderer, screen, user } from 'helpers/testingHelpers/test-utils';
+import { addToSelectedNumbers } from 'redux/actions/gameActions';
 import TestStore from 'test/TestStore';
 
 import Voting from '..';
@@ -12,9 +15,35 @@ beforeEach(() => {
 const render = getRenderer(Voting);
 
 describe('<Voting />', () => {
-  it('should render correct amount of active buttons depend on alive players amount', () => {});
+  it.each`
+    killedPlayers
+    ${[]}
+    ${[0, 1, 2]}
+    ${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]}
+  `(
+    'should render correct amount of active buttons depend on alive players amount',
+    ({ killedPlayers }: { killedPlayers: number[] }) => {
+      killedPlayers.forEach(plNum => store.killPlayer(plNum));
+      render();
 
-  it('should exit to EndOfGame if voting result makes "red <= black"', () => {});
+      const buttons = screen.getAllByTestId('votingSingleElement');
+
+      const amountOfEnabledButtons = 10 - killedPlayers.length;
+      const amountOfDisabledButtons = killedPlayers.length;
+
+      repeat(i => expect(buttons[i]).not.toBeDisabled(), amountOfEnabledButtons);
+      repeat(i => expect(buttons[i + amountOfEnabledButtons]).toBeDisabled(), amountOfDisabledButtons);
+    },
+  );
+
+  it('should exit to EndOfGame if voting result makes "red <= black"', () => {
+    store.defaultTestRoles();
+    store.dispatch(addToSelectedNumbers(0));
+    store.killPlayer(1).killPlayer(2).killPlayer(3).killPlayer(4).killPlayer(5);
+    render();
+
+    screen.debug();
+  });
 
   it('should not render reset voting button on first player, but should render it on next stages', () => {});
 
