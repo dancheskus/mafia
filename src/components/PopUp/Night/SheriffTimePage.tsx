@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { TargetIcon, NextIcon } from 'icons/svgIcons';

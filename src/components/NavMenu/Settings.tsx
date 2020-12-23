@@ -1,4 +1,3 @@
-import React from 'react';
 import { Howl } from 'howler';
 import { batch, useDispatch, useSelector } from 'react-redux';
 

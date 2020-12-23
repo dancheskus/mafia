@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useState } from 'react';
+import { Dispatch, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTimer } from 'use-timer';
 import { Howl } from 'howler';

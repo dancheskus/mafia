@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch, batch } from 'react-redux';
 
 import { changeGameState, closePopup } from 'redux/actions/gameActions';

@@ -7,7 +7,7 @@
 КОМПОНЕНТ ВОЗВРАЩАЕТ: значение нажатой кнопки
 */
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { range } from 'lodash';
 

@@ -1,4 +1,3 @@
-import React from 'react';
 import { render as rtlRender, screen as rtlScreen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import user from '@testing-library/user-event';

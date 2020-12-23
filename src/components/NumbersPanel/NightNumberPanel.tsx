@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { useGetAlivePlayersAmountByTeam } from 'helpers/roleHelpers';
 import PHASE from 'common/phaseEnums';
 

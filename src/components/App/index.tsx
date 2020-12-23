@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
 

@@ -2,7 +2,7 @@
 // 1. список уходящих игроков
 // 2. коллбэк уводящий в ночь
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import useOnMount from 'helpers/useOnMount';

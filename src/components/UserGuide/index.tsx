@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import useOnMount from 'helpers/useOnMount';

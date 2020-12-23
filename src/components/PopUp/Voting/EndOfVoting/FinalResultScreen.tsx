@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { PopUpButton, PopUpLabel } from 'components/PopUp/styled-components';

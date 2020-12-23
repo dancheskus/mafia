@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 import { last } from 'lodash';
 

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import React from 'react';
 
 import colors from 'style/colors';
 import { ResetIcon } from 'icons/svgIcons';

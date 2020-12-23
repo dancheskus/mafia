@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { shuffle, range, random } from 'lodash';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import { useTimer } from 'use-timer';

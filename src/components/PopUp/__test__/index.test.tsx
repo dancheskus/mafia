@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import { changeGameState, minimizeMaximaizePopup } from 'redux/actions/gameActions';
 import PHASE from 'common/phaseEnums';

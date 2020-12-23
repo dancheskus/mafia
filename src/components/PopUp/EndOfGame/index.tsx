@@ -1,4 +1,3 @@
-import React from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
 
 import useOnMount from 'helpers/useOnMount';
