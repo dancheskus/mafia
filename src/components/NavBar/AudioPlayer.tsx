@@ -19,9 +19,7 @@ const checkMusicAllowedByPhase = (phase: PHASE) =>
   phase === PHASE.NIGHT || phase === PHASE.ZERONIGHT || phase === PHASE.ROLEDEALING;
 
 const useUnloadSoundOnUnmount = (sound: any) => {
-  useEffect(() => {
-    return () => sound && sound.unload();
-  }, [sound]);
+  useEffect(() => () => sound && sound.unload(), [sound]);
 };
 
 export default function AudioPlayer() {

@@ -37,6 +37,8 @@
         "args": "after-used",
         "ignoreRestSiblings": true
       }],
-      "no-underscore-dangle": ["error", { "allow": ["__STORE__", "__REDUX_DEVTOOLS_EXTENSION__"] }]
+      "no-underscore-dangle": ["error", { "allow": ["__STORE__", "__REDUX_DEVTOOLS_EXTENSION__"] }],
+      "react/react-in-jsx-scope": 0,
+      "react/jsx-uses-react": 0
   }
 }
