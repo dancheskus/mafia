@@ -120,7 +120,9 @@ export default function StandartVoting({
 
       {isCarCrashOnceClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
 
-      <PopUpCircle mini={isCarCrashOnceClosed}>{selectedNumbers[currentPlayer] + 1 || null}</PopUpCircle>
+      <PopUpCircle data-testid='votingForPlayerCircle' mini={isCarCrashOnceClosed}>
+        {selectedNumbers[currentPlayer] + 1 || null}
+      </PopUpCircle>
 
       <VictimSelector
         lastPlayer={lastPlayer} // для автоматической подсветки при последнем игроке

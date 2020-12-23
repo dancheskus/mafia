@@ -112,11 +112,44 @@ describe('<Voting />', () => {
     checkSelectedNumbersResetted(selectedNumbers);
   });
 
-  it('should render correct player nubmer in big circle', () => {});
+  it('should render correct player nubmer in big circle', () => {
+    const selectedNumbers = [7, 0, 3];
+    store.setSelectedNumbers(selectedNumbers);
+    render();
 
-  it('should enable only left amount of votes on last voting screen and diable other buttons. Should render "ЗАВЕРШИТЬ" button on last step', () => {});
+    const сircle = screen.getByTestId(/votingForPlayerCircle/i);
 
-  it('should remove initialSelectedNumbers from localStorage on unmount', () => {});
+    expect(сircle).toHaveTextContent('8');
+
+    clickButton(/далее/i);
+    expect(сircle).toHaveTextContent('1');
+
+    clickButton(/далее/i);
+    expect(сircle).toHaveTextContent('4');
+  });
+
+  it('should enable only left amount of votes on last voting screen and diable other buttons. Should render "ЗАВЕРШИТЬ" button on last step', () => {
+    const selectedNumbers = [0, 1, 2];
+    store.setSelectedNumbers(selectedNumbers);
+    render();
+
+    clickButton(/далее/i);
+    repeat(i => expect(screen.getByRole('button', { name: String(i + 1) })).toBeEnabled(), 10);
+
+    clickButton(/далее/i);
+    repeat(i => expect(screen.getByRole('button', { name: String(i + 1) })).toBeDisabled(), 9);
+
+    expect(screen.getByRole('button', { name: '10' })).toBeEnabled();
+  });
+
+  it('should remove initialSelectedNumbers from localStorage on unmount', () => {
+    const selectedNumbers = [0, 1, 2];
+    store.setSelectedNumbers(selectedNumbers);
+    const { unmount } = render();
+    unmount();
+
+    expect(localStorage.removeItem).toHaveBeenCalledWith('initialSelectedNumbers');
+  });
 
   it('should skip voting if this IS 1st day and only 1 selectedNumber', () => {
     store.setSelectedNumbers(9).dispatch(changeGameState({ phase: PHASE.VOTING, dayNumber: 1 }));
@@ -141,7 +174,24 @@ describe('<Voting />', () => {
     expect(store.dispatchSpy).toHaveBeenLastCalledWith(changeGameState({ phase: PHASE.NIGHT }));
   });
 
-  it('should render EndOfVoting if voting ended or voting skipped', () => {});
+  it('should render EndOfVoting if voting ended', () => {
+    const selectedNumbers = [0, 1];
+    store.setSelectedNumbers(selectedNumbers);
+    render();
+
+    clickButton(/далее/i);
+    clickButton(/завершить/i);
+
+    expect(screen.getByText(/игру покидает/i)).toBeInTheDocument();
+  });
+
+  it('should render EndOfVoting if voting skipped', () => {
+    const selectedNumbers = [0, 1];
+    store.setSelectedNumbers(selectedNumbers).dispatch(skipVotingEnable());
+    render();
+
+    expect(screen.getByText(/голосование не проводится/i)).toBeInTheDocument();
+  });
 
   it('should render CarCrash if carCrash enabled', () => {});
 
