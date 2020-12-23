@@ -65,11 +65,13 @@ describe('<Voting />', () => {
   });
 
   fit('should reset voting to initial state W/O car crash', () => {
-    // store.setSelectedNumbers([0, 1, 2]);
-    // render();
-    // clickButton(/далее/i);
-    // clickByTestId(/resetButton/i);
-    // screen.debug();
+    store.setSelectedNumbers([0, 1, 2]);
+    render();
+
+    clickButton(/далее/i);
+    clickByTestId(/resetButton/i);
+
+    screen.debug();
   });
 
   it('should reset voting to initial state W/ car crash', () => {});

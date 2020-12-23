@@ -127,15 +127,12 @@ export default function Voting() {
   };
 
   const resetVoting = () => {
-    // eslint-disable-next-line no-alert
-    if (window.confirm('Сбросить голосование?')) {
-      resetState();
+    resetState();
 
-      batch(() => {
-        dispatch(clearSelectedNumbers());
-        initialSelectedNumbers.forEach(num => dispatch(addToSelectedNumbers(num)));
-      });
-    }
+    batch(() => {
+      dispatch(clearSelectedNumbers());
+      initialSelectedNumbers.forEach(num => dispatch(addToSelectedNumbers(num)));
+    });
   };
 
   if (isEndOfVoting || skipVoting)
