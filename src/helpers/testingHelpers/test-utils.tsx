@@ -30,7 +30,13 @@ const clickButton = (name: RegExp | RegExp[]) => {
 const clickByTestId = (testId: RegExp) => user.click(rtlScreen.getByTestId(testId));
 const clickByText = (text: RegExp) => user.click(rtlScreen.getByText(text));
 
+const addPortal = () => {
+  const modalRoot = document.createElement('div');
+  modalRoot.setAttribute('id', 'portal');
+  document.body.appendChild(modalRoot);
+};
+
 // re-export everything
 export * from '@testing-library/react';
 
-export { user, getRenderer, clickButton, clickByTestId, clickByText };
+export { user, getRenderer, clickButton, clickByTestId, clickByText, addPortal };

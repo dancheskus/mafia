@@ -226,7 +226,7 @@ export const SettingsLine = styled.div`
   align-items: center;
   text-align: left;
 
-  span {
+  .title {
     width: 90%;
   }
 

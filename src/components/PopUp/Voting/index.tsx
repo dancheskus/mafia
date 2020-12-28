@@ -3,11 +3,11 @@ import { batch, useDispatch, useSelector } from 'react-redux';
 
 import { addToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from 'helpers/localStorageHelpers';
 import useOnMount from 'helpers/useOnMount';
-import { clearSelectedNumbers, addToSelectedNumbers, skipVotingDisable } from 'redux/actions/gameActions';
+import { clearSelectedNumbers, addToSelectedNumbers } from 'redux/actions/gameActions';
 import { useCheckForEnd } from 'helpers/checkForEnd';
 import useCustomRef from 'helpers/useCustomRef';
 import useOnUnmount from 'helpers/useOnUnmount';
-import { gameSelector, playersSelector, settingsSelector } from 'redux/selectors';
+import { gameSelector, settingsSelector } from 'redux/selectors';
 
 import EndOfVoting from './EndOfVoting';
 import CarCrash from './CarCrash';
@@ -19,7 +19,6 @@ const getNewVotesArray = (selectedNumbers: number[]) => Array(selectedNumbers.le
 export default function Voting() {
   const dispatch = useDispatch();
   const { multiplePlayerRemove } = useSelector(settingsSelector);
-  const players = useSelector(playersSelector);
   const {
     selectedNumbers,
     skipVoting,

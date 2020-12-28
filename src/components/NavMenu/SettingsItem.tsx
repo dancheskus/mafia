@@ -34,9 +34,11 @@ export default function SettingsItem({ type, title }: Props) {
 
   return (
     <SettingsLine>
-      <span>{title}</span>
+      <span className='title'>{title}</span>
 
-      <Switch onColor={onColor} checked={settings[type]} onChange={() => dispatch(functions[type]!())} />
+      <span data-testid={`toggle_${type}`}>
+        <Switch onColor={onColor} checked={settings[type]} onChange={() => dispatch(functions[type]!())} />
+      </span>
     </SettingsLine>
   );
 }

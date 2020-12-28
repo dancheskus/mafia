@@ -1,8 +1,6 @@
-import { act } from 'react-dom/test-utils';
-
 import PHASE from 'common/phaseEnums';
 import repeat from 'helpers/repeat';
-import { clickButton, clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
+import { addPortal, clickButton, clickByTestId, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import {
   addToSelectedNumbers,
   changeGameState,
@@ -23,12 +21,9 @@ beforeEach(() => {
   store.dispatch(changeGameState({ phase: PHASE.VOTING, dayNumber: 2 }));
 });
 
-const VotingWithPortal = () => (
-  <>
-    <div id='portal' />
-    <Voting />
-  </>
-);
+addPortal();
+
+const render = getRenderer(Voting);
 
 const checkSelectedNumbersResetted = (newSelectedNumbers: number[]) => {
   expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
@@ -39,8 +34,6 @@ const killWithFourFouls = (playerNumber: number) => {
   repeat(() => store.dispatch(addFoul(playerNumber)), 4);
   store.dispatch(skipVotingEnable());
 };
-
-const render = getRenderer(VotingWithPortal);
 
 describe('<Voting />', () => {
   it.each`
@@ -168,8 +161,7 @@ describe('<Voting />', () => {
   });
 
   it('should skip voting if this is NOT 1st day and skipVoting was enabled', () => {
-    store.setSelectedNumbers([9, 4]);
-    store.dispatch(skipVotingEnable());
+    store.setSelectedNumbers([9, 4]).dispatch(skipVotingEnable());
     render();
 
     expect(screen.getByText(/голосование не проводится/i)).toBeInTheDocument();
