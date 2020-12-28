@@ -76,12 +76,6 @@ export default function Voting() {
     removeFromLocalStorage('initialSelectedNumbers');
 
     dispatch(clearSelectedNumbers()); // Это нужно, чтобы не показывать кого убили, если конец игры, т.к это голосование.
-
-    const numberOfVotedOutPlayersWithFourthFoul = lastMinuteFor.filter(plNum => !players[plNum].isAlive).length;
-
-    if (skipVoting && lastMinuteFor.length !== 0) {
-      for (let i = 0; i < numberOfVotedOutPlayersWithFourthFoul; i++) dispatch(skipVotingDisable());
-    }
   });
 
   useCheckForEnd();

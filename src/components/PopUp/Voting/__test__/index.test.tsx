@@ -35,6 +35,11 @@ const checkSelectedNumbersResetted = (newSelectedNumbers: number[]) => {
   newSelectedNumbers.forEach(num => expect(store.dispatchSpy).toHaveBeenCalledWith(addToSelectedNumbers(num)));
 };
 
+const killWithFourFouls = (playerNumber: number) => {
+  repeat(() => store.dispatch(addFoul(playerNumber)), 4);
+  store.dispatch(skipVotingEnable());
+};
+
 const render = getRenderer(VotingWithPortal);
 
 describe('<Voting />', () => {
@@ -223,34 +228,25 @@ describe('<Voting />', () => {
     expect(store.dispatchSpy).toHaveBeenCalledWith(killPlayer(4));
   });
 
-  // it('should leave "skipVoting" after component unmount', () => {
-  //   store.setSelectedNumbers([0, 1]);
-  //   const { unmount } = render();
+  it.each`
+    playerNumberToKill | shouldDisableSkipVoting
+    ${7}               | ${false}
+    ${1}               | ${true}
+  `(
+    'should make "skipVoting" $shouldDisableSkipVoting after goToNight clicked',
+    ({ playerNumberToKill, shouldDisableSkipVoting }) => {
+      store.setSelectedNumbers([0, 1]);
+      render();
 
-  //   clickButton([/далее/i, /завершить/i]);
+      clickButton([/далее/i, /завершить/i, /ок/i]);
+      killWithFourFouls(playerNumberToKill);
+      clickButton(/ночь/i);
 
-  //   repeat(() => store.dispatch(addFoul(7)), 4);
-  //   store.dispatch(skipVotingEnable());
-
-  //   unmount();
-  // });
-
-  // fit('should disable "skipVoting" after component unmount', () => {
-  //   store.setSelectedNumbers([0, 1]);
-  //   const { unmount } = render();
-
-  //   clickButton([/далее/i, /завершить/i, /ок/i, /ночь/i]);
-
-  //   repeat(() => store.dispatch(addFoul(1)), 4);
-  //   act(() => {
-  //     store.dispatch(skipVotingEnable());
-  //   });
-
-  //   console.log(store.state.game.skipVoting);
-
-  //   // screen.debug();
-  //   // unmount();
-  //   // expect(store.dispatchSpy).toHaveBeenCalledWith(skipVotingDisable());
-  //   // console.log(store.state.game.skipVoting);
-  // });
+      if (shouldDisableSkipVoting) {
+        expect(store.dispatchSpy).toHaveBeenCalledWith(skipVotingDisable());
+      } else {
+        expect(store.dispatchSpy).not.toHaveBeenCalledWith(skipVotingDisable());
+      }
+    },
+  );
 });

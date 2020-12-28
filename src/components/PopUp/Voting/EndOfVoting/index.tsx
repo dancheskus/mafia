@@ -29,7 +29,9 @@ export default function EndOfVoting({ lastMinuteFor, resetFn, votingSkipped }: P
       dispatch(changeGameState({ phase: PHASE.NIGHT }));
 
       lastMinuteFor.forEach(plNum => {
+        // skipVotingDisable if player was killed during voting and IS voted out player
         if (!players[plNum].isAlive) dispatch(skipVotingDisable());
+
         dispatch(killPlayer(plNum));
       });
     });
