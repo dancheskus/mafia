@@ -75,6 +75,7 @@ export default function PlayerControls() {
   return (
     <ButtonsWrapper className='day-user-navigation'>
       <NavBarCircleButton
+        data-testid='previeousPlayerButton'
         disabled={!isStepBackAvaliable}
         onClick={() => (isStepBackAvaliable ? goToPreviousAlivePlayer() : null)}
       >
@@ -88,7 +89,10 @@ export default function PlayerControls() {
         key={activePlayer}
       />
 
-      <NavBarCircleButton onClick={lastSpeaker ? goToVoting : () => goToNextAlivePlayer()}>
+      <NavBarCircleButton
+        data-testid={lastSpeaker ? 'goToVotingButton' : 'nextPlayerButton'}
+        onClick={lastSpeaker ? goToVoting : () => goToNextAlivePlayer()}
+      >
         {lastSpeaker ? (
           selectedNumbers.length === 0 ? (
             <EyeIcon size='50%' />

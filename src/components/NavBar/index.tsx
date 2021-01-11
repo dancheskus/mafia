@@ -28,7 +28,7 @@ export default function NavBar() {
     <StyledNavigation color={phase} tutorialEnabled={tutorialEnabled}>
       <Container className='d-flex justify-content-between p-0'>
         <NavStateName tutorialEnabled={tutorialEnabled} key={currentPhaseTitle}>
-          <span>{currentPhaseTitle}</span>
+          <span data-testid='phaseTitle'>{currentPhaseTitle}</span>
         </NavStateName>
 
         {phase === PHASE.DAY && <PlayerControls />}
