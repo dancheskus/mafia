@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 import colors from 'style/colors';
 
-export default styled.div<{ disabled?: boolean }>`
+export default styled.button<{ disabled?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;

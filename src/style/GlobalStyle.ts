@@ -7,6 +7,7 @@ export default createGlobalStyle`
   }
 
   button {
+    padding: 0;
     background: none;
     border: none;
     :focus {

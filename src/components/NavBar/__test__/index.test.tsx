@@ -1,5 +1,3 @@
-import { act } from 'react-dom/test-utils';
-
 import PHASE from 'common/phaseEnums';
 import { addPortal, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
 import { changeGameState } from 'redux/actions/gameActions';

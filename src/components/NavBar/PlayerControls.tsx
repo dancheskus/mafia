@@ -22,13 +22,13 @@ export default function PlayerControls() {
   const { phase } = useSelector(gameSelector).gameState;
   const { activePlayer, opensTable, selectedNumbers } = useSelector(gameSelector);
 
-  const [isStepBackAvaliable, setIsStepBackAvaliable] = useState(false);
+  const [isStepBackDisabled, setIsStepBackDisabled] = useState(true);
 
   const prevPhaseState = usePreviousState(phase);
   const prevPlayersState = usePreviousState(players);
 
   useEffect(() => {
-    setIsStepBackAvaliable(false);
+    setIsStepBackDisabled(true);
   }, [selectedNumbers]);
 
   const alivePlayersCount = getAllAlivePlayers(players).length;
@@ -36,11 +36,11 @@ export default function PlayerControls() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (!isStepBackAvaliable) return;
+    if (isStepBackDisabled) return;
 
     const isPlayerDiedDuringDay = prevAlivePlayersCount !== alivePlayersCount;
     const isJustSwitchedToDay = prevPhaseState !== PHASE.DAY;
-    if (isPlayerDiedDuringDay || isJustSwitchedToDay) setIsStepBackAvaliable(false);
+    if (isPlayerDiedDuringDay || isJustSwitchedToDay) setIsStepBackDisabled(true);
   });
 
   // @ts-expect-error
@@ -62,12 +62,12 @@ export default function PlayerControls() {
       dispatch(unmutePlayer(mod(i - 1, 10)));
       players[mod(i, 10)].isAlive ? dispatch(changeActivePlayer(mod(i, 10))) : goToNextAlivePlayer(i + 1);
     });
-    setIsStepBackAvaliable(true);
+    setIsStepBackDisabled(false);
   };
 
   const goToPreviousAlivePlayer = (i = activePlayer - 1) => {
     players[mod(i, 10)].isAlive ? dispatch(changeActivePlayer(mod(i, 10))) : goToPreviousAlivePlayer(i - 1);
-    setIsStepBackAvaliable(false);
+    setIsStepBackDisabled(true);
   };
 
   const lastSpeaker = activePlayer === findLastSpeaker();
@@ -76,8 +76,8 @@ export default function PlayerControls() {
     <ButtonsWrapper className='day-user-navigation'>
       <NavBarCircleButton
         data-testid='previeousPlayerButton'
-        disabled={!isStepBackAvaliable}
-        onClick={() => (isStepBackAvaliable ? goToPreviousAlivePlayer() : null)}
+        disabled={isStepBackDisabled}
+        onClick={() => (isStepBackDisabled ? null : goToPreviousAlivePlayer())}
       >
         <BackIcon size='50%' />
       </NavBarCircleButton>

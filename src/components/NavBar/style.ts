@@ -63,13 +63,7 @@ export const NavStateName = styled.h2<{ tutorialEnabled: boolean }>`
 `;
 
 export const ButtonsWrapper = styled.div`
-  > div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  > div:not(:first-child) {
+  > :not(:first-child) {
     margin-left: 15px;
   }
 `;
