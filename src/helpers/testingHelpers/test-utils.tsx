@@ -5,7 +5,7 @@ import { castArray } from 'lodash';
 
 import { store } from 'redux/reduxStore';
 
-const getRenderer = <T extends (...args: any[]) => JSX.Element>(Component: T, props: Parameters<T>[0] = {}) => (
+const getRenderer = <T extends (...args: any[]) => JSX.Element | null>(Component: T, props: Parameters<T>[0] = {}) => (
   overrideProps?: Partial<Parameters<T>[0]>,
 ) => {
   const RenderComponent = ({ overrideProps }: { overrideProps: Partial<Parameters<T>>[0] }) => (

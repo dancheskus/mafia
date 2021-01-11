@@ -22,13 +22,13 @@ export default function PlayerControls() {
   const { phase } = useSelector(gameSelector).gameState;
   const { activePlayer, opensTable, selectedNumbers } = useSelector(gameSelector);
 
-  const [stepBackAvaliable, setStepBackAvaliable] = useState(false);
+  const [isStepBackAvaliable, setIsStepBackAvaliable] = useState(false);
 
   const prevPhaseState = usePreviousState(phase);
   const prevPlayersState = usePreviousState(players);
 
   useEffect(() => {
-    setStepBackAvaliable(false);
+    setIsStepBackAvaliable(false);
   }, [selectedNumbers]);
 
   const alivePlayersCount = getAllAlivePlayers(players).length;
@@ -36,17 +36,17 @@ export default function PlayerControls() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    if (!stepBackAvaliable) return;
+    if (!isStepBackAvaliable) return;
 
     const isPlayerDiedDuringDay = prevAlivePlayersCount !== alivePlayersCount;
     const isJustSwitchedToDay = prevPhaseState !== PHASE.DAY;
-    if (isPlayerDiedDuringDay || isJustSwitchedToDay) setStepBackAvaliable(false);
+    if (isPlayerDiedDuringDay || isJustSwitchedToDay) setIsStepBackAvaliable(false);
   });
 
   // @ts-expect-error
   const findLastSpeaker = (i = opensTable - 1) => (players[mod(i, 10)].isAlive ? mod(i, 10) : findLastSpeaker(i - 1));
 
-  const toVotingClicked = () => {
+  const goToVoting = () => {
     batch(() => {
       dispatch(disableTutorial());
 
@@ -62,12 +62,12 @@ export default function PlayerControls() {
       dispatch(unmutePlayer(mod(i - 1, 10)));
       players[mod(i, 10)].isAlive ? dispatch(changeActivePlayer(mod(i, 10))) : goToNextAlivePlayer(i + 1);
     });
-    setStepBackAvaliable(true);
+    setIsStepBackAvaliable(true);
   };
 
   const goToPreviousAlivePlayer = (i = activePlayer - 1) => {
     players[mod(i, 10)].isAlive ? dispatch(changeActivePlayer(mod(i, 10))) : goToPreviousAlivePlayer(i - 1);
-    setStepBackAvaliable(false);
+    setIsStepBackAvaliable(false);
   };
 
   const lastSpeaker = activePlayer === findLastSpeaker();
@@ -75,8 +75,8 @@ export default function PlayerControls() {
   return (
     <ButtonsWrapper className='day-user-navigation'>
       <NavBarCircleButton
-        disabled={!stepBackAvaliable}
-        onClick={() => (stepBackAvaliable ? goToPreviousAlivePlayer() : null)}
+        disabled={!isStepBackAvaliable}
+        onClick={() => (isStepBackAvaliable ? goToPreviousAlivePlayer() : null)}
       >
         <BackIcon size='50%' />
       </NavBarCircleButton>
@@ -88,7 +88,7 @@ export default function PlayerControls() {
         key={activePlayer}
       />
 
-      <NavBarCircleButton onClick={lastSpeaker ? toVotingClicked : () => goToNextAlivePlayer()}>
+      <NavBarCircleButton onClick={lastSpeaker ? goToVoting : () => goToNextAlivePlayer()}>
         {lastSpeaker ? (
           selectedNumbers.length === 0 ? (
             <EyeIcon size='50%' />

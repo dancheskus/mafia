@@ -15,7 +15,7 @@
       "arrowParens": "avoid" // Allow single argument without parentheses in arrow functions
     }],
     "import/no-anonymous-default-export": 0, // Allow "export default"
-    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/setupTests.ts", "**/*.test.js", "**/*.spec.js"]}],
+    "import/no-extraneous-dependencies": ["error", {"devDependencies": ["**/setupTests.ts", "**/*.test.js", "**/*.test.tsx", "**/*.spec.js"]}],
     "react/jsx-one-expression-per-line": 0,
     "import/order": ["warn", {
       "groups": [
