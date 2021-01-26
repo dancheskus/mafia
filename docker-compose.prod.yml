@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  mafia:
+    build:
+      target: prod
+    restart: always      
+    environment:
+      NODE_ENV: production
+    ports:
+      - 5000

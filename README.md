@@ -10,7 +10,7 @@
 * Регестрировать ночные выстрелы
 * Выставлять фолы за нарушения в любой момент игры
 
-**Адрес проекта** [mafia-city.ml](https://mafia-city.ml/)
+**Адрес проекта** [mafia.dandev.online](https://mafia.dandev.online/)
 
 ## Production
 - Скопировать проект:  `git clone https://github.com/dancheskus/mafia.git`
