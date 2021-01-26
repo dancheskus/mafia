@@ -2,7 +2,7 @@ FROM mhart/alpine-node:latest AS dev
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn
-CMD yarn start:react
+CMD yarn start
 
 FROM mhart/alpine-node:latest AS prod
 RUN yarn global add serve
