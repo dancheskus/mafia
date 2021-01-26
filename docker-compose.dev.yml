@@ -9,3 +9,4 @@ services:
     tty: true
     volumes:
       - .:/app
+      - /app/node_modules
