@@ -8,9 +8,9 @@ services:
       - "traefik.http.routers.${PROJ_NAME}.entrypoints=websecure"
       - "traefik.http.routers.${PROJ_NAME}.tls.certresolver=myresolver"
       - "traefik.http.routers.${PROJ_NAME}.tls.domains[0].main=${REACT_APP_DOMAIN}"
-      - "traefik.http.routers.${PROJ_NAME}.tls.domains[0].sans=www.${REACT_APP_DOMAIN}"      
+      - "traefik.http.routers.${PROJ_NAME}.tls.domains[0].sans=www.${REACT_APP_DOMAIN}"
 
 networks:
   default:
-    external: 
+    external:
       name: traefik
