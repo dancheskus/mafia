@@ -1,11 +1,7 @@
-version: '3.8'
-
 services:
   mafia:
-    build:
-      target: prod
+    build: .
     restart: always      
     environment:
       NODE_ENV: production
-    ports:
-      - 5000
+    command: serve -s -l 3000 build

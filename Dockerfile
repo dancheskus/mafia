@@ -1,14 +1,5 @@
-FROM mhart/alpine-node:latest AS dev
+# for production only
+FROM mhart/alpine-node:latest
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn
-CMD yarn start
-
-FROM mhart/alpine-node:latest AS prod
-RUN yarn global add serve
-WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn
 COPY . .
-RUN yarn build
-CMD serve -s /app/build
+RUN yarn global add serve && yarn && yarn build

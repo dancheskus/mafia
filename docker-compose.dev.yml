@@ -1,12 +1,6 @@
-version: '3.8'
-
 services:
   mafia:
-    build:
-      target: dev
-    ports:
-      - 3000
+    image: mhart/alpine-node:latest
     tty: true
-    volumes:
-      - .:/app
-      - /app/node_modules
+    volumes: [.:/app]
+    command: yarn start:react
