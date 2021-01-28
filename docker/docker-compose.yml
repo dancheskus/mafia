@@ -3,6 +3,7 @@ services:
     container_name: ${PROJ_NAME}
     working_dir: /app
     ports: [3000]
+    env_file: [../.env]
     labels:
       - "traefik.http.routers.${PROJ_NAME}.rule=Host(`${REACT_APP_DOMAIN}`)"
       - "traefik.http.routers.${PROJ_NAME}.entrypoints=websecure"
