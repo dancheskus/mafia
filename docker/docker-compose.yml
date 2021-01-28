@@ -10,6 +10,16 @@ services:
       - "traefik.http.routers.${PROJ_NAME}.tls.domains[0].main=${REACT_APP_DOMAIN}"
       - "traefik.http.routers.${PROJ_NAME}.tls.domains[0].sans=www.${REACT_APP_DOMAIN}"
 
+  mafia-music:
+    container_name: ${MUSIC_PROJ_NAME}
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./music:/music
+    labels:
+      - "traefik.http.routers.${MUSIC_PROJ_NAME}.rule=Host(`${REACT_APP_DOMAIN}`) && PathPrefix(`/music`)"
+      - "traefik.http.routers.${MUSIC_PROJ_NAME}.tls.certresolver=myresolver"
+
 networks:
   default:
     external:
