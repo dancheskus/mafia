@@ -1,7 +1,7 @@
 services:
   mafia:
     build:
-      context: ..
+      context: .
       dockerfile: docker/dockerfile
     restart: always
     environment:

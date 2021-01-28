@@ -2,5 +2,5 @@ services:
   mafia:
     image: mhart/alpine-node:latest
     tty: true
-    volumes: [..:/app]
+    volumes: [.:/app]
     command: yarn start:react
