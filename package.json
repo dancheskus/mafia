@@ -30,11 +30,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "docker:conf": "docker-compose -f docker-compose.yml -f",
-    "start": "yarn docker:conf docker-compose.dev.yml up",
+    "start": "./docker-scripts.sh",
     "start:react": "react-scripts start",
-    "prod": "yarn docker:conf docker-compose.prod.yml up",
-    "prod:build": "yarn docker:conf docker-compose.prod.yml up --build",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "coverage": "react-scripts test --coverage --watchAll=false",

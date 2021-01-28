@@ -1,6 +1,8 @@
 services:
   mafia:
-    build: .
+    build:
+      context: ..
+      dockerfile: docker/dockerfile
     restart: always
     environment:
       NODE_ENV: production
