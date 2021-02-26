@@ -47,3 +47,18 @@ export const UnsupportedRes = styled.div`
     opacity: 0.8;
   }
 `;
+
+export const DevLanguageSwitcher = styled.button`
+  background: lightgray;
+  color: gray;
+  width: 60px;
+  height: 60px;
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+`;

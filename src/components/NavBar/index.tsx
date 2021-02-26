@@ -13,10 +13,7 @@ import PlayerControls from './PlayerControls';
 export default function NavBar() {
   const { tutorialEnabled, appMusic } = useSelector(settingsSelector);
   const { phase, dayNumber } = useSelector(gameSelector).gameState;
-  const { t, i18n } = useTranslation('navBarTitles');
-
-  const isDevelopment = process.env.NODE_ENV === 'development';
-  const changeLanguage = (lang: 'en' | 'ru') => i18n.changeLanguage(lang);
+  const { t } = useTranslation('navBarTitles');
 
   const phaseTitles = {
     SeatAllocator: t('seatAllocator'),
@@ -34,25 +31,6 @@ export default function NavBar() {
       <Container className='d-flex justify-content-between p-0'>
         <NavStateName tutorialEnabled={tutorialEnabled} key={currentPhaseTitle}>
           <span data-testid='phaseTitle'>{currentPhaseTitle}</span>
-
-          {isDevelopment && (
-            <div>
-              <button
-                style={{ marginLeft: '10px', textDecoration: i18n.language === 'en' ? 'underline' : 'none' }}
-                type='button'
-                onClick={() => changeLanguage('en')}
-              >
-                EN
-              </button>
-              <button
-                style={{ marginLeft: '10px', textDecoration: i18n.language === 'ru' ? 'underline' : 'none' }}
-                type='button'
-                onClick={() => changeLanguage('ru')}
-              >
-                RU
-              </button>
-            </div>
-          )}
         </NavStateName>
 
         {phase === PHASE.DAY && <PlayerControls />}
