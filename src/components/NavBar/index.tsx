@@ -14,19 +14,20 @@ export default function NavBar() {
   const { tutorialEnabled, appMusic } = useSelector(settingsSelector);
   const { phase, dayNumber } = useSelector(gameSelector).gameState;
   const { t, i18n } = useTranslation();
-  const changeLanguage = (lang: 'en' | 'ru') => i18n.changeLanguage(lang);
-  const phaseTitles = {
-    SeatAllocator: 'раздача номеров',
-    RoleDealing: t('navBarTitles.roleDealing'),
-    ZeroNight: '0 ночь',
-    Day: `${dayNumber} день`,
-    Voting: 'Голосование',
-    Night: `${dayNumber} Ночь`,
-    EndOfGame: 'Конец игры',
-  };
-  const currentPhaseTitle = phaseTitles[phase];
 
   const isDevelopment = process.env.NODE_ENV === 'development';
+  const changeLanguage = (lang: 'en' | 'ru') => i18n.changeLanguage(lang);
+
+  const phaseTitles = {
+    SeatAllocator: t('navBarTitles.seatAllocator'),
+    RoleDealing: t('navBarTitles.roleDealing'),
+    ZeroNight: t('navBarTitles.zeroNight'),
+    Day: `${dayNumber} ${t('navBarTitles.day')}`,
+    Voting: t('navBarTitles.voting'),
+    Night: `${dayNumber} ${t('navBarTitles.night')}`,
+    EndOfGame: t('navBarTitles.endOfGame'),
+  };
+  const currentPhaseTitle = phaseTitles[phase];
 
   return (
     <StyledNavigation color={phase} tutorialEnabled={tutorialEnabled}>

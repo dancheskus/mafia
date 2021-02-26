@@ -1,5 +1,11 @@
 {
   "navBarTitles": {
-    "roleDealing": "раздача ролей"
+    "roleDealing": "раздача ролей",
+    "seatAllocator": "раздача номеров",
+    "zeroNight": "0 ночь",
+    "day": "день",
+    "voting": "голосование",
+    "night": "ночь",
+    "endOfGame": "конец игры"
   }
 }
