@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import useOnMount from 'helpers/useOnMount';

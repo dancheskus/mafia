@@ -1,5 +1,6 @@
 import { useSelector, useDispatch, batch } from 'react-redux';
 import { countBy } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 import { addRole } from 'redux/actions/playersActions';
 import { numbersPanelClickable, addToSelectedNumbers } from 'redux/actions/gameActions';
@@ -17,6 +18,7 @@ import startGame from '../startGame';
 const { popupIconLight, popupIcon } = colors.RoleDealing;
 
 export default function ManualMode({ resetMode }: { resetMode: () => void }) {
+  const { t } = useTranslation('common');
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
@@ -89,7 +91,7 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
 
       <div className='flex-grow-1 d-flex align-items-center'>
         <PopUpButton onClick={() => startGame(dispatch)} color='RoleDealing' disabled={isButtonDisabled}>
-          Играть
+          {t('playGameButton')}
         </PopUpButton>
       </div>
     </>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { shuffle, range, random } from 'lodash';
 import { useDispatch, useSelector, batch } from 'react-redux';
 import { useTimer } from 'use-timer';
+import { useTranslation } from 'react-i18next';
 
 import { addToSelectedNumbers, clearSelectedNumbers, changeGameState } from 'redux/actions/gameActions';
 import useOnMount from 'helpers/useOnMount';
@@ -14,6 +15,7 @@ import BigCircle from './style';
 const getShuffledNumbers = () => shuffle(range(0, 10));
 
 export default function SeatAllocator() {
+  const { t } = useTranslation('common');
   const dispatch = useDispatch();
   const { selectedNumbers } = useSelector(gameSelector);
 
@@ -83,11 +85,11 @@ export default function SeatAllocator() {
         number={!!randomNumber}
         disabled={timersAreRunning || !seats.length}
       >
-        {randomNumber || 'нажми'}
+        {randomNumber || t('pressButton')}
       </BigCircle>
 
       <PopUpButton color={PHASE.SEATALLOCATOR} onClick={startPlaying} className='seat-allocator-popup-button'>
-        {seats.length ? 'пропустить' : 'играть'}
+        {seats.length ? t('skipButton') : t('nextButton')}
       </PopUpButton>
     </>
   );

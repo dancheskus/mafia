@@ -17,7 +17,7 @@ describe('<ManualMode />', () => {
   it('should show notification about role selection and disable "ИГРАТЬ" button until required roles selected.', () => {
     render();
 
-    const nextButton = screen.getByRole('button', { name: /играть/i });
+    const nextButton = screen.getByRole('button', { name: /playGameButton/i });
     const notification = screen.getByTestId(/roleNotification/i);
 
     expect(nextButton).toBeDisabled();
@@ -82,7 +82,7 @@ describe('<ManualMode />', () => {
     store.defaultTestRoles();
     render();
 
-    clickButton(/играть/i);
+    clickButton(/playGameButton/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ZERONIGHT }));

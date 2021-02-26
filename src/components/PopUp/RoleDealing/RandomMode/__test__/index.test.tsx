@@ -21,7 +21,7 @@ describe('<RandomMode />', () => {
   it('should show eye icon with text "НАЖМИ" by default', () => {
     render();
 
-    expect(screen.getByText(/нажми/i)).toBeInTheDocument();
+    expect(screen.getByText(/pressButton/i)).toBeInTheDocument();
     expect(screen.getByTestId(/eyeIcon/i)).toBeInTheDocument();
   });
 
@@ -46,7 +46,7 @@ describe('<RandomMode />', () => {
 
       render();
 
-      clickButton(/нажми/i);
+      clickButton(/pressButton/i);
       expect(store.state.game.lightMode).toBe(isLightMode);
       expect(screen.getByText(roleText)).toBeInTheDocument();
       expect(screen.getByTestId(roleIcon)).toBeInTheDocument();
@@ -62,12 +62,12 @@ describe('<RandomMode />', () => {
 
     fakeTimerEnabled && mockSetInterval();
 
-    clickButton(/нажми/i);
+    clickButton(/pressButton/i);
 
     if (cardShouldBeClosed) {
-      expect(screen.queryByText(/нажми/i)).toBeInTheDocument();
+      expect(screen.queryByText(/pressButton/i)).toBeInTheDocument();
     } else {
-      expect(screen.queryByText(/нажми/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/pressButton/i)).not.toBeInTheDocument();
     }
   });
 
@@ -79,11 +79,11 @@ describe('<RandomMode />', () => {
     expect(store.state.game.selectedNumbers[0]).toBe(0);
 
     repeat(i => {
-      clickButton(/нажми/i);
+      clickButton(/pressButton/i);
       expect(store.state.game.selectedNumbers[0]).toBe(i + 1);
     }, 9);
 
-    clickButton(/нажми/i);
+    clickButton(/pressButton/i);
     expect(store.state.game.selectedNumbers[0]).toBe(9);
   });
 
@@ -91,7 +91,7 @@ describe('<RandomMode />', () => {
     localStorage.__STORE__.lastCardRevealed = true;
     render();
 
-    clickButton(/играть/i);
+    clickButton(/playGameButton/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ZERONIGHT }));

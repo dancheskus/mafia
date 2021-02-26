@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { shuffle, concat, fill, clamp } from 'lodash';
 import { useSelector, useDispatch, batch } from 'react-redux';
 import { useTimer } from 'use-timer';
+import { useTranslation } from 'react-i18next';
 
 import { lightModeOff, lightModeOn, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
 import { addRole } from 'redux/actions/playersActions';
@@ -35,6 +36,7 @@ const roleIcons: IRoleIcons = {
 };
 
 export default function RandomMode({ resetMode }: { resetMode: () => void }) {
+  const { t } = useTranslation('common');
   const dispatch = useDispatch();
   const { selectedNumbers, lightMode } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
@@ -96,7 +98,7 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
             <>
               <EyeIcon size='40%' fill={popupIcon} />
 
-              <PressText>Нажми</PressText>
+              <PressText>{t('pressButton')}</PressText>
             </>
           ) : (
             <>
@@ -108,7 +110,7 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
         </Card>
       ) : (
         <ScaledPopUpButton onClick={() => startGame(dispatch)} color='RoleDealing'>
-          Играть
+          {t('playGameButton')}
         </ScaledPopUpButton>
       )}
     </>
