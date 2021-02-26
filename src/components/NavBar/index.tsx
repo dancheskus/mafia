@@ -13,19 +13,19 @@ import PlayerControls from './PlayerControls';
 export default function NavBar() {
   const { tutorialEnabled, appMusic } = useSelector(settingsSelector);
   const { phase, dayNumber } = useSelector(gameSelector).gameState;
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('navBarTitles');
 
   const isDevelopment = process.env.NODE_ENV === 'development';
   const changeLanguage = (lang: 'en' | 'ru') => i18n.changeLanguage(lang);
 
   const phaseTitles = {
-    SeatAllocator: t('navBarTitles.seatAllocator'),
-    RoleDealing: t('navBarTitles.roleDealing'),
-    ZeroNight: t('navBarTitles.zeroNight'),
-    Day: `${dayNumber} ${t('navBarTitles.day')}`,
-    Voting: t('navBarTitles.voting'),
-    Night: `${dayNumber} ${t('navBarTitles.night')}`,
-    EndOfGame: t('navBarTitles.endOfGame'),
+    SeatAllocator: t('seatAllocator'),
+    RoleDealing: t('roleDealing'),
+    ZeroNight: t('zeroNight'),
+    Day: `${dayNumber} ${t('day')}`,
+    Voting: t('voting'),
+    Night: `${dayNumber} ${t('night')}`,
+    EndOfGame: t('endOfGame'),
   };
   const currentPhaseTitle = phaseTitles[phase];
 

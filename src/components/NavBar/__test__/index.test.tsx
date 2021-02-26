@@ -22,25 +22,25 @@ describe('<NavBar />', () => {
 
     const expectTitle = (title: RegExp) => expect(screen.getByTestId(/phaseTitle/i)).toHaveTextContent(title);
 
-    expectTitle(/navBarTitles.seatAllocator/i);
+    expectTitle(/seatAllocator/i);
 
     store.dispatch(changeGameState({ phase: PHASE.ROLEDEALING }));
-    expectTitle(/navBarTitles.roleDealing/i);
+    expectTitle(/roleDealing/i);
 
     store.dispatch(changeGameState({ phase: PHASE.ZERONIGHT }));
-    expectTitle(/navBarTitles.zeroNight/i);
+    expectTitle(/zeroNight/i);
 
     store.dispatch(changeGameState({ phase: PHASE.DAY, dayNumber: 1 }));
-    expectTitle(/1 navBarTitles.day/i);
+    expectTitle(/1 day/i);
 
     store.dispatch(changeGameState({ phase: PHASE.VOTING }));
-    expectTitle(/navBarTitles.voting/i);
+    expectTitle(/voting/i);
 
     store.dispatch(changeGameState({ phase: PHASE.NIGHT, dayNumber: 2 }));
-    expectTitle(/2 navBarTitles.night/i);
+    expectTitle(/2 night/i);
 
     store.dispatch(changeGameState({ phase: PHASE.ENDOFGAME }));
-    expectTitle(/navBarTitles.endOfGame/i);
+    expectTitle(/endOfGame/i);
   });
 
   it('should render player controls on Day', () => {
