@@ -1,18 +1,25 @@
+/* eslint-disable import/no-dynamic-require */
+/* eslint-disable global-require */
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import Backend from 'i18next-http-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 i18n
-  .use(Backend)
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     fallbackLng: 'ru',
-    // debug: true,
-    interpolation: {
-      escapeValue: false,
-    },
+    resources: {},
+    interpolation: { escapeValue: false },
   });
+
+const loadTranslations = (fileNames: string[]) => {
+  fileNames.forEach(namespace => {
+    i18n.addResourceBundle('en', namespace, require(`locales/en/${namespace}`));
+    i18n.addResourceBundle('ru', namespace, require(`locales/ru/${namespace}`));
+  });
+};
+
+loadTranslations(['common', 'navBarTitles', 'playerRoles', 'roleDealing', 'zeroNight', 'navMenu']);
 
 export default i18n;

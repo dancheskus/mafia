@@ -5,5 +5,7 @@
   "playGameButton": "play",
   "finishButton": "finish",
   "dayButton": "day",
-  "newGame": "new game"
+  "newGame": "new game",
+  "ok": "ok",
+  "cancel": "cancel"
 }

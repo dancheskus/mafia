@@ -5,5 +5,7 @@
   "playGameButton": "играть",
   "finishButton": "завершить",
   "dayButton": "день",
-  "newGame": "новая игра"
+  "newGame": "новая игра",
+  "ok": "ок",
+  "cancel": "отмена"
 }

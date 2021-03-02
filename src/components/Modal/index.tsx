@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { PopUpButton } from 'components/PopUp/styled-components';
 
@@ -13,6 +14,8 @@ interface IModal {
 }
 
 export default function Modal({ children, opened, onClose, onAccept }: IModal) {
+  const { t } = useTranslation('common');
+
   const modal = createPortal(
     <>
       <Backdrop />
@@ -22,7 +25,7 @@ export default function Modal({ children, opened, onClose, onAccept }: IModal) {
 
         <ModalButtonGroup>
           <PopUpButton small color='Voting' onClick={onClose}>
-            отмена
+            {t('cancel')}
           </PopUpButton>
 
           <PopUpButton
@@ -33,7 +36,7 @@ export default function Modal({ children, opened, onClose, onAccept }: IModal) {
               onClose();
             }}
           >
-            ок
+            {t('ok')}
           </PopUpButton>
         </ModalButtonGroup>
       </ModalStyle>

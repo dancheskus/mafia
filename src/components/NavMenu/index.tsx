@@ -16,7 +16,7 @@ import { StyledNavMenu, MenuItems } from './style';
 import Settings from './Settings';
 
 export default function NavMenu() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['common', 'navMenu']);
   const dispatch = useDispatch();
   const { phase } = useSelector(gameSelector).gameState;
   const { tutorialEnabled } = useSelector(settingsSelector);
@@ -63,7 +63,7 @@ export default function NavMenu() {
         <MenuItems hide={isSettingsPage} className='navi_nav'>
           <ul className='navi_list'>
             <li onClick={() => setIsSettingsPage(true)} className='navi_item'>
-              <div className='navi_link'>Настройки</div>
+              <div className='navi_link'>{t('navMenu:settings')}</div>
             </li>
 
             <li className='navi_item'>
@@ -78,16 +78,16 @@ export default function NavMenu() {
         </MenuItems>
 
         <div className='menu-footer'>
-          Проект{' '}
+          {t('navMenu:signature.project')}{' '}
           <a target='_blank' rel='noopener noreferrer' href='https://github.com/dancheskus'>
-            Даниэля Шлейфмана
+            {t('navMenu:signature.name')}
           </a>
           . 2018-2021г.
         </div>
       </StyledNavMenu>
 
       <Modal opened={isModalOpened} onClose={() => setIsModalOpened(false)} onAccept={startNewGame}>
-        Начать новую игру?
+        {t('navMenu:startNewGame')}
       </Modal>
     </>
   );

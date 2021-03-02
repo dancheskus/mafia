@@ -1,0 +1,19 @@
+{
+  "settings": "settings",
+  "signature": {
+    "project": "Project by",
+    "name": "Daniel Shleifman"
+  },
+  "settingsItem": {
+    "seatAllocator": "Numbers dealing before game start",
+    "appMusic": "Music",
+    "timerSounds": "Timer sounds (on 10/0 sec)",
+    "mafiaTimer": "Timer on assigning victims at \"0 night\" (1 min)",
+    "multiplePlayerRemove": "Offer to withdraw everyone after re-voting"
+  },
+  "buttons": {
+    "enableTutorial": "Enable tutorial",
+    "soundsExample": "Sounds example"
+  },
+  "startNewGame": "Start new game?"
+}

@@ -2,14 +2,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import throttle from 'lodash/throttle';
-import { Suspense } from 'react';
 
 import './i18n';
 
 import { saveState } from 'redux/localStorage';
 import App from 'components/App';
 import { store } from 'redux/reduxStore';
-import Spinner from 'Spinner';
 
 // ----------- Отключение pullToRefresh и scroll в моб. браузерах --------------------
 
@@ -42,11 +40,9 @@ store.subscribe(
 );
 
 const jsx = (
-  <Suspense fallback={<Spinner />}>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </Suspense>
+  <Provider store={store}>
+    <App />
+  </Provider>
 );
 
 ReactDOM.render(jsx, document.getElementById('root'));
