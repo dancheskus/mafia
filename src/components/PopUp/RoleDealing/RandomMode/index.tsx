@@ -36,7 +36,7 @@ const roleIcons: IRoleIcons = {
 };
 
 export default function RandomMode({ resetMode }: { resetMode: () => void }) {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['common', 'playerRoles']);
   const dispatch = useDispatch();
   const { selectedNumbers, lightMode } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
@@ -47,6 +47,13 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
 
   const [playerNumber] = selectedNumbers;
   const role = players[playerNumber]?.role;
+
+  const getRoleName = () => {
+    if (role === ROLE.SHERIF) return t('playerRoles:sheriff');
+    if (role === ROLE.MAFIA) return t('playerRoles:mafia');
+    if (role === ROLE.DON) return t('playerRoles:don');
+    return t('playerRoles:civilian');
+  };
 
   const { start: startCardBlockingTimer, status: timerStatus } = useTimer({
     initialTime: 1,
@@ -104,7 +111,7 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
             <>
               {roleIcons[role]}
 
-              <RoleName light={lightMode}>{role}</RoleName>
+              <RoleName light={lightMode}>{getRoleName()}</RoleName>
             </>
           )}
         </Card>

@@ -33,11 +33,11 @@ describe('<RandomMode />', () => {
   });
 
   it.each`
-    changePlayersState         | roleText     | roleIcon            | isLightMode
-    ${[ROLE.MIRNIJ, ROLE.DON]} | ${/мирный/i} | ${/thumbUpIcon/i}   | ${true}
-    ${[ROLE.SHERIF, ROLE.DON]} | ${/шериф/i}  | ${/sheriffOkIcon/i} | ${true}
-    ${[ROLE.DON]}              | ${/дон/i}    | ${/donRingIcon/i}   | ${false}
-    ${[ROLE.MAFIA]}            | ${/мафия/i}  | ${/thumbDownIcon/i} | ${false}
+    changePlayersState         | roleText                   | roleIcon            | isLightMode
+    ${[ROLE.MIRNIJ, ROLE.DON]} | ${/playerRoles:civilian/i} | ${/thumbUpIcon/i}   | ${true}
+    ${[ROLE.SHERIF, ROLE.DON]} | ${/playerRoles:sheriff/i}  | ${/sheriffOkIcon/i} | ${true}
+    ${[ROLE.DON]}              | ${/playerRoles:don/i}      | ${/donRingIcon/i}   | ${false}
+    ${[ROLE.MAFIA]}            | ${/playerRoles:mafia/i}    | ${/thumbDownIcon/i} | ${false}
   `(
     'should show correct role, role icon and lightMode for $roleText on card clicked',
     ({ changePlayersState, roleText, roleIcon, isLightMode }) => {

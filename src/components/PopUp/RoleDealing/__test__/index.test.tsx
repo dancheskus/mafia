@@ -25,11 +25,11 @@ describe('<RoleDealing />', () => {
 
     expect(listIcon).not.toHaveClass('selected');
     expect(randomIcon).toHaveClass('selected');
-    expect(nextButton).toHaveTextContent(/автоматически/i);
+    expect(nextButton).toHaveTextContent(/automatically/i);
 
     user.click(listIcon);
 
-    expect(nextButton).toHaveTextContent(/вручную/i);
+    expect(nextButton).toHaveTextContent(/manually/i);
   });
 
   it('should clear localStorage on unmount', () => {

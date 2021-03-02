@@ -18,7 +18,7 @@ import startGame from '../startGame';
 const { popupIconLight, popupIcon } = colors.RoleDealing;
 
 export default function ManualMode({ resetMode }: { resetMode: () => void }) {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['common', 'roleDealing']);
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
@@ -86,7 +86,7 @@ export default function ManualMode({ resetMode }: { resetMode: () => void }) {
       </RoleSelectionWrapper>
 
       <Notification data-testid='roleNotification' disabled={isButtonDisabled}>
-        Выберите все функциональные роли (2 Мафии, Дон и Шериф)
+        {t('roleDealing:requiredRolesMessage')}
       </Notification>
 
       <div className='flex-grow-1 d-flex align-items-center'>
