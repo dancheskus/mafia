@@ -1,0 +1,5 @@
+{
+  "winnerMessage_red": "победа красных",
+  "winnerMessage_black": "победа черных",
+  "killedAtNightPlayer": "Ночью был убит {{playerNumber}} игрок."
+}

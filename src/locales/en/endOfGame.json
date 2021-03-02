@@ -1,0 +1,5 @@
+{
+  "winnerMessage_red": "red won",
+  "winnerMessage_black": "black won",
+  "killedAtNightPlayer": "Player {{playerNumber}} was killed in the night."
+}

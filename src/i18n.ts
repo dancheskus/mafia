@@ -31,6 +31,7 @@ loadTranslations([
   'night',
   'day',
   'voting',
+  'endOfGame',
 ]);
 
 export default i18n;

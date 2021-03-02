@@ -14,9 +14,9 @@ import { GameResult, KilledPlayer } from './style';
 const phase = PHASE.ENDOFGAME;
 
 export default function EndOfGame() {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['endOfGame', 'common']);
   const dispatch = useDispatch();
-  const { popupMinimized, selectedNumbers } = useSelector(gameSelector);
+  const { popupMinimized, killedAtNightPlayer } = useSelector(gameSelector);
 
   useOnMount(() => {
     popupMinimized && dispatch(minimizeMaximaizePopup());
@@ -31,14 +31,16 @@ export default function EndOfGame() {
 
   const { red, black } = useGetAlivePlayersAmountByTeam('all');
 
-  const [justKilledPlayer] = selectedNumbers;
-
   return (
     <GameResult>
-      Победа {black >= red ? ' черных' : ' красных'}
-      {justKilledPlayer >= 0 && <KilledPlayer>Ночью был убит {justKilledPlayer + 1} игрок.</KilledPlayer>}
+      {t('winnerMessage', { context: black >= red ? 'black' : 'red' })}
+
+      {killedAtNightPlayer && (
+        <KilledPlayer>{t('killedAtNightPlayer', { playerNumber: killedAtNightPlayer + 1 })}</KilledPlayer>
+      )}
+
       <PopUpButton onClick={startNewGame} color={phase}>
-        {t('newGame')}
+        {t('common:newGame')}
       </PopUpButton>
     </GameResult>
   );
