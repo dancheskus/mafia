@@ -30,6 +30,7 @@ loadTranslations([
   'numbersPanel',
   'night',
   'day',
+  'voting',
 ]);
 
 export default i18n;

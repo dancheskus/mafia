@@ -2,6 +2,7 @@ import { Dispatch, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useTimer } from 'use-timer';
 import { Howl } from 'howler';
+import { useTranslation } from 'react-i18next';
 
 import { addToLocalStorage, getFromLocalStorage, removeFromLocalStorage } from 'helpers/localStorageHelpers';
 // @ts-expect-error
@@ -31,6 +32,7 @@ export default function StandartVoting({
   endVoting,
   isCarCrashOnceClosed,
 }: Props) {
+  const { t } = useTranslation(['common', 'voting']);
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
 
@@ -118,7 +120,7 @@ export default function StandartVoting({
         />
       )}
 
-      {isCarCrashOnceClosed && <PopUpLabel className='h2'>Повторное голосование</PopUpLabel>}
+      {isCarCrashOnceClosed && <PopUpLabel className='h2'>{t('voting:standartVoting.votingAgain')}</PopUpLabel>}
 
       <PopUpCircle data-testid='votingForPlayerCircle' mini={isCarCrashOnceClosed}>
         {selectedNumbers[currentPlayer] + 1 || null}
@@ -134,11 +136,11 @@ export default function StandartVoting({
 
       <BottomButtonGroup buttonOncePressed={buttonOncePressed}>
         <PopUpButton light color='Voting' onClick={timerClicked}>
-          таймер
+          {t('timerButton')}
         </PopUpButton>
 
         <PopUpButton color='Voting' onClick={lastPlayer ? endVoting : nextButtonClicked}>
-          {lastPlayer ? 'Завершить' : 'Далее'}
+          {lastPlayer ? t('finishButton') : t('nextButton')}
         </PopUpButton>
       </BottomButtonGroup>
     </>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import Timer from 'components/Timer';
 import VictimSelector from 'components/VictimSelector';
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export default function CarCrash({ isSecondTime, closeCarCrash, endCarCrash }: Props) {
+  const { t } = useTranslation(['common', 'voting']);
   const { selectedNumbers } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
 
@@ -31,12 +33,12 @@ export default function CarCrash({ isSecondTime, closeCarCrash, endCarCrash }: P
   if (isSecondTime)
     return (
       <>
-        <PopUpLabel className='h2 text-warning'>Вывести всех выставленных?</PopUpLabel>
+        <PopUpLabel className='h2 text-warning'>{t('voting:carCrash.withDrawAll')}</PopUpLabel>
 
         <VictimSelector onNumberSelected={onNumberSelected} votesLeft={9 - deadPlayers} />
 
         <PopUpButton color='Voting' onClick={() => endCarCrash(selectedNumber! > alivePlayers / 2)}>
-          Завершить
+          {t('finishButton')}
         </PopUpButton>
       </>
     );
@@ -53,7 +55,7 @@ export default function CarCrash({ isSecondTime, closeCarCrash, endCarCrash }: P
       <Timer time={30} key={currentPlayer} />
 
       <PopUpButton color='Voting' onClick={lastPlayer ? closeCarCrash : nextPlayer}>
-        {lastPlayer ? 'Завершить' : 'Далее'}
+        {lastPlayer ? t('finishButton') : t('nextButton')}
       </PopUpButton>
     </>
   );

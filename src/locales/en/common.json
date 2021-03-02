@@ -6,7 +6,9 @@
   "finishButton": "finish",
   "dayButton": "day",
   "newGame": "new game",
-  "ok": "ok",
-  "cancel": "cancel",
-  "closeButton": "close"
+  "okButton": "ok",
+  "cancelButton": "cancel",
+  "closeButton": "close",
+  "nightButton": "night",
+  "timerButton": "timer"
 }

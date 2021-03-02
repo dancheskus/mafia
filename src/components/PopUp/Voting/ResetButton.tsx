@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import colors from 'style/colors';
 import { ResetIcon } from 'icons/svgIcons';
@@ -26,6 +27,7 @@ const ResetButtonStyle = styled.div`
 `;
 
 export default function ResetButton({ onClick }: { onClick: () => void }) {
+  const { t } = useTranslation('voting');
   const [isOpened, setIsOpened] = useState(false);
 
   return (
@@ -35,7 +37,7 @@ export default function ResetButton({ onClick }: { onClick: () => void }) {
       </ResetButtonStyle>
 
       <Modal opened={isOpened} onClose={() => setIsOpened(false)} onAccept={onClick}>
-        Хотите сбросить голосование?
+        {t('resetVoting')}
       </Modal>
     </>
   );

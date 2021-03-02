@@ -6,7 +6,9 @@
   "finishButton": "завершить",
   "dayButton": "день",
   "newGame": "новая игра",
-  "ok": "ок",
-  "cancel": "отмена",
-  "closeButton": "закрыть"
+  "okButton": "ок",
+  "cancelButton": "отмена",
+  "closeButton": "закрыть",
+  "nightButton": "ночь",
+  "timerButton": "таймер"
 }

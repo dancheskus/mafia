@@ -25,7 +25,7 @@ export default function Modal({ children, opened, onClose, onAccept }: IModal) {
 
         <ModalButtonGroup>
           <PopUpButton small color='Voting' onClick={onClose}>
-            {t('cancel')}
+            {t('cancelButton')}
           </PopUpButton>
 
           <PopUpButton
@@ -36,7 +36,7 @@ export default function Modal({ children, opened, onClose, onAccept }: IModal) {
               onClose();
             }}
           >
-            {t('ok')}
+            {t('okButton')}
           </PopUpButton>
         </ModalButtonGroup>
       </ModalStyle>
