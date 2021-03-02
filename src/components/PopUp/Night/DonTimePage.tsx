@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function DonTimePage({ setDonTime, setPlayerToKill, setSheriffTime }: Props) {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['common', 'night']);
   const players = useSelector(playersSelector);
 
   return (
@@ -32,7 +32,7 @@ export default function DonTimePage({ setDonTime, setPlayerToKill, setSheriffTim
       </BackButton>
 
       <PopUpLabel color='Night' className='h2'>
-        Дон ищет шерифа
+        {t('night:donSearchesSheriff')}
       </PopUpLabel>
 
       <Sheriff>

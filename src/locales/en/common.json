@@ -7,5 +7,6 @@
   "dayButton": "day",
   "newGame": "new game",
   "ok": "ok",
-  "cancel": "cancel"
+  "cancel": "cancel",
+  "closeButton": "close"
 }

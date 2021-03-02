@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { TargetIcon, NextIcon } from 'icons/svgIcons';
 import { killPlayer } from 'redux/actions/playersActions';
@@ -18,6 +19,7 @@ interface Props {
 }
 
 export default function SheriffTimePage({ setSheriffTime, playerToKill }: Props) {
+  const { t } = useTranslation(['common', 'night']);
   const dispatch = useDispatch();
   const { dayNumber } = useSelector(gameSelector).gameState;
   const players = useSelector(playersSelector);
@@ -45,7 +47,7 @@ export default function SheriffTimePage({ setSheriffTime, playerToKill }: Props)
       </BackButton>
 
       <PopUpLabel color='Night' className='h2'>
-        Шериф ищет черных игроков
+        {t('night:sheriffSearchesMafia')}
       </PopUpLabel>
 
       <BlackTeamPlayers>
@@ -59,7 +61,7 @@ export default function SheriffTimePage({ setSheriffTime, playerToKill }: Props)
       </BlackTeamPlayers>
 
       <PopUpButton onClick={goToDayPressed} color='Night'>
-        День
+        {t('dayButton')}
       </PopUpButton>
     </>
   );

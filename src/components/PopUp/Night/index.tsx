@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import VictimSelector from 'components/VictimSelector';
 
@@ -7,6 +8,7 @@ import SheriffTimePage from './SheriffTimePage';
 import DonTimePage from './DonTimePage';
 
 export default function Night() {
+  const { t } = useTranslation(['common', 'night']);
   const [playerToKill, setPlayerToKill] = useState<number>();
   const [donTime, setDonTime] = useState(false);
   const [sheriffTime, setSheriffTime] = useState(false);
@@ -21,13 +23,13 @@ export default function Night() {
   return (
     <>
       <PopUpLabel color='Night' className='h2'>
-        В кого стреляет мафия?
+        {t('night:whoMafiaKills')}
       </PopUpLabel>
 
       <VictimSelector shooting onNumberSelected={onNumberSelected} />
 
       <PopUpButton onClick={() => setDonTime(true)} color='Night'>
-        Далее
+        {t('nextButton')}
       </PopUpButton>
     </>
   );

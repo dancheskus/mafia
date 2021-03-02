@@ -20,6 +20,16 @@ const loadTranslations = (fileNames: string[]) => {
   });
 };
 
-loadTranslations(['common', 'navBarTitles', 'playerRoles', 'roleDealing', 'zeroNight', 'navMenu']);
+loadTranslations([
+  'common',
+  'navBarTitles',
+  'playerRoles',
+  'roleDealing',
+  'zeroNight',
+  'navMenu',
+  'numbersPanel',
+  'night',
+  'day',
+]);
 
 export default i18n;
