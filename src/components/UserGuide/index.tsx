@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import useOnMount from 'helpers/useOnMount';
 import { disableTutorial } from 'redux/actions/settingsActions';
@@ -29,6 +30,7 @@ import stepDescription from './stepDescription';
 const splitLines = (text: string) => text.split('\n').map(i => <p key={i}>{i}</p>);
 
 const UserGuide = ({ children }: { children: ReactNode }) => {
+  const { t } = useTranslation('common');
   const dispatch = useDispatch();
   const { tutorialEnabled, appMusic, seatAllocator } = useSelector(settingsSelector);
   const {
@@ -119,12 +121,12 @@ const UserGuide = ({ children }: { children: ReactNode }) => {
 
       {guideStepsAvaliable && (
         <GuideButton light skipGuide onClick={endGuide}>
-          Завершить
+          {t('finishButton')}
         </GuideButton>
       )}
 
       <GuideButton guideNextStep onClick={guideStepsAvaliable ? nextStep : endGuide}>
-        {guideStepsAvaliable ? 'Далее' : 'Завершить'}
+        {guideStepsAvaliable ? t('nextButton') : t('finishButton')}
       </GuideButton>
 
       {children}

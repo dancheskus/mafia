@@ -2,5 +2,8 @@
   "pressButton": "нажми",
   "skipButton": "пропустить",
   "nextButton": "далее",
-  "playGameButton": "играть"
+  "playGameButton": "играть",
+  "finishButton": "завершить",
+  "dayButton": "день",
+  "newGame": "новая игра"
 }

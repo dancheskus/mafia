@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { SheriffStarIcon, NextIcon } from 'icons/svgIcons';
 import { playersSelector } from 'redux/selectors';
@@ -15,6 +16,7 @@ interface Props {
 }
 
 export default function DonTimePage({ setDonTime, setPlayerToKill, setSheriffTime }: Props) {
+  const { t } = useTranslation('common');
   const players = useSelector(playersSelector);
 
   return (
@@ -40,7 +42,7 @@ export default function DonTimePage({ setDonTime, setPlayerToKill, setSheriffTim
       </Sheriff>
 
       <PopUpButton onClick={() => setSheriffTime(true)} color='Night'>
-        Далее
+        {t('nextButton')}
       </PopUpButton>
     </>
   );

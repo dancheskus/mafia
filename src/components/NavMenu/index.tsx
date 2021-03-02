@@ -4,6 +4,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import { useSelector, useDispatch, batch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
@@ -15,6 +16,7 @@ import { StyledNavMenu, MenuItems } from './style';
 import Settings from './Settings';
 
 export default function NavMenu() {
+  const { t } = useTranslation('common');
   const dispatch = useDispatch();
   const { phase } = useSelector(gameSelector).gameState;
   const { tutorialEnabled } = useSelector(settingsSelector);
@@ -69,7 +71,7 @@ export default function NavMenu() {
                 onClick={() => (askNewGameConfirmation ? setIsModalOpened(true) : startNewGame())}
                 className='navi_link'
               >
-                Новая игра
+                {t('newGame')}
               </div>
             </li>
           </ul>

@@ -1,4 +1,5 @@
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import useOnMount from 'helpers/useOnMount';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
@@ -13,6 +14,7 @@ import { GameResult, KilledPlayer } from './style';
 const phase = PHASE.ENDOFGAME;
 
 export default function EndOfGame() {
+  const { t } = useTranslation('common');
   const dispatch = useDispatch();
   const { popupMinimized, selectedNumbers } = useSelector(gameSelector);
 
@@ -36,7 +38,7 @@ export default function EndOfGame() {
       Победа {black >= red ? ' черных' : ' красных'}
       {justKilledPlayer >= 0 && <KilledPlayer>Ночью был убит {justKilledPlayer + 1} игрок.</KilledPlayer>}
       <PopUpButton onClick={startNewGame} color={phase}>
-        Новая игра
+        {t('newGame')}
       </PopUpButton>
     </GameResult>
   );

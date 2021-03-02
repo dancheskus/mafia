@@ -2,5 +2,8 @@
   "pressButton": "press",
   "skipButton": "skip",
   "nextButton": "next",
-  "playGameButton": "play"
+  "playGameButton": "play",
+  "finishButton": "finish",
+  "dayButton": "day",
+  "newGame": "new game"
 }

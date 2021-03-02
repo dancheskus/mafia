@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useSelector, useDispatch, batch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { changeGameState, closePopup } from 'redux/actions/gameActions';
 import { SheriffStarIcon, TargetIcon } from 'icons/svgIcons';
@@ -12,6 +13,7 @@ import { PopUpButton, PopUpLabel } from '../styled-components';
 import { Icon, TwoIcons } from './style';
 
 export default function ZeroNight() {
+  const { t } = useTranslation(['common', 'playerRoles', 'zeroNight']);
   const dispatch = useDispatch();
   const { mafiaTimer, tutorialEnabled } = useSelector(settingsSelector);
   const players = useSelector(playersSelector);
@@ -30,13 +32,13 @@ export default function ZeroNight() {
   return dogovorka ? (
     <>
       <PopUpLabel color='ZeroNight' className='h1'>
-        Договорка
+        {t('zeroNight:assigningVictims')}
       </PopUpLabel>
 
       {mafiaTimer && <Timer />}
 
       <PopUpButton onClick={() => !tutorialEnabled && setDogovorka(false)} color='ZeroNight'>
-        Далее
+        {t('nextButton')}
       </PopUpButton>
     </>
   ) : (
@@ -47,7 +49,7 @@ export default function ZeroNight() {
 
           <span data-testid='shariffPlayerNumber'>{findPlayerNumber(ROLE.SHERIF)}</span>
 
-          <div className='label'>ШЕРИФ</div>
+          <div className='label'>{t('playerRoles:sheriff')}</div>
         </Icon>
 
         <Icon>
@@ -55,12 +57,12 @@ export default function ZeroNight() {
 
           <span data-testid='donPlayerNumber'>{findPlayerNumber(ROLE.DON)}</span>
 
-          <div className='label'>ДОН</div>
+          <div className='label'>{t('playerRoles:don')}</div>
         </Icon>
       </TwoIcons>
 
       <PopUpButton onClick={startGame} color='ZeroNight'>
-        День
+        {t('dayButton')}
       </PopUpButton>
     </>
   );
