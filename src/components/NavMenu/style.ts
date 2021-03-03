@@ -290,7 +290,7 @@ export const BottomButton = styled.div`
   }
 `;
 
-export const LanguageButton = styled.button<{ selected?: boolean }>`
+export const LanguageButton = styled.button<{ selected: boolean }>`
   ${({ selected }) => css`
     width: 50px;
     height: 50px;
@@ -298,24 +298,21 @@ export const LanguageButton = styled.button<{ selected?: boolean }>`
     background: ${selected ? 'white' : 'rgb(122, 156, 236)'};
     transition: 0.2s;
 
-    ${!selected &&
-    css`
-      color: white;
-
-      :hover {
-        background: rgb(201, 214, 242);
-        color: black;
-      }
-    `};
-
-    ${selected &&
-    css`
-      /* text-decoration: underline; */
-      border: 5px solid rgb(201, 214, 242);
-    `};
-
     :not(:last-child) {
       margin-right: 15px;
     }
+
+    ${selected
+      ? css`
+          border: 5px solid rgb(201, 214, 242);
+        `
+      : css`
+          color: white;
+
+          :hover {
+            background: rgb(201, 214, 242);
+            color: black;
+          }
+        `};
   `}
 `;
