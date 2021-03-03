@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
-import { useTranslation } from 'react-i18next';
 
 import useOnMount from 'helpers/useOnMount';
 import NavBar from 'components/NavBar';
@@ -20,6 +19,7 @@ import { GuideOverlay } from 'components/UserGuide/style';
 import { gameSelector, settingsSelector } from 'redux/selectors';
 import GlobalStyle from 'style/GlobalStyle';
 import PHASE from 'common/phaseEnums';
+import useChangeLanguage from 'helpers/useChangeLanguage';
 
 import { AppWrapper, DevLanguageSwitcher, MainApp, MainContentWrapper, UnsupportedRes } from './style';
 
@@ -32,8 +32,7 @@ const App = () => {
     popupOpened,
   } = useSelector(gameSelector);
   const { tutorialEnabled } = useSelector(settingsSelector);
-  const { i18n } = useTranslation('navBarTitles');
-  const changeLanguage = (lang: 'en' | 'ru') => i18n.changeLanguage(lang);
+  const [currentLang, changeLang] = useChangeLanguage();
   const [appHeight, setAppHeight] = useState(document.documentElement.clientHeight);
 
   const updateHeight = () => {
@@ -57,8 +56,8 @@ const App = () => {
       <GlobalStyle />
 
       {isDevelopment && (
-        <DevLanguageSwitcher onClick={() => (i18n.language === 'en' ? changeLanguage('ru') : changeLanguage('en'))}>
-          {i18n.language === 'en' ? 'RU' : 'EN'}
+        <DevLanguageSwitcher onClick={() => (currentLang === 'en' ? changeLang('ru') : changeLang('en'))}>
+          {currentLang.includes('en') ? 'RU' : 'EN'}
         </DevLanguageSwitcher>
       )}
 

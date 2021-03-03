@@ -156,3 +156,32 @@ export const GuideStepContentStyle = styled.div`
     font-weight: 400;
   }
 `;
+
+export const LanguageSwitchGroup = styled.div`
+  z-index: 3500;
+  position: fixed;
+  bottom: 80px;
+  left: 20px;
+`;
+
+export const LanguageButton = styled.button<{ selected?: boolean }>`
+  ${({ selected }) => css`
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: ${selected ? 'rgba(0, 0, 0, 0.524)' : 'rgba(0, 0, 0, 0.124)'};
+    transition: 0.2s;
+    color: white;
+
+    :not(:last-child) {
+      margin-right: 10px;
+    }
+
+    ${!selected &&
+    css`
+      :hover {
+        background: rgba(0, 0, 0, 0.524);
+      }
+    `};
+  `}
+`;
