@@ -30,7 +30,7 @@ describe('<SeatAllocator />', () => {
 
     const randomNumberButton = screen.getByTestId(/randomNumberButton/i);
 
-    expect(randomNumberButton).toHaveTextContent(/pressButton/i);
+    expect(randomNumberButton).toHaveTextContent(/нажми/i);
     user.click(randomNumberButton);
     expect(getTextOrNumber(randomNumberButton.textContent!)).toEqual(expect.any(Number));
   });
@@ -76,13 +76,13 @@ describe('<SeatAllocator />', () => {
 
     mockSetInterval();
 
-    expect(screen.getByRole('button', { name: /skipButton/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /пропустить/i })).toBeInTheDocument();
 
     repeat(() => user.click(randomNumberButton), 9);
-    expect(screen.getByRole('button', { name: /skipButton/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /пропустить/i })).toBeInTheDocument();
 
     user.click(randomNumberButton);
-    expect(screen.getByRole('button', { name: /nextButton/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /далее/i })).toBeInTheDocument();
   });
 
   it('should reset component state if "Start new game" was pressed before unmounting this component', () => {
@@ -99,8 +99,8 @@ describe('<SeatAllocator />', () => {
       store.dispatch(resetGameReducer());
     });
 
-    expect(randomNumberButton).toHaveTextContent(/pressButton/i);
-    expect(screen.getByRole('button', { name: /skipButton/i })).toBeInTheDocument();
+    expect(randomNumberButton).toHaveTextContent(/нажми/i);
+    expect(screen.getByRole('button', { name: /пропустить/i })).toBeInTheDocument();
   });
 
   it('should clearSelectedNumbers on mount', () => {
@@ -116,7 +116,7 @@ describe('<SeatAllocator />', () => {
     mockSetInterval();
     repeat(() => clickByTestId(/randomNumberButton/i), 10);
 
-    clickButton(/nextButton/i);
+    clickButton(/далее/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ROLEDEALING }));

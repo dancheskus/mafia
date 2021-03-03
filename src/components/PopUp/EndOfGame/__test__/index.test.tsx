@@ -1,5 +1,5 @@
 import { clickButton, getRenderer, screen } from 'helpers/testingHelpers/test-utils';
-import { addToSelectedNumbers, minimizeMaximaizePopup, resetGameReducer } from 'redux/actions/gameActions';
+import { addKilledAtNightPlayer, minimizeMaximaizePopup, resetGameReducer } from 'redux/actions/gameActions';
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import TestStore from 'test/TestStore';
 
@@ -56,7 +56,7 @@ describe('<EndOfGame />', () => {
   });
 
   it('should show "Ночью был убит + playerNumber" message if selectedNumbers has first value', () => {
-    store.dispatch(addToSelectedNumbers(4));
+    store.dispatch(addKilledAtNightPlayer(4));
     render();
 
     expect(screen.getByText(/Ночью был убит 5/i)).toBeInTheDocument();

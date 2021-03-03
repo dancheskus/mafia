@@ -50,11 +50,11 @@ describe('<NavMenu />', () => {
   it('should show settings and hide new game button', () => {
     render();
 
-    expect(screen.getByText(/Раздача номеров в начале игры/i)).not.toBeVisible();
+    expect(screen.getByText(/Раздача номеров перед началом игры/i)).not.toBeVisible();
 
     clickByText(/настройки/i);
     expect(screen.getByText(/новая игра/i)).not.toBeVisible();
-    expect(screen.getByText(/Раздача номеров в начале игры/i)).toBeVisible();
+    expect(screen.getByText(/Раздача номеров перед началом игры/i)).toBeVisible();
   });
 
   it('should toggle correct settings', () => {

@@ -21,7 +21,7 @@ describe('<RandomMode />', () => {
   it('should show eye icon with text "НАЖМИ" by default', () => {
     render();
 
-    expect(screen.getByText(/pressButton/i)).toBeInTheDocument();
+    expect(screen.getByText(/нажми/i)).toBeInTheDocument();
     expect(screen.getByTestId(/eyeIcon/i)).toBeInTheDocument();
   });
 
@@ -33,11 +33,11 @@ describe('<RandomMode />', () => {
   });
 
   it.each`
-    changePlayersState         | roleText                   | roleIcon            | isLightMode
-    ${[ROLE.MIRNIJ, ROLE.DON]} | ${/playerRoles:civilian/i} | ${/thumbUpIcon/i}   | ${true}
-    ${[ROLE.SHERIF, ROLE.DON]} | ${/playerRoles:sheriff/i}  | ${/sheriffOkIcon/i} | ${true}
-    ${[ROLE.DON]}              | ${/playerRoles:don/i}      | ${/donRingIcon/i}   | ${false}
-    ${[ROLE.MAFIA]}            | ${/playerRoles:mafia/i}    | ${/thumbDownIcon/i} | ${false}
+    changePlayersState         | roleText     | roleIcon            | isLightMode
+    ${[ROLE.MIRNIJ, ROLE.DON]} | ${/мирный/i} | ${/thumbUpIcon/i}   | ${true}
+    ${[ROLE.SHERIF, ROLE.DON]} | ${/шериф/i}  | ${/sheriffOkIcon/i} | ${true}
+    ${[ROLE.DON]}              | ${/дон/i}    | ${/donRingIcon/i}   | ${false}
+    ${[ROLE.MAFIA]}            | ${/мафия/i}  | ${/thumbDownIcon/i} | ${false}
   `(
     'should show correct role, role icon and lightMode for $roleText on card clicked',
     ({ changePlayersState, roleText, roleIcon, isLightMode }) => {
@@ -46,7 +46,7 @@ describe('<RandomMode />', () => {
 
       render();
 
-      clickButton(/pressButton/i);
+      clickButton(/нажми/i);
       expect(store.state.game.lightMode).toBe(isLightMode);
       expect(screen.getByText(roleText)).toBeInTheDocument();
       expect(screen.getByTestId(roleIcon)).toBeInTheDocument();
@@ -62,12 +62,12 @@ describe('<RandomMode />', () => {
 
     fakeTimerEnabled && mockSetInterval();
 
-    clickButton(/pressButton/i);
+    clickButton(/нажми/i);
 
     if (cardShouldBeClosed) {
-      expect(screen.queryByText(/pressButton/i)).toBeInTheDocument();
+      expect(screen.queryByText(/нажми/i)).toBeInTheDocument();
     } else {
-      expect(screen.queryByText(/pressButton/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/нажми/i)).not.toBeInTheDocument();
     }
   });
 
@@ -79,11 +79,11 @@ describe('<RandomMode />', () => {
     expect(store.state.game.selectedNumbers[0]).toBe(0);
 
     repeat(i => {
-      clickButton(/pressButton/i);
+      clickButton(/нажми/i);
       expect(store.state.game.selectedNumbers[0]).toBe(i + 1);
     }, 9);
 
-    clickButton(/pressButton/i);
+    clickButton(/нажми/i);
     expect(store.state.game.selectedNumbers[0]).toBe(9);
   });
 
@@ -91,7 +91,7 @@ describe('<RandomMode />', () => {
     localStorage.__STORE__.lastCardRevealed = true;
     render();
 
-    clickButton(/playGameButton/i);
+    clickButton(/играть/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ZERONIGHT }));
