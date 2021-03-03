@@ -1,0 +1,19 @@
+{
+  "settings": "настройки",
+  "signature": {
+    "project": "Проект",
+    "name": "Даниэля Шлейфмана"
+  },
+  "settingsItem": {
+    "seatAllocator": "Раздача номеров перед началом игры",
+    "appMusic": "Музыка",
+    "timerSounds": "Звуки таймера (на 10 и 0 сек)",
+    "mafiaTimer": "Таймер на договорку (1 мин)",
+    "multiplePlayerRemove": "Предлагать вывести всех кандидатов после повторной переголосовки"
+  },
+  "buttons": {
+    "enableTutorial": "Включить обучение",
+    "soundsExample": "Пример звуков"
+  },
+  "startNewGame": "Начать новую игру?"
+}

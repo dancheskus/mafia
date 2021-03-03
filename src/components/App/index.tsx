@@ -19,8 +19,11 @@ import { GuideOverlay } from 'components/UserGuide/style';
 import { gameSelector, settingsSelector } from 'redux/selectors';
 import GlobalStyle from 'style/GlobalStyle';
 import PHASE from 'common/phaseEnums';
+import useChangeLanguage from 'helpers/useChangeLanguage';
 
-import { AppWrapper, MainApp, MainContentWrapper, UnsupportedRes } from './style';
+import { AppWrapper, DevLanguageSwitcher, MainApp, MainContentWrapper, UnsupportedRes } from './style';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 const App = () => {
   const {
@@ -29,7 +32,7 @@ const App = () => {
     popupOpened,
   } = useSelector(gameSelector);
   const { tutorialEnabled } = useSelector(settingsSelector);
-
+  const [currentLang, changeLang] = useChangeLanguage();
   const [appHeight, setAppHeight] = useState(document.documentElement.clientHeight);
 
   const updateHeight = () => {
@@ -51,6 +54,12 @@ const App = () => {
   return (
     <>
       <GlobalStyle />
+
+      {isDevelopment && (
+        <DevLanguageSwitcher onClick={() => (currentLang === 'en' ? changeLang('ru') : changeLang('en'))}>
+          {currentLang.includes('en') ? 'RU' : 'EN'}
+        </DevLanguageSwitcher>
+      )}
 
       {appHeight < 535 && (
         <UnsupportedRes>

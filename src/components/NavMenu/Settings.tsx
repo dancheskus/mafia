@@ -1,5 +1,6 @@
 import { Howl } from 'howler';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { enableTutorial } from 'redux/actions/settingsActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export default function Settings({ hide, onClose }: Props) {
+  const { t } = useTranslation('navMenu');
   const dispatch = useDispatch();
   const { tutorialEnabled } = useSelector(settingsSelector);
 
@@ -49,15 +51,15 @@ export default function Settings({ hide, onClose }: Props) {
         <NextIcon />
       </BackButton>
 
-      <SettingsItem title='Раздача номеров в начале игры' type='seatAllocator' />
-      <SettingsItem title='Музыка' type='appMusic' />
-      <SettingsItem title='Звуки таймера (на 10/0 сек)' type='timerSounds' />
-      <SettingsItem title='Таймер на договорку (1 мин)' type='mafiaTimer' />
-      <SettingsItem title='Предлагать вывести всех после повторной переголосовки' type='multiplePlayerRemove' />
+      <SettingsItem title={t('settingsItem.seatAllocator')} type='seatAllocator' />
+      <SettingsItem title={t('settingsItem.appMusic')} type='appMusic' />
+      <SettingsItem title={t('settingsItem.timerSounds')} type='timerSounds' />
+      <SettingsItem title={t('settingsItem.mafiaTimer')} type='mafiaTimer' />
+      <SettingsItem title={t('settingsItem.multiplePlayerRemove')} type='multiplePlayerRemove' />
 
       <BottomButtonsGroup>
-        <BottomButton onClick={startTutorial}>Включить обучение</BottomButton>
-        <BottomButton onClick={enableSounds}>Пример звуков</BottomButton>
+        <BottomButton onClick={startTutorial}>{t('buttons.enableTutorial')}</BottomButton>
+        <BottomButton onClick={enableSounds}>{t('buttons.soundsExample')}</BottomButton>
       </BottomButtonsGroup>
     </AppSettings>
   );

@@ -1,9 +1,11 @@
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { PopUpButton, PopUpLabel } from 'components/PopUp/styled-components';
 import { gameSelector } from 'redux/selectors';
 
 export default function VotingSkippedScreen({ goToNight }: { goToNight: () => void }) {
+  const { t } = useTranslation(['voting', 'common']);
   const {
     skipVoting,
     selectedNumbers,
@@ -12,22 +14,22 @@ export default function VotingSkippedScreen({ goToNight }: { goToNight: () => vo
 
   return (
     <>
-      <PopUpLabel className='h2'>Голосование не проводится</PopUpLabel>
+      <PopUpLabel className='h2'>{t('votingSkipped.noVoting')}</PopUpLabel>
 
       {selectedNumbers.length === 1 && dayNumber === 1 ? (
         <PopUpLabel light className='h3'>
-          Один игрок в первый день не голосуется
+          {t('votingSkipped.firstDayOnePlayerVoting')}
         </PopUpLabel>
       ) : (
         skipVoting && (
           <PopUpLabel light className='h3'>
-            Игрок получил 4-й фол
+            {t('votingSkipped.fourthFoulReceived')}
           </PopUpLabel>
         )
       )}
 
       <PopUpButton color='Voting' onClick={goToNight}>
-        Ночь
+        {t('common:nightButton')}
       </PopUpButton>
     </>
   );

@@ -4,6 +4,7 @@
 
 import { useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import useOnMount from 'helpers/useOnMount';
 import Timer from 'components/Timer';
@@ -24,6 +25,7 @@ interface Props {
 }
 
 export default function PlayersLastMinute({ listOfPlayers, lastMinuteFor, goToNight, resetFn }: Props) {
+  const { t } = useTranslation('common');
   const dispatch = useDispatch();
   const players = useSelector(playersSelector);
   const { selectedNumbers } = useSelector(gameSelector);
@@ -57,7 +59,7 @@ export default function PlayersLastMinute({ listOfPlayers, lastMinuteFor, goToNi
       />
 
       <PopUpButton color='Voting' onClick={lastPlayer ? goToNight : nextPlayer}>
-        {lastPlayer ? 'Ночь' : 'Далее'}
+        {lastPlayer ? t('nightButton') : t('nextButton')}
       </PopUpButton>
     </>
   );

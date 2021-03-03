@@ -4,17 +4,21 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { useState } from 'react';
 import { useSelector, useDispatch, batch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { resetPlayersReducer } from 'redux/actions/playersActions';
 import { resetGameReducer } from 'redux/actions/gameActions';
 import { gameSelector, settingsSelector } from 'redux/selectors';
 import PHASE from 'common/phaseEnums';
 import Modal from 'components/Modal';
+import useChangeLanguage from 'helpers/useChangeLanguage';
 
-import { StyledNavMenu, MenuItems } from './style';
+import { StyledNavMenu, MenuItems, LanguageButton } from './style';
 import Settings from './Settings';
 
 export default function NavMenu() {
+  const { t } = useTranslation(['common', 'navMenu']);
+  const [currentLang, changeLang] = useChangeLanguage();
   const dispatch = useDispatch();
   const { phase } = useSelector(gameSelector).gameState;
   const { tutorialEnabled } = useSelector(settingsSelector);
@@ -61,7 +65,7 @@ export default function NavMenu() {
         <MenuItems hide={isSettingsPage} className='navi_nav'>
           <ul className='navi_list'>
             <li onClick={() => setIsSettingsPage(true)} className='navi_item'>
-              <div className='navi_link'>Настройки</div>
+              <div className='navi_link'>{t('navMenu:settings')}</div>
             </li>
 
             <li className='navi_item'>
@@ -69,23 +73,35 @@ export default function NavMenu() {
                 onClick={() => (askNewGameConfirmation ? setIsModalOpened(true) : startNewGame())}
                 className='navi_link'
               >
-                Новая игра
+                {t('newGame')}
+              </div>
+            </li>
+
+            <li className='navi_item'>
+              <div style={{ paddingTop: '15px' }}>
+                <LanguageButton onClick={() => changeLang('ru')} selected={currentLang.includes('ru')}>
+                  RU
+                </LanguageButton>
+
+                <LanguageButton onClick={() => changeLang('en')} selected={currentLang.includes('en')}>
+                  EN
+                </LanguageButton>
               </div>
             </li>
           </ul>
         </MenuItems>
 
         <div className='menu-footer'>
-          Проект{' '}
+          {t('navMenu:signature.project')}{' '}
           <a target='_blank' rel='noopener noreferrer' href='https://github.com/dancheskus'>
-            Даниэля Шлейфмана
+            {t('navMenu:signature.name')}
           </a>
           . 2018-2021г.
         </div>
       </StyledNavMenu>
 
       <Modal opened={isModalOpened} onClose={() => setIsModalOpened(false)} onAccept={startNewGame}>
-        Начать новую игру?
+        {t('navMenu:startNewGame')}
       </Modal>
     </>
   );

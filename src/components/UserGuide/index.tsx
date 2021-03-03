@@ -1,5 +1,6 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import useOnMount from 'helpers/useOnMount';
 import { disableTutorial } from 'redux/actions/settingsActions';
@@ -16,6 +17,7 @@ import { gameSelector, settingsSelector } from 'redux/selectors';
 import ROLE from 'common/playerEnums';
 import PHASE from 'common/phaseEnums';
 import { cleanRoleDealingLocalStorage } from 'components/PopUp/RoleDealing';
+import useChangeLanguage from 'helpers/useChangeLanguage';
 
 import {
   GuideWrapperStyle,
@@ -23,12 +25,16 @@ import {
   GuideStepTitleStyle,
   GuideStepContentStyle,
   GuideButton,
+  LanguageSwitchGroup,
+  LanguageButton,
 } from './style';
-import stepDescription from './stepDescription';
 
 const splitLines = (text: string) => text.split('\n').map(i => <p key={i}>{i}</p>);
 
 const UserGuide = ({ children }: { children: ReactNode }) => {
+  const { t } = useTranslation(['userGuideStepDescription', 'common']);
+  const [currentLang, changeLang] = useChangeLanguage();
+  const stepDescription = t('stepDescription', { returnObjects: true });
   const dispatch = useDispatch();
   const { tutorialEnabled, appMusic, seatAllocator } = useSelector(settingsSelector);
   const {
@@ -107,6 +113,7 @@ const UserGuide = ({ children }: { children: ReactNode }) => {
   };
 
   const guideStepsAvaliable = currentStep < stepDescription.length - 1;
+  // @ts-ignore
   const { position, title, content } = stepDescription[currentStep];
 
   return tutorialEnabled ? (
@@ -117,16 +124,25 @@ const UserGuide = ({ children }: { children: ReactNode }) => {
         <GuideStepContentStyle>{splitLines(content)}</GuideStepContentStyle>
       </GuideStepWrapperStyle>
 
-      {guideStepsAvaliable && (
-        <GuideButton light skipGuide onClick={endGuide}>
-          Завершить
-        </GuideButton>
+      {currentStep === 0 && (
+        <LanguageSwitchGroup>
+          <LanguageButton onClick={() => changeLang('ru')} selected={currentLang.includes('ru')}>
+            RU
+          </LanguageButton>
+          <LanguageButton onClick={() => changeLang('en')} selected={currentLang.includes('en')}>
+            EN
+          </LanguageButton>
+        </LanguageSwitchGroup>
       )}
 
+      {guideStepsAvaliable && (
+        <GuideButton light skipGuide onClick={endGuide}>
+          {t('common:finishButton')}
+        </GuideButton>
+      )}
       <GuideButton guideNextStep onClick={guideStepsAvaliable ? nextStep : endGuide}>
-        {guideStepsAvaliable ? 'Далее' : 'Завершить'}
+        {guideStepsAvaliable ? t('common:nextButton') : t('common:finishButton')}
       </GuideButton>
-
       {children}
     </GuideWrapperStyle>
   ) : (

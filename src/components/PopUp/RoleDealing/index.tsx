@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { RandomCubeIcon, ListIcon } from 'icons/svgIcons';
 import { settingsSelector } from 'redux/selectors';
@@ -19,6 +20,7 @@ const svgClassName = 'flex-grow-1 d-flex align-items-center justify-content-cent
 export const cleanRoleDealingLocalStorage = () => removeFromLocalStorage(['randomModeSelected', 'modeApproved']);
 
 export default function RoleDealing() {
+  const { t } = useTranslation('roleDealing');
   const { tutorialEnabled } = useSelector(settingsSelector);
 
   const [randomModeSelected, setRandomModeSelected] = useState(getFromLocalStorage('randomModeSelected') ?? true);
@@ -57,7 +59,7 @@ export default function RoleDealing() {
 
       <div className='flex-grow-1 d-flex align-items-center'>
         <PopUpButton data-testid='nextButton' color={PHASE.ROLEDEALING} onClick={() => setModeApproved(true)}>
-          {randomModeSelected ? 'автоматически' : 'вручную'}
+          {randomModeSelected ? t('automatically') : t('manually')}
         </PopUpButton>
       </div>
     </>

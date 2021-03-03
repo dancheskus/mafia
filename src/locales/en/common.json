@@ -1,0 +1,14 @@
+{
+  "pressButton": "press",
+  "skipButton": "skip",
+  "nextButton": "next",
+  "playGameButton": "play",
+  "finishButton": "finish",
+  "dayButton": "$t(navBarTitles:day)",
+  "newGame": "new game",
+  "okButton": "ok",
+  "cancelButton": "cancel",
+  "closeButton": "close",
+  "nightButton": "$t(navBarTitles:night)",
+  "timerButton": "timer"
+}

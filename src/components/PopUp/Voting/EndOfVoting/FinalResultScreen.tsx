@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import { PopUpButton, PopUpLabel } from 'components/PopUp/styled-components';
 import { gameSelector, playersSelector } from 'redux/selectors';
@@ -19,6 +20,7 @@ interface Props {
 }
 
 export default function FinalResultScreen({ lastMinuteFor, goToNight, resetFn, setIsFinalResultVisible }: Props) {
+  const { t } = useTranslation(['voting', 'common']);
   const dispatch = useDispatch();
   const { selectedNumbers } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
@@ -40,7 +42,7 @@ export default function FinalResultScreen({ lastMinuteFor, goToNight, resetFn, s
 
       {lastMinuteFor.length > 0 ? (
         <>
-          <PopUpLabel className='h1'>Игру покидает</PopUpLabel>
+          <PopUpLabel className='h1'>{t('finalResults.leavesGame')}</PopUpLabel>
 
           <ResultsNumbers>
             {lastMinuteFor.map(num => (
@@ -49,15 +51,15 @@ export default function FinalResultScreen({ lastMinuteFor, goToNight, resetFn, s
           </ResultsNumbers>
 
           <PopUpButton color='Voting' onClick={goToLastMinuteOrEndGame}>
-            ОК
+            {t('common:okButton')}
           </PopUpButton>
         </>
       ) : (
         <>
-          <PopUpLabel className='h1'>Никто не уходит</PopUpLabel>
+          <PopUpLabel className='h1'>{t('finalResults.noOneLeaves')}</PopUpLabel>
 
           <PopUpButton color='Voting' onClick={goToNight}>
-            Ночь
+            {t('common:nightButton')}
           </PopUpButton>
         </>
       )}

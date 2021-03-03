@@ -1,4 +1,5 @@
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import useOnMount from 'helpers/useOnMount';
 import { resetGameReducer, minimizeMaximaizePopup } from 'redux/actions/gameActions';
@@ -13,8 +14,9 @@ import { GameResult, KilledPlayer } from './style';
 const phase = PHASE.ENDOFGAME;
 
 export default function EndOfGame() {
+  const { t } = useTranslation(['endOfGame', 'common']);
   const dispatch = useDispatch();
-  const { popupMinimized, selectedNumbers } = useSelector(gameSelector);
+  const { popupMinimized, killedAtNightPlayer } = useSelector(gameSelector);
 
   useOnMount(() => {
     popupMinimized && dispatch(minimizeMaximaizePopup());
@@ -29,14 +31,16 @@ export default function EndOfGame() {
 
   const { red, black } = useGetAlivePlayersAmountByTeam('all');
 
-  const [justKilledPlayer] = selectedNumbers;
-
   return (
     <GameResult>
-      Победа {black >= red ? ' черных' : ' красных'}
-      {justKilledPlayer >= 0 && <KilledPlayer>Ночью был убит {justKilledPlayer + 1} игрок.</KilledPlayer>}
+      {t('winnerMessage', { context: black >= red ? 'black' : 'red' })}
+
+      {killedAtNightPlayer && (
+        <KilledPlayer>{t('killedAtNightPlayer', { playerNumber: killedAtNightPlayer + 1 })}</KilledPlayer>
+      )}
+
       <PopUpButton onClick={startNewGame} color={phase}>
-        Новая игра
+        {t('common:newGame')}
       </PopUpButton>
     </GameResult>
   );

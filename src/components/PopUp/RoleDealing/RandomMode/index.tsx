@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { shuffle, concat, fill, clamp } from 'lodash';
 import { useSelector, useDispatch, batch } from 'react-redux';
 import { useTimer } from 'use-timer';
+import { useTranslation } from 'react-i18next';
 
 import { lightModeOff, lightModeOn, replaceSelectedNumbersWith } from 'redux/actions/gameActions';
 import { addRole } from 'redux/actions/playersActions';
@@ -35,6 +36,7 @@ const roleIcons: IRoleIcons = {
 };
 
 export default function RandomMode({ resetMode }: { resetMode: () => void }) {
+  const { t } = useTranslation(['common', 'playerRoles']);
   const dispatch = useDispatch();
   const { selectedNumbers, lightMode } = useSelector(gameSelector);
   const players = useSelector(playersSelector);
@@ -45,6 +47,13 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
 
   const [playerNumber] = selectedNumbers;
   const role = players[playerNumber]?.role;
+
+  const getRoleName = () => {
+    if (role === ROLE.SHERIF) return t('playerRoles:sheriff');
+    if (role === ROLE.MAFIA) return t('playerRoles:mafia');
+    if (role === ROLE.DON) return t('playerRoles:don');
+    return t('playerRoles:civilian');
+  };
 
   const { start: startCardBlockingTimer, status: timerStatus } = useTimer({
     initialTime: 1,
@@ -96,19 +105,19 @@ export default function RandomMode({ resetMode }: { resetMode: () => void }) {
             <>
               <EyeIcon size='40%' fill={popupIcon} />
 
-              <PressText>Нажми</PressText>
+              <PressText>{t('pressButton')}</PressText>
             </>
           ) : (
             <>
               {roleIcons[role]}
 
-              <RoleName light={lightMode}>{role}</RoleName>
+              <RoleName light={lightMode}>{getRoleName()}</RoleName>
             </>
           )}
         </Card>
       ) : (
         <ScaledPopUpButton onClick={() => startGame(dispatch)} color='RoleDealing'>
-          Играть
+          {t('playGameButton')}
         </ScaledPopUpButton>
       )}
     </>

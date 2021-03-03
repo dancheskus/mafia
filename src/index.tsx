@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import throttle from 'lodash/throttle';
 
+import 'i18n';
+
 import { saveState } from 'redux/localStorage';
 import App from 'components/App';
 import { store } from 'redux/reduxStore';

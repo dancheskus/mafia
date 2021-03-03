@@ -1,0 +1,19 @@
+{
+  "votingSkipped": {
+    "noVoting": "no voting",
+    "firstDayOnePlayerVoting": "No voting for a single player on the first day",
+    "fourthFoulReceived": "Player receives 4th foul"
+  },
+  "finalResults": {
+    "leavesGame": "leaves the game",
+    "noOneLeaves": "nobody leaves"
+  },
+  "resetVoting": "Do you want to reset the voting?",
+  "reVoting": "re-voting",
+  "standartVoting": {
+    "votingAgain": "let's vote again"
+  },
+  "carCrash": {
+    "withDrawAll": "Withdraw all candidates?"
+  }
+}

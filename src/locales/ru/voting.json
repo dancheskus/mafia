@@ -1,0 +1,19 @@
+{
+  "votingSkipped": {
+    "noVoting": "голосование не проводится",
+    "firstDayOnePlayerVoting": "Один игрок в первый день не голосуется",
+    "fourthFoulReceived": "Игрок получил 4-й фол"
+  },
+  "finalResults": {
+    "leavesGame": "игру покидает",
+    "noOneLeaves": "никто не уходит"
+  },
+  "resetVoting": "Хотите сбросить голосование?",
+  "reVoting": "переголосовка",
+  "standartVoting": {
+    "votingAgain": "повторное голосование"
+  },
+  "carCrash": {
+    "withDrawAll": "Вывести всех выставленных?"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "pressButton": "нажми",
+  "skipButton": "пропустить",
+  "nextButton": "далее",
+  "playGameButton": "играть",
+  "finishButton": "завершить",
+  "dayButton": "$t(navBarTitles:day)",
+  "newGame": "новая игра",
+  "okButton": "ок",
+  "cancelButton": "отмена",
+  "closeButton": "закрыть",
+  "nightButton": "$t(navBarTitles:night)",
+  "timerButton": "таймер"
+}

@@ -70,7 +70,7 @@ describe('<SeatAllocator />', () => {
     expect(randomNumberButton).toBeDisabled();
   });
 
-  it('should render "ПРОПУСТИТЬ" button, or "ИГРАТЬ" if all numbers received', () => {
+  it('should render "ПРОПУСТИТЬ" button, or "ДАЛЕЕ" if all numbers received', () => {
     render();
     const randomNumberButton = screen.getByTestId(/randomNumberButton/i);
 
@@ -82,7 +82,7 @@ describe('<SeatAllocator />', () => {
     expect(screen.getByRole('button', { name: /пропустить/i })).toBeInTheDocument();
 
     user.click(randomNumberButton);
-    expect(screen.getByRole('button', { name: /играть/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /далее/i })).toBeInTheDocument();
   });
 
   it('should reset component state if "Start new game" was pressed before unmounting this component', () => {
@@ -116,7 +116,7 @@ describe('<SeatAllocator />', () => {
     mockSetInterval();
     repeat(() => clickByTestId(/randomNumberButton/i), 10);
 
-    clickButton(/играть/i);
+    clickButton(/далее/i);
 
     expect(store.dispatchSpy).toHaveBeenCalledWith(clearSelectedNumbers());
     expect(store.dispatchSpy).toHaveBeenCalledWith(changeGameState({ phase: PHASE.ROLEDEALING }));

@@ -1,5 +1,6 @@
 import { Container } from 'reactstrap';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import NavMenu from 'components/NavMenu';
 import { gameSelector, settingsSelector } from 'redux/selectors';
@@ -12,15 +13,16 @@ import PlayerControls from './PlayerControls';
 export default function NavBar() {
   const { tutorialEnabled, appMusic } = useSelector(settingsSelector);
   const { phase, dayNumber } = useSelector(gameSelector).gameState;
+  const { t } = useTranslation('navBarTitles');
 
   const phaseTitles = {
-    SeatAllocator: 'раздача номеров',
-    RoleDealing: 'раздача ролей',
-    ZeroNight: '0 ночь',
-    Day: `${dayNumber} день`,
-    Voting: 'Голосование',
-    Night: `${dayNumber} Ночь`,
-    EndOfGame: 'Конец игры',
+    SeatAllocator: t('seatAllocator'),
+    RoleDealing: t('roleDealing'),
+    ZeroNight: t('zeroNight'),
+    Day: `${dayNumber} ${t('day')}`,
+    Voting: t('voting'),
+    Night: `${dayNumber} ${t('night')}`,
+    EndOfGame: t('endOfGame'),
   };
   const currentPhaseTitle = phaseTitles[phase];
 

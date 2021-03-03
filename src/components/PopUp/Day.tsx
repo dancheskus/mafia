@@ -1,4 +1,5 @@
 import { batch, useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
 import useOnMount from 'helpers/useOnMount';
 import { closePopup, openPopup, changeGameState, removeKilledAtNightPlayer } from 'redux/actions/gameActions';
@@ -15,6 +16,7 @@ import { addToLocalStorage, removeFromLocalStorage } from 'helpers/localStorageH
 import { PopUpLabel, PopUpButton, PopUpCircle } from './styled-components';
 
 export default function Day() {
+  const { t } = useTranslation(['common', 'day']);
   const {
     activePlayer,
     killedAtNightPlayer,
@@ -53,7 +55,7 @@ export default function Day() {
     <>
       {playerShouldBeKilled ? (
         <>
-          <PopUpLabel className='h1'>Убит</PopUpLabel>
+          <PopUpLabel className='h1'>{t('day:killed')}</PopUpLabel>
 
           <PopUpCircle mini color='Night'>
             {killedPlayerRef + 1}
@@ -63,7 +65,7 @@ export default function Day() {
         </>
       ) : (
         <>
-          <PopUpLabel className='h1'>Несострел</PopUpLabel>
+          <PopUpLabel className='h1'>{t('day:noKills')}</PopUpLabel>
 
           <PopUpCircle>
             <CylinderIcon fill={colors.Day.popupNightResult} size='80%' />
@@ -72,7 +74,7 @@ export default function Day() {
       )}
 
       <PopUpButton color='Day' onClick={goToDay}>
-        Закрыть
+        {t('closeButton')}
       </PopUpButton>
     </>
   );
