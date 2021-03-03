@@ -1,0 +1,48 @@
+{
+  "stepDescription": [
+    {
+      "title": "Top panel",
+      "content": "This panel can perform different functions depending on the state of the game. In this case, the numbers at the table will be indicated here. \n Click \"NEXT\" button to continue tutorial.",
+      "position": "afterNumbersPanel"
+    },
+    {
+      "content": "Press on the \"PRESS\" button few times, to get player number.",
+      "position": "afterNumbersPanel"
+    },
+    {
+      "title": "Music",
+      "content": "Music will be loaded in the application. If you want to disable this option, go to the settings. This will save your traffic.",
+      "position": "afterNumbersPanel"
+    },
+    {
+      "title": "Music control",
+      "content": "At night, the buttons on the top can pause the sound, and also turn on the next song. \n If you are using a smartphone, make sure it is not in silent mode.",
+      "position": "top"
+    },
+    {
+      "title": "$t(navBarTitles:roleDealing)",
+      "content": "During the manual distribution of roles, select a player number and assign a role to him. \n The application also has automatic distribution of roles.",
+      "position": "bottom"
+    },
+    {
+      "title": "Minimize the window",
+      "content": "To set fouls at night, minimize the window to access the players' cards.",
+      "position": "bottom"
+    },
+    {
+      "title": "Put a foul",
+      "content": "To issue a foul, you must click on \"+\". To remove a foul committed by mistake, click on \"-\".\n Give 8th player 4 fouls and he will die in a second.",
+      "position": "left"
+    },
+    {
+      "title": "Player management",
+      "content": "In this panel, you can control the player's timer (pause/reset) and switch to the next players.",
+      "position": "top"
+    },
+    {
+      "title": "Putting players on a vote",
+      "content": "In the top panel, you can specify who the active player exposes. By clicking on another number, the candidate will be replaced. By pressing the selected number again, you can remove the candidacy.",
+      "position": "afterNumbersPanel"
+    }
+  ]
+}

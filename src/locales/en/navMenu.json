@@ -5,15 +5,15 @@
     "name": "Daniel Shleifman"
   },
   "settingsItem": {
-    "seatAllocator": "Numbers dealing before game start",
+    "seatAllocator": "Setting up players numbers",
     "appMusic": "Music",
-    "timerSounds": "Timer sounds (on 10/0 sec)",
-    "mafiaTimer": "Timer on assigning victims at \"0 night\" (1 min)",
-    "multiplePlayerRemove": "Offer to withdraw everyone after re-voting"
+    "timerSounds": "Timer warning (on 10 and 0 sec)",
+    "mafiaTimer": "Timer on assigning victims on \"0th night\" (1 min)",
+    "multiplePlayerRemove": "Suggest to withdraw all candidates after re-voting"
   },
   "buttons": {
     "enableTutorial": "Enable tutorial",
-    "soundsExample": "Sounds example"
+    "soundsExample": "Sounds examples"
   },
   "startNewGame": "Start new game?"
 }

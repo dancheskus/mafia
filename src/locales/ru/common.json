@@ -4,11 +4,11 @@
   "nextButton": "далее",
   "playGameButton": "играть",
   "finishButton": "завершить",
-  "dayButton": "день",
+  "dayButton": "$t(navBarTitles:day)",
   "newGame": "новая игра",
   "okButton": "ок",
   "cancelButton": "отмена",
   "closeButton": "закрыть",
-  "nightButton": "ночь",
+  "nightButton": "$t(navBarTitles:night)",
   "timerButton": "таймер"
 }

@@ -32,6 +32,7 @@ loadTranslations([
   'day',
   'voting',
   'endOfGame',
+  'userGuideStepDescription',
 ]);
 
 export default i18n;

@@ -25,12 +25,12 @@ import {
   GuideStepContentStyle,
   GuideButton,
 } from './style';
-import stepDescription from './stepDescription';
 
 const splitLines = (text: string) => text.split('\n').map(i => <p key={i}>{i}</p>);
 
 const UserGuide = ({ children }: { children: ReactNode }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation(['userGuideStepDescription', 'common']);
+  const stepDescription = t('stepDescription', { returnObjects: true });
   const dispatch = useDispatch();
   const { tutorialEnabled, appMusic, seatAllocator } = useSelector(settingsSelector);
   const {
@@ -109,6 +109,7 @@ const UserGuide = ({ children }: { children: ReactNode }) => {
   };
 
   const guideStepsAvaliable = currentStep < stepDescription.length - 1;
+  // @ts-ignore
   const { position, title, content } = stepDescription[currentStep];
 
   return tutorialEnabled ? (
@@ -121,12 +122,12 @@ const UserGuide = ({ children }: { children: ReactNode }) => {
 
       {guideStepsAvaliable && (
         <GuideButton light skipGuide onClick={endGuide}>
-          {t('finishButton')}
+          {t('common:finishButton')}
         </GuideButton>
       )}
 
       <GuideButton guideNextStep onClick={guideStepsAvaliable ? nextStep : endGuide}>
-        {guideStepsAvaliable ? t('nextButton') : t('finishButton')}
+        {guideStepsAvaliable ? t('common:nextButton') : t('common:finishButton')}
       </GuideButton>
 
       {children}
