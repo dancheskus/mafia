@@ -12,11 +12,12 @@ import { gameSelector, settingsSelector } from 'redux/selectors';
 import PHASE from 'common/phaseEnums';
 import Modal from 'components/Modal';
 
-import { StyledNavMenu, MenuItems } from './style';
+import { StyledNavMenu, MenuItems, LanguageButton } from './style';
 import Settings from './Settings';
 
 export default function NavMenu() {
-  const { t } = useTranslation(['common', 'navMenu']);
+  const { t, i18n } = useTranslation(['common', 'navMenu']);
+  const changeLanguage = (lang: 'en' | 'ru') => i18n.changeLanguage(lang);
   const dispatch = useDispatch();
   const { phase } = useSelector(gameSelector).gameState;
   const { tutorialEnabled } = useSelector(settingsSelector);
@@ -72,6 +73,18 @@ export default function NavMenu() {
                 className='navi_link'
               >
                 {t('newGame')}
+              </div>
+            </li>
+
+            <li className='navi_item'>
+              <div style={{ paddingTop: '15px' }}>
+                <LanguageButton onClick={() => changeLanguage('ru')} selected={i18n.language.includes('ru')}>
+                  RU
+                </LanguageButton>
+
+                <LanguageButton onClick={() => changeLanguage('en')} selected={i18n.language.includes('en')}>
+                  EN
+                </LanguageButton>
               </div>
             </li>
           </ul>
