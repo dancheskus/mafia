@@ -53,7 +53,7 @@
 - `yarn` or `npm i` to install all dependencies
 - `yarn start` or `npm start`
 > This will start start 2 containers. NGINX container for music server and mafia contaier.
-- Open you URL
+- Open your URL
 > Now you can modify local files and changes will be displayed in the browser
 
 ### Option 2 (easy version. without docker, music and ssl)
