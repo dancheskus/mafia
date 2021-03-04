@@ -36,6 +36,7 @@
 
 **Project address** [mafia.dandev.online](https://mafia.dandev.online/)
 
+---
 # Setup
 
 ## Development
