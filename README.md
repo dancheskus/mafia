@@ -45,7 +45,7 @@
 >
 > you have to register URL that can be verified with ACME challenge and is pointing to `localhost`
 
-- `git pull https://github.com/dancheskus/traefik`
+- `git clone https://github.com/dancheskus/traefik`
 - Read how to setup and start `traefik` container in `README.md`
 - `git clone https://github.com/dancheskus/mafia.git`
 - Rename `.env_example` to `.env` and replace `REACT_APP_DOMAIN` with your URL that is pointing to `localhost`
