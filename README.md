@@ -14,7 +14,7 @@
 - Русский
 - Английский
 
-**Адрес проекта** [mafia.dandev.online](https://mafia.dandev.online/)
+**Адрес проекта** [mafia.dandev.site](https://mafia.dandev.site/)
 
 ---
 
@@ -34,7 +34,7 @@
 - English
 - Russian
 
-**Project address** [mafia.dandev.online](https://mafia.dandev.online/)
+**Project address** [mafia.dandev.site](https://mafia.dandev.site/)
 
 ---
 # Setup
@@ -47,7 +47,7 @@
 
 - `git clone https://github.com/dancheskus/traefik`
 - Read how to setup and start `traefik` container in `README.md`
-- `git clone https://github.com/dancheskus/mafia.git`
+- `git clone https://github.com/dancheskus/mafia`
 - Rename `.env_example` to `.env` and replace `REACT_APP_DOMAIN` with your URL that is pointing to `localhost`
 - Add some mp3 music files to music folder
 - `yarn` or `npm i` to install all dependencies
@@ -57,7 +57,7 @@
 > Now you can modify local files and changes will be displayed in the browser
 
 ### Option 2 (easy version. without docker, music and ssl)
-- `git clone https://github.com/dancheskus/mafia.git`
+- `git clone https://github.com/dancheskus/mafia`
 - `yarn` or `npm i` to install all dependencies
 - `yarn start:react` or `npm start:react`
 - open [http://localhost:3000](http://localhost:3000)
@@ -67,9 +67,9 @@
 >
 > you have to register URL that can be verified with ACME challenge and is pointing to your server
 
-- `git pull https://github.com/dancheskus/traefik`
+- `git clone https://github.com/dancheskus/traefik`
 - Read how to setup and start `traefik` container in `README.md`
-- `git clone https://github.com/dancheskus/mafia.git`
+- `git clone https://github.com/dancheskus/mafia`
 - Rename `.env_example` to `.env` and replace `REACT_APP_DOMAIN` with your URL that is pointing to `localhost`
 - Add some mp3 music files to music folder
 - `./docker-scripts.sh prod:build` - to rebuild container
